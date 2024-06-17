@@ -2,11 +2,12 @@
 import { Icon } from '@iconify/vue'
 </script>
 <template>
-  <header class="flex justify-between px-50 py-3 bg-white items-center">
+  <header class="flex justify-between px-50 py-2 items-center" style="background-color: blue;">
     <!-- Logo -->
     <div class="flex items-center space-x-2">
-      <Icon icon="skill-icons:devto-dark" style="font-size: 45px" />
-      <span class="text-xl font-bold">I-KNOW</span>
+      <!-- <Icon icon="skill-icons:devto-dark" style="font-size: 45px" />
+      <span class="text-xl font-bold">I-KNOW</span> -->
+      <img width="38%" height="45%" src="../assets/image/logo.png" alt="">
     </div>
 
     <!-- Menu Items -->
