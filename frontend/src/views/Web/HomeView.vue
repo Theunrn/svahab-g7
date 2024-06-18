@@ -1,15 +1,28 @@
+<template>
+  <WebLayout></WebLayout>
+  <SearchView></SearchView>
+ <div class="div flex justify-content-center mt-3">
+    <img width="18%" height="18%" src="../../assets/image/logo1.png" alt="">
+  </div>
+ <CardCom></CardCom>
+ <WeatherCom></WeatherCom>
+ <WebFooter></WebFooter>
+
+</template>
+
 <script setup lang="ts">
 import WebLayout from '@/Components/Layouts/WebLayout.vue'
+import SearchView from '../../views/Web/SearchBar/SearchView.vue'
+import CardCom from '../../Components/Cards/CardCom.vue'
+import WebFooter from '../../Components/WebFooter.vue'
+import WeatherCom from '../../Components/Weathers/WeatherCom.vue'
 </script>
-<template>
-  <WebLayout
-    ><div
-      class="max-w-2xl mt-2 rounded px-4 py-10 m-auto bg-white sm:px-8 dark:bg-gray-800 ring-1 ring-gray-200 dark:ring-gray-700"
-    >
-      <div class="text-center">
-        <p class="text-lg md:text-2xl mb-8">Your journey to excellence starts here.</p>
-        <p>Join Us Today and Get Started</p>
-      </div>
-    </div>
-  </WebLayout>
-</template>
+
+<style scoped>
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+</style>

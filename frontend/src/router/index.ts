@@ -27,9 +27,34 @@ const router = createRouter({
       component: () => import('../views/Web/HomeView.vue')
     },
     {
-      path: '/post',
-      name: 'post',
-      component: () => import('../views/Web/Post/ListView.vue')
+      path: '/about',
+      name: 'about',
+      component: () => import('../views/Web/AboutView.vue')
+    },
+    {
+      path: '/fields',
+      name: 'fields',
+      component: () => import('../views/Web/FieldsView.vue')
+    },
+    {
+      path: '/shop',
+      name: 'shop',
+      component: () => import('../views/Web/ShopView.vue')
+    },
+    {
+      path: '/contact',
+      name: 'contact',
+      component: () => import('../views/Web/ContactView.vue')
+    },
+    {
+      path: '/field/detail/:id',
+      name: 'Detail',
+      component: () => import('../views/Web/Field/FieldDetailView.vue')
+    },
+    {
+      path: '/field/book/:id',
+      name: 'Book',
+      component: () => import('../views/Web/Field/FieldDetailView.vue')
     }
   ]
 })
