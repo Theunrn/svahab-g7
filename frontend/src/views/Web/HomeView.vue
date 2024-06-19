@@ -5,6 +5,9 @@
     <img width="18%" height="18%" src="../../assets/image/logo1.png" alt="">
   </div>
  <CardCom></CardCom>
+ <HomeBody></HomeBody>
+ <MatchTeam></MatchTeam>
+ <MatchSchedule></MatchSchedule>
  <WeatherCom></WeatherCom>
  <WebFooter></WebFooter>
 
@@ -16,6 +19,9 @@ import SearchView from '../../views/Web/SearchBar/SearchView.vue'
 import CardCom from '../../Components/Cards/CardCom.vue'
 import WebFooter from '../../Components/WebFooter.vue'
 import WeatherCom from '../../Components/Weathers/WeatherCom.vue'
+import HomeBody from '../../Components/Bodies/HomeBody.vue'
+import MatchTeam from '../../Components/Bodies/MatchTeam.vue'
+import MatchSchedule from '../../Components/Bodies/MatchSchedule.vue'
 </script>
 
 <style scoped>
