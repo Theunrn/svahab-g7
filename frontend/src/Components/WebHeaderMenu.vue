@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  <header class="flex justify-between px-30 py-2 items-center shadow navbar-light navbar-sticky header-static" style="background-color: green">
+  <header class="flex justify-between px-30 py-2 items-center shadow navbar-light navbar-sticky header-static bg-green-600">
     <!-- Logo -->
     <div class="flex items-center space-x-2">
       <a href="/"><img width="25%" height="32%" src="../assets/image/logo.png" alt="Logo"></a>
