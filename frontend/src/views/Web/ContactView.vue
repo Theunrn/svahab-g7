@@ -1,11 +1,13 @@
 <template>
     <WebHeaderMenu></WebHeaderMenu>
+    <ContactUse/>
    <WebFooter></WebFooter>
   
   </template>
   
   <script setup lang="ts">
   import WebHeaderMenu from '@/Components/WebHeaderMenu.vue'
+  import ContactUse from '@/Components/Contact/ContactUse.vue'
   import WebFooter from '../../Components/WebFooter.vue'
 
   </script>
