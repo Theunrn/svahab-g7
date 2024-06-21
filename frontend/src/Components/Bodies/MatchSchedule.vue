@@ -5,7 +5,7 @@
       <h1 class="text-3xl font-bold text-center mb-8">Football Match Schedule</h1>
       <!-- Match Card -->
       <div class="bg-white shadow-md rounded-lg mb-6 py-1 px-8">
-        <div class="flex items-center justify-between">
+        <div class="flex items-center justify-between p-2">
           <div class="flex items-center">
             <img src="../../assets/image/logo-team1.webp" alt="Team A Logo" width="80" height="80" class="border border-2 border-info avatar-img rounded-circle"/>
             <div>
