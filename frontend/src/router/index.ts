@@ -60,7 +60,20 @@ const router = createRouter({
       path: '/field/book/:id',
       name: 'Book',
       component: () => import('../views/Web/Field/FieldDetailView.vue')
-    }
+    },
+    {
+      path: '/product',
+      name: 'Products',
+      component: () => import('../views/Web/Products/ProductView.vue')
+    },
+    
+    {
+      path: '/product/detail',
+      name: 'Card',
+      component: () => import('../views/Web/Products/CardView.vue')
+    },
+
+   
   ]
 })
 

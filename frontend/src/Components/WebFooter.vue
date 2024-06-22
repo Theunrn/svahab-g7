@@ -1,3 +1,4 @@
+
 <template>
     <footer class="bg-gray-800 text-white py-10">
       <div class="container mx-auto flex flex-wrap justify-between items-center">
@@ -66,9 +67,11 @@
       </div>
     </footer>
 </template>
-<script>
-export default {
-  name: 'FooterComponent',
-};
-</script>
+<script setup lang="ts">
+
+</script >
+
+<style scope>
+
+</style>
   
