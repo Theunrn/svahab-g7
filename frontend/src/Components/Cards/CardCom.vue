@@ -1,6 +1,8 @@
 <template>
   <div class="card-me flex flex-wrap justify-content-center align-items-start ml-5">
     <!-- Loop to generate 6 cards -->
+    <p class="w-full text-center mb-2 mr-11 ml-11 text-lg text-gray-700">
+      Find the best football fields near you! Whether you want to play a friendly game or a competitive match, our platform helps you easily find and book the perfect field. Check out our top-rated venues and book your spot today.    </p>
     <div class="card-wrapper relative w-1/4 sm:w-full mx-2 my-2" v-for="index in 6" :key="index">
       <div class="container bg-overlay">
         <div class="row text-center flex flex-col items-center justify-center h-full">

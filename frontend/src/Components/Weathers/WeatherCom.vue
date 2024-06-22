@@ -2,7 +2,7 @@
   <div class="container mx-auto px-4">
     <div class="flex flex-col md:flex-row justify-between items-center gap-5">
       <!-- Left Side -->
-      <div class="left-content md:w-1/2 mb-5 md:mb-0">
+      <div class="left-content md:w-1/2 mb-5 ml-5 md:mb-0">
         <h1 class="text-4xl font-bold mb-4">Check Weather</h1>
         <p class="text-lg text-gray-700">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum vestibulum. Cras venenatis euismod malesuada. Sed sit amet facilisis urna. Praesent ultrices eros in cursus turpis massa tincidunt ante in nibh mauris cursus.
@@ -15,13 +15,13 @@
 
       <!-- Right Side (Weather Widget) -->
       <div class="weather-widget md:w-1/2 mb-3 bg-gradient-to-r from-[#98AFC7] to-[#488AC7] hover:bg-gradient-to-r w-full rounded-lg shadow-md p-3 font-sans">
-        <div class="weather-header text-center mb-5 border-b border-white">
+        <div class="weather-header text-center mb-3 border-b border-white">
           <h1 class="text-3xl font-bold mb-1 text-white">{{ city }}</h1>
         </div>
         <div class="weather-info flex items-center mb-5 gap-5">
           <div class="weather-icon flex flex-col justify-center items-center w-1/2">
             <img :src="iconUrl" alt="Weather Icon" class="w-40 h-35 mb-2" />
-            <h2 class="text-3xl font-bold text-white">{{ weather?.weather[0]?.description }}</h2>
+            <h2 class="text-3xl text-center font-bold text-white">{{ weather?.weather[0]?.description }}</h2>
           </div>
           <div class="w-1/2 flex flex-col justify-start">
             <div class="border-b border-white">
@@ -29,17 +29,17 @@
               <h2 class="font-bold text-5xl mb-2 text-white">{{ currentTime }}</h2>
             </div>
             <div class="weather-details text-left">
-              <p class="weather-temp text-5xl font-bold text-white">{{ weather?.main?.temp }}°</p>
-              <p class="weather-feels text-sm text-white">Feels like: {{ weather?.main?.feels_like }}°</p>
-              <p class="weather-humidity text-sm text-white">Humidity: {{ weather?.main?.humidity }}%</p>
-              <p class="weather-wind text-sm text-white">Wind: {{ weather?.wind?.speed }} km/h</p>
+              <p class="weather-temp text-5xl mb-1 font-bold text-white">{{ weather?.main?.temp }}°</p>
+              <p class="weather-feels text-1xl text-white">Feels like: {{ weather?.main?.feels_like }}°</p>
+              <p class="weather-humidity text-1xl text-white">Humidity: {{ weather?.main?.humidity }}%</p>
+              <p class="weather-wind text-1xl text-white">Wind: {{ weather?.wind?.speed }} km/h</p>
             </div>
           </div>
         </div>
         <div class="weather-forecast flex justify-between border-t border-white">
           <div class="forecast-day flex flex-col justify-center text-center mt-2" v-for="day in forecast" :key="day.dt">
             <p class="mb-1 text-white">{{ day.day }}</p>
-            <img :src="getIconUrl(day.icon)" alt="Weather Icon" class="w-7 h-7 mb-1" />
+            <img :src="getIconUrl(day.icon)" alt="Weather Icon" class="w-7 h-7 mb-2" />
             <p class="mb-1 text-white">{{ day.temp.max }}°</p>
             <p class="text-white">{{ day.temp.min }}°</p>
           </div>
@@ -59,7 +59,8 @@ export default {
       forecast: [], // To store the 7-day forecast
       apiKey: '1d5b1ee8b600b4a9e279d0d3cdd57a23', // Your OpenWeatherMap API key
       city: 'Phnom Penh', // Default city
-      searchCity: '' // Bind this to the input field
+      searchCity: '', // Bind this to the input field
+      currentTime: '' // Add currentTime to data
     }
   },
   computed: {
@@ -72,14 +73,14 @@ export default {
     currentDateTime() {
       const now = new Date()
       return now.toLocaleDateString()
-    },
-    currentTime() {
-      const now = new Date()
-      return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     }
   },
   created() {
     this.fetchWeather()
+    this.startTimeAnimation() // Start updating the time
+  },
+  beforeUnmount() {
+    this.stopTimeAnimation() // Stop updating the time when component is unmounted
   },
   methods: {
     async fetchWeather(city = this.city) {
@@ -93,6 +94,8 @@ export default {
       } catch (error) {
         console.error('Error fetching weather data:', error)
         this.weather = null
+        this.city = 'Phnom Penh' // Revert to default city if error occurs
+        this.fetchWeather('Phnom Penh') // Fetch weather for default city
       }
     },
     async fetchForecast(lat, lon) {
@@ -121,11 +124,30 @@ export default {
         this.searchCity = '' // Clear the input field
       }
     },
+    getCurrentTime() {
+      const currentDate = new Date()
+      const cambodiaTime = new Date(currentDate.toLocaleString('en-US', { timeZone: 'Asia/Phnom_Penh' }))
+      let hours = cambodiaTime.getHours()
+      let minutes = cambodiaTime.getMinutes()
+      let seconds = cambodiaTime.getSeconds()
 
-    
-  },
+      // Format the time display
+      hours = String(hours).padStart(2, '0')
+      minutes = String(minutes).padStart(2, '0')
+      seconds = String(seconds).padStart(2, '0')
 
-  
+      return `${hours}:${minutes}:${seconds}`
+    },
+    startTimeAnimation() {
+      this.currentTime = this.getCurrentTime() // Initialize with the current time
+      this.intervalId = setInterval(() => {
+        this.currentTime = this.getCurrentTime()
+      }, 1000)
+    },
+    stopTimeAnimation() {
+      clearInterval(this.intervalId)
+    }
+  }
 }
 </script>
 
