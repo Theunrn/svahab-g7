@@ -1,7 +1,6 @@
 <template>
   <WebLayout></WebLayout>
-  <SearchView></SearchView>
- <div class="div flex justify-content-center mt-3">
+ <div class="div flex justify-content-center mt-3 relative z-10">
     <img width="18%" height="18%" src="../../assets/image/logo1.png" alt="">
   </div>
  <CardCom></CardCom>
@@ -15,7 +14,6 @@
 
 <script setup lang="ts">
 import WebLayout from '@/Components/Layouts/WebLayout.vue'
-import SearchView from '../../views/Web/SearchBar/SearchView.vue'
 import CardCom from '../../Components/Cards/CardCom.vue'
 import WebFooter from '../../Components/WebFooter.vue'
 import WeatherCom from '../../Components/Weathers/WeatherCom.vue'
