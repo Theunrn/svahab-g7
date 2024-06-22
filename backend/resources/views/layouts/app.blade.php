@@ -13,10 +13,16 @@
         <!-- Styles -->
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 
+        <!-- Icon -->
+        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
         <!-- Scripts -->
         <script src="{{ asset('js/app.js') }}" defer></script>
     </head>
     <body class="font-sans antialiased">
+        <div class="container">
+            @yield('content')
+        </div>
         <div x-data="{ sidebarOpen: false }" class="flex h-screen bg-gray-200">
             <div :class="sidebarOpen ? 'block' : 'hidden'" @click="sidebarOpen = false" class="fixed z-20 inset-0 bg-black opacity-50 transition-opacity lg:hidden"></div>
         
