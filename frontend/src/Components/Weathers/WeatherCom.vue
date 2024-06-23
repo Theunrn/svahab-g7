@@ -5,7 +5,7 @@
       <div class="left-content md:w-1/2 mb-5 ml-5 md:mb-0">
         <h1 class="text-4xl font-bold mb-4">Check Weather</h1>
         <p class="text-lg text-gray-700">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum vestibulum. Cras venenatis euismod malesuada. Sed sit amet facilisis urna. Praesent ultrices eros in cursus turpis massa tincidunt ante in nibh mauris cursus.
+          Get the latest weather updates for your area. We provide the current temperature, humidity, wind speed, and more. Just enter your city name to start. Stay informed about changing weather and plan your day with accurate, up-to-date info. Our service is quick, easy, and reliable.        
         </p>
         <form @submit.prevent="handleSearch" class="flex relative shadow-lg mt-3 rounded-2xl">
           <input v-model="searchCity" class="flex-1 pr-16 px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-l-md" type="search" placeholder="Search" aria-label="Search">
@@ -49,8 +49,9 @@
   </div>
 </template>
 
+
 <script>
-import axios from 'axios'
+import axios from 'axios';
 
 export default {
   data() {
@@ -60,96 +61,85 @@ export default {
       apiKey: '1d5b1ee8b600b4a9e279d0d3cdd57a23', // Your OpenWeatherMap API key
       city: 'Phnom Penh', // Default city
       searchCity: '', // Bind this to the input field
-      currentTime: '' // Add currentTime to data
-    }
+      currentTime: '', // Add currentTime to data
+    };
   },
   computed: {
     iconUrl() {
       if (this.weather && this.weather.weather[0].icon) {
-        return `http://openweathermap.org/img/wn/${this.weather.weather[0].icon}@2x.png`
+        return `http://openweathermap.org/img/wn/${this.weather.weather[0].icon}@2x.png`;
       }
-      return ''
+      return '';
     },
     currentDateTime() {
-      const now = new Date()
-      return now.toLocaleDateString()
-    }
+      const options = { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' };
+      return new Date().toLocaleDateString('en-US', options);
+    },
   },
   created() {
-    this.fetchWeather()
-    this.startTimeAnimation() // Start updating the time
+    this.fetchWeather();
+    this.startTimeAnimation(); // Start updating the time
   },
   beforeUnmount() {
-    this.stopTimeAnimation() // Stop updating the time when component is unmounted
+    this.stopTimeAnimation(); // Stop updating the time when component is unmounted
   },
   methods: {
     async fetchWeather(city = this.city) {
       try {
-        const response = await axios.get(
-          `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${this.apiKey}`
-        )
-        this.weather = response.data
-        this.city = city
-        this.fetchForecast(response.data.coord.lat, response.data.coord.lon)
+        const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${this.apiKey}`);
+        this.weather = response.data;
+        this.city = city;
+        this.fetchForecast(response.data.coord.lat, response.data.coord.lon);
       } catch (error) {
-        console.error('Error fetching weather data:', error)
-        this.weather = null
-        this.city = 'Phnom Penh' // Revert to default city if error occurs
-        this.fetchWeather('Phnom Penh') // Fetch weather for default city
+        console.error('Error fetching weather data:', error);
+        this.weather = null;
+        this.city = 'Phnom Penh'; // Revert to default city if error occurs
+        this.fetchWeather('Phnom Penh'); // Fetch weather for default city
       }
     },
     async fetchForecast(lat, lon) {
       try {
-        const response = await axios.get(
-          `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=current,minutely,hourly,alerts&units=metric&appid=${this.apiKey}`
-        )
+        const response = await axios.get(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=current,minutely,hourly,alerts&units=metric&appid=${this.apiKey}`);
         const dailyForecast = response.data.daily.slice(0, 7).map(day => ({
           dt: day.dt,
           day: new Date(day.dt * 1000).toLocaleDateString('en', { weekday: 'short' }),
           temp: day.temp,
           icon: day.weather[0].icon
-        }))
-        this.forecast = dailyForecast
+        }));
+        this.forecast = dailyForecast;
       } catch (error) {
-        console.error('Error fetching forecast data:', error)
-        this.forecast = []
+        console.error('Error fetching forecast data:', error);
+        this.forecast = [];
       }
     },
     getIconUrl(icon) {
-      return `http://openweathermap.org/img/wn/${icon}.png`
+      return `http://openweathermap.org/img/wn/${icon}.png`;
     },
     handleSearch() {
       if (this.searchCity) {
-        this.fetchWeather(this.searchCity)
-        this.searchCity = '' // Clear the input field
+        this.fetchWeather(this.searchCity);
+        this.searchCity = ''; // Clear the input field
       }
     },
     getCurrentTime() {
-      const currentDate = new Date()
-      const cambodiaTime = new Date(currentDate.toLocaleString('en-US', { timeZone: 'Asia/Phnom_Penh' }))
-      let hours = cambodiaTime.getHours()
-      let minutes = cambodiaTime.getMinutes()
-      let seconds = cambodiaTime.getSeconds()
-
-      // Format the time display
-      hours = String(hours).padStart(2, '0')
-      minutes = String(minutes).padStart(2, '0')
-      seconds = String(seconds).padStart(2, '0')
-
-      return `${hours}:${minutes}:${seconds}`
+      const currentDate = new Date();
+      const cambodiaTime = new Date(currentDate.toLocaleString('en-US', { timeZone: 'Asia/Phnom_Penh' }));
+      const formattedTime = date => String(date.getHours()).padStart(2, '0') + ':' + String(date.getMinutes()).padStart(2, '0') + ':' + String(date.getSeconds()).padStart(2, '0');
+      return formattedTime(cambodiaTime);
     },
     startTimeAnimation() {
-      this.currentTime = this.getCurrentTime() // Initialize with the current time
+      this.currentTime = this.getCurrentTime(); // Initialize with the current time
       this.intervalId = setInterval(() => {
-        this.currentTime = this.getCurrentTime()
-      }, 1000)
+        this.currentTime = this.getCurrentTime();
+      }, 1000);
     },
     stopTimeAnimation() {
-      clearInterval(this.intervalId)
+      clearInterval(this.intervalId);
     }
   }
 }
 </script>
+
 
 <style scoped>
 .weather-widget {
