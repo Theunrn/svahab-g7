@@ -2,21 +2,21 @@
   <div id="carouselExampleFade" class="carousel slide carousel-fade">
     <div class="carousel-inner">
       <div class="carousel-item active">
-        <img src="../../assets/contact-piture/pixelcut-export.jpeg" class="d-block w-full h-[95vh] md:h-[95vh] lg:h-[95vh] header-image object-cover" alt="...">
+        <img src="https://m.media-amazon.com/images/I/51ObuMG94FS._AC_UF894,1000_QL80_.jpg" class="d-block w-full h-[50vh] md:h-[95vh] lg:h-[95vh] header-image object-cover" alt="...">
         <div class="carousel-caption">
           <h1>Kick Off Your Shopping Spree!</h1>
           <p>Explore our wide range of football gear and accessories to elevate your game.</p>
         </div>
       </div>
       <div class="carousel-item">
-        <img src="../../assets/ShopImage/soccer-jersey.jpg.webp" class="d-block w-full h-[95vh] md:h-[80vh] lg:h-[95vh] header-image object-cover" alt="...">
+        <img src="https://www.soccerbox.com/media/wysiwyg/homepage_images/champions-league-kit-2019-20.jpg" class="d-block w-full h-[95vh] md:h-[80vh] lg:h-[95vh] header-image object-cover" alt="...">
         <div class="carousel-caption">
           <h1>Suit Up for the Big Game</h1>
           <p>Find the perfect jersey, shorts, and more to show off your team spirit.</p>
         </div>
       </div>
       <div class="carousel-item">
-        <img src="../../assets/ShopImage/P1280309-768x432.jpg" class="d-block w-full h-[95vh] md:h-[80vh] lg:h-[95vh] header-image object-cover" alt="...">
+        <img src="https://ae01.alicdn.com/kf/S64d54d9682e04805a0513746409cf8080.jpg_640x640Q90.jpg_.webp" class="d-block w-full h-[95vh] md:h-[80vh] lg:h-[95vh] header-image object-cover" alt="...">
         <div class="carousel-caption">
           <h1>Elevate Your Football Experience</h1>
           <p>Discover the latest football gear and accessories to enhance your performance and style.</p>
