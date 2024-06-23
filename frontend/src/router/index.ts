@@ -72,6 +72,11 @@ const router = createRouter({
       name: 'Card',
       component: () => import('../views/Web/Products/CardView.vue')
     },
+    {
+      path: '/register',
+      name: 'register',
+      component: () => import('../views/Admin/Auth/RegisterVIew.vue')
+    },
 
    
   ]

@@ -15,7 +15,7 @@
     <div class="contact-body flex flex-col gap-4 md:flex-row mt-5 px-4 md:px-10 lg:px-20">
       <div class="contact-form w-full md:w-1/2 lg:w-1/2 p-4">
         <form class="bg-white mb-5 p-8 rounded-md shadow-lg bg-gradient-to-r from-[#F5F5F5] to-[#E5E4E2]">
-          <h2 class="text-2xl font-bold mb-4 text-center">Get start</h2>
+          <h2 class="text-2xl font-bold mb-4 text-center">Give us your feedback</h2>
           <div class="mb-3">
             <input type="text" id="name" name="name" placeholder="Name:" class="border border-gray-300 rounded-md py-2 px-3 w-full focus:outline-none focus:ring focus:ring-[#2F539B]" required>
           </div>

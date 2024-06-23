@@ -1,5 +1,5 @@
 <template>
-  <div id="default-carousel" class="relative w-full" data-carousel="slide" @mouseenter="stopAutoSlide" @mouseleave="startAutoSlide">
+  <div style="margin-top: 80px;" id="default-carousel" class="relative w-full" data-carousel="slide" @mouseenter="stopAutoSlide" @mouseleave="startAutoSlide">
     <!-- Carousel wrapper -->
     <div class="relative h-86 overflow-hidden rounded-lg md:h-96">
       <!-- Carousel items -->
