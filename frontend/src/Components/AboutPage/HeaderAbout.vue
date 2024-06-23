@@ -8,7 +8,7 @@ import WebHeaderMenu from '@/Components/WebHeaderMenu.vue'
       <slot />
     </div>
   </div>
-  <section class="bg-white">
+  <section class="bg-gray-100">
     <div class="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 md:grid-cols-2 items-center gap-8">
             <div class="max-w-lg ml-15 mb-20">
