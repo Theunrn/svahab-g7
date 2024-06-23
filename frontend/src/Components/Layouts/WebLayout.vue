@@ -27,7 +27,7 @@
         </div>
       </div>
     </div>
-    <div class="form-select absolute p-2 bg-orange bg-opacity-90 z-20 rounded-lg w-full md:w-5/5 lg:w-9/10 ml-16">
+    <div class="form-select absolute p-2 bg-green-500 bg-opacity-90 z-20 rounded-lg w-full md:w-5/5 lg:w-9/10 ml-16">
       <div class="flex items-center justify-center space-x-2">
         <select id="large" class="flex-1 px-4 py-3 rounded-md text-black border-2 border-transparent focus:border-yellow-500">
           <option selected>Where are you going?</option>
@@ -46,12 +46,7 @@
           placeholder="2 adults · 0 children · 1 room"
           class="flex-1 px-4 py-3 rounded-md text-black border-2 border-transparent focus:border-yellow-500"
         />
-        <button
-          type="button"
-          class="px-4 py-3 rounded-md bg-blue-500 text-white border-2 border-transparent focus:border-yellow-500"
-        >
-          Search
-        </button>
+        
       </div>
     </div>
   </div>
@@ -66,5 +61,13 @@ import WebHeaderMenu from '@/Components/WebHeaderMenu.vue'
 
 .form-select {
   bottom: -35px;
+}
+/* You can adjust the opacity value to make the overlay lighter or darker */
+.bg-opacity-75 {
+  opacity: 0.80; /* Adjust this value as needed */
+}
+
+.font-bold {
+  font-weight: bold;
 }
 </style>

@@ -1,11 +1,15 @@
 <template>
-    <WebHeaderMenu></WebHeaderMenu>
+    <HeaderAbout></HeaderAbout>
+    <CardAbout></CardAbout>
+    <MainAbout></MainAbout>
    <WebFooter></WebFooter>
   
   </template>
   
   <script setup lang="ts">
-  import WebHeaderMenu from '@/Components/WebHeaderMenu.vue'
+  import HeaderAbout from '@/Components/AboutPage/HeaderAbout.vue'
+  import CardAbout from '@/Components/AboutPage/CardAbout.vue'
+  import MainAbout from '@/Components/AboutPage/MainAbout.vue';
   import WebFooter from '../../Components/WebFooter.vue'
 
   </script>

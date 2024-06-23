@@ -15,6 +15,7 @@ import 'element-plus/dist/index.css'
 import axios from './plugins/axios'
 import 'uno.css'
 import { configure } from 'vee-validate'
+import './boxicons.css'
 
 
 configure({
