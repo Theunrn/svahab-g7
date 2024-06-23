@@ -17,9 +17,9 @@
               <p class="card-text text-danger fw-bold">{{ product.price }}$</p>
               <p class="card-text">{{ product.description }}</p>
               <div class="rating">
-                <span class="star">&#9733;</span>
-                <span class="star">&#9733;</span>
-                <span class="star">&#9733;</span>
+                <span class="star text-warning">&#9733;</span>
+                <span class="star text-warning">&#9733;</span>
+                <span class="star text-warning">&#9733;</span>
                 <span class="star">&#9733;</span> 
                 <span class="star">&#9734;</span>
               </div>
@@ -38,6 +38,7 @@
               >
                 Add to Cart
               </router-link>
+ 
             </div>
           </div>
         </div>
@@ -56,56 +57,56 @@ export default {
         id: 1,
         name: 'Ball',
         price: 10,
-        image: 'https://www.slazzer.com/downloads/7c8af552-309e-11ef-8754-42010a80000a/image_prev_ui.png',
+        image: 'https://cdn.britannica.com/68/195168-050-BBAE019A/football.jpg',
         description: 'Mini Football Sunny 300 Size 1 - Pastel Blue'
       },
         {
         id: 2,
-        name: 'Uniform',
+        name: 'Sport Cloth',
         price: 15,
-        image: 'https://www.slazzer.com/downloads/a919c094-309e-11ef-b7a6-42010a80000a/image_prev_ui.png',
+        image: 'https://s.alicdn.com/@sc04/kf/Habf4d374b47548fb944c63c2d15e6580X.jpg_300x300.jpg',
         description: 'Mini Football Sunny 300 Size 1 - Pastel Blue'
       },
         {
         id: 3,
         name: 'Soccer Sock',
         price: 15,
-        image: 'https://www.slazzer.com/downloads/41dc93be-30a0-11ef-bb37-42010a80000a/image_prev_ui.png',
+        image: 'https://soccerzoneusa.com/cdn/shop/products/SX5728-100-PHCFH001_590x.jpg?v=1588263965',
         description: 'Mini Football Sunny 300 Size 1 - Pastel Blue'
       },
         {
         id: 4,
         name: 'Soccer Cleats',
         price: 10,
-        image: 'https://www.slazzer.com/downloads/f68e531c-309e-11ef-bb37-42010a80000a/image_prev_ui.png',
+        image: 'https://i.ebayimg.com/images/g/6GEAAOSwWGZkVbFZ/s-l1200.jpg',
         description: 'Mini Football Sunny 300 Size 1 - Pastel Blue'
       },
         {
         id: 5,
         name: 'Shin Guards',
         price: 10,
-        image: 'https://www.slazzer.com/downloads/3828ba60-309f-11ef-bb37-42010a80000a/image_prev_ui.png',
+        image: 'https://soccerzoneusa.com/cdn/shop/products/SP0040-009-PHSFH001_875x.jpg?v=1588263959',
         description: 'Mini Football Sunny 300 Size 1 - Pastel Blue'
       },
         {
         id: 6,
         name: 'Coalkeeper Gloves',
         price: 10,
-        image: 'https://www.slazzer.com/downloads/622d11a8-309f-11ef-af54-42010a800009/image_prev_ui.png',
+        image: 'https://m.media-amazon.com/images/I/61bndwlfJSL._AC_UF1000,1000_QL80_.jpg',
         description: 'Mini Football Sunny 300 Size 1 - Pastel Blue'
       },
         {
         id: 7,
         name: 'Water Bottle',
         price: 10,
-        image: 'https://www.slazzer.com/downloads/9533e43c-309f-11ef-8754-42010a80000a/image_prev_ui.png',
+        image: 'https://football-futures.com/wp-content/uploads/2021/12/Waterv-bottle-2.png',
         description: 'Mini Football Sunny 300 Size 1 - Pastel Blue'
       },
         {
         id: 8,
         name: 'Cear Bag',
         price: 10,
-        image: 'https://www.slazzer.com/downloads/f1ba8d64-309f-11ef-a189-42010a80000a/image_prev_ui.png',
+        image: 'https://contents.mediadecathlon.com/p2161169/k$bbd724010de90a72409e266044a48426/45l-sports-bag-hardcase-black.jpg?format=auto&quality=70&f=1366x1366',
         description: 'Mini Football Sunny 300 Size 1 - Pastel Blue'
       },
 

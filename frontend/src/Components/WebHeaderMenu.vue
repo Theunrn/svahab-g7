@@ -11,17 +11,17 @@
     </div>
     <!-- Menu Items -->
     <nav class="flex justify-center space-x-4">
-      <a href="/" class="font-bold py-2 text-white custom-hover text-decoration-none me-3">Home</a>
-      <a href="/about" class="font-bold py-2 text-white custom-hover text-decoration-none me-3"
-        >About</a
+      <a href="/" class="font-bold-200 py-2 text-white custom-hover text-decoration-none me-3">HOME</a>
+      <a href="/about" class="font-bold-200 py-2 text-white custom-hover text-decoration-none me-3"
+        >ABOUT</a
       >
-      <a href="/shop" class="font-bold py-2 text-white custom-hover text-decoration-none me-3"
-        >Shop</a
+      <a href="/shop" class="font-bold-200 py-2 text-white custom-hover text-decoration-none me-3"
+        >SHOP</a
       >
       <a
         href="/contact"
-        class="font-bold py-2 me-5 text-white custom-hover text-decoration-none me-5"
-        >Contact</a
+        class="font-bold-200 py-2 me-5 text-white custom-hover text-decoration-none me-5"
+        > CONTACT</a
       >
     </nav>
 
