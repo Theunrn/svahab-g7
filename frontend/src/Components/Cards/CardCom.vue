@@ -1,40 +1,37 @@
 <template>
-  <div class="card-me flex flex-wrap justify-content-start align-items-start ml-5">
-    <!-- Card 1 -->
-    <div class="card-wrapper relative w-1/4 sm:w-full mx-2 my-5" v-for="index in 4" :key="index" >
-      <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 overflow-hidden">
-        <!-- Card Image -->
-        <router-link :to="{ name: 'Detail', params: { id: 1 } }">
-          <img class="rounded-t-lg p-2" src="../../assets/image/field.png" alt="Football Stadium" />
-        </router-link>
-        <div class="p-4 relative z-10">
-          <!-- Card Title -->
-          <router-link :to="{ name: 'Detail', params: { id: 1 } }">
-            <h5 class="mb-2 text-2xl text-info font-bold tracking-tight text-gray-900 dark:text-white">Football Stadium</h5>
-          </router-link>
-          <!-- Card Description -->
-          <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>
-          <!-- See Details Button -->
-          <router-link :to="{ name: 'Detail', params: { id: 1 } }" class="me-2 inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-gray-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-            See Details
-          </router-link>
-          <!-- Book Now Button -->
-          <router-link :to="{ name: 'Book', params: { id: 1 } }" class="me-2 inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-            Book Now
-            <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
-            </svg>
-          </router-link>
-        </div>
-        <!-- Overlay for Hover Effect -->
-        <div class="overlay absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 transition-opacity duration-300">
-          <p class="text-white text-center">Football Field Booking</p>
+  <div class="card-me flex flex-wrap justify-content-center align-items-start ml-5">
+    <!-- Loop to generate 6 cards -->
+    <p class="w-full text-center mb-2 mr-11 ml-11 text-lg text-gray-700">
+      Find the best football fields near you! Whether you want to play a friendly game or a competitive match, our platform helps you easily find and book the perfect field. Check out our top-rated venues and book your spot today.    </p>
+    <div class="card-wrapper relative w-1/4 sm:w-full mx-2 my-2" v-for="index in 6" :key="index">
+      <div class="container bg-overlay">
+        <div class="row text-center flex flex-col items-center justify-center h-full">
+          <h1 class="text-2xl font-bold mb-4">Football Field Name</h1>
+          <div class="btn-group">
+            <router-link :to="'/field/detail/' + index">
+              <button type="button" class="btn btn-primary btn-details btn-sm py-1 me-2">
+                <font-awesome-icon :icon="['fas', 'info-circle']" class="me-1" /> See Details
+              </button>
+            </router-link>
+            <router-link to="/booking">
+              <button type="button" style="background-color: orange" class="btn btn-book btn-sm py-1">
+                <font-awesome-icon :icon="['fas', 'book']" class="me-1" /> Book Now
+              </button>
+            </router-link>
+          </div>
         </div>
       </div>
     </div>
-    <!-- Repeat for other cards with unique IDs -->
   </div>
 </template>
+
+<script>
+export default {
+  name: 'FootballFields', 
+  // Your component's logic here
+}
+</script>
+
 <style scoped>
 .card-me {
   justify-content: center;
@@ -42,23 +39,45 @@
 }
 
 .card-wrapper {
-  width: 23%;
+  width: 30%;
   transition: transform 0.3s ease;
+  position: relative;
 }
 
 .card-wrapper:hover {
   transform: scale(1.05);
 }
 
-.overlay {
-  z-index: 5;
-  background-color: rgba(0, 0, 0, 0.5);
-  opacity: 0;
-  transition: opacity 0.3s ease;
+.bg-overlay {
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url("../../assets/image/field.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  color: #fff;
+  height: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+  position: relative;
 }
 
-.card-wrapper:hover .overlay {
+.btn-group {
+  position: absolute;
+  bottom: 30px;
+  width: 60%;
+  display: flex;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  transform: translateY(20px);
+}
+
+/* Show buttons on hover */
+.card-wrapper:hover .btn-group {
   opacity: 1;
+  transform: translateY(0);
 }
 
 @media (max-width: 768px) {
