@@ -1,5 +1,5 @@
 <template>
-    <div class="product-detail container my-5">
+    <div class="product-detail my-5">
       <div class="row mb-3">
         <div class="col-12">
           <router-link to="/product" class="btn btn-outline-primary">
@@ -7,21 +7,21 @@
           </router-link>
         </div>
       </div>
-      <div class="row">
+      <div class="row" style="margin-left: -50px;">
         <!-- Image Section -->
         <div class="col-md-6">
           <div class="product-images">
-            <img src="../../assets/ShopImage/card/ball.jpg" class="img-fluid" alt="Football ball">
+            <img src="../../assets/ShopImage/card/ball.png" class="img-fluid" alt="Football ball">
           </div>
         </div>
         <!-- Product Details Section -->
         <div class="col-md-6">
-          <h2 class="mb-2">Ball</h2>
-          <h3 class="mb-3">Mini Football Sunny 300 Size 1 - Pastel Blue</h3>
-          <p class="mb-1">Reference: 8753527</p>
-          <p class="price text-success font-weight-bold mb-3">$10</p>
-          <p class="mb-3">Tax included</p>
-          <div class="rating mb-3">
+          <h2 class="mb-2 mt-4 fs-3 font-bold ">Ball</h2>
+          <h3 class="mb-2">Mini Football Sunny 300 Size 1 - Pastel Blue</h3>
+          <p class="mb-1"><strong>Call: </strong> 098753527</p>
+          <p class="price text-success font-weight-bold mb-2"><strong>Price: </strong> $10</p>
+          <p class="mb-2">Tax included</p>
+          <div class="rating mb-2">
             <span class="star text-warning">&#9733;</span>
             <span class="star text-warning">&#9733;</span>
             <span class="star text-warning">&#9733;</span>
@@ -32,8 +32,9 @@
           <div class="color-options mb-3">
             <h5 class="mb-2">Color:</h5>
             <div class="d-flex">
-              <div class="color-circle bg-pink mr-2 cursor-pointer"></div>
+              <div class="color-circle bg-yellow mr-2 cursor-pointer"></div>
               <div class="color-circle bg-blue mr-2 cursor-pointer"></div>
+              <div class="color-circle bg-black mr-2 cursor-pointer"></div>
             </div>
           </div>
           <div class="size-options mb-3">
