@@ -6,6 +6,10 @@ use App\Http\Controllers\Admin\{
     MailSettingController,
 };
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\Admin\FieldController;
+
+Route::resource('fields', FieldController::class);
+
 
 /*
 |--------------------------------------------------------------------------

@@ -1,30 +1,26 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Field;
 use Illuminate\Http\Request;
 
-class FieldController extends Controller
+class FildController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
     public function index()
     {
-        $fields = Field::all();
-        return view('setting.fields.index', compact('fields'));
+        //
     }
-
 
     /**
      * Store a newly created resource in storage.
      */
-    // public function store(Request $request)
-    // {
-    //     //
-    // }
-    public function create()
+    public function store(Request $request)
     {
-        return view('setting.fields.create');
+        //
     }
 
     /**
