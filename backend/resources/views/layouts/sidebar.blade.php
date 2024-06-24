@@ -55,14 +55,7 @@
         @canany('User access','User add','User edit','User delete')
         <a class="flex items-center mt-4 py-2 px-6 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 {{ Route::currentRouteNamed('admin.users.index') ? 'active' : '' }}"
             href="{{ route('admin.users.index')}}">
-            <span class="inline-flex justify-center items-center">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                </svg>
-            </span>
-
+            <i class='bx bx-user text-2xl'></i>
             <span class="mx-3">User</span>
         </a>
         @endcanany
@@ -70,15 +63,11 @@
         {{-- @canany(['Booking access','Booking add','Booking edit','Booking delete']) --}}
         <a
             class="flex items-center mt-4 py-2 px-6 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 {{ Route::currentRouteNamed('admin.booking.index') ? 'active' : '' }}">
-            <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M8 7V3m8 4V3M3 13h18M5 21h14a2 2 0 002-2V7H3v12a2 2 0 002 2z"></path>
-            </svg>
+            <i class='bx bx-calendar-check text-2xl'></i>
             <span class="mx-3">Booking</span>
         </a>
         {{-- @endcanany --}}
-        @canany(['Field access','Field add','Field edit','Field delete'])
+        {{-- @canany(['Field access','Field add','Field edit','Field delete']) --}}
         <a
             class="flex items-center mt-4 py-2 px-6 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 {{ Route::currentRouteNamed('admin.fields.index') ? 'active' : '' }}"
             href="{{ route('admin.fields.index') }}">
@@ -90,7 +79,7 @@
             </svg>
             <span class="mx-3">Fields</span>
         </a>
-        @endcanany
+        {{-- @endcanany --}}
         {{-- @canany(['Payment access','Payment add','Payment edit','Payment delete']) --}}
         <a class="flex items-center mt-4 py-2 px-6 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 {{ Route::currentRouteNamed('admin.payment.index') ? 'active' : '' }}"
             href="#">
@@ -101,24 +90,14 @@
         {{-- @canany(['Notification access','Notification add','Notification edit','Notification delete']) --}}
         <a class="flex items-center mt-4 py-2 px-6 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 {{ Route::currentRouteNamed('admin.notification.index') ? 'active' : '' }}"
             href="#">
-            <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M12 22c1.656 0 3-1.344 3-3H9c0 1.656 1.344 3 3 3zM21 16h-1.72C18.12 14.834 17.454 13.448 17 12V9c0-3.404-2.687-6.177-6.029-6.875A2.996 2.996 0 0012 3a2.996 2.996 0 00-1.971-.875C7.687 2.823 5 5.596 5 9v3c-.454 1.448-1.12 2.834-2.28 4H1c0 2.21 1.79 4 4 4h12c2.21 0 4-1.79 4-4z">
-                </path>
-            </svg>
+            <i class='bx bxs-bell-ring text-2xl' ></i>
             <span class="mx-3">Notification</span>
         </a>
         {{-- @endcanany --}}
         {{-- @canany(['Feedback access','Feedback add','Feedback edit','Feedback delete']) --}}
         <a class="flex items-center mt-4 py-2 px-6 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 {{ Route::currentRouteNamed('admin.feedback.index') ? 'active' : '' }}"
             href="#">
-            <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M7 8h10M7 12h8m-8 4h6M21 8v10a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h2l2-2h6l2 2h2a2 2 0 012 2z">
-                </path>
-            </svg>
+            <i class='bx bx-comment-detail text-2xl' ></i>
             <span class="mx-3">Feedback</span>
         </a>
         {{-- @endcanany --}}
