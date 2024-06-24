@@ -1,5 +1,5 @@
 <div :class="sidebarOpen ? 'translate-x-0 ease-out' : '-translate-x-full ease-in'"
-    class="fixed z-30 inset-y-0 left-0 w-64 transition duration-300 transform bg-gray-900 overflow-y-auto lg:translate-x-0 lg:static lg:inset-0">
+    class="pb-5 fixed z-30 inset-y-0 left-0 w-64 transition duration-300 transform bg-gray-900 overflow-y-auto lg:translate-x-0 lg:static lg:inset-0">
     <div class="flex items-center justify-center mt-8">
         <div class="flex items-center">
             <svg class="h-12 w-12" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -61,8 +61,9 @@
         @endcanany
 
         {{-- @canany(['Booking access','Booking add','Booking edit','Booking delete']) --}}
-        <a
-            class="flex items-center mt-4 py-2 px-6 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 {{ Route::currentRouteNamed('admin.booking.index') ? 'active' : '' }}">
+        <a 
+            class="flex items-center mt-4 py-2 px-6 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 {{ Route::currentRouteNamed('admin.bookings.index') ? 'active' : '' }}"
+            href="{{ route('admin.bookings.index') }}">
             <i class='bx bx-calendar-check text-2xl'></i>
             <span class="mx-3">Booking</span>
         </a>
@@ -80,23 +81,23 @@
             <span class="mx-3">Fields</span>
         </a>
         {{-- @endcanany --}}
+         {{-- @canany(['Notification access','Notification add','Notification edit','Notification delete']) --}}
+         <a class="flex items-center mt-4 py-2 px-6 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 {{ Route::currentRouteNamed('admin.products.index') ? 'active' : '' }}"
+         href="{{route('admin.products.index')}}">
+         <i class='bx bxl-product-hunt text-2xl'></i>
+         <span class="mx-3">Products</span>
+        </a>
+     {{-- @endcanany --}}
         {{-- @canany(['Payment access','Payment add','Payment edit','Payment delete']) --}}
-        <a class="flex items-center mt-4 py-2 px-6 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 {{ Route::currentRouteNamed('admin.payment.index') ? 'active' : '' }}"
-            href="#">
+        <a class="flex items-center mt-4 py-2 px-6 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 {{ Route::currentRouteNamed('admin.payments.index') ? 'active' : '' }}"
+            href="{{route('admin.payments.index')}}">
             <i class='bx bxl-paypal text-3xl'></i>
             <span class="mx-3">Payment</span>
         </a>
         {{-- @endcanany --}}
-        {{-- @canany(['Notification access','Notification add','Notification edit','Notification delete']) --}}
-        <a class="flex items-center mt-4 py-2 px-6 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 {{ Route::currentRouteNamed('admin.notification.index') ? 'active' : '' }}"
-            href="#">
-            <i class='bx bxs-bell-ring text-2xl' ></i>
-            <span class="mx-3">Notification</span>
-        </a>
-        {{-- @endcanany --}}
         {{-- @canany(['Feedback access','Feedback add','Feedback edit','Feedback delete']) --}}
-        <a class="flex items-center mt-4 py-2 px-6 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 {{ Route::currentRouteNamed('admin.feedback.index') ? 'active' : '' }}"
-            href="#">
+        <a class="flex items-center mt-4 py-2 px-6 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 {{ Route::currentRouteNamed('admin.feedbacks.index') ? 'active' : '' }}"
+            href="{{route('admin.feedbacks.index')}}">
             <i class='bx bx-comment-detail text-2xl' ></i>
             <span class="mx-3">Feedback</span>
         </a>
@@ -104,7 +105,7 @@
 
         {{-- @canany(['Setting access','Setting edit']) --}}
         <a class="flex items-center mt-4 py-2 px-6 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 {{ Route::currentRouteNamed('admin.settings.index') ? 'active' : '' }}"
-            href="#">
+            href="{{route('admin.settings.index')}}">
             <i class='bx bx-cog text-2xl'></i>
             <span class="mx-3">Settings</span>
         </a>
