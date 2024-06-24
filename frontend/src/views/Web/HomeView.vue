@@ -4,8 +4,8 @@
     <img width="18%" height="18%" src="../../assets/image/logo1.png" alt="">
   </div>
  <CardCom></CardCom>
- <HomeBody></HomeBody>
  <MatchTeam></MatchTeam>
+ <HomeBody></HomeBody>
  <MatchSchedule></MatchSchedule>
  <WeatherCom></WeatherCom>
  <WebFooter></WebFooter>
