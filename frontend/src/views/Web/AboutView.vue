@@ -1,16 +1,20 @@
 <template>
     <HeaderAbout></HeaderAbout>
-    <CardAbout></CardAbout>
-    <MainAbout></MainAbout>
+    <CardService></CardService>
+    <MvvAbout></MvvAbout>
+    <RateAbout></RateAbout>
+    <FeedAbout></FeedAbout>
    <WebFooter></WebFooter>
   
   </template>
   
   <script setup lang="ts">
-  import HeaderAbout from '@/Components/AboutPage/HeaderAbout.vue'
-  import CardAbout from '@/Components/AboutPage/CardAbout.vue'
-  import MainAbout from '@/Components/AboutPage/MainAbout.vue';
-  import WebFooter from '../../Components/WebFooter.vue'
+  import HeaderAbout from '@/Components/AboutPage/HeaderAbout.vue';
+  import CardService from '@/Components/AboutPage/CardService.vue';
+  import MvvAbout from '@/Components/AboutPage/MvvAbout.vue';
+  import RateAbout from '@/Components/AboutPage/RateAbout.vue';
+  import FeedAbout from '@/Components/AboutPage/FeedAbout.vue';
+  import WebFooter from '../../Components/WebFooter.vue';
 
   </script>
   
