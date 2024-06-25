@@ -6,7 +6,7 @@ use App\Http\Controllers\Admin\{
     MailSettingController,
 };
 use App\Http\Controllers\BookingController;
-
+use App\Http\Controllers\OrderController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -61,6 +61,7 @@ Route::namespace('App\Http\Controllers\Admin')->name('admin.')->prefix('admin')
         Route::resource('bookings','BookingController');
         Route::resource('settings','SettingController');
         Route::resource('products','ProductController');
+        Route::resource('orders','OrderController');
         Route::resource('payments','PaymentController');
         Route::resource('feedbacks','FeedbackController');
 
@@ -70,6 +71,7 @@ Route::namespace('App\Http\Controllers\Admin')->name('admin.')->prefix('admin')
         Route::put('/mail-update/{mailsetting}',[MailSettingController::class,'update'])->name('mail.update');
 
 });
+
 
 
 

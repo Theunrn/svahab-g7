@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\PostController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\OrderController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -25,3 +26,5 @@ Route::put('/customers/{id}/role', [AuthController::class, 'updateRole']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 Route::get('/me', [AuthController::class, 'index'])->middleware('auth:sanctum');
 Route::get('/post/list', [PostController::class, 'index'])->middleware('auth:sanctum');
+Route::get('/order/list', [OrderController::class, 'index'])->middleware('auth:sanctum');
+
