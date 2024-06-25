@@ -74,9 +74,6 @@ const flatpickrConfig = {
   dateFormat: 'Y-m-d'
 };
 
-const tongleFevorite = (field) => {
-  field.favorite = !field.favorite;
-};
 </script>
 
 <style scoped>
