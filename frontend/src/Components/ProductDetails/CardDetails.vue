@@ -53,7 +53,7 @@
               </div>
             </div>
           </div>
-          <button class="btn btn-warning btn-block mb-4">Add To Cart</button>
+          <router-link to="/payment" class="btn btn-warning btn-block mb-4"> Pay Now</router-link>
           <div class="delivery-info mb-4">
             <p class="mb-1"><strong>Home Delivery:</strong> Available within 48 hours</p>
             <p class="mb-0"><strong>Click & Collect:</strong> Pickup in store within 4 hours</p>

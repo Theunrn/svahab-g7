@@ -17,7 +17,7 @@
     <!-- Authentication Button -->
     <div class="auth flex gap-2">
       <!-- Conditionally render Register, Login or Logout button -->
-      <template v-if="isAuthenticated = false">
+      <template v-if="!authStore.isAuthenticated">
         <a href="/register"><button class="hover:bg-red-400 text-dark bg-white px-4 py-1 border-1 border-red-700 hover:border-red-500 rounded">Register</button></a>
         <a href="/login"><button class="hover:bg-red-400 text-dark bg-white px-4 py-1 border-1 border-red-700 hover:border-red-500 rounded">Login</button></a>
       </template>
@@ -28,10 +28,12 @@
 
     <!-- Cart Button -->
     <button class="relative m-6 inline-flex w-fit">
-      <div class="absolute bottom-auto left-auto right-0 top-0 z-10 inline-block -translate-y-1/2 translate-x-2/4 rotate-0 skew-x-0 skew-y-0 scale-x-100 scale-y-100 text-white rounded-full bg-red-600 py-1 px-2 text-sx">1</div>
-      <div class="flex items-center justify-center rounded-lg bg-primary-500 text-center text-white dark:text-gray-200">
+      <div
+        class="absolute bottom-auto left-auto right-0 top-0 z-10 inline-block -translate-y-1/2 translate-x-2/4 rotate-0 skew-x-0 skew-y-0 scale-x-100 scale-y-100 text-white rounded-full bg-red-600 py-1 px-2 text-sx">1</div>
+      <router-link  to="/addtocart"
+        class="flex items-center justify-center rounded-lg bg-primary-500 text-center text-white dark:text-gray-200">
         <i class='bx bxs-cart-add text-4xl ml-4 text-white'></i>
-      </div>
+      </router-link>
     </button>
   </header>
 </template>
@@ -43,13 +45,9 @@ import { useAuthStore } from '@/stores/auth-store'; // Adjust the import path ba
 const route = useRoute();
 const authStore = useAuthStore();
 
-// Access isAuthenticated from authStore
-let isAuthenticated = authStore.isAuthenticated;
 // Function to trigger logout
 const logout = () => {
-  authStore.isAuthenticated = false;
   authStore.logout();
-  
 };
 </script>
 

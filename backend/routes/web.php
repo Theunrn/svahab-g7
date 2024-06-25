@@ -1,11 +1,20 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+<<<<<<< HEAD
 use App\Http\Controllers\Admin\FieldController;
 use App\Http\Controllers\Admin\MailSettingController;
 use App\Http\Controllers\Admin\ProfileController;
 
 
+=======
+use App\Http\Controllers\Admin\{
+    ProfileController,
+    MailSettingController,
+};
+use App\Http\Controllers\BookingController;
+use App\Http\Controllers\OrderController;
+>>>>>>> d2c01e186c5ac769f0a1a73da29e83fa90e693d1
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -49,6 +58,7 @@ Route::get('/admin/dashboard', function () {
 require __DIR__ . '/auth.php';
 
 Route::namespace('App\Http\Controllers\Admin')->name('admin.')->prefix('admin')
+<<<<<<< HEAD
     ->group(function () {
         Route::resource('roles', 'RoleController');
         Route::resource('permissions', 'PermissionController');
@@ -66,3 +76,28 @@ Route::namespace('App\Http\Controllers\Admin')->name('admin.')->prefix('admin')
         Route::get('/mail', [MailSettingController::class, 'index'])->name('mail.index');
         Route::put('/mail-update/{mailsetting}', [MailSettingController::class, 'update'])->name('mail.update');
     });
+=======
+    ->group(function(){
+        Route::resource('roles','RoleController');
+        Route::resource('permissions','PermissionController');
+        Route::resource('users','UserController');
+        Route::resource('posts','PostController');
+        Route::resource('fields','FieldController');
+        Route::resource('bookings','BookingController');
+        Route::resource('settings','SettingController');
+        Route::resource('products','ProductController');
+        Route::resource('orders','OrderController');
+        Route::resource('payments','PaymentController');
+        Route::resource('feedbacks','FeedbackController');
+
+        Route::get('/profile',[ProfileController::class,'index'])->name('profile');
+        Route::put('/profile-update',[ProfileController::class,'update'])->name('profile.update');
+        Route::get('/mail',[MailSettingController::class,'index'])->name('mail.index');
+        Route::put('/mail-update/{mailsetting}',[MailSettingController::class,'update'])->name('mail.update');
+
+});
+
+
+
+
+>>>>>>> d2c01e186c5ac769f0a1a73da29e83fa90e693d1
