@@ -19,6 +19,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.5.2",
     "@fortawesome/vue-fontawesome": "^3.0.8",
     "axios": "^1.7.2",
+    "bcryptjs": "^2.4.3",
     "bootstrap": "^5.3.3",
     "element-plus": "^2.7.4",
     "pinia": "^2.1.7",
@@ -28,11 +29,9 @@
     "vue-gates": "^2.1.2",
     "vue-router": "^4.3.0",
     "vue-simple-acl": "^2.0.2",
-<<<<<<<<< Temporary merge branch 1
-    "vue3-datepicker": "^0.4.0",
-=========
     "vue-slick-carousel": "^1.0.6",
->>>>>>>>> Temporary merge branch 2
+    "vue3-datepicker": "^0.4.0",
+    "vuex": "^4.0.2",
     "yup": "^1.4.0"
   },
   "devDependencies": {
