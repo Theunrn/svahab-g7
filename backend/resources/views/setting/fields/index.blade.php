@@ -6,12 +6,12 @@
   </x-slot>
 
   <div class="container mt-4">
-    @if(session('success'))
+    {{-- @if(session('success'))
     <div class="alert alert-success alert-dismissible fade show" role="alert">
       {{ session('success') }}
       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
-    @endif
+    @endif --}}
     <a href="{{ route('admin.fields.create') }}" class="btn btn-primary mb-3">Add Field</a>
     <div class="table-responsive">
       <table class="table table-hover table-bordered">

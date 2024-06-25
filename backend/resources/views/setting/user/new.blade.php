@@ -1,5 +1,6 @@
 <x-app-layout>
 <<<<<<< HEAD
+<<<<<<< HEAD
   <div>
     <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-200">
       <div class="container mx-auto px-6 py-1 pb-16">
@@ -12,6 +13,8 @@
               <input id="name" type="text" name="name" value="{{ old('name') }}" placeholder="Enter name" class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-200" />
             </div>
 =======
+=======
+>>>>>>> ea26997741c66c7ddc7d27c6e72f9d8ae4f40dcb
    <div>
         <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-200">
             <div class="container mx-auto px-6 py-1 pb-16">
@@ -52,7 +55,23 @@
                     <input id="password_confirmation" type="password" name="password_confirmation" placeholder="Re-enter password" class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-200"
                     />
                 </div>
+<<<<<<< HEAD
 >>>>>>> 9378dcb72fe6df899f0f22937ce21cd8b776692b
+=======
+=======
+  <div>
+    <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-200">
+      <div class="container mx-auto px-6 py-1 pb-16">
+        <div class="bg-white shadow-md rounded my-6 p-5">
+          <form method="POST" action="{{ route('admin.users.store')}}">
+            @csrf
+            @method('post')
+            <div class="flex flex-col space-y-2">
+              <label for="name" class="text-gray-700 select-none font-medium">User Name</label>
+              <input id="name" type="text" name="name" value="{{ old('name') }}" placeholder="Enter name" class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-200" />
+            </div>
+>>>>>>> 68302db391a7306cfa3b10541bd69ede50667dc8
+>>>>>>> ea26997741c66c7ddc7d27c6e72f9d8ae4f40dcb
 
             <div class="flex flex-col space-y-2">
               <label for="email" class="text-gray-700 select-none font-medium">Email</label>

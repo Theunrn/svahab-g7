@@ -60,6 +60,7 @@ Route::namespace('App\Http\Controllers\Admin')->name('admin.')->prefix('admin')
         Route::resource('payments', 'PaymentController');
         Route::resource('feedbacks', 'FeedbackController');
         Route::resource('fields', 'FieldController');
+        Route::resource('orders', 'OrderController');
 
         Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
         Route::put('/profile-update', [ProfileController::class, 'update'])->name('profile.update');
