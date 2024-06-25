@@ -1,10 +1,10 @@
 <template>
   <!-- How It Works -->
-  <div class="py-12 bg-gray-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <div class="py-12 bg-gray-50 ">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
       <h2 class="text-3xl font-bold text-gray-900 mb-1 text-center">HOW IT WORKS</h2>
       <p class="text-center mb-5">Learn More About Our Features</p>
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-10 mr-7">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-40 mr-7">
         <div class="card rounded-lg shadow-lg p-4 w-76">
           <div class="text-center">
             <div class="flex items-center justify-center mb-4 text-3xl text-blue-500">

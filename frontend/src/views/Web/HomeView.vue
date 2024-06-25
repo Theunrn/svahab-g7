@@ -5,8 +5,8 @@
   </div>
  <CardCom></CardCom>
  <MatchTeam></MatchTeam>
- <HomeBody></HomeBody>
  <MatchSchedule></MatchSchedule>
+ <HomeBody></HomeBody>
  <WeatherCom></WeatherCom>
  <WebFooter></WebFooter>
 
