@@ -22,6 +22,7 @@
     "@heroicons/vue": "^2.1.4",
     "@syncfusion/ej2-vue-calendars": "^26.1.38",
     "axios": "^1.7.2",
+    "bcryptjs": "^2.4.3",
     "bootstrap": "^5.3.3",
     "element-plus": "^2.7.4",
     "flatpickr": "^4.6.13",
@@ -37,6 +38,7 @@
     "vue-simple-acl": "^2.0.2",
     "vue-slick-carousel": "^1.0.6",
     "vue3-datepicker": "^0.4.0",
+    "vuex": "^4.0.2",
     "yup": "^1.4.0"
   },
   "devDependencies": {

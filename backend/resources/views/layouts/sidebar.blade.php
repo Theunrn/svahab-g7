@@ -17,7 +17,6 @@
             </a>
         </div>
     </div>
-
     <nav class="mt-10">
         <a class="flex items-center mt-4 py-2 px-6 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 {{ Route::currentRouteNamed('admin.dashboard') ? 'active' : '' }} "
             href="{{ route('admin.dashboard')}}">
@@ -34,7 +33,6 @@
                     d="M17 14v6m-3-3h6M6 10h2a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2zm10 0h2a2 2 0 002-2V6a2 2 0 00-2-2h-2a2 2 0 00-2 2v2a2 2 0 002 2zM6 20h2a2 2 0 002-2v-2a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2z">
                 </path>
             </svg>
-
             <span class="mx-3">Role</span>
         </a>
         @endcanany
@@ -60,15 +58,15 @@
         </a>
         @endcanany
 
-        {{-- @canany(['Booking access','Booking add','Booking edit','Booking delete']) --}}
+        @canany(['Booking access','Booking add','Booking edit','Booking delete'])
         <a 
             class="flex items-center mt-4 py-2 px-6 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 {{ Route::currentRouteNamed('admin.bookings.index') ? 'active' : '' }}"
             href="{{ route('admin.bookings.index') }}">
             <i class='bx bx-calendar-check text-2xl'></i>
             <span class="mx-3">Booking</span>
         </a>
-        {{-- @endcanany --}}
-        {{-- @canany(['Field access','Field add','Field edit','Field delete']) --}}
+        @endcanany
+        @canany(['Field access','Field add','Field edit','Field delete'])
         <a
             class="flex items-center mt-4 py-2 px-6 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 {{ Route::currentRouteNamed('admin.fields.index') ? 'active' : '' }}"
             href="{{ route('admin.fields.index') }}">
@@ -80,8 +78,8 @@
             </svg>
             <span class="mx-3">Fields</span>
         </a>
-        {{-- @endcanany --}}
-         {{-- @canany(['Notification access','Notification add','Notification edit','Notification delete']) --}}
+        @endcanany
+         @canany(['Product access','Product add','Product edit','Product delete'])
          <a class="flex items-center mt-4 py-2 px-6 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 {{ Route::currentRouteNamed('admin.products.index') ? 'active' : '' }}"
          href="{{route('admin.products.index')}}">
          <i class='bx bxl-product-hunt text-2xl'></i>
@@ -94,19 +92,22 @@
         </a>
      {{-- @endcanany --}}
         {{-- @canany(['Payment access','Payment add','Payment edit','Payment delete']) --}}
+        @endcanany
+
+        @canany(['Payment access','Payment add','Payment edit','Payment delete'])
         <a class="flex items-center mt-4 py-2 px-6 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 {{ Route::currentRouteNamed('admin.payments.index') ? 'active' : '' }}"
             href="{{route('admin.payments.index')}}">
             <i class='bx bxl-paypal text-3xl'></i>
             <span class="mx-3">Payment</span>
         </a>
-        {{-- @endcanany --}}
-        {{-- @canany(['Feedback access','Feedback add','Feedback edit','Feedback delete']) --}}
+        @endcanany
+        @canany(['Feedback access','Feedback add','Feedback edit','Feedback delete'])
         <a class="flex items-center mt-4 py-2 px-6 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 {{ Route::currentRouteNamed('admin.feedbacks.index') ? 'active' : '' }}"
             href="{{route('admin.feedbacks.index')}}">
             <i class='bx bx-comment-detail text-2xl' ></i>
             <span class="mx-3">Feedback</span>
         </a>
-        {{-- @endcanany --}}
+        @endcanany
 
         {{-- @canany(['Setting access','Setting edit']) --}}
         <a class="flex items-center mt-4 py-2 px-6 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 {{ Route::currentRouteNamed('admin.settings.index') ? 'active' : '' }}"
@@ -115,7 +116,6 @@
             <span class="mx-3">Settings</span>
         </a>
         {{-- @endcanany --}}
-
 
 
     </nav>
