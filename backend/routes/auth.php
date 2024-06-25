@@ -24,3 +24,7 @@ Route::prefix('admin')->name('admin.')->group(function(){
                     ->middleware('auth')
                     ->name('logout');
 });
+// product
+
+
+

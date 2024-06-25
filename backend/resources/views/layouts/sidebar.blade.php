@@ -68,7 +68,7 @@
             <span class="mx-3">Booking</span>
         </a>
         {{-- @endcanany --}}
-        {{-- @canany(['Field access','Field add','Field edit','Field delete']) --}}
+        @canany(['Field access','Field add','Field edit','Field delete'])
         <a
             class="flex items-center mt-4 py-2 px-6 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 {{ Route::currentRouteNamed('admin.fields.index') ? 'active' : '' }}"
             href="{{ route('admin.fields.index') }}">
@@ -80,7 +80,7 @@
             </svg>
             <span class="mx-3">Fields</span>
         </a>
-        {{-- @endcanany --}}
+        @endcanany
          {{-- @canany(['Notification access','Notification add','Notification edit','Notification delete']) --}}
          <a class="flex items-center mt-4 py-2 px-6 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 {{ Route::currentRouteNamed('admin.products.index') ? 'active' : '' }}"
          href="{{route('admin.products.index')}}">
