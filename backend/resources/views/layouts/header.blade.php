@@ -27,7 +27,8 @@
             <button @click="dropdownOpen = ! dropdownOpen"
                 class="relative block h-8 w-8 rounded-full overflow-hidden shadow focus:outline-none">
                 <img class="h-full w-full object-cover"
-                    src="/images/{{ auth()->user()->profile }}"
+                    {{-- src="/images/{{ auth()->user()->profile }}" --}}
+                    src="{{auth()->user()->profile  ? asset('images/' .  auth()->user()->profile ) : asset('images/default-profile.jpg') }}"
                     alt="Your avatar">
             </button>
 

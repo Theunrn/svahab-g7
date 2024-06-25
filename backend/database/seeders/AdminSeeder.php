@@ -21,19 +21,22 @@ class AdminSeeder extends Seeder
             'name' => 'Admin',
             'email' => 'admin@gmail.com',
             'password' => bcrypt('password'),
+            'phone_number' => '0984214124',
             'profile' => 'user.avif'
         ]);
 
         $writer = User::create([
             'name' => 'User',
             'email' => 'user@gmail.com',
-            'password' => bcrypt('password')
+            'password' => bcrypt('password'),
+            'phone_number' => '0984214123',
         ]);
 
 
 
         $admin_role = Role::create(['name' => 'admin']);
-        $writer_role = Role::create(['name' => 'user']);
+        $writer_role = Role::create(['name' => 'owner']);
+        Role::create(['name' => 'customer']);
 
         $permission = Permission::create(['name' => 'Post access']);
         $permission = Permission::create(['name' => 'Post edit']);
@@ -63,11 +66,28 @@ class AdminSeeder extends Seeder
         $permission = Permission::create(['name' => 'Field edit']);
         $permission = Permission::create(['name' => 'Field delete']);
 
+        $permission = Permission::create(['name' => 'Booking access']);
+        $permission = Permission::create(['name' => 'Booking add']);
+        $permission = Permission::create(['name' => 'Booking edit']);
+        $permission = Permission::create(['name' => 'Booking delete']);
 
+        $permission = Permission::create(['name' => 'Product access']);
+        $permission = Permission::create(['name' => 'Product add']);
+        $permission = Permission::create(['name' => 'Product edit']);
+        $permission = Permission::create(['name' => 'Product delete']);
+
+        $permission = Permission::create(['name' => 'Payment access']);
+        $permission = Permission::create(['name' => 'Payment add']);
+        $permission = Permission::create(['name' => 'Payment edit']);
+        $permission = Permission::create(['name' => 'Payment delete']);
+
+        $permission = Permission::create(['name' => 'Feedback access']);
+        $permission = Permission::create(['name' => 'Feedback add']);
+        $permission = Permission::create(['name' => 'Feedback edit']);
+        $permission = Permission::create(['name' => 'Feedback delete']);
 
         $admin->assignRole($admin_role);
         $writer->assignRole($writer_role);
-
         
         $admin_role->givePermissionTo(Permission::all());
     }
