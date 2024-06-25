@@ -82,4 +82,12 @@ const flatpickrConfig = {
 .form-select {
   bottom: -35px;
 }
+/* You can adjust the opacity value to make the overlay lighter or darker */
+.bg-opacity-75 {
+  opacity: 0.80; /* Adjust this value as needed */
+}
+
+.font-bold {
+  font-weight: bold;
+}
 </style>
