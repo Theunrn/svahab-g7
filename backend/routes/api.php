@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\FieldController;
 use App\Http\Controllers\API\PostController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\OrderController;
@@ -28,3 +29,5 @@ Route::get('/me', [AuthController::class, 'index'])->middleware('auth:sanctum');
 Route::get('/post/list', [PostController::class, 'index'])->middleware('auth:sanctum');
 Route::get('/order/list', [OrderController::class, 'index'])->middleware('auth:sanctum');
 
+
+Route::get('field/list', [FieldController::class,'index'])->name('field.list');
