@@ -1,6 +1,6 @@
 <template>
   <WebHeaderMenu />
-  <div class="header-text">
+  <div class="header-text mt-5">
     <div class="header-detail">
       <div class="form-select absolute p-2 mt-17 bg-green bg-opacity-90 z-20 rounded-lg w-full md:w-5/5 lg:w-9/10 ml-16">
         <div class="flex items-center justify-center space-x-2">

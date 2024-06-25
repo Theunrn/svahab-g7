@@ -25,10 +25,10 @@
         </div>
       </div>
       <div class="flex justify-center">
-        <div class="w-50 bg-blue text-center rounded-b-2xl relative text-white p-3">
-          <span class="text-xl font-bold text-center p-1 relative z-10">Date: Monday, June 24, 2024</span> |
-          <span class="text-xl font-bold text-center p-1 relative z-10">Time: 09: 00</span> | 
-          <span class="text-xl font-bold text-center p-1 mb-3 relative z-10">Place: Stadium XYZ</span>
+        <div class="w-50 text-center rounded-b-2xl border-2 border-gray-400 relative text-dark p-3">
+          <span class="text-xl font-bold text-center p-1 relative z-10">Monday, June 24, 2024</span> |
+          <span class="text-xl font-bold text-center p-1 relative z-10">09: 00</span> | 
+          <span class="text-xl font-bold text-center p-1 mb-3 relative z-10">Stadium XYZ</span>
         </div>
       </div>
 
