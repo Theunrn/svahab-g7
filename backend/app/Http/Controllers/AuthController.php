@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -16,7 +17,7 @@ class AuthController extends Controller
         $validator = Validator::make($request->all(), [
             'email'     => 'required|string|max:255',
             'password'  => 'required|string'
-          ]);
+        ]);
 
         if ($validator->fails()) {
             return response()->json($validator->errors());
@@ -39,15 +40,36 @@ class AuthController extends Controller
             'token_type'    => 'Bearer'
         ]);
     }
-    
+
     public function index(Request $request)
     {
         $user = $request->user();
-        // $permissions = $user->getAllPermissions();
-        // $roles = $user->getRoleNames();
         return response()->json([
             'message' => 'Login success',
-            'data' =>$user,
+            'data' => $user,
+        ]);
+    }
+    public function register(RegisterRequest $request)
+    {
+        $token = User::store($request);
+        return response()->json([
+            'message'       => 'Register success',
+            'access_token'  => $token,
+            'token_type'    => 'Bearer'
+        ], 201);
+    }
+    public function updateRole(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        $user->syncRoles($request->role); 
+        return response()->json(['message' => 'Role updated successfully', 'role' => $user->getRoleNames()], 200);
+    }
+
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+        return response()->json([
+            'message' => 'Logout successful'
         ]);
     }
 }
