@@ -11,6 +11,9 @@
     <!-- Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
 
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
     <!-- Styles -->
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 
@@ -19,6 +22,9 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
 
 <body class="font-sans antialiased">
@@ -31,7 +37,6 @@
         @include('layouts.sidebar')
 
         <div class="flex-1 flex flex-col overflow-scroll">
-
             @include('layouts.header')
 
             @if(\Session::has('success'))
@@ -51,7 +56,7 @@
             @endif
 
             @if ($errors->any())
-            <div class="text-red-600  pt-5 pl-5">
+            <div class="text-red-600 pt-5 pl-5">
                 <ul>
                     @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
@@ -60,8 +65,9 @@
             </div>
             @endif
 
-            @yield('content')
-
+            <main>
+                {{ $slot }}
+            </main>
         </div>
     </div>
 </body>

@@ -18,4 +18,6 @@ class Field extends Model
         'number_of_players',
         'lighting_availability'
     ];
+
+    
 }
