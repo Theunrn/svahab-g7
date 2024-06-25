@@ -31,10 +31,5 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanc
 
 Route::get('/me', [AuthController::class, 'index'])->middleware('auth:sanctum');
 Route::get('/post/list', [PostController::class, 'index'])->middleware('auth:sanctum');
-<<<<<<< HEAD
-
-Route::get('field/list', [FieldController::class,'index'])->name('field.list');
-=======
 Route::get('/order/list', [OrderController::class, 'index'])->middleware('auth:sanctum');
 
->>>>>>> d2c01e186c5ac769f0a1a73da29e83fa90e693d1
