@@ -36,7 +36,7 @@
             <td>{{ $field->number_of_players }}</td>
             <td>{{ $field->lighting_availability ? 'Yes' : 'No' }}</td>
             <td>
-              <a href="{{ route('admin.fields.edit', $field->id) }}" class="btn btn-warning btn-sm">Edit</a>
+              <a href="{{ route('admin.fields.edit', $field->id) }}" class="btn btn-primary btn-sm">Edit</a>
               <form action="{{ route('admin.fields.destroy', $field->id) }}" method="POST" style="display:inline-block;">
                 @csrf
                 @method('DELETE')
