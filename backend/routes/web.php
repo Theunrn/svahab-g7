@@ -6,7 +6,7 @@ use App\Http\Controllers\Admin\{
     MailSettingController,
 };
 use App\Http\Controllers\BookingController;
-
+use App\Http\Controllers\OrderController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -21,7 +21,6 @@ use App\Http\Controllers\BookingController;
 Route::get('/', function () {
     return view('auth.login');
 });
-
 
 Route::get('/test-mail',function(){
 
@@ -52,8 +51,6 @@ Route::get('/admin/dashboard', function () {
 require __DIR__.'/auth.php';
 
 
-
-
 Route::namespace('App\Http\Controllers\Admin')->name('admin.')->prefix('admin')
     ->group(function(){
         Route::resource('roles','RoleController');
@@ -61,6 +58,12 @@ Route::namespace('App\Http\Controllers\Admin')->name('admin.')->prefix('admin')
         Route::resource('users','UserController');
         Route::resource('posts','PostController');
         Route::resource('fields','FieldController');
+        Route::resource('bookings','BookingController');
+        Route::resource('settings','SettingController');
+        Route::resource('products','ProductController');
+        Route::resource('orders','OrderController');
+        Route::resource('payments','PaymentController');
+        Route::resource('feedbacks','FeedbackController');
 
         Route::get('/profile',[ProfileController::class,'index'])->name('profile');
         Route::put('/profile-update',[ProfileController::class,'update'])->name('profile.update');
@@ -68,4 +71,7 @@ Route::namespace('App\Http\Controllers\Admin')->name('admin.')->prefix('admin')
         Route::put('/mail-update/{mailsetting}',[MailSettingController::class,'update'])->name('mail.update');
 
 });
+
+
+
 
