@@ -17,7 +17,7 @@
     <!-- Authentication Button -->
     <div class="auth flex gap-2">
       <!-- Conditionally render Register, Login or Logout button -->
-      <template v-if="isAuthenticated = false">
+      <template v-if="!authStore.isAuthenticated">
         <a href="/register"><button class="hover:bg-red-400 text-dark bg-white px-4 py-1 border-1 border-red-700 hover:border-red-500 rounded">Register</button></a>
         <a href="/login"><button class="hover:bg-red-400 text-dark bg-white px-4 py-1 border-1 border-red-700 hover:border-red-500 rounded">Login</button></a>
       </template>
@@ -43,13 +43,9 @@ import { useAuthStore } from '@/stores/auth-store'; // Adjust the import path ba
 const route = useRoute();
 const authStore = useAuthStore();
 
-// Access isAuthenticated from authStore
-let isAuthenticated = authStore.isAuthenticated;
 // Function to trigger logout
 const logout = () => {
-  authStore.isAuthenticated = false;
   authStore.logout();
-  
 };
 </script>
 
