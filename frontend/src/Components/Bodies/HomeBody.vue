@@ -55,8 +55,7 @@ export default {
 <style>
 
 .card {
-  transition: transform 0.3s ease-in-out;
-  cursor: pointer;
+ 
 }
 
 .card:hover {
