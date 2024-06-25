@@ -2,7 +2,7 @@
   <WebHeaderMenu />
   <div class="header-text">
     <div class="header-detail">
-      <div class="form-select absolute p-2 mt-17 bg-orange bg-opacity-90 z-20 rounded-lg w-full md:w-5/5 lg:w-9/10 ml-16">
+      <div class="form-select absolute p-2 mt-17 bg-green bg-opacity-90 z-20 rounded-lg w-full md:w-5/5 lg:w-9/10 ml-16">
         <div class="flex items-center justify-center space-x-2">
           <div class="relative flex gap-10 w-[334px]">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="absolute top-1/2 left-4 transform -translate-y-1/2">
@@ -10,9 +10,10 @@
             </svg>
             <select v-model="selectedOption" class="flex-1 text-center pl-10 rounded-md text-black border-2 border-transparent focus:border-yellow-500" @change="handleChange" style="padding: 13px;" >
               <option disabled value="">Choose field for play</option>
-              <option value="option1">Option 1</option>
-              <option value="option2">Option 2</option>
-              <option value="option3">Option 3</option>
+              <option value="option1">PNC Stadium</option>
+              <option value="option2">PSE Stadium</option>
+              <option value="option3">Borey Solar Stadium</option>
+              <option value="option3">G7 Stadium</option>
             </select>
           </div>
 
