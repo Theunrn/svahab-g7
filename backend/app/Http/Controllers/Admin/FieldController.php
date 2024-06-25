@@ -27,7 +27,7 @@ class FieldController extends Controller
             'field_type' => 'required|string|max:255',
             'field_size' => 'required|integer',
             'number_of_players' => 'required|integer',
-            'lighting_availability' => 'required|string|max:255',
+            'lighting_availability' => 'required|boolean',
         ]);
 
         Field::create($request->all());
@@ -40,13 +40,11 @@ class FieldController extends Controller
         //
     }
 
-
     public function edit($id)
     {
         $field = Field::findOrFail($id);
-        return view('admin.fields.edit', compact('field'));
+        return view('setting.fields.edit', compact('field'));
     }
-    
 
     public function update(Request $request, $id)
     {
@@ -62,10 +60,8 @@ class FieldController extends Controller
         $field = Field::findOrFail($id);
         $field->update($request->all());
 
-        return redirect()->route('admin.fields.index')->with('success', 'Field updated successfully');
+        return redirect()->route('admin.fields.index')->with('success', 'Field updated successfully.');
     }
-
-
 
     public function destroy($id)
     {

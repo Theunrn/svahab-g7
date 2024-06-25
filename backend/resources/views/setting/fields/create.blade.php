@@ -39,8 +39,15 @@
                 <input type="number" class="form-control" id="number_of_players" name="number_of_players" value="{{ old('number_of_players') }}" required>
             </div>
             <div class="form-group">
-                <label for="lighting_availability">Lighting Availability</label>
-                <input type="text" class="form-control" id="lighting_availability" name="lighting_availability" value="{{ old('lighting_availability') }}" required>
+                <label for="lighting_availability">Lighting Availability</label><br>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="lighting_availability" id="lighting_yes" value="1" {{ old('lighting_availability') == 1 ? 'checked' : '' }}>
+                    <label class="form-check-label" for="lighting_yes">Yes</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="lighting_availability" id="lighting_no" value="0" {{ old('lighting_availability') == 0 ? 'checked' : '' }}>
+                    <label class="form-check-label" for="lighting_no">No</label>
+                </div>
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>

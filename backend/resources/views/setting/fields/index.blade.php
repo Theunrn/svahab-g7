@@ -34,21 +34,12 @@
           <td>{{ $field->number_of_players }}</td>
           <td>{{ $field->lighting_availability }}</td>
           <td>
-            <a href="{{ route('admin.fields.show', $field->id) }}" class="btn btn-info">View</a>
             <a href="{{ route('admin.fields.edit', $field->id) }}" class="btn btn-warning">Edit</a>
-            
             <form action="{{ route('admin.fields.destroy', $field->id) }}" method="POST" style="display:inline-block;">
               @csrf
               @method('DELETE')
               <button type="submit" class="btn btn-danger">Delete</button>
             </form>
-
-            <!-- <form action="{{ route('admin.fields.destroy', $field->id) }}" method="POST" style="display:inline-block;">
-              @csrf
-              @method('DELETE')
-              <button type="submit" class="btn btn-danger">Delete</button>
-
-            </form> -->
           </td>
         </tr>
         @endforeach
