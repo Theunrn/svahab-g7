@@ -77,6 +77,16 @@ const router = createRouter({
       name: 'register',
       component: () => import('../views/Admin/Auth/RegisterVIew.vue')
     },
+    {
+      path: '/payment',
+      name: 'payment',
+      component: () => import('../views/Web/Products/PaymentView.vue')
+    },
+    {
+      path: '/addtocart',
+      name: 'addtocart',
+      component: () => import('../views/Web/AddToCardView.vue')
+    },
 
    
   ]

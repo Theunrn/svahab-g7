@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\API\PostController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\OrderController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,7 +21,14 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+//Authentication
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register']);
+Route::put('/customers/{id}/role', [AuthController::class, 'updateRole']);
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+
+
 Route::get('/me', [AuthController::class, 'index'])->middleware('auth:sanctum');
 Route::get('/post/list', [PostController::class, 'index'])->middleware('auth:sanctum');
 
@@ -28,4 +36,5 @@ Route::get('/post/list', [PostController::class, 'index'])->middleware('auth:san
 Route::get('/product', [ProductController::class, 'index']);
 Route::post('/product/create', [ProductController::class, 'store']);
 Route::delete('/product/delete/{id}', [ProductController::class, 'destroy']);
+Route::get('/order/list', [OrderController::class, 'index'])->middleware('auth:sanctum');
 

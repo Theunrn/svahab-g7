@@ -18,6 +18,7 @@ import { configure } from 'vee-validate'
 import './boxicons.css'
 
 
+
 configure({
   validateOnInput: true
 })

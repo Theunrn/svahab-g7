@@ -1,9 +1,3 @@
-<script setup lang="ts">
-import { useRoute } from 'vue-router';
-
-const route = useRoute();
-</script>
-
 <template>
   <header style="padding-left: 60px; padding-right: 60px;"
     class="flex justify-between py-2 items-center shadow-md navbar-light fixed top-0 left-0 right-0 bg-green-600 z-50"
@@ -20,22 +14,42 @@ const route = useRoute();
       <a :href="'/contact'" :class="['font-bold-200 py-2 me-5 text-white custom-hover text-decoration-none me-5', { 'active': route.path === '/contact' }]">CONTACT</a>
     </nav>
 
-    <!-- Btn auth -->
+    <!-- Authentication Button -->
     <div class="auth flex gap-2">
-      <a href="/register"><button class="hover:bg-red-400 text-dark bg-white px-4 py-1 border-1 border-red-700 hover:border-red-500 rounded">Register</button></a>
-      <a href="/login"><button class="hover:bg-red-400 text-dark bg-white px-4 py-1 border-1 border-red-700 hover:border-red-500 rounded">Login</button></a>
+      <!-- Conditionally render Register, Login or Logout button -->
+      <template v-if="!authStore.isAuthenticated">
+        <a href="/register"><button class="hover:bg-red-400 text-dark bg-white px-4 py-1 border-1 border-red-700 hover:border-red-500 rounded">Register</button></a>
+        <a href="/login"><button class="hover:bg-red-400 text-dark bg-white px-4 py-1 border-1 border-red-700 hover:border-red-500 rounded">Login</button></a>
+      </template>
+      <template v-else>
+        <button @click="logout" class="hover:bg-red-400 text-dark bg-white px-4 py-1 border-1 border-red-700 hover:border-red-500 rounded">Logout</button>
+      </template>
     </div>
+
+    <!-- Cart Button -->
     <button class="relative m-6 inline-flex w-fit">
       <div
         class="absolute bottom-auto left-auto right-0 top-0 z-10 inline-block -translate-y-1/2 translate-x-2/4 rotate-0 skew-x-0 skew-y-0 scale-x-100 scale-y-100 text-white rounded-full bg-red-600 py-1 px-2 text-sx">1</div>
-      <div
+      <router-link  to="/addtocart"
         class="flex items-center justify-center rounded-lg bg-primary-500 text-center text-white dark:text-gray-200">
         <i class='bx bxs-cart-add text-4xl ml-4 text-white'></i>
-      </div>
+      </router-link>
     </button>
   </header>
 </template>
 
+<script setup lang="ts">
+import { useRoute } from 'vue-router';
+import { useAuthStore } from '@/stores/auth-store'; // Adjust the import path based on your actual file structure
+
+const route = useRoute();
+const authStore = useAuthStore();
+
+// Function to trigger logout
+const logout = () => {
+  authStore.logout();
+};
+</script>
 
 <style scoped>
 .custom-hover {
