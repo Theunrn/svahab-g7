@@ -33,8 +33,5 @@ Route::get('/me', [AuthController::class, 'index'])->middleware('auth:sanctum');
 Route::get('/post/list', [PostController::class, 'index'])->middleware('auth:sanctum');
 Route::get('/order/list', [OrderController::class, 'index'])->middleware('auth:sanctum');
 
-<<<<<<< HEAD
-=======
 
 Route::get('field/list', [FieldController::class,'index'])->name('field.list');
->>>>>>> ea26997741c66c7ddc7d27c6e72f9d8ae4f40dcb
