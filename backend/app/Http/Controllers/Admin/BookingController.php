@@ -15,6 +15,7 @@ class BookingController extends Controller
     {
         $bookings = Booking::all();
         return view('setting.booking.index', compact('bookings'));
+        
     }
 
     /**
