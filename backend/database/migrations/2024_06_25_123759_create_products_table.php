@@ -6,27 +6,29 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
+    /*
      * Run the migrations.
      */
     public function up(): void
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
+            $table->string('image');
             $table->string('name');
-            $table->string('description');
+            $table->text('description');
             $table->decimal('price');
-            $table->string('color');
-            $table->string('size');
+            $table->json('color')->nullable(); // Change to JSON
+            $table->json('size')->nullable();  // Change to JSON
+            $table->foreignId('category_id')->nullable()->constrained()->onDelete('set null');
             $table->timestamps();
         });
     }
 
-    /**
+    /*
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('notifications');
+        Schema::dropIfExists('products');
     }
 };

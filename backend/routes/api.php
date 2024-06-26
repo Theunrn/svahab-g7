@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\FieldController;
+use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\API\PostController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\OrderController;
@@ -35,3 +36,9 @@ Route::get('/order/list', [OrderController::class, 'index'])->middleware('auth:s
 
 
 Route::get('field/list', [FieldController::class,'index'])->name('field.list');
+
+// product
+Route::get('/product', [ProductController::class, 'index']);
+Route::post('/product/create', [ProductController::class, 'store']);
+Route::delete('/product/delete/{id}', [ProductController::class, 'destroy']);
+

@@ -8,46 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     use HasFactory;
+    protected $fillable = ['name', 'description', 'price', 'image', 'color', 'size', 'category_id'];
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $fillable = [
-        'name',
-        'price',
-        'description',
-    ];
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
     protected $casts = [
-        'price' => 'integer',
+        'color' => 'array', // Cast the 'color' attribute to array
+        'size' => 'array',  // Cast the 'size' attribute to array
     ];
 
-    /**
-     * Scope a query to only include active products.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeActive($query)
-    {
-        return $query->whereNotNull('active_at')
-                     ->where('active_at', '<=', now());
-    }
-
-    /**
-     * Determine if the product is active.
-     *
-     * @return bool
-     */
-    public function isActive()
-    {
-        return $this->active_at <= now();
-    }
 }
