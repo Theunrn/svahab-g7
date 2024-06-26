@@ -6,41 +6,35 @@
   </x-slot>
 
   <div class="container mt-4">
-    {{-- @if(session('success'))
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-      {{ session('success') }}
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    @endif --}}
-    <a href="{{ route('admin.fields.create') }}" class="btn btn-primary mb-3">Add Field</a>
-    <div class="table-responsive">
-      <table class="table table-hover table-bordered">
-        <thead class="table-dark">
-          <tr>
-            <th scope="col">Field Name</th>
-            <th scope="col">Location</th>
-            <th scope="col">Type</th>
-            <th scope="col">Size</th>
-            <th scope="col">Players</th>
-            <th scope="col">Lighting</th>
-            <th scope="col">Actions</th>
+    <a href="{{ route('admin.fields.create') }}" class="inline-block bg-blue-500 text-white px-4 py-2 rounded-md mb-3 hover:bg-blue-600">Add Field</a>
+    <div class="overflow-x-auto">
+      <table class="table-auto min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50 dark:bg-gray-800">
+          <tr class="text-left text-gray-700 dark:text-white">
+            <th scope="col" class="px-6 py-3 text-xs font-medium uppercase tracking-wider">Field Name</th>
+            <th scope="col" class="px-6 py-3 text-xs font-medium uppercase tracking-wider">Location</th>
+            <th scope="col" class="px-6 py-3 text-xs font-medium uppercase tracking-wider">Type</th>
+            <th scope="col" class="px-6 py-3 text-xs font-medium uppercase tracking-wider">Size</th>
+            <th scope="col" class="px-6 py-3 text-xs font-medium uppercase tracking-wider">Players</th>
+            <th scope="col" class="px-6 py-3 text-xs font-medium uppercase tracking-wider">Lighting</th>
+            <th scope="col" class="px-6 py-3 text-xs font-medium uppercase tracking-wider">Actions</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody class="bg-white divide-y divide-gray-200">
           @foreach($fields as $field)
-          <tr>
-            <td>{{ $field->field_name }}</td>
-            <td>{{ $field->field_location }}</td>
-            <td>{{ $field->field_type }}</td>
-            <td>{{ $field->field_size }}</td>
-            <td>{{ $field->number_of_players }}</td>
-            <td>{{ $field->lighting_availability ? 'Yes' : 'No' }}</td>
-            <td>
-              <a href="{{ route('admin.fields.edit', $field->id) }}" class="btn btn-primary btn-sm">Edit</a>
-              <form action="{{ route('admin.fields.destroy', $field->id) }}" method="POST" style="display:inline-block;">
+          <tr class="text-gray-700 dark:text-white">
+            <td class="px-6 py-4 whitespace-nowrap">{{ $field->field_name }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ $field->field_location }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ $field->field_type }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ $field->field_size }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ $field->number_of_players }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ $field->lighting_availability ? 'Yes' : 'No' }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <a href="{{ route('admin.fields.edit', $field->id) }}" class="inline-block bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600">Edit</a>
+              <form action="{{ route('admin.fields.destroy', $field->id) }}" method="POST" class="inline-block">
                 @csrf
                 @method('DELETE')
-                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                <button type="submit" class="inline-block bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 ml-2">Delete</button>
               </form>
             </td>
           </tr>
