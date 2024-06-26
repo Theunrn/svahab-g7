@@ -42,6 +42,17 @@
                         <input type="text" name="price" id="price" value="{{ old('price', $product->price) }}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                     </div>
 
+                    <!-- Category -->
+                    <div class="mb-4">
+                        <label for="category_id" class="block text-gray-700 text-sm font-bold mb-2">Category:</label>
+                        <select name="category_id" id="category_id" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                            <option value="">Select a category</option>
+                            @foreach ($categories as $category)
+                                <option value="{{ $category->id }}" {{ $category->id == $product->category_id ? 'selected' : '' }}>{{ $category->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
                     <!-- Colors -->
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2">Colors:</label>
@@ -69,6 +80,7 @@
                             <!-- Add more size options as needed -->
                         </div>
                     </div>
+
                     <!-- Submit Button -->
                     <div class="flex items-center justify-between">
                         <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">

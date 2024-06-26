@@ -62,8 +62,10 @@ Route::namespace('App\Http\Controllers\Admin')->name('admin.')->prefix('admin')
         Route::resource('bookings','BookingController');
         Route::resource('settings','SettingController');
         Route::resource('products','ProductController');
+        Route::resource('categories','CategoryController');
         Route::resource('payments','PaymentController');
         Route::resource('feedbacks','FeedbackController');
+
 
         Route::get('/profile',[ProfileController::class,'index'])->name('profile');
         Route::put('/profile-update',[ProfileController::class,'update'])->name('profile.update');

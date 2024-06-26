@@ -19,6 +19,7 @@ return new class extends Migration
             $table->decimal('price');
             $table->json('color')->nullable(); // Change to JSON
             $table->json('size')->nullable();  // Change to JSON
+            $table->foreignId('category_id')->nullable()->constrained()->onDelete('set null');
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('notifications');
+        Schema::dropIfExists('products');
     }
 };

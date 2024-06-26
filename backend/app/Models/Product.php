@@ -5,41 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class product extends Model
+class Product extends Model
 {
     use HasFactory;
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var string[]
-     */
-    protected $fillable = [
-        'image',
-        'name',
-        'description',
-        'price',
-        'color',
-        'size'
-    ];
-    protected $casts = [
-        'color' => 'array',
-        'size' => 'array',
-    ];
-    
+    protected $fillable = ['name', 'description', 'price', 'image', 'color', 'size', 'category_id'];
 
-
-    // list all product
-    public static function list(){
-        $product = self::all();
-        return $product;
-    }
-
-    //store
-    public static function store($request, $id = null)
+    public function category()
     {
-        $data = $request->only('image', 'name', 'description', 'color', 'size');
-        $data = self::updateOrCreate(['id' => $id], $data);
+        return $this->belongsTo(Category::class);
     }
 
+    protected $casts = [
+        'color' => 'array', // Cast the 'color' attribute to array
+        'size' => 'array',  // Cast the 'size' attribute to array
+    ];
 
 }

@@ -63,6 +63,11 @@ class AdminSeeder extends Seeder
         $permission = Permission::create(['name' => 'Field edit']);
         $permission = Permission::create(['name' => 'Field delete']);
 
+        $permission = Permission::create(['name' => 'Category access']);
+        $permission = Permission::create(['name' => 'Category add']);
+        $permission = Permission::create(['name' => 'Category edit']);
+        $permission = Permission::create(['name' => 'Category delete']);
+
 
 
         $admin->assignRole($admin_role);

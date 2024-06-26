@@ -3,84 +3,131 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $products = Product::all();
-        return view('setting.products.index', compact('products'));
+    public function index(Request $request)
+{
+    $categories = Category::all(); // Fetch all categories for the dropdown
+
+    $productsQuery = Product::query();
+
+    // Check if category filter is applied
+    if ($request->has('category') && $request->category != '') {
+        $category_id = $request->category;
+
+        // If category ID is provided and not empty, filter by category
+        if (!empty($category_id)) {
+            $productsQuery->where('category_id', $category_id);
+        }
     }
-    
 
+    $products = $productsQuery->get();
 
+    return view('setting.products.index', compact('products', 'categories'));
+}
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        return view('setting.products.new');
+        $categories = Category::all();
+        return view('setting.products.new', compact('categories'));
     }
 
     public function store(Request $request)
     {
+        // Validate incoming request
         $validatedData = $request->validate([
-            'image' => 'nullable|image|max:2048', // Max 2MB and must be an image file
             'name' => 'required|string|max:255',
             'description' => 'required|string',
             'price' => 'required|numeric|min:0',
-            'color' => 'nullable|array', // Should be an array
-            'size' => 'nullable|array',  // Should be an array
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // adjust max file size if needed
+            'category_id' => 'required|exists:categories,id', // ensure category exists in database
+            'color' => 'nullable|array', // optional, if colors are required
+            'size' => 'nullable|array', // optional, if sizes are required
         ]);
 
-        // Handle image upload if provided
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('product_images', 'public');
-            $validatedData['image'] = $imagePath;
-        }
+        // Handle file upload (image)
+        $imageName = time() . '.' . $request->image->extension();
+        $request->image->storeAs('public/images', $imageName);
 
         // Create new product
-        $product = Product::create($validatedData);
+        $product = new Product();
+        $product->name = $validatedData['name'];
+        $product->description = $validatedData['description'];
+        $product->price = $validatedData['price'];
+        $product->image = 'images/' . $imageName; // assuming storage symlink is set up
+        $product->category_id = $validatedData['category_id'];
+        // Add colors if provided
+        if (isset($validatedData['color'])) {
+            $product->color = $validatedData['color'];
+        }
+        // Add sizes if provided
+        if (isset($validatedData['size'])) {
+            $product->size = $validatedData['size'];
+        }
+        $product->save();
 
-        return redirect()->route('admin.products.index')->with('success', 'Product created successfully!');
+        // Redirect to a success page or back to the form with a success message
+        return redirect()->route('admin.products.index')->with('success', 'Product created successfully.');
     }
 
 
-    public function edit(string $id)
+    public function edit(Product $product)
     {
-        $product = Product::findOrFail($id);
-        return view('setting.products.edit', compact('product'));
+        $categories = Category::all();
+        return view('setting.products.edit', compact('product', 'categories'));
     }
 
     public function update(Request $request, $id)
     {
+        // Validate incoming request
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
+            'price' => 'required|numeric|min:0',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // adjust max file size if needed
+            'category_id' => 'required|exists:categories,id', // ensure category exists in database
+            'color' => 'nullable|array', // optional, if colors are required
+            'size' => 'nullable|array', // optional, if sizes are required
+        ]);
+
+        // Find the product
         $product = Product::findOrFail($id);
 
-        // Update basic attributes
-        $product->name = $request->input('name');
-        $product->description = $request->input('description');
-        $product->price = $request->input('price');
-
-        // Update color and size attributes
-        $product->color = $request->input('color', []);
-        $product->size = $request->input('size', []);
-
-        // Handle image upload if needed
+        // Handle file upload (image) if provided
         if ($request->hasFile('image')) {
-            // Handle image upload logic here
-            // Example:
-            // $imagePath = $request->file('image')->store('products', 'public');
-            // $product->image = $imagePath;
+            $imageName = time() . '.' . $request->image->extension();
+            $request->image->storeAs('public/images', $imageName);
+            $product->image = 'images/' . $imageName; // assuming storage symlink is set up
+        }
+
+        // Update product details
+        $product->name = $validatedData['name'];
+        $product->description = $validatedData['description'];
+        $product->price = $validatedData['price'];
+        $product->category_id = $validatedData['category_id'];
+        // Update colors if provided
+        if (isset($validatedData['color'])) {
+            $product->color = $validatedData['color'];
+        }
+        // Update sizes if provided
+        if (isset($validatedData['size'])) {
+            $product->size = $validatedData['size'];
         }
 
         // Save the updated product
         $product->save();
 
+        // Redirect back with success message
         return redirect()->route('admin.products.index')->with('success', 'Product updated successfully.');
     }
     /**

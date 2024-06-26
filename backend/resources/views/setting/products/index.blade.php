@@ -1,66 +1,96 @@
 <x-app-layout>
-  <x-slot name="header">
-      <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-          {{ __('Products') }}
-      </h2>
-  </x-slot>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Products') }}
+        </h2>
+    </x-slot>
 
-  <div class="py-12">
-      <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-          <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6">
-              <div class="flex justify-between items-center mb-4">
-                  <h3 class="text-lg font-bold text-gray-800">List of Products</h3>
-                  <a href="{{ route('admin.products.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Add New</a>
-              </div>
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6">
+                {{-- Product List --}}
+                <div class="flex justify-between items-center mb-4 ml-5">
+                    <h3 class="text-lg font-bold text-gray-800">List of Products</h3>
+                </div>
+                {{-- Filter by Category --}}
+                <div class="flex justify-between items-center mb-4 ml-5">
+                    <div class="flex items-center space-x-2 w-2/5">
+                        <label for="category_filter" class="block text-sm font-medium text-gray-700">Filter by Category:</label>
+                        <select id="category_filter" name="category_filter" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            <option value="">All Catogries</option>
+                            @foreach ($categories as $category)
+                                <option value="{{ $category->id }}" {{ request('category') == $category->id ? 'selected' : '' }}>
+                                    {{ $category->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <a href="{{ route('admin.products.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Add New</a>
+                </div>
 
-              @if ($products->isEmpty())
-                  <p>No products found.</p>
-              @else
-                  <table class="min-w-full divide-y divide-gray-200">
-                      <thead class="bg-gray-50">
-                          <tr>
-                              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Image</th>
-                              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
-                              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
-                              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Color</th>
-                              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Size</th>
-                              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                          </tr>
-                      </thead>
-                      <tbody class="bg-white divide-y divide-gray-200">
-                          @foreach ($products as $product)
-                              <tr class="hover:bg-gray-100">
-                                  <td class="px-6 py-4 whitespace-nowrap">
-                                      <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="h-16 w-16 object-cover rounded">
-                                  </td>
-                                  <td class="px-6 py-4 whitespace-nowrap">{{ $product->name }}</td>
-                                  <td class="px-6 py-4 whitespace-nowrap">{{ $product->description }}</td>
-                                  <td class="px-6 py-4 whitespace-nowrap">${{ number_format($product->price, 2) }}</td>
-                                  <td class="px-6 py-4 whitespace-nowrap">
-                                      @foreach ($product->color as $color)
-                                          <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-{{ strtolower($color) }}-200 text-{{ strtolower($color) }}-800">{{ $color }}</span>
-                                      @endforeach
-                                  </td>
-                                  <td class="px-6 py-4 whitespace-nowrap">
-                                      @foreach ($product->size as $size)
-                                          <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-200 text-gray-800">{{ $size }}</span>
-                                      @endforeach
-                                  </td>
-                                  <td class="px-4 py-2">
-                                    <a href="{{ route('admin.products.edit', $product->id) }}" class="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">Edit</a>
-                                    <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST" class="inline-block">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="inline-block bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded">Delete</button>
-                                    </form>
-                              </td>
-                              </tr>
-                          @endforeach
-                      </tbody>
-                  </table>
-              @endif
-          </div>
-      </div>
-  </div>
+                @if ($products->isEmpty())
+                    <p>No products found.</p>
+                @else
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="py-4 px-6 bg-grey-lightest font-bold text-sm text-grey-dark border-b border-grey-light">Image</th>
+                                <th class="py-4 px-6 bg-grey-lightest font-bold text-sm text-grey-dark border-b border-grey-light">Name</th>
+                                <th class="py-4 px-6 bg-grey-lightest font-bold text-sm text-grey-dark border-b border-grey-light">Category</th>
+                                <th class="py-4 px-6 bg-grey-lightest font-bold text-sm text-grey-dark border-b border-grey-light">Description</th>
+                                <th class="py-4 px-6 bg-grey-lightest font-bold text-sm text-grey-dark border-b border-grey-light">Price</th>
+                                <th class="py-4 px-6 bg-grey-lightest font-bold text-sm text-grey-dark border-b border-grey-light">Color</th>
+                                <th class="py-4 px-6 bg-grey-lightest font-bold text-sm text-grey-dark border-b border-grey-light">Size</th>
+                                <th class="py-4 px-6 bg-grey-lightest font-bold text-sm text-grey-dark border-b border-grey-light">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            @foreach ($products as $product)
+                                <tr class="hover:bg-gray-100">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="h-16 w-16 object-cover rounded">
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">{{ $product->name }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        {{ $product->category ? $product->category->name : 'Uncategorized' }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">{{ $product->description }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">${{ number_format($product->price, 2) }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        @foreach ($product->color as $color)
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-{{ strtolower($color) }}-200 text-{{ strtolower($color) }}-800">{{ $color }}</span>
+                                        @endforeach
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        @foreach ($product->size as $size)
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-200 text-gray-800">{{ $size }}</span>
+                                        @endforeach
+                                    </td>
+                                    <td class="px-4 py-2">
+                                        <a href="{{ route('admin.products.edit', $product->id) }}" class="text-blue-500 hover:text-blue-700 mr-2">
+                                            <i class='bx bx-edit text-2xl'></i>
+                                        </a>
+                                        <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST" class="inline-block">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="text-red-500 hover:text-red-700">
+                                                <i class='bx bx-trash text-2xl'></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                @endif
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('category_filter').addEventListener('change', function() {
+            let categoryId = this.value;
+            window.location.href = categoryId ? '{{ route('admin.products.index') }}?category=' + categoryId : '{{ route('admin.products.index') }}';
+        });
+    </script>
 </x-app-layout>
