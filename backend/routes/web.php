@@ -5,7 +5,6 @@ use App\Http\Controllers\Admin\FieldController;
 use App\Http\Controllers\Admin\MailSettingController;
 use App\Http\Controllers\Admin\ProfileController;
 
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -22,22 +21,15 @@ Route::get('/', function () {
 });
 
 Route::get('/test-mail', function () {
-
-    $message = "Testing mail";
-
     \Mail::raw('Hi, welcome!', function ($message) {
-        $message->to('ajayydavex@gmail.com')
-            ->subject('Testing mail');
+        $message->to('ajayydavex@gmail.com')->subject('Testing mail');
     });
-
     dd('sent');
 });
-
 
 Route::get('/dashboard', function () {
     return view('front.dashboard');
 })->middleware(['front'])->name('dashboard');
-
 
 require __DIR__ . '/front_auth.php';
 
@@ -48,24 +40,20 @@ Route::get('/admin/dashboard', function () {
 
 require __DIR__ . '/auth.php';
 
-Route::namespace('App\Http\Controllers\Admin')->name('admin.')->prefix('admin')
-    ->group(function () {
-        Route::resource('roles', 'RoleController');
-        Route::resource('permissions', 'PermissionController');
-        Route::resource('users', 'UserController');
-        Route::resource('posts', 'PostController');
-        Route::resource('bookings', 'BookingController');
-        Route::resource('settings', 'SettingController');
-        Route::resource('products', 'ProductController');
-        Route::resource('payments', 'PaymentController');
-        Route::resource('feedbacks', 'FeedbackController');
-        Route::resource('fields', 'FieldController');
+Route::prefix('admin')->name('admin.')->middleware(['auth'])->namespace('App\Http\Controllers\Admin')->group(function () {
+    Route::resource('roles', 'RoleController');
+    Route::resource('permissions', 'PermissionController');
+    Route::resource('users', 'UserController');
+    Route::resource('posts', 'PostController');
+    Route::resource('bookings', 'BookingController');
+    Route::resource('settings', 'SettingController');
+    Route::resource('products', 'ProductController');
+    Route::resource('payments', 'PaymentController');
+    Route::resource('feedbacks', 'FeedbackController');
+    Route::resource('fields', 'FieldController');
 
-        Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
-        Route::put('/profile-update', [ProfileController::class, 'update'])->name('profile.update');
-        Route::get('/mail', [MailSettingController::class, 'index'])->name('mail.index');
-        Route::put('/mail-update/{mailsetting}', [MailSettingController::class, 'update'])->name('mail.update');
-        Route::prefix('admin')->name('admin.')->group(function () {
-            Route::resource('fields', FieldController::class);
-        });
-    });
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
+    Route::put('/profile-update', [ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/mail', [MailSettingController::class, 'index'])->name('mail.index');
+    Route::put('/mail-update/{mailsetting}', [MailSettingController::class, 'update'])->name('mail.update');
+});

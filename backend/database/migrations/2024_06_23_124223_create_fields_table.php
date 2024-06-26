@@ -13,15 +13,15 @@ return new class extends Migration
     {
         Schema::create('fields', function (Blueprint $table) {
             $table->id();
-            $table->text('field_name');
+            $table->string('field_name');
             $table->string('field_location');
-            $table->string('field_type');
-            $table->integer('field_size');
-            $table->integer('number_of_players');
-            $table->boolean('lighting_availability');
-            $table->softDeletes()->nullable();
+            $table->string('surface_type');
+            $table->string('dimensions');
+            $table->integer('capacity')->nullable();
+            $table->boolean('availablity');
+            $table->string('home_team');
+            $table->softDeletes();
             $table->timestamps();
-            
         });
     }
 
