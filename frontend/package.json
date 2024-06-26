@@ -28,11 +28,7 @@
     "vue-gates": "^2.1.2",
     "vue-router": "^4.3.0",
     "vue-simple-acl": "^2.0.2",
-<<<<<<< HEAD
-    "vue3-datepicker": "^0.4.0",
-=======
     "vue-slick-carousel": "^1.0.6",
->>>>>>> 8b4dd5fa67a37d73797ae066de7148aec93b0856
     "yup": "^1.4.0"
   },
   "devDependencies": {
