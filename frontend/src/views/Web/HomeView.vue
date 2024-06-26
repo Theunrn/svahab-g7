@@ -3,16 +3,18 @@
  <div class="div flex justify-content-center mt-3 relative z-10">
     <img width="18%" height="18%" src="../../assets/image/logo1.png" alt="">
   </div>
+  {{ authStore }}
  <CardCom></CardCom>
  <MatchTeam></MatchTeam>
  <MatchSchedule></MatchSchedule>
  <HomeBody></HomeBody>
  <WeatherCom></WeatherCom>
  <WebFooter></WebFooter>
-
+ 
 </template>
-
 <script setup lang="ts">
+import  {useAuthStore}  from '../../../src/stores/auth-store'; 
+let authStore = useAuthStore();
 import WebLayout from '@/Components/Layouts/WebLayout.vue'
 import CardCom from '../../Components/Cards/CardCom.vue'
 import WebFooter from '../../Components/WebFooter.vue'
