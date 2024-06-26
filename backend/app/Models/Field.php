@@ -12,12 +12,11 @@ class Field extends Model
 
     protected $fillable = [
         'field_name',
-        'field_location', // Corrected typo
-        'field_type',
-        'field_size',
-        'number_of_players',
-        'lighting_availability'
+        'field_location',
+        'surface_type',
+        'dimensions',
+        'capacity',
+        'availablity',
+        'home_team'
     ];
-
-    
 }
