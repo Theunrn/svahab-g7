@@ -16,6 +16,8 @@ return new class extends Migration
             $table->integer('user_id');
             $table->integer('field_id');
             $table->date('booking_date');
+            $table->string('status');
+            $table->string('payment_status');
             $table->timestamps();
         });
     }

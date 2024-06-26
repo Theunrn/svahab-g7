@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\Admin\FieldController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\API\PostController;
+use App\Http\Controllers\API\ProductController as APIProductController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\OrderController;
 use Illuminate\Http\Request;
@@ -37,4 +39,12 @@ Route::get('/product', [ProductController::class, 'index']);
 Route::post('/product/create', [ProductController::class, 'store']);
 Route::delete('/product/delete/{id}', [ProductController::class, 'destroy']);
 Route::get('/order/list', [OrderController::class, 'index'])->middleware('auth:sanctum');
+Route::get('/order/list', [OrderController::class, 'index'])->middleware('auth:sanctum');
+
+Route::get('field/list', [FieldController::class,'index'])->name('field.list');
+
+// product
+Route::get('/product/list', [APIProductController::class, 'index']);
+Route::post('/product/create', [APIProductController::class, 'create'])->middleware('auth:sanctum');
+Route::delete('/product/delete/{id}', [APIProductController::class, 'destroy']);
 
