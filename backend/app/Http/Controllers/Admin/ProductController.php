@@ -14,25 +14,31 @@ class ProductController extends Controller
      * Display a listing of the resource.
      */
     public function index(Request $request)
-{
-    $categories = Category::all(); // Fetch all categories for the dropdown
+    {
+        $categories = Category::all(); // Fetch all categories for the dropdown
 
-    $productsQuery = Product::query();
+        $productsQuery = Product::query();
 
-    // Check if category filter is applied
-    if ($request->has('category') && $request->category != '') {
-        $category_id = $request->category;
+        // Check if category filter is applied
+        if ($request->has('category') && $request->category != '') {
+            $category_id = $request->category;
 
-        // If category ID is provided and not empty, filter by category
-        if (!empty($category_id)) {
-            $productsQuery->where('category_id', $category_id);
+            // If category ID is provided and not empty, filter by category
+            if (!empty($category_id)) {
+                $productsQuery->where('category_id', $category_id);
+            }
         }
+
+        $products = $productsQuery->get();
+
+        return view('setting.products.index', compact('products', 'categories'));
     }
+    public function getAllProducts()
+    {
+        $products = Product::all(); // Assuming Product model exists and has necessary fields
 
-    $products = $productsQuery->get();
-
-    return view('setting.products.index', compact('products', 'categories'));
-}
+        return response()->json($products);
+    }
     /**
      * Show the form for creating a new resource.
      */

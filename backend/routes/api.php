@@ -28,4 +28,4 @@ Route::get('/post/list', [PostController::class, 'index'])->middleware('auth:san
 Route::get('/product', [ProductController::class, 'index']);
 Route::post('/product/create', [ProductController::class, 'store']);
 Route::delete('/product/delete/{id}', [ProductController::class, 'destroy']);
-
+Route::get('/products', [ProductController::class, 'getAllProducts']);
