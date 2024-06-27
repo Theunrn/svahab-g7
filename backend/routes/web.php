@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\Admin\BookingController as AdminBookingController;
 use App\Http\Controllers\Admin\ProductController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\FieldController;
 use App\Http\Controllers\Admin\MailSettingController;
 use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\API\BookingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -62,3 +64,7 @@ Route::namespace('App\Http\Controllers\Admin')->name('admin.')->prefix('admin')
         Route::get('/mail', [MailSettingController::class, 'index'])->name('mail.index');
         Route::put('/mail-update/{mailsetting}', [MailSettingController::class, 'update'])->name('mail.update');
     });
+    Route::get('/admin/bookings/{id}/cancel', [AdminBookingController::class, 'cancel'])->name('admin.bookings.cancel');
+    Route::get('/admin/bookings/{id}/rebook', [AdminBookingController::class, 'reBook'])->name('admin.bookings.rebook');
+    Route::get('/admin/bookings/{id}/accept', [AdminBookingController::class, 'accept'])->name('admin.bookings.accept');
+    Route::get('/admin/bookings/{id}/reject', [AdminBookingController::class, 'reject'])->name('admin.bookings.reject');

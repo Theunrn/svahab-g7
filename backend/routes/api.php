@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\FieldController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\API\BookingController;
 use App\Http\Controllers\API\PostController;
 use App\Http\Controllers\API\ProductController as APIProductController;
 use App\Http\Controllers\AuthController;
@@ -42,3 +43,10 @@ Route::get('/product/list', [APIProductController::class, 'index']);
 Route::post('/product/create', [APIProductController::class, 'create'])->middleware('auth:sanctum');
 Route::delete('/product/delete/{id}', [APIProductController::class, 'destroy']);
 
+//Booking
+Route::get('/booking/list', [BookingController::class, 'index']);
+Route::post('/booking/create', [BookingController::class, 'store']);
+Route::get('/booking/show/{id}', [BookingController::class, 'show']);
+Route::put('/booking/accept/{id}', [BookingController::class, 'acceptBooking']);
+Route::put('/booking/reject/{id}', [BookingController::class, 'rejectBooking']);
+Route::put('/booking/cancel/{id}', [BookingController::class, 'cancelBooking']);
