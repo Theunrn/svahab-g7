@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\FieldController;
+use App\Http\Controllers\Api\FildController;
 use App\Http\Controllers\API\PostController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
@@ -25,3 +26,10 @@ Route::get('/me', [AuthController::class, 'index'])->middleware('auth:sanctum');
 Route::get('/post/list', [PostController::class, 'index'])->middleware('auth:sanctum');
 
 Route::get('field/list', [FieldController::class,'index'])->name('field.list');
+
+
+Route::get('/fields/list', [FildController::class, 'index']);
+Route::post('/fields/create', [FildController::class, 'store']);
+Route::get('/fields/show/{id}', [FildController::class, 'show']);
+Route::put('/fields/update/{id}', [FildController::class, 'update']);
+Route::delete('/fields/delete/{id}', [FildController::class, 'destroy']);
