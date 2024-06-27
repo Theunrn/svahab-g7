@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\ProductController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\FieldController;
 use App\Http\Controllers\Admin\MailSettingController;
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProfileController;
 
 /*
@@ -43,6 +44,10 @@ require __DIR__ . '/auth.php';
 
 Route::namespace('App\Http\Controllers\Admin')->name('admin.')->prefix('admin')
     ->group(function () {
+
+        Route::put('orders/{id}/reactivate', [OrderController::class, 'reactivate'])
+            ->name('orders.reactivate');
+
         Route::resource('roles', 'RoleController');
         Route::resource('permissions', 'PermissionController');
         Route::resource('users', 'UserController');
@@ -61,4 +66,5 @@ Route::namespace('App\Http\Controllers\Admin')->name('admin.')->prefix('admin')
         Route::put('/profile-update', [ProfileController::class, 'update'])->name('profile.update');
         Route::get('/mail', [MailSettingController::class, 'index'])->name('mail.index');
         Route::put('/mail-update/{mailsetting}', [MailSettingController::class, 'update'])->name('mail.update');
+
     });
