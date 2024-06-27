@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\FieldController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Api\FeedbackController;
 use App\Http\Controllers\API\PostController;
 use App\Http\Controllers\API\ProductController as APIProductController;
 use App\Http\Controllers\AuthController;
@@ -42,3 +43,6 @@ Route::get('/product/list', [APIProductController::class, 'index']);
 Route::post('/product/create', [APIProductController::class, 'create'])->middleware('auth:sanctum');
 Route::delete('/product/delete/{id}', [APIProductController::class, 'destroy']);
 
+
+//feedback
+Route::apiResource('feedback',FeedbackController::class);
