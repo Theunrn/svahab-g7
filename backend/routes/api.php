@@ -38,7 +38,7 @@ Route::get('/me', [AuthController::class, 'index'])->middleware('auth:sanctum');
 Route::get('/post/list', [PostController::class, 'index'])->middleware('auth:sanctum');
 Route::get('/order/list', [OrderController::class, 'index'])->middleware('auth:sanctum');
 
-Route::get('field/list', [FieldController::class,'index'])->name('field.list');
+Route::get('field/list', [FieldController::class, 'index'])->name('field.list');
 
 // product
 Route::get('/product/list', [APIProductController::class, 'index']);
@@ -62,4 +62,4 @@ Route::put('/booking/reject/{id}', [BookingController::class, 'rejectBooking']);
 Route::put('/booking/cancel/{id}', [BookingController::class, 'cancelBooking']);
 
 //feedback
-Route::apiResource('feedback',FeedbackController::class);
+Route::apiResource('feedback', FeedbackController::class);
