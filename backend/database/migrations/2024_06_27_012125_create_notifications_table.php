@@ -11,15 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('bookings', function (Blueprint $table) {
+        Schema::create('notifications', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id');
-            $table->integer('field_id');
-            $table->date('booking_date');
-            $table->time('start_time');
-            $table->time('end_time');
-            $table->string('status');
-            $table->string('payment_status');
             $table->timestamps();
         });
     }
@@ -29,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('bookings');
+        Schema::dropIfExists('notifications');
     }
 };
