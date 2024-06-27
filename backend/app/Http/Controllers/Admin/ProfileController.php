@@ -61,6 +61,6 @@ class ProfileController extends Controller
 
         $user->update($validated);
 
-        return redirect()->back()->withSuccess('User updated !!!');
+        return redirect()->route('admin.users.index')->withSuccess('User updated !!!');
     }
 }

@@ -15,6 +15,12 @@
               <label for="email" class="text-gray-700 select-none font-medium">Email</label>
               <input id="email" type="text" name="email" value="{{ old('email') }}" placeholder="Enter email" class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-200" />
             </div>
+            <div class="flex flex-col space-y-2">
+              <label for="phone_number" class="text-gray-700 select-none font-medium">Phone Number</label>
+              <input id="phone_number" type="text" name="phone_number" value="{{ old('phone_number') }}"
+                placeholder="Enter Phone Number" class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-200"
+              />
+          </div>
 
             <div class="flex flex-col space-y-2">
               <label for="password" class="text-gray-700 select-none font-medium">Password</label>
@@ -42,8 +48,6 @@
               <button type="submit" class="bg-blue-500 text-white font-bold px-5 py-1 rounded focus:outline-none shadow hover:bg-blue-500 transition-colors ">Submit</button>
             </div>
         </div>
-
-
       </div>
     </main>
   </div>

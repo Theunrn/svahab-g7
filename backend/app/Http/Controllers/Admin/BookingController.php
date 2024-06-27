@@ -11,10 +11,18 @@ class BookingController extends Controller
     /**
      * Display a listing of the resource.
      */
+    function __construct()
+    {
+        $this->middleware('role_or_permission:Booking access|Booking create|Booking edit|Booking delete', ['only' => ['index','show']]);
+        $this->middleware('role_or_permission:Booking create', ['only' => ['create','store']]);
+        $this->middleware('role_or_permission:Booking edit', ['only' => ['edit','update']]);
+        $this->middleware('role_or_permission:Booking delete', ['only' => ['destroy']]);
+    }
     public function index()
     {
         $bookings = Booking::all();
         return view('setting.booking.index', compact('bookings'));
+        
     }
 
     /**
