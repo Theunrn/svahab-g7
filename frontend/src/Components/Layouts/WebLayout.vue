@@ -64,15 +64,15 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import WebHeaderMenu from '@/Components/WebHeaderMenu.vue'
-import VueFlatpickr from 'vue-flatpickr-component';
-import 'flatpickr/dist/flatpickr.css';
+// import VueFlatpickr from 'vue-flatpickr-component';
+// import 'flatpickr/dist/flatpickr.css';
 
-const showDatePicker = ref(false);
-const dateRange = ref(null);
-const flatpickrConfig = {
-  mode: 'range',
-  dateFormat: 'Y-m-d'
-};
+// const showDatePicker = ref(false);
+// const dateRange = ref(null);
+// const flatpickrConfig = {
+//   mode: 'range',
+//   dateFormat: 'Y-m-d'
+// };
 
 </script>
 

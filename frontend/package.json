@@ -39,10 +39,7 @@
     "vue-simple-acl": "^2.0.2",
     "vue-slick-carousel": "^1.0.6",
     "vue3-datepicker": "^0.4.0",
-<<<<<<< HEAD
-=======
     "vuex": "^4.0.2",
->>>>>>> 17b8cedcd68572863b6d1c2d54abec201450e1bf
     "yup": "^1.4.0"
   },
   "devDependencies": {
