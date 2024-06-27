@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\ProductRequest;
+use App\Http\Controllers\Controlluse Illumuse App\Http\Requests\ProductRequest;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -41,8 +40,8 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Product $product): JsonResponse
-    {
-        //
-    }
+//     public function destroy(Product $producJsonResponseonse
+// /
+    // }
 }
+// 
