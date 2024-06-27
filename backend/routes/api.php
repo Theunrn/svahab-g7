@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\FieldController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\PostController;
 use App\Http\Controllers\API\ProductController as APIProductController;
 use App\Http\Controllers\AuthController;
@@ -34,17 +35,14 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanc
 Route::get('/me', [AuthController::class, 'index'])->middleware('auth:sanctum');
 Route::get('/post/list', [PostController::class, 'index'])->middleware('auth:sanctum');
 
-// product
-Route::get('/product', [ProductController::class, 'index']);
-Route::post('/product/create', [ProductController::class, 'store']);
-Route::delete('/product/delete/{id}', [ProductController::class, 'destroy']);
-Route::get('/order/list', [OrderController::class, 'index'])->middleware('auth:sanctum');
-Route::get('/order/list', [OrderController::class, 'index'])->middleware('auth:sanctum');
 
-Route::get('field/list', [FieldController::class,'index'])->name('field.list');
+// Categories API Routes
+Route::get('/category/list', [CategoryController::class, 'index'])->middleware('auth:sanctum');
+Route::post('/category/create', [CategoryController::class, 'store'])->middleware('auth:sanctum');
+Route::put('/category/update/{id}', [CategoryController::class, 'update'])->middleware('auth:sanctum');
+Route::delete('/category/delete/{id}', [CategoryController::class, 'destroy'])->middleware('auth:sanctum');
 
-// product
+// // product
 Route::get('/product/list', [APIProductController::class, 'index']);
 Route::post('/product/create', [APIProductController::class, 'create'])->middleware('auth:sanctum');
 Route::delete('/product/delete/{id}', [APIProductController::class, 'destroy']);
-
