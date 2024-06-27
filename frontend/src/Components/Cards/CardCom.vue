@@ -2,24 +2,13 @@
   <div>
     <div class="card-me flex flex-wrap justify-content-start align-items-start ml-10">
       <!-- Loop to generate 6 cards -->
-     
       <div class="card-wrapper rounded-md shadow-lg relative w-1/3 sm:w-full mx-2 my-2" v-for="index in 8" :key="index">
         <div class="container bg-overlay">
           <div class="row text-center flex flex-col items-center justify-center h-full">
-            <h1 class="text-2xl font-bold mb-4">Football Field Name</h1>
             <div class="btn-group">
               <router-link :to="'/field/detail/' + index">
                 <button type="button" class="btn btn-primary btn-details btn-sm py-1 me-2">
                   <font-awesome-icon :icon="['fas', 'info-circle']" class="me-1" /> See Details
-                </button>
-              </router-link>
-              <router-link to="/booking">
-                <button
-                  type="button"
-                  style="background-color: orange"
-                  class="btn btn-book btn-sm py-1"
-                >
-                  <font-awesome-icon :icon="['fas', 'book']" class="me-1" /> Book Now
                 </button>
               </router-link>
             </div>

@@ -57,9 +57,9 @@ const router = createRouter({
       component: () => import('../views/Web/Field/FieldDetailView.vue')
     },
     {
-      path: '/field/book/:id',
+      path: '/field/book',
       name: 'Book',
-      component: () => import('../views/Web/Field/FieldDetailView.vue')
+      component: () => import('../views/Web/Field/BookingView.vue')
     },
     {
       path: '/product',

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\FeedbackController;
 use App\Http\Controllers\Admin\FieldController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\API\BookingController;
@@ -50,3 +51,6 @@ Route::get('/booking/show/{id}', [BookingController::class, 'show']);
 Route::put('/booking/accept/{id}', [BookingController::class, 'acceptBooking']);
 Route::put('/booking/reject/{id}', [BookingController::class, 'rejectBooking']);
 Route::put('/booking/cancel/{id}', [BookingController::class, 'cancelBooking']);
+
+//feedback
+Route::apiResource('feedback',FeedbackController::class);
