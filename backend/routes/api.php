@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\PostController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
@@ -24,8 +25,8 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::get('/me', [AuthController::class, 'index'])->middleware('auth:sanctum');
 Route::get('/post/list', [PostController::class, 'index'])->middleware('auth:sanctum');
 
-// product
-Route::get('/product', [ProductController::class, 'index']);
-Route::post('/product/create', [ProductController::class, 'store']);
-Route::delete('/product/delete/{id}', [ProductController::class, 'destroy']);
-Route::get('/products', [ProductController::class, 'getAllProducts']);
+// Categories API Routes
+Route::get('/category/list', [CategoryController::class, 'index'])->middleware('auth:sanctum');
+Route::post('/category/create', [CategoryController::class, 'store'])->middleware('auth:sanctum');
+Route::put('/category/update/{id}', [CategoryController::class, 'update'])->middleware('auth:sanctum');
+Route::delete('/category/delete/{id}', [CategoryController::class, 'destroy'])->middleware('auth:sanctum');
