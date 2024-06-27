@@ -172,7 +172,6 @@
 import { ref } from 'vue'
 import VueFlatpickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css';
-
 const dateRange = ref(null);
 const flatpickrConfig = {
   dateFormat: 'Y-m-d',
