@@ -20,21 +20,12 @@
 
     <div class="flex items-center">
         <div x-data="{ dropdownOpen: false }" class="relative">
-<<<<<<< HEAD
             <button @click="dropdownOpen = ! dropdownOpen" class="relative block h-8 w-8 rounded-full overflow-hidden shadow focus:outline-none">
                 @if (auth()->check() && auth()->user()->profile)
                 <img class="h-full w-full object-cover" src="/images/{{ auth()->user()->profile }}" alt="Your avatar">
                 @else
                 <img class="h-full w-full object-cover" src="/images/default-avatar.png" alt="Default avatar">
                 @endif
-=======
-            <button @click="dropdownOpen = ! dropdownOpen"
-                class="relative block h-8 w-8 rounded-full overflow-hidden shadow focus:outline-none">
-                <img class="h-full w-full object-cover"
-                    {{-- src="/images/{{ auth()->user()->profile }}" --}}
-                    src="{{auth()->user()->profile  ? asset('images/' .  auth()->user()->profile ) : asset('images/default-profile.jpg') }}"
-                    alt="Your avatar">
->>>>>>> af9eff645019aaf4d6fe8a6959c5ebf3020f0ede
             </button>
 
             <div x-show="dropdownOpen" @click="dropdownOpen = false" class="fixed inset-0 h-full w-full z-10" style="display: none;"></div>
@@ -55,6 +46,3 @@
         </div>
     </div>
 </header>
-
-
-
