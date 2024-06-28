@@ -23,13 +23,11 @@ class FildController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'field_name' => 'required|string|max:255',
-            'field_location' => 'required|string|max:255',
-            'surface_type' => 'required|string|max:255',
-            'dimensions' => 'required|string|max:255',
-            'capacity' => 'nullable|integer',
+            'name' => 'required|string|max:255',
+            'location' => 'required|string|max:255',
+            'field_type' => 'required|string|max:255',
+            'owner_id' => 'required|integer',
             'availablity' => 'required|boolean',
-            'home_team' => 'required|string|max:255',
         ]);
 
         $field = Field::create($request->all());
@@ -37,7 +35,7 @@ class FildController extends Controller
         return response()->json(
             [
                 'field' => $field,
-               'message' => 'Field created successfully'
+                'message' => 'Field created successfully'
             ]
         );
     }
@@ -60,13 +58,11 @@ class FildController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'field_name' => 'required|string|max:255',
-            'field_location' => 'required|string|max:255',
-            'surface_type' => 'required|string|max:255',
-            'dimensions' => 'required|string|max:255',
-            'capacity' => 'nullable|integer',
+            'name' => 'required|string|max:255',
+            'location' => 'required|string|max:255',
+            'field_type' => 'required|string|max:255',
+            'owner_id' => 'required|integer',
             'availablity' => 'required|boolean',
-            'home_team' => 'required|string|max:255',
         ]);
 
         $field = Field::find($id);
@@ -87,6 +83,6 @@ class FildController extends Controller
             return response()->json(['message' => 'Field not found'], 404);
         }
         $field->delete();
-        return response()->json(['message'=>'Field was delete'],200);
+        return response()->json(['message' => 'Field was delete'], 200);
     }
 }
