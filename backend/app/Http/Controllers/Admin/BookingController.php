@@ -54,7 +54,6 @@ class BookingController extends Controller
         return view('setting.booking.show', compact('booking'));
     }
 
-
     /**
      * Update the specified resource in storage.
      */
@@ -62,7 +61,6 @@ class BookingController extends Controller
     {
        
     }
-
     public function cancel($id)
     {
         $booking = Booking::find($id);

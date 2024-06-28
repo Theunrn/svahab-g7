@@ -19,9 +19,9 @@ class Feedback extends Model
     {
         return $this->belongsTo(User::class, 'user_id','id');
     }
-    public function fields():BelongsTo
+    public function field():BelongsTo
     {
-        return $this->belongsTo(Field::class, 'fiend_id','id');
+        return $this->belongsTo(Field::class, 'field_id','id');
     }
 
     public static function store($request, $id = null){

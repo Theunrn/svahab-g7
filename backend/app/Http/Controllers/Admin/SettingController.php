@@ -20,48 +20,35 @@ class SettingController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+
+    public function edit($id)
     {
-        //
+        $setting = Setting::find($id);
+        return view('setting.setting.edit', compact('setting'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function update(Request $request, $id)
     {
-        //
-    }
+        $request->validate([
+            'key' => 'required|string|max:255',
+            'value' => 'required|string|max:255',
+            'email_address' => 'required|email',
+            'responsible' => 'required|string|max:255',
+            'email_notifications' => 'required|boolean',
+            'phone_number' => 'nullable|string|max:20',
+            'address' => 'nullable|string|max:255',
+            'timezone' => 'nullable|string|max:255',
+            'language' => 'nullable|string|max:10',
+            'currency' => 'nullable|string|max:10',
+            'date_format' => 'nullable|string|max:10',
+            'time_format' => 'nullable|string|max:10',
+            'maintenance_mode' => 'nullable|boolean',
+            'additional_data' => 'nullable|json',
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        $setting = Setting::find($id);
+        $setting->update($request->all());
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return redirect()->route('setting.setting.index')->with('success', 'Settings updated successfully');
     }
 }
