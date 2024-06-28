@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\FieldController;
 use App\Http\Controllers\Admin\MailSettingController;
 use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\SettingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,6 +56,7 @@ Route::namespace('App\Http\Controllers\Admin')->name('admin.')->prefix('admin')
         Route::resource('payments', 'PaymentController');
         Route::resource('feedbacks', 'FeedbackController');
         Route::resource('orders', 'OrderController');
+
 
 
         Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
