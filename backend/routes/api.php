@@ -1,15 +1,12 @@
 <?php
 
+use App\Http\Controllers\Admin\BookingController;
 use App\Http\Controllers\Admin\FeedbackController;
 use App\Http\Controllers\Admin\FieldController;
 use App\Http\Controllers\Admin\ProductController;
-<<<<<<< HEAD
-use App\Http\Controllers\API\BookingController;
-use App\Http\Controllers\API\OrderProductController;
-=======
-use App\Http\Controllers\Api\FeedbackController;
+// use App\Http\Controllers\Api\FeedbackController;
 use App\Http\Controllers\Api\FildController;
->>>>>>> interface-field
+use App\Http\Controllers\API\OrderProductController;
 use App\Http\Controllers\API\PostController;
 use App\Http\Controllers\API\ProductController as APIProductController;
 use App\Http\Controllers\AuthController;
