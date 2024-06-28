@@ -1,6 +1,7 @@
 <x-app-layout>
     <div class="container mx-auto px-6 py-5">
-        <strong class="text-2xl font-semibold mb-4">Booking Dashboard</strong>
+        <strong style="font-size: 30px">Booking Dashboard</strong><br>
+
         <div class="overflow-x-auto bg-white rounded-lg shadow overflow-y-auto relative mt-3">
             
             <table class="border-collapse table-auto w-full whitespace-no-wrap bg-white table-striped relative">
@@ -37,7 +38,7 @@
                         <td class="py-2 px-3 border-b border-gray-300">{{ $booking->field_id }}</td>
                         <td class="py-2 px-3 border-b border-gray-300">{{ $booking->booking_date }}</td>
                         <td class="py-2 px-3 border-b border-gray-300">
-                            <span class="inline-block px-3 py-1 text-white text-xs font-semibold mr-2 rounded-full
+                            <span class="inline-block px-3 py-1 text-black-500 text-xs font-semibold mr-2 rounded-full
                                 {{ $booking->status === 'confirmed' ? 'bg-green-300 text-gray-700' : '' }}
                                 {{ $booking->status === 'reject' ? 'bg-red-300 text-gray-700' : '' }}
                                 {{  $booking->status === 'pending' ? 'bg-blue-400 text-white-300' : '' }}">
@@ -45,7 +46,7 @@
                             </span>
                         </td>
                         <td class="py-2 px-3 border-b border-gray-300">
-                            <span class="inline-block px-3 py-1 text-white text-xs font-semibold mr-2 rounded-full
+                            <span class="inline-block px-3 py-1 text-black text-xs font-semibold mr-2 rounded-full
                                 {{ $booking->payment_status === 'paid' ? 'bg-green-300 text-gray-700' : '' }}
                                 {{  $booking->payment_status === 'unpaid' ? 'bg-red-400 text-white-300' : '' }}">
                                 {{  $booking->payment_status }}
