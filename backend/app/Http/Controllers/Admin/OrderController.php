@@ -24,14 +24,12 @@
 //     }
 // }
 
-
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Order;
 use App\Http\Resources\OrderProductResource;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Carbon\Carbon;
 
 class OrderController extends Controller
 {
@@ -46,16 +44,19 @@ class OrderController extends Controller
         }
 
         if ($date) {
-            $orders = Order::whereDate('created_at', $date)->get();
-        } else {
-            $orders = Order::all();
+            $ordersQuery->whereDate('created_at', $date);
         }
 
-        if($orders !== null) {
+        // Retrieve orders with products and pivot data
+        $orders = $ordersQuery->with(['products' => function ($query) {
+            $query->withPivot('qty', 'color', 'size');
+        }])->get();
+
+        // Check if orders are found
+        if ($orders->isNotEmpty()) {
+            // Transform orders using resource for consistent JSON response
             $orders = OrderProductResource::collection($orders);
-            return view('setting.orders.index', compact('orders'));
-        } else {
-            return response()->json(['status' => false, 'message' => 'No orders found'], 404);
         }
+        return view('setting.orders.index', compact('orders'));
     }
 }
