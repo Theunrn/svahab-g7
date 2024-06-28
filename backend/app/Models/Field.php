@@ -11,12 +11,10 @@ class Field extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'field_name',
-        'field_location',
-        'surface_type',
-        'dimensions',
-        'capacity',
+        'name',
+        'location',
+        'field_type',
+        'owner_id',
         'availablity',
-        'home_team'
     ];
 }
