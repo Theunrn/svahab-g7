@@ -56,8 +56,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('orders/create', [OrderProductController::class, 'store']);
     Route::get('orders/show/{id}', [OrderProductController::class, 'show']);
     Route::delete('orders/cancel/{id}', [OrderProductController::class, 'cancel']);
-    Route::put('orders/{id}/reactivate', [OrderProductController::class, 'reactivate']);
+    Route::put('orders/reactivate/{id}', [OrderProductController::class, 'reactivate']);
 });
+
+
 //Booking
 Route::get('/booking/list', [BookingController::class, 'index']);
 Route::post('/booking/create', [BookingController::class, 'store']);

@@ -16,6 +16,8 @@ return new class extends Migration
             $table->integer('order_id');
             $table->integer('product_id');
             $table->integer('qty');
+            $table->string('color')->nullable();
+            $table->enum('size', ['S', 'M', 'L', 'X', 'XL', 'XXL', '1XL', '2XL', '3XL'])->default('M');
             $table->timestamps();
         });
     }
