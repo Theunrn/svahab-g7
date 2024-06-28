@@ -1,5 +1,4 @@
 <template>
-  <WebHeaderMenu />
   <div class="header-text mt-5">
     <div class="header-detail">
       <div class="form-select absolute p-2 mt-17 bg-green bg-opacity-90 z-20 rounded-lg w-full md:w-5/5 lg:w-9/10 ml-16">
@@ -53,58 +52,73 @@
                 </button>
               </div>
             </div>
-            <div class="text-start bg-white p-4 flex flex-col">
-              <p class="text-xl font-bold text-grey-900 mb-2">Available:</p>
-              <p class="text-grey">Price:</p>
-              <button class="match-btn mr-2 bg-orange-500 w-40 text-white rounded-md px-3 py-1 mt-2 mb-2 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50 shadow-md hover:shadow-lg z-20">
-                Booking Now
-              </button>
+            <div class="text text-start bg-white p-4 flex flex-col">
+              <h5 class="text-xl font-bold text-grey-900 mb-2">Available</h5>
+              <h5 class="text-grey">Price:</h5>
             </div>
           </div>
-          <div class="wrapper-card relative w-full mx-2 my-2 rounded-md">  
-            <h3 class="mb-3 mt-2 font-semibold text-gray-900 dark:text-white">Technology</h3>
-            <ul class="w-100 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-              <li class="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
-                <div class="flex items-center ps-3">
-                  <input id="vue-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                  <label for="vue-checkbox" class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Water</label>
-                </div>
-              </li>
-              <li class="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
-                <div class="flex items-center ps-3">
-                  <input id="react-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                  <label for="react-checkbox" class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Towel</label>
-                </div>
-              </li>
-              <li class="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
-                <div class="flex items-center ps-3">
-                  <input id="angular-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                  <label for="angular-checkbox" class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Ball</label>
-                </div>
-              </li>
-              <li class="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
-                <div class="flex items-center ps-3">
-                  <input id="laravel-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                  <label for="laravel-checkbox" class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Bag</label>
-                </div>
-              </li>
-            </ul>
-          </div>
         </div>
-  
+        <div class="user-detail">
+          <h1>User Detial</h1>
+          <form>
+            <div class="form-group half-width">
+              <label for="first-name">Team Name *</label>
+              <input type="text" id="first-name" />
+            </div>
+            <div class="clearfix"></div>
+            <div class="form-group">
+              <label for="phoneNumber">Phone Number *</label>
+              <input type="tel" id="phoneNumber">
+            </div>
+            <div class="form-group">
+              <label for="field-type">Field Type</label>
+              <select id="field-type">
+                <option value="">Please Select</option>
+                <!-- Add more options as needed -->
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="number-of-guests">Number of water</label>
+              <input type="number" id="number-of-guests" />
+            </div>
+            <div class="wrapper-card relative w-full mx-2 my-2 rounded-md">  
+                  <h2>Optional</h2>
+                  <div class="flex items-center">
+                    <input id="vue-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                    <label for="vue-checkbox" class="w-full py-2 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Water</label>
+                  </div>
+                  <div class="flex items-center">
+                    <input id="react-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                    <label for="react-checkbox" class="w-full py-2 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Live</label>
+                  </div>
+                  <div class="flex items-center">
+                    <input id="angular-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                    <label for="angular-checkbox" class="w-full py-2 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Take Photo</label>
+                  </div>
+                  <div class="flex items-center">
+                    <input id="laravel-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                    <label for="laravel-checkbox" class="w-full py-2 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Team Duncing</label>
+                  </div>
+            </div>
+            <router-link to="/field/book" class="btn-book match-btn mr-2 bg-orange-500 w-40 text-white rounded-md px-3 py-1 mt-2 mb-2 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50 shadow-md hover:shadow-lg z-20">
+              Book Now
+            </router-link>
+          </form>
+        </div>
       </div>
-      <div class="map-right w-215 mt-2">
+      
+      <div class="map-right w-244 mt-2">
         <!-- w-96 sets a fixed width for the right div -->
         <div class="w-full w-214">
           <!-- <h2 class="text-2xl font-bold">7Seasons Apartments offers</h2> -->
           <img src="../../assets/image/contact-imag.jpg" alt="" class="w-full h-74 object-cover" />
         </div>
         <div class="gap-2">
-          <div class="card-text mt-4">
+          <div class="card-text mt-4" >
             <div class="card-display-container gap-3 flex flex-col">
-              <div class="card-display border border-gray-400 rounded-lg shadow-lg flex overflow-hidden">
-                <div class="relative w-1/3 p-2">
-                  <img
+              <div class="card-display border border-gray-400 rounded-lg shadow-lg flex overflow-hidden" v-for="index in 2" :key="index">
+                <div class="relative w-1/3 p-2" >
+                  <img 
                     src="../../assets/image/contact-imag.jpg"
                     alt=""
                     class="w-full h-66 object-cover rounded-md"
@@ -112,7 +126,6 @@
                   />
                   <span
                     class="absolute top-5 right-5 bg-white rounded-full p-1 shadow-md cursor-pointer"
-                    @click="tongleFevorite"
                   >
                     <img src="../../assets/image/heart.png" alt="Heart icon" class="w-8 h-8 p-1" />
                   </span>
@@ -132,45 +145,16 @@
                   <div class="text-gray-700">
                     <p class="mt-2 cursor-pointer">
                       <span class="price bg-blue-500 text-white p-2 rounded-md mr-2">8.8 $</span
-                      >2,965 reviews
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div
-                class="card-display border border-gray-400 rounded-lg shadow-lg flex overflow-hidden"
-              >
-                <div class="relative w-1/3 p-2">
-                  <img
-                    src="../../assets/contact-piture/match.jpg"
-                    alt=""
-                    class="w-full h-66 object-cover rounded-md"
-                    style="border-radius: 10px"
-                  />
-                  <span
-                    class="absolute top-5 right-5 bg-white rounded-full p-1 shadow-md cursor-pointer"
-                    @click="tongleFevorite"
-                  >
-                    <img src="../../assets/image/heart.png" alt="Heart icon" class="w-8 h-8 p-1" />
-                  </span>
-                </div>
-                <div class="flex flex-col justify-between p-4 w-2/3">
-                  <div class="mb-2">
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">
-                      <strong class="text-orange font-bold"
-                        >7Seasons Apartments BudapestOpens in new window</strong
                       >
-                    </h3>
-                    <p class="text-gray-700">
-                      Metro access Featuring a 24-hour reception, the 7Seasons Apartments offers you
-                      from Deak Ferenc tér, which is a major public transport...
                     </p>
-                  </div>
-                  <div class="text-gray-700">
-                    <p class="mt-2 cursor-pointer">
-                      <span class="price bg-blue-500 text-white p-2 rounded-md mr-2">8.8 $</span
-                      >2,965 reviews
-                    </p>
+                    <div class="rating mt-3">
+                      <span class="star">&#9733;</span>
+                      <span class="star">&#9733;</span>
+                      <span class="star">&#9733;</span>
+                      <span class="star">&#9733;</span>
+                      <span class="star">&#9734;</span>
+                    </div>
+                    <span class="viewer">2,965 reviews</span>
                   </div>
                 </div>
               </div>
@@ -186,10 +170,8 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import WebHeaderMenu from '@/Components/WebHeaderMenu.vue'
 import VueFlatpickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css';
-
 const dateRange = ref(null);
 const flatpickrConfig = {
   dateFormat: 'Y-m-d',
@@ -208,23 +190,41 @@ const handleChange = () => {
 /* Additional styling if needed */
 
 .header-text {
-  height: 100vh;
+  color: #000;
 }
 .header-detail {
   height: 100px;
   background-color: rgb(144, 124, 91);
 }
+h2{
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 20px;
+  font-weight: bold;
 
-.card-me {
-  justify-content: start;
-  align-items: start;
-  text-align: left;
+}
+h5{
+  font-size: 15px;
+  font-weight: bold;
+  text-align: center;
 }
 
+.rating .star {
+  color: #ffcc00;
+  font-size: 20px;
+}
+.viewer{
+  font-size: 15px;
+  text-align: center;
+  color: #808080;
+}
 .card-wrapper {
   border-radius: 20px 20px 0px 0px;
 }
-
+ .btn-book{
+   display:flex;
+   justify-content: center;
+ }
 .bg-overlay {
   background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
     url('../../assets/image/field.png');
@@ -240,6 +240,7 @@ const handleChange = () => {
   padding: 20px;
   border-radius: 10px 10px 0px 0px;
   position: relative;
+  
 }
 
 .price {
@@ -251,4 +252,38 @@ const handleChange = () => {
     width: 100%;
   }
 }
+
+.user-detail {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  color: #000;
+  margin-bottom: 20px;
+}
+
+h1 {
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+  color: #000;
+}
+
+
+.form-group label {
+  display: block;
+  margin-top: 10px;
+}
+
+.form-group input,
+.form-group select {
+  width: calc(100% - 20px);
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+
+
+
 </style>

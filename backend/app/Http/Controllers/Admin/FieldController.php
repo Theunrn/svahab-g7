@@ -24,10 +24,11 @@ class FieldController extends Controller
         $request->validate([
             'field_name' => 'required|string|max:255',
             'field_location' => 'required|string|max:255',
-            'field_type' => 'required|string|max:255',
-            'field_size' => 'required|integer',
-            'number_of_players' => 'required|integer',
-            'lighting_availability' => 'required|boolean',
+            'surface_type' => 'required|string|max:255',
+            'dimensions' => 'required|string|max:255',
+            'capacity' => 'nullable|integer',
+            'availablity' => 'required|boolean',
+            'home_team' => 'required|string|max:255',
         ]);
 
         Field::create($request->all());
@@ -42,20 +43,20 @@ class FieldController extends Controller
 
     public function edit($id)
     {
-        $field = Field::findOrFail($id);
+        $field = Field::find($id);
         return view('setting.fields.edit', compact('field'));
     }
-
 
     public function update(Request $request, $id)
     {
         $request->validate([
             'field_name' => 'required|string|max:255',
             'field_location' => 'required|string|max:255',
-            'field_type' => 'required|string|max:255',
-            'field_size' => 'required|string|max:255',
-            'number_of_players' => 'required|integer',
-            'lighting_availability' => 'required|boolean',
+            'surface_type' => 'required|string|max:255',
+            'dimensions' => 'required|string|max:255',
+            'capacity' => 'required|integer',
+            'availablity' => 'required|boolean',
+            'home_team' => 'required|string|max:255'
         ]);
 
         $field = Field::findOrFail($id);
@@ -63,6 +64,7 @@ class FieldController extends Controller
 
         return redirect()->route('admin.fields.index')->with('success', 'Field updated successfully.');
     }
+
 
     public function destroy($id)
     {

@@ -1,6 +1,7 @@
 <x-app-layout>
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   <div>
     <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-200">
       <div class="container mx-auto px-6 py-1 pb-16">
@@ -59,6 +60,8 @@
 >>>>>>> 9378dcb72fe6df899f0f22937ce21cd8b776692b
 =======
 =======
+=======
+>>>>>>> e958e5e079529d2c1659bbcb8411722d761578a6
   <div>
     <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-200">
       <div class="container mx-auto px-6 py-1 pb-16">
@@ -70,13 +73,22 @@
               <label for="name" class="text-gray-700 select-none font-medium">User Name</label>
               <input id="name" type="text" name="name" value="{{ old('name') }}" placeholder="Enter name" class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-200" />
             </div>
+<<<<<<< HEAD
 >>>>>>> 68302db391a7306cfa3b10541bd69ede50667dc8
 >>>>>>> ea26997741c66c7ddc7d27c6e72f9d8ae4f40dcb
+=======
+>>>>>>> e958e5e079529d2c1659bbcb8411722d761578a6
 
             <div class="flex flex-col space-y-2">
               <label for="email" class="text-gray-700 select-none font-medium">Email</label>
               <input id="email" type="text" name="email" value="{{ old('email') }}" placeholder="Enter email" class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-200" />
             </div>
+            <div class="flex flex-col space-y-2">
+              <label for="phone_number" class="text-gray-700 select-none font-medium">Phone Number</label>
+              <input id="phone_number" type="text" name="phone_number" value="{{ old('phone_number') }}"
+                placeholder="Enter Phone Number" class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-200"
+              />
+          </div>
 
             <div class="flex flex-col space-y-2">
               <label for="password" class="text-gray-700 select-none font-medium">Password</label>
@@ -104,8 +116,6 @@
               <button type="submit" class="bg-blue-500 text-white font-bold px-5 py-1 rounded focus:outline-none shadow hover:bg-blue-500 transition-colors ">Submit</button>
             </div>
         </div>
-
-
       </div>
     </main>
   </div>

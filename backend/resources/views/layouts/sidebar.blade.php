@@ -79,7 +79,14 @@
             <span class="mx-3">Fields</span>
         </a>
         @endcanany
-         @canany(['Product access','Product add','Product edit','Product delete'])
+         {{-- @canany(['Notification access','Notification add','Notification edit','Notification delete']) --}}
+         <a class="flex items-center mt-4 py-2 px-6 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 {{ Route::currentRouteNamed('admin.categories.index') ? 'active' : '' }}"
+         href="{{route('admin.categories.index')}}">
+         <i class='bx bxl-product-hunt text-2xl'></i>
+         <span class="mx-3">Categories</span>
+        </a>
+     {{-- @endcanany --}}
+         {{-- @canany(['Notification access','Notification add','Notification edit','Notification delete']) --}}
          <a class="flex items-center mt-4 py-2 px-6 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 {{ Route::currentRouteNamed('admin.products.index') ? 'active' : '' }}"
          href="{{route('admin.products.index')}}">
          <i class='bx bxl-product-hunt text-2xl'></i>
@@ -87,12 +94,12 @@
         </a>
         <a class="flex items-center mt-4 py-2 px-6 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 {{ Route::currentRouteNamed('admin.orders.index') ? 'active' : '' }}"
             href="{{ route('admin.orders.index') }}">
-            <i class='bx bxl-product-hunt text-2xl'></i>
+            <i class='bx bx-cart-add text-2xl'></i>
             <span class="mx-3">Orders</span>
         </a>
      {{-- @endcanany --}}
         {{-- @canany(['Payment access','Payment add','Payment edit','Payment delete']) --}}
-        @endcanany
+        {{-- @endcanany --}}
 
         @canany(['Payment access','Payment add','Payment edit','Payment delete'])
         <a class="flex items-center mt-4 py-2 px-6 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 {{ Route::currentRouteNamed('admin.payments.index') ? 'active' : '' }}"

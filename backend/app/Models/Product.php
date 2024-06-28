@@ -4,50 +4,44 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Product extends Model
 {
     use HasFactory;
+    protected $fillable = ['name', 'description', 'price', 'image', 'color', 'size', 'category_id'];
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $fillable = [
-        'name',
-        'price',
-        'description',
-    ];
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
+    public function orders()
+    {
+        return $this->belongsToMany(Order::class, 'product_orders')->withPivot('qty');
+    }
+
     protected $casts = [
-        'price' => 'integer',
+        'color' => 'array', // Cast the 'color' attribute to array
+        'size' => 'array',  // Cast the 'size' attribute to array
     ];
 
-    /**
-     * Scope a query to only include active products.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeActive($query)
-    {
-        return $query->whereNotNull('active_at')
-                     ->where('active_at', '<=', now());
+    public static function store($request, $id = null) {
+
+        $data = $request->only('name', 'description', 'price', 'category_id', 'size', 'color');
+        if ($request->hasFile('image')) {
+            $request->validate([
+                'image' => 'mimes:jpeg,png,jpg,gif,svg,mp4,avi,mov,wmv|max:20480', 
+            ]);
+            $image = $request->file('image')->store('images', 'public');
+            $data['image'] = Storage::url($image); 
+    
+        } else {
+            $data['image'] = $request->input('image');
+        }
+        
+        $product = self::updateOrCreate(['id' => $id], $data);
+        return $product;
     }
 
-    /**
-     * Determine if the product is active.
-     *
-     * @return bool
-     */
-    public function isActive()
-    {
-        return $this->active_at <= now();
-    }
 }

@@ -5,7 +5,7 @@
         <div class="flex justify-between items-center mb-4">
           <div>
             <!-- Select dropdown for filtering by role -->
-            <select v-model="selectedRole" class=" py-2 border border-gray-300 rounded-md px-10">
+            <select v-model="selectedRole" class="py-2 border border-gray-300 rounded-md px-10">
               <option class="px-5" value="">Select Role</option>
               @foreach($users as $user)
                 @foreach($user->roles as $role)
@@ -83,18 +83,33 @@
                     </td>
                     <td class="py-4 px-6 border-b border-gray-300 text-right">
                       @can('User edit')
-                        <a href="{{ route('admin.users.edit', $user->id) }}" class="text-blue-500 hover:text-blue-700 mr-2">
-                          <i class='bx bx-edit text-2xl'></i>
-                        </a>
+                        @if(auth()->user()->roles->pluck('name')->contains('admin') || 
+                          (auth()->user()->roles->pluck('name')->contains('owner') && $user->roles->pluck('name')->contains('customer')) ||
+                          (auth()->user()->id === $user->id))
+                          <a href="{{ route('admin.users.edit', $user->id) }}" class="text-blue-500 hover:text-blue-700 mr-2">
+                            <i class='bx bx-edit text-2xl'></i>
+                          </a>
+                        @elseif(auth()->user()->roles->pluck('name')->contains('owner') && $user->roles->pluck('name')->contains('admin'))
+                          <button class="text-blue-500 cursor-not-allowed" disabled>
+                            <i class='bx bx-edit text-2xl mr-2'></i>
+                          </button>
+                        @endif
                       @endcan
                       @can('User delete')
-                        <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="inline">
-                          @csrf
-                          @method('DELETE')
-                          <button type="submit" class="text-red-500 hover:text-red-700">
+                        @if(auth()->user()->roles->pluck('name')->contains('admin') || 
+                          (auth()->user()->roles->pluck('name')->contains('owner') && $user->roles->pluck('name')->contains('customer')))
+                          <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="inline">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="text-red-500 hover:text-red-700">
+                              <i class='bx bx-trash text-2xl'></i>
+                            </button>
+                          </form>
+                        @elseif(auth()->user()->roles->pluck('name')->contains('owner') && !$user->roles->pluck('name')->contains('customer'))
+                          <button class="text-red-500 cursor-not-allowed" disabled>
                             <i class='bx bx-trash text-2xl'></i>
                           </button>
-                        </form>
+                        @endif
                       @endcan
                     </td>
                   </tr>

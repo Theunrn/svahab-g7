@@ -39,13 +39,17 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import { useAuthStore } from '@/stores/auth-store'; // Adjust the import path based on your actual file structure
+import { useAuthStore } from '@/stores/auth-store';
 
 const route = useRoute();
 const authStore = useAuthStore();
 
-// Function to trigger logout
+onMounted(() => {
+  authStore.initialize();
+});
+
 const logout = () => {
   authStore.logout();
 };
