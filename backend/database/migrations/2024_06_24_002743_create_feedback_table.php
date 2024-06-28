@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('feedback', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id');
-            $table->integer('field_id');
+            $table->foreignId('user_id');
+            $table->foreignId('field_id');
             $table->string('feedback_text');
             $table->timestamps();
         });

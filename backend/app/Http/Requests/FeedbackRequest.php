@@ -8,7 +8,14 @@ class FeedbackRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
+     *
+     * @return bool
      */
+    public function authorize(): bool
+    {
+        return true; // Update this based on your authorization logic
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -17,10 +24,9 @@ class FeedbackRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id'=>'required|integer',
-            'field_id'=>'required|integer',
-            'feedback_text' =>'required|string|max:255',
-            
+            'user_id' => 'required|exists:users,id',
+            'field_id' => 'required|exists:fields,id',
+            'feedback_text' => 'required|string|max:255',
         ];
     }
 }
