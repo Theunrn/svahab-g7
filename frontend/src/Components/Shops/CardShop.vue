@@ -17,7 +17,7 @@
             </div>
             
             <router-link to="/product/detail" class="mt-2 flex items-center justify-center mb-4 text-3xl text-blue-500" width="150px" height="150px">
-              <img width="150px" height="150px" :src="product.image" class="text-center" alt="Product Image" />
+              <img :src="getImageUrl(product.image)" class="text-center w-90%" alt="Product Image" />
             </router-link>
             <div class="card-body d-flex flex-column justify-content-between">
               <div>
@@ -55,86 +55,43 @@
   </div>
 </template>
 
-
-
 <script>
+import axios from 'axios';
+
 export default {
   data() {
     return {
-      products:[
-        {
-          id: 1,
-          name: 'Ball',
-          price: 10,
-          image: 'https://cdn.britannica.com/68/195168-050-BBAE019A/football.jpg',
-          description: 'Mini Football Sunny 300 Size 1 - Pastel Blue',
-          isFavorite: false
-        },
-        {
-          id: 2,
-          name: 'Sport Cloth',
-          price: 15,
-          image: 'https://s.alicdn.com/@sc04/kf/Habf4d374b47548fb944c63c2d15e6580X.jpg_300x300.jpg',
-          description: 'Mini Football Sunny 300 Size 1 - Pastel Blue',
-          isFavorite: false
-        },
-        {
-          id: 3,
-          name: 'Soccer Sock',
-          price: 15,
-          image: 'https://soccerzoneusa.com/cdn/shop/products/SX5728-100-PHCFH001_590x.jpg?v=1588263965',
-          description: 'Mini Football Sunny 300 Size 1 - Pastel Blue',
-          isFavorite: false
-        },
-        {
-          id: 4,
-          name: 'Soccer Cleats',
-          price: 10,
-          image: 'https://i.ebayimg.com/images/g/6GEAAOSwWGZkVbFZ/s-l1200.jpg',
-          description: 'Mini Football Sunny 300 Size 1 - Pastel Blue'
-        },
-        {
-          id: 5,
-          name: 'Shin Guards',
-          price: 10,
-          image: 'https://soccerzoneusa.com/cdn/shop/products/SP0040-009-PHSFH001_875x.jpg?v=1588263959',
-          description: 'Mini Football Sunny 300 Size 1 - Pastel Blue',
-          isFavorite: false
-        },
-        {
-          id: 6,
-          name: 'Coalkeeper Gloves',
-          price: 10,
-          image: 'https://m.media-amazon.com/images/I/61bndwlfJSL._AC_UF1000,1000_QL80_.jpg',
-          description: 'Mini Football Sunny 300 Size 1 - Pastel Blue',
-          isFavorite: false
-        },
-        {
-          id: 7,
-          name: 'Water Bottle',
-          price: 10,
-          image: 'https://football-futures.com/wp-content/uploads/2021/12/Waterv-bottle-2.png',
-          description: 'Mini Football Sunny 300 Size 1 - Pastel Blue',
-          isFavorite: false
-        },
-        {
-          id: 8,
-          name: 'Cear Bag',
-          price: 10,
-          image: 'https://contents.mediadecathlon.com/p2161169/k$bbd724010de90a72409e266044a48426/45l-sports-bag-hardcase-black.jpg?format=auto&quality=70&f=1366x1366',
-          description: 'Mini Football Sunny 300 Size 1 - Pastel Blue',
-          isFavorite: false
-        },
-      ]
+      products: [],
+      cart: [],
+      cartCount: 0,
+      isFavorite: true
     };
   },
+  created() {
+    this.fetchProducts(); // Fetch products when the component is created
+  },
   methods: {
+    fetchProducts() {
+      axios.get('http://127.0.0.1:8000/api/product/list')
+        .then(response => {
+          this.products = response.data; // Assuming your API returns an array of products
+        })
+        .catch(error => {
+          console.error('Error fetching products:', error);
+          // Optionally handle errors here (e.g., show a message to the user)
+        });
+    },
+    getImageUrl(imagePath) {
+      return `http://127.0.0.1:8000/storage/${imagePath}`; // Adjust URL if needed
+    },
     toggleFavorite(product) {
       product.isFavorite = !product.isFavorite;
     }
-  },
-};
+    
+  }
+}
 </script>
+
 
 
 
@@ -180,7 +137,7 @@ export default {
   color: #000;
 }
 
-.button {
+button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
