@@ -16,6 +16,11 @@ class Product extends Model
         return $this->belongsTo(Category::class);
     }
 
+    public function orders()
+    {
+        return $this->belongsToMany(Order::class, 'product_orders')->withPivot('qty');
+    }
+
     protected $casts = [
         'color' => 'array', // Cast the 'color' attribute to array
         'size' => 'array',  // Cast the 'size' attribute to array
