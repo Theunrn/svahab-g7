@@ -8,111 +8,123 @@ use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
-     /**
-     * Display a listing of the products.
+    /**
+     * Display a listing of the resource.
      */
-    public function index(): JsonResponse
+    public function index()
     {
-        $products = Product::all();
+        $products = Product::with(['category', 'colors', 'sizes'])->get();
         return response()->json($products);
     }
 
     /**
-     * Store a newly created product in storage.
+     * Show the form for creating a new resource.
      */
-    public function store(ProductRequest $request): JsonResponse
-    {
-        $validatedData = $request->validated();
-
-        // Handle file upload (image)
-        $imageName = time() . '.' . $request->image->extension();
-        $request->image->storeAs('public/images', $imageName);
-
-        // Create new product
-        $product = new Product();
-        $product->name = $validatedData['name'];
-        $product->description = $validatedData['description'];
-        $product->price = $validatedData['price'];
-        $product->image = 'images/' . $imageName; // assuming storage symlink is set up
-        $product->category_id = $validatedData['category_id'];
-        // Add colors if provided
-        if (isset($validatedData['color'])) {
-            $product->color = $validatedData['color'];
-        }
-        // Add sizes if provided
-        if (isset($validatedData['size'])) {
-            $product->size = $validatedData['size'];
-        }
-        $product->save();
-
-        return response()->json([
-            'message' => 'Product created successfully',
-            'data' => $product,
-        ], 201);
-    }
-
     /**
-     * Display the specified product.
+     * Store a newly created resource in storage.
      */
-    public function show(string $id): JsonResponse
+    public function store(ProductRequest $request)
     {
-        $product = Product::findOrFail($id);
-        return response()->json($product);
-    }
+        if (Auth::check()) {
+            $validatedData = $request->validated();
 
-    /**
-     * Update the specified product in storage.
-     */
-    public function update(ProductRequest $request, string $id): JsonResponse
-    {
-        $validatedData = $request->validated();
-
-        // Find the product
-        $product = Product::findOrFail($id);
-
-        // Handle file upload (image) if provided
-        if ($request->hasFile('image')) {
             $imageName = time() . '.' . $request->image->extension();
             $request->image->storeAs('public/images', $imageName);
-            $product->image = 'images/' . $imageName; // assuming storage symlink is set up
-        }
 
-        // Update product details
-        $product->name = $validatedData['name'];
-        $product->description = $validatedData['description'];
-        $product->price = $validatedData['price'];
-        $product->category_id = $validatedData['category_id'];
-        // Update colors if provided
-        if (isset($validatedData['color'])) {
-            $product->color = $validatedData['color'];
-        }
-        // Update sizes if provided
-        if (isset($validatedData['size'])) {
-            $product->size = $validatedData['size'];
-        }
+            $product = new Product();
+            $product->name = $validatedData['name'];
+            $product->description = $validatedData['description'];
+            $product->price = $validatedData['price'];
+            $product->image = 'images/' . $imageName;
+            $product->category_id = $validatedData['category_id'];
+            $product->save();
 
-        // Save the updated product
-        $product->save();
+            // Sync colors and sizes if provided
+            if (isset($validatedData['color_ids'])) {
+                $product->colors()->sync($validatedData['color_ids']);
+            }
 
-        return response()->json([
-            'message' => 'Product updated successfully',
-            'data' => $product,
-        ]);
+            if (isset($validatedData['size_ids'])) {
+                $product->sizes()->sync($validatedData['size_ids']);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Product created successfully',
+                'data' => $product->load(['category', 'colors', 'sizes']),
+            ], 201);
+        } else {
+            return response()->json(['error' => 'User not authenticated'], 401);
+        }
+    }
+    /**
+ * Update the specified resource in storage.
+ */
+public function update(ProductRequest $request, $id)
+{
+    if (!Auth::check()) {
+        return response()->json(['error' => 'User not authenticated'], 401);
     }
 
-    /**
-     * Remove the specified product from storage.
-     */
-    public function destroy(string $id): JsonResponse
-    {
-        $product = Product::findOrFail($id);
-        $product->delete();
+    $validatedData = $request->validated();
 
-        return response()->json([
-            'message' => 'Product deleted successfully',
-        ], 204);
+    $product = Product::findOrFail($id);
+
+    if ($request->hasFile('image')) {
+        // Delete old image if exists
+        if ($product->image) {
+            Storage::delete('public/' . $product->image);
+        }
+        $imageName = time() . '.' . $request->image->extension();
+        $request->image->storeAs('public/images', $imageName);
+        $product->image = 'images/' . $imageName;
+    }
+
+    $product->name = $validatedData['name'];
+    $product->description = $validatedData['description'];
+    $product->price = $validatedData['price'];
+    $product->category_id = $validatedData['category_id'];
+    $product->save();
+
+    if (isset($validatedData['color_ids'])) {
+        $product->colors()->sync($validatedData['color_ids']);
+    }
+
+    if (isset($validatedData['size_ids'])) {
+        $product->sizes()->sync($validatedData['size_ids']);
+    }
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Product updated successfully',
+        'data' => $product->load(['category', 'colors', 'sizes']),
+    ]);
+}
+
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy($id)
+    {
+        if (Auth::check()) {
+            $product = Product::findOrFail($id);
+
+            // Delete the image from storage
+            Storage::delete('public/' . $product->image);
+
+            $product->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Product deleted successfully',
+            ]);
+        } else {
+            return response()->json(['error' => 'User not authenticated'], 401);
+        }
     }
 }

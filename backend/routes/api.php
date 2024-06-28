@@ -34,10 +34,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/category/delete/{id}', [CategoryController::class, 'destroy']);
 });
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/products', [APIProductController::class, 'index']);
-    Route::post('/product/create', [APIProductController::class, 'store']);
-    Route::get('/products/{id}', [APIProductController::class, 'show']);
-    Route::put('/products/{id}', [APIProductController::class, 'update']);
-    Route::delete('/products/{id}', [APIProductController::class, 'destroy']);
-});
+// Products API Routes
+Route::get('/product/list', [APIProductController::class, 'index']);
+Route::post('/product/create', [APIProductController::class, 'store'])->middleware('auth:sanctum');
+Route::put('/product/update/{id}', [APIProductController::class, 'update'])->middleware('auth:sanctum');
+Route::delete('/product/delete/{id}', [APIProductController::class, 'destroy'])->middleware('auth:sanctum');

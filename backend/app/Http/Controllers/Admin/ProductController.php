@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Color;
 use App\Models\Product;
+use App\Models\Size;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -33,21 +35,21 @@ class ProductController extends Controller
 
         return view('setting.products.index', compact('products', 'categories'));
     }
-    public function getAllProducts()
-    {
-        $products = Product::all(); // Assuming Product model exists and has necessary fields
 
-        return response()->json($products);
-    }
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
         $categories = Category::all();
-        return view('setting.products.new', compact('categories'));
+        $colors = Color::all();
+        $sizes = Size::all();
+        return view('setting.products.new', compact('categories', 'colors', 'sizes'));
     }
 
+    /**
+     * Store a newly created resource in storage.
+     */
     public function store(Request $request)
     {
         // Validate incoming request
@@ -56,9 +58,11 @@ class ProductController extends Controller
             'description' => 'required|string',
             'price' => 'required|numeric|min:0',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // adjust max file size if needed
-            'category_id' => 'required|exists:categories,id', // ensure category exists in database
-            'color' => 'nullable|array', // optional, if colors are required
-            'size' => 'nullable|array', // optional, if sizes are required
+            'category_id' => 'nullable|exists:categories,id', // ensure category exists in database, allow null
+            'colors' => 'nullable|array',
+            'colors.*' => 'exists:colors,id',
+            'sizes' => 'nullable|array',
+            'sizes.*' => 'exists:sizes,id',
         ]);
 
         // Handle file upload (image)
@@ -72,28 +76,32 @@ class ProductController extends Controller
         $product->price = $validatedData['price'];
         $product->image = 'images/' . $imageName; // assuming storage symlink is set up
         $product->category_id = $validatedData['category_id'];
-        // Add colors if provided
-        if (isset($validatedData['color'])) {
-            $product->color = $validatedData['color'];
-        }
-        // Add sizes if provided
-        if (isset($validatedData['size'])) {
-            $product->size = $validatedData['size'];
-        }
+        
         $product->save();
+
+        // Attach colors and sizes
+        $product->colors()->attach($validatedData['colors'] ?? []);
+        $product->sizes()->attach($validatedData['sizes'] ?? []);
 
         // Redirect to a success page or back to the form with a success message
         return redirect()->route('admin.products.index')->with('success', 'Product created successfully.');
     }
 
-
+    /**
+     * Show the form for editing the specified resource.
+     */
     public function edit(Product $product)
     {
         $categories = Category::all();
-        return view('setting.products.edit', compact('product', 'categories'));
+        $colors = Color::all();
+        $sizes = Size::all();
+        return view('setting.products.edit', compact('product', 'categories', 'colors', 'sizes'));
     }
 
-    public function update(Request $request, $id)
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, Product $product)
     {
         // Validate incoming request
         $validatedData = $request->validate([
@@ -101,13 +109,12 @@ class ProductController extends Controller
             'description' => 'required|string',
             'price' => 'required|numeric|min:0',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // adjust max file size if needed
-            'category_id' => 'required|exists:categories,id', // ensure category exists in database
-            'color' => 'nullable|array', // optional, if colors are required
-            'size' => 'nullable|array', // optional, if sizes are required
+            'category_id' => 'nullable|exists:categories,id', // ensure category exists in database, allow null
+            'colors' => 'nullable|array',
+            'colors.*' => 'exists:colors,id',
+            'sizes' => 'nullable|array',
+            'sizes.*' => 'exists:sizes,id',
         ]);
-
-        // Find the product
-        $product = Product::findOrFail($id);
 
         // Handle file upload (image) if provided
         if ($request->hasFile('image')) {
@@ -121,27 +128,22 @@ class ProductController extends Controller
         $product->description = $validatedData['description'];
         $product->price = $validatedData['price'];
         $product->category_id = $validatedData['category_id'];
-        // Update colors if provided
-        if (isset($validatedData['color'])) {
-            $product->color = $validatedData['color'];
-        }
-        // Update sizes if provided
-        if (isset($validatedData['size'])) {
-            $product->size = $validatedData['size'];
-        }
-
-        // Save the updated product
+       
         $product->save();
+
+        // Sync colors and sizes
+        $product->colors()->sync($validatedData['colors'] ?? []);
+        $product->sizes()->sync($validatedData['sizes'] ?? []);
 
         // Redirect back with success message
         return redirect()->route('admin.products.index')->with('success', 'Product updated successfully.');
     }
+
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Product $product)
     {
-        $product = Product::findOrFail($id);
         $product->delete();
 
         return redirect()->route('admin.products.index')->with('success', 'Product deleted successfully.');

@@ -7,6 +7,8 @@ use App\Http\Controllers\Admin\{
     MailSettingController,
 };
 use App\Http\Controllers\BookingController;
+use Illuminate\Auth\Access\Response;
+use Illuminate\Http\File;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,6 +52,17 @@ Route::get('/admin/dashboard', function () {
 })->middleware(['auth'])->name('admin.dashboard');
 
 require __DIR__.'/auth.php';
+Route::get('/storage/{filename}', function ($filename) {
+    $path = storage_path('app/public/' . $filename);
+    if (!File::exists($path)) {
+        abort(404);
+    }
+    $file = File::get($path);
+    $type = File::mimeType($path);
+    $response = Response::make($file, 200);
+    $response->header("Content-Type", $type);
+    return $response;
+})->where('filename', '.*');
 
 
 Route::namespace('App\Http\Controllers\Admin')->name('admin.')->prefix('admin')

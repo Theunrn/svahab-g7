@@ -46,28 +46,27 @@
                         </select>
                     </div>
 
-                    <!-- Color Selection -->
                     <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2">Colors:</label>
-                        <div class="mt-1 grid grid-cols-1 gap-2 sm:grid-cols-2">
-                            @foreach(['Red', 'Black', 'Yellow', 'White', 'Pink', 'Blue'] as $color)
-                            <label for="color_{{ strtolower($color) }}" class="inline-flex items-center">
-                                <input type="checkbox" id="color_{{ strtolower($color) }}" name="color[]" value="{{ $color }}" class="form-checkbox h-5 w-5 text-{{ strtolower($color) }}-600">
-                                <span class="ml-2 text-gray-700">{{ $color }}</span>
-                            </label>
+                        <label for="colors" class="block text-sm font-medium text-gray-700">Colors</label>
+                        <div class="mt-1 grid grid-cols-2 gap-4">
+                            @foreach ($colors as $color)
+                                <label class="flex items-center">
+                                    <input type="checkbox" name="colors[]" value="{{ $color->id }}" class="rounded text-blue-500">
+                                    <span class="ml-2 text-sm text-gray-600">{{ $color->name }}</span>
+                                </label>
                             @endforeach
                         </div>
                     </div>
+                    
 
-                    <!-- Size Selection -->
                     <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2">Sizes:</label>
-                        <div class="mt-1 grid grid-cols-1 gap-2 sm:grid-cols-2">
-                            @foreach(['S', 'M', 'L', 'XL', '2XL', '3XL'] as $size)
-                            <label for="size_{{ strtolower($size) }}" class="inline-flex items-center">
-                                <input type="checkbox" id="size_{{ strtolower($size) }}" name="size[]" value="{{ $size }}" class="form-checkbox h-5 w-5">
-                                <span class="ml-2 text-gray-700">{{ $size }}</span>
-                            </label>
+                        <label for="sizes" class="block text-sm font-medium text-gray-700">Sizes</label>
+                        <div class="mt-1 grid grid-cols-2 gap-4">
+                            @foreach ($sizes as $size)
+                                <label class="flex items-center">
+                                    <input type="checkbox" name="sizes[]" value="{{ $size->id }}" class="rounded text-blue-500">
+                                    <span class="ml-2 text-sm text-gray-600">{{ $size->name }}</span>
+                                </label>
                             @endforeach
                         </div>
                     </div>
