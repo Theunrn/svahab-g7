@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Admin\BookingController as AdminBookingController;
 use App\Http\Controllers\Admin\ProductController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\FieldController;
@@ -60,7 +59,7 @@ Route::namespace('App\Http\Controllers\Admin')->name('admin.')->prefix('admin')
         Route::resource('products', 'ProductController');
         Route::resource('categories', 'CategoryController');
         Route::resource('payments', 'PaymentController');
-        Route::resource('feedbacks', 'FeedbackController');
+        Route::resource('feedbacks', FeedbackController::class);
         Route::resource('orders', 'OrderController');
 
 
