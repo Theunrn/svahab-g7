@@ -3,8 +3,13 @@
 use App\Http\Controllers\Admin\FeedbackController;
 use App\Http\Controllers\Admin\FieldController;
 use App\Http\Controllers\Admin\ProductController;
+<<<<<<< HEAD
 use App\Http\Controllers\API\BookingController;
 use App\Http\Controllers\API\OrderProductController;
+=======
+use App\Http\Controllers\Api\FeedbackController;
+use App\Http\Controllers\Api\FildController;
+>>>>>>> interface-field
 use App\Http\Controllers\API\PostController;
 use App\Http\Controllers\API\ProductController as APIProductController;
 use App\Http\Controllers\AuthController;
@@ -38,7 +43,11 @@ Route::get('/me', [AuthController::class, 'index'])->middleware('auth:sanctum');
 Route::get('/post/list', [PostController::class, 'index'])->middleware('auth:sanctum');
 Route::get('/order/list', [OrderController::class, 'index'])->middleware('auth:sanctum');
 
-Route::get('field/list', [FieldController::class,'index'])->name('field.list');
+Route::get('field/list', [FildController::class,'index'])->name('field.list');
+Route::post('field/create', [FildController::class,'store'])->name('field.create');
+Route::get('field/show/{id}', [FildController::class,'show'])->name('field.show');
+Route::put('field/update/{id}', [FildController::class,'update'])->name('field.update');
+Route::delete('field/delete/{id}', [FildController::class,'destroy'])->name('field.delete');
 
 // product
 Route::get('/product/list', [APIProductController::class, 'index']);

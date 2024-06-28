@@ -6,7 +6,11 @@ use App\Http\Controllers\Admin\FieldController;
 use App\Http\Controllers\Admin\MailSettingController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProfileController;
+<<<<<<< HEAD
 use App\Http\Controllers\API\BookingController;
+=======
+use App\Http\Controllers\Admin\SettingController;
+>>>>>>> interface-field
 
 /*
 |--------------------------------------------------------------------------
@@ -61,6 +65,7 @@ Route::namespace('App\Http\Controllers\Admin')->name('admin.')->prefix('admin')
         Route::resource('payments', 'PaymentController');
         Route::resource('feedbacks', FeedbackController::class);
         Route::resource('orders', 'OrderController');
+
 
 
         Route::get('/profile', [ProfileController::class, 'index'])->name('profile');

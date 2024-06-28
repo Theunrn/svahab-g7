@@ -13,42 +13,38 @@
     </button>
     @endif
 
-    <a href="{{ route('admin.fields.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mb-3 rounded inline-block">Add
+    <a href="{{ route('admin.fields.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mb-3 ml-2 rounded inline-block">Add
       Field</a>
 
     <div class="overflow-x-auto">
       <table class="min-w-full w-full bg-white shadow-md border border-gray-200">
         <thead class="bg-gray-800 text-white">
           <tr>
-            <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Field
-              Name</th>
+            <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Name</th>
             <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Location</th>
-            <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Surface
-              Type</th>
-            <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Dimensions</th>
-            <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Capacity</th>
+            <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">field_type
+            </th>
+            <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">owner_id</th>
             <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Availability</th>
-            <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Home
-              Team</th>
             <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Actions</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-gray-200">
           @foreach($fields as $field)
           <tr>
-            <td class="px-4 py-4 whitespace-nowrap">{{ $field->field_name }}</td>
-            <td class="px-4 py-4 whitespace-nowrap">{{ $field->field_location }}</td>
-            <td class="px-4 py-4 whitespace-nowrap">{{ $field->surface_type }}</td>
-            <td class="px-4 py-4 whitespace-nowrap">{{ $field->dimensions }}</td>
-            <td class="px-4 py-4 whitespace-nowrap">{{ $field->capacity }}</td>
+            <td class="px-4 py-4 whitespace-nowrap">{{ $field->name }}</td>
+            <td class="px-4 py-4 whitespace-nowrap">{{ $field->location }}</td>
+            <td class="px-4 py-4 whitespace-nowrap">{{ $field->field_type }}</td>
+            <td class="px-4 py-4 whitespace-nowrap">{{ $field->owner_id }}</td>
             <td class="px-4 py-4 whitespace-nowrap">{{ $field->availablity ? 'Yes' : 'No' }}</td>
-            <td class="px-4 py-4 whitespace-nowrap">{{ $field->home_team }}</td>
             <td class="px-4 py-4 whitespace-nowrap">
-              <a href="{{ route('admin.fields.edit', $field->id) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded inline-block">Edit</a>
+              <a href="{{ route('admin.fields.edit', $field->id) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded inline-block">
+              <i class='bx bx-edit text-2xl'></i>
+              </a>
               <form action="{{ route('admin.fields.destroy', $field->id) }}" method="POST" class="inline-block">
                 @csrf
                 @method('DELETE')
-                <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded inline-block">Delete</button>
+                <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded inline-block">  <i class='bx bx-trash text-2xl'></i></button>
               </form>
             </td>
           </tr>

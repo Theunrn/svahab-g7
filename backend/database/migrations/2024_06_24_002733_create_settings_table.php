@@ -15,6 +15,18 @@ return new class extends Migration
             $table->id();
             $table->string('key');
             $table->string('value');
+            $table->string('email_address');
+            $table->string('responsible');
+            $table->boolean('email_notifications');
+            $table->string('phone_number')->nullable();
+            $table->string('address')->nullable();
+            $table->string('timezone')->nullable();
+            $table->string('language')->default('en');
+            $table->string('currency')->default('USD');
+            $table->string('date_format')->default('Y-m-d');
+            $table->string('time_format')->default('H:i:s');
+            $table->boolean('maintenance_mode')->default(false);
+            $table->json('additional_data')->nullable();
             $table->timestamps();
         });
     }
