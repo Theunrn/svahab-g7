@@ -7,10 +7,10 @@
                 </div>
                 <div class="p-8">
                     <div class="uppercase tracking-wide text-2xl text-indigo-500 font-semibold mb-5">Booking Details</div>
-                    <h2 class="block mt-1 text-lg leading-tight font-medium text-black">Field Name: {{ $booking->field->field_name }}</h2>
+                    <h2 class="block mt-1 text-lg leading-tight font-medium text-black">Field Name: {{ $booking->field->name }}</h2>
                     <div class="flex gap-1 mt-2">
                         <i class='bx bx-map text-2xl'></i>
-                        <p class=" mt-1 text-gray-500">Location: {{ $booking->field->field_location }}</p>
+                        <p class=" mt-1 text-gray-500">Location: {{ $booking->field->location }}</p>
                     </div>
                     <div class="mt-4">
                     

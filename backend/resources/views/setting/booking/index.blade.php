@@ -39,7 +39,7 @@
                     <tr class="text-left booking-row" data-status="{{ $booking->status }}">
                         <td class="py-2 px-3 border-b border-gray-300">{{ $booking->id }}</td>
                         <td class="py-2 px-3 border-b border-gray-300">{{ $booking->customer->name }}</td>
-                        <td class="py-2 px-3 border-b border-gray-300">{{ $booking->field->field_name }}</td>
+                        <td class="py-2 px-3 border-b border-gray-300">{{ $booking->field->name }}</td>
                         <td class="py-2 px-3 border-b border-gray-300">{{ $booking->start_time }}</td>
                         <td class="py-2 px-3 border-b border-gray-300">{{ $booking->end_time }}</td>
                         <td class="py-2 px-3 border-b border-gray-300">{{ $booking->booking_date }}</td>
