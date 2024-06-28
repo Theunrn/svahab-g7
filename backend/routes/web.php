@@ -7,9 +7,7 @@ use App\Http\Controllers\Admin\{
     MailSettingController,
 };
 use App\Http\Controllers\BookingController;
-use Illuminate\Auth\Access\Response;
-use Illuminate\Http\File;
-
+use App\Http\Controllers\OrderController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -89,6 +87,7 @@ Route::namespace('App\Http\Controllers\Admin')->name('admin.')->prefix('admin')
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('products', ProductController::class);
 });
+
 
 
 

@@ -66,9 +66,10 @@ class UserController extends Controller
             'name'=>$request->name,
             'email'=>$request->email,
             'password'=> bcrypt($request->password),
+            'phone_number'=> $request->phone_number,
         ]);
-        $user->syncRoles($request->roles);
-        return redirect()->back()->withSuccess('User created !!!');
+        $user->assignRole($request->roles);
+        return redirect()->route('admin.users.index')->with('success', 'User created !!!');
     }
 
     /**
@@ -119,7 +120,7 @@ class UserController extends Controller
         $user->update($validated);
 
         $user->syncRoles($request->roles);
-        return redirect()->back()->withSuccess('User updated !!!');
+        return redirect()->route('admin.users.index')->withSuccess('User updated !!!');
     }
 
     /**
@@ -128,9 +129,12 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Role $role)
+    public function destroy($id)
     {
-        $role->delete();
-        return redirect()->back()->withSuccess('Role deleted !!!');
+
+
+        $user = User::find($id);
+        $user->delete();
+        return redirect()->back()->withSuccess('User deleted !!!');
     }
 }

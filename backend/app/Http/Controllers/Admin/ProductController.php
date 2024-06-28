@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
+
+
     /**
      * Display a listing of the resource.
      */
@@ -36,9 +38,6 @@ class ProductController extends Controller
         return view('setting.products.index', compact('products', 'categories'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         $categories = Category::all();

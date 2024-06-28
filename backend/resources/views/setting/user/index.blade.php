@@ -30,23 +30,26 @@
             </thead>
             <tbody>
               @can('User access')
+              
               @foreach($users as $user)
+             
               <tr class="hover:bg-gray-100">
                 <td class="py-2 px-6 border-b border-gray-300">
                   <div class="flex items-center">
-                    <div class="w-10 h-10">
-                      <img class="w-full h-full object-cover rounded-full" src="https://www.tastingtable.com/img/gallery/everything-you-need-to-know-about-lychee-fruit/intro-1648012156.jpg" alt="User Avatar">
+                    <div class="h-10 w-10">
+                      <img src="{{ $user->profile ? asset('images/' . $user->profile) : asset('images/default-profile.jpg') }}" alt="User Avatar" class="w-full h-full rounded-full object-cover">
                     </div>
                   </div>
                 </td>
                 <td class="py-4 px-6 border-b border-gray-300">{{ $user->name }}</td>
                 <td class="py-4 px-6 border-b border-gray-300">{{ $user->email }}</td>
-                <td class="py-4 px-6 border-b border-gray-300">0928342873</td>
+                <td class="py-4 px-6 border-b border-gray-300">{{$user->phone_number}}</td>
                 <td class="py-4 px-6 border-b border-gray-300">
                   @foreach($user->roles as $role)
                   <span
                     class="inline-block px-3 py-1 text-white text-xs font-semibold text-gray-700 mr-2 rounded-full
-                    {{ $role->name === 'user' ? 'bg-yellow-300' : '' }}
+                    {{ $role->name === 'owner' ? 'bg-yellow-300' : '' }}
+                    {{ $role->name === 'customer' ? 'bg-blue-300' : '' }}
                     {{ $role->name === 'admin' ? 'bg-red-300' : '' }}">
                     {{ $role->name }}
                   </span>
