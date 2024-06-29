@@ -21,6 +21,17 @@
               <h5 class="card-title text-bold">{{ product.name }}</h5>
               <p class="card-text text-danger fw-bold">{{ product.price }}$</p>
               <p class="card-text">{{ product.description }}</p>
+<<<<<<< HEAD
+              <div class="rating">
+                <span class="star text-warning">&#9733;</span>
+                <span class="star text-warning">&#9733;</span>
+                <span class="star text-warning">&#9733;</span>
+                <span class="star">&#9733;</span> 
+                <span class="star">&#9734;</span>
+              </div>
+            </div>
+
+=======
             </div>
             <div class="group">
               <router-link
@@ -37,6 +48,7 @@
                 Buy Now
               </router-link>
             </div>
+>>>>>>> fc624a4a3c520351196e298087231834d6d71fe8
           </div>
         </div>
       </div>
@@ -51,6 +63,25 @@ export default {
   data() {
     return {
       products: [],
+<<<<<<< HEAD
+    };
+  },
+  mounted() {
+  axios.get('http://127.0.0.1:8000/api/product/list')
+    .then(response => {
+      this.products = response.data.products;
+      console.log('Products loaded:', this.products);
+      // Log product images to verify paths
+      this.products.forEach(product => {
+        console.log('Product Image:', product.image);
+      });
+    })
+    .catch(error => {
+      console.error('Error fetching data:', error);
+    });
+}
+
+=======
       uniqueProductsByCategory: []
     };
   },
@@ -97,6 +128,7 @@ export default {
       product.isFavorite = !product.isFavorite;
     }
   },
+>>>>>>> fc624a4a3c520351196e298087231834d6d71fe8
 };
 </script>
 

@@ -59,32 +59,29 @@ Route::get('/storage/{filename}', function ($filename) {
 
 
 Route::namespace('App\Http\Controllers\Admin')->name('admin.')->prefix('admin')
-    ->group(function(){
-        Route::put('orders/{id}/reactivate', [OrderController::class, 'reactivate'])
-            ->name('orders.reactivate');
-
-        Route::resource('roles', 'RoleController');
-        Route::resource('permissions', 'PermissionController');
-        Route::resource('users', 'UserController');
-        Route::resource('posts', 'PostController');
-        Route::resource('fields', 'FieldController');
-        Route::resource('bookings', 'BookingController');
-        Route::resource('settings', 'SettingController');
-        Route::resource('products', 'ProductController');
-        Route::resource('categories', 'CategoryController');
-        Route::resource('payments', 'PaymentController');
-        Route::resource('feedbacks', 'FeedbackController');
-        Route::resource('orders', 'OrderController');
+->group(function () {
+    Route::resource('roles', 'RoleController');
+    Route::resource('permissions', 'PermissionController');
+    Route::resource('users', 'UserController');
+    Route::resource('posts', 'PostController');
+    Route::resource('fields', 'FieldController');
+    Route::resource('bookings', 'BookingController');
+    Route::resource('settings', 'SettingController');
+    Route::resource('products', 'ProductController');
+    Route::resource('categories', 'CategoryController');
+    Route::resource('payments', 'PaymentController');
+    Route::resource('feedbacks', 'FeedbackController');
+    Route::resource('orders', 'OrderController');
 
 
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
+    Route::put('/profile-update', [ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/mail', [MailSettingController::class, 'index'])->name('mail.index');
+    Route::put('/mail-update/{mailsetting}', [MailSettingController::class, 'update'])->name('mail.update');
+});
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::resource('products', ProductController::class);
+});
 
-        Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
-        Route::put('/profile-update', [ProfileController::class, 'update'])->name('profile.update');
-        Route::get('/mail', [MailSettingController::class, 'index'])->name('mail.index');
-        Route::put('/mail-update/{mailsetting}', [MailSettingController::class, 'update'])->name('mail.update');
 
-    });
-    Route::get('/admin/bookings/{id}/cancel', [BookingController::class, 'cancel'])->name('admin.bookings.cancel');
-    Route::get('/admin/bookings/{id}/rebook', [BookingController::class, 'reBook'])->name('admin.bookings.rebook');
-    Route::get('/admin/bookings/{id}/accept', [BookingController::class, 'accept'])->name('admin.bookings.accept');
-    Route::get('/admin/bookings/{id}/reject', [BookingController::class, 'reject'])->name('admin.bookings.reject');
+    
