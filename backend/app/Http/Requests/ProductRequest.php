@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class ProductRequest extends FormRequest
 {
-    public function authorize()
+   public function authorize()
     {
         return true; // Adjust based on your authentication logic
     }

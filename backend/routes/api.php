@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\API\CategoryController;
+use App\Http\Controllers\API\ColorController;
 use App\Http\Controllers\API\PostController;
 use App\Http\Controllers\API\ProductController as APIProductController;
+use App\Http\Controllers\API\SizeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\OrderController;
 use Illuminate\Http\Request;
@@ -33,13 +35,19 @@ Route::get('/post/list', [PostController::class, 'index'])->middleware('auth:san
 // Categories API Routes
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/category/list', [CategoryController::class, 'index']);
+    
     Route::post('/category/create', [CategoryController::class, 'store']);
     Route::put('/category/update/{id}', [CategoryController::class, 'update']);
     Route::delete('/category/delete/{id}', [CategoryController::class, 'destroy']);
 });
+Route::get('/category/show/{id}', [CategoryController::class, 'show']);
 
 // Products API Routes
 Route::get('/product/list', [APIProductController::class, 'index']);
 Route::post('/product/create', [APIProductController::class, 'store'])->middleware('auth:sanctum');
 Route::put('/product/update/{id}', [APIProductController::class, 'update'])->middleware('auth:sanctum');
+Route::get('/product/show/{id}', [APIProductController::class, 'show']);
 Route::delete('/product/delete/{id}', [APIProductController::class, 'destroy'])->middleware('auth:sanctum');
+
+Route::get('/sizes', [SizeController::class, 'index']);
+Route::get('/colors', [ColorController::class, 'index']);

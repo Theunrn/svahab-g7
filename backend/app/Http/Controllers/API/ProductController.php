@@ -22,9 +22,6 @@ class ProductController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    /**
      * Store a newly created resource in storage.
      */
     public function store(ProductRequest $request)
@@ -59,6 +56,19 @@ class ProductController extends Controller
             ], 201);
         } else {
             return response()->json(['error' => 'User not authenticated'], 401);
+        }
+    }
+    public function show($id)
+    {
+        try {
+            $product = Product::with(['category', 'colors', 'sizes'])->findOrFail($id);
+
+            return response()->json([
+                'success' => true,
+                'data' => $product,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Product not found'], 404);
         }
     }
     /**
