@@ -33,14 +33,13 @@
           <h5 class="mb-2">Color:</h5>
           <div class="d-flex flex-wrap">
             <div
-              v-for="color in colors"
+              v-for="color in product.colors"
               :key="color.id"
-              :style="{ backgroundColor: color.hex_code }"
+              :style="{ backgroundColor: color.name.toLowerCase() }"
               :class="[
                 'color-circle',
                 'mr-2',
                 'cursor-pointer',
-                `bg-${color.name.toLowerCase()}`,
                 { selected: selectedColor === color.id }
               ]"
               @click="toggleColorSelection(color.id)"
@@ -50,7 +49,7 @@
         <div class="size-options mb-3">
           <h5 class="mb-2">Size:</h5>
           <select class="form-select w-auto" v-model="selectedSize">
-            <option v-for="size in sizes" :key="size.id" :value="size.id">{{ size.name }}</option>
+            <option v-for="size in product.sizes" :key="size.id" :value="size.id">{{ size.name }}</option>
           </select>
         </div>
         <div class="quantity mb-4">
@@ -95,9 +94,7 @@ import axiosInstance from '@/plugins/axios'
 const route = useRoute()
 const productId = computed(() => route.params)
 const product = ref({})
-const colors = ref([]) // Reactive reference for colors
 const selectedColor = ref(null) // Reactive reference for selected color
-const sizes = ref([]) // Reactive reference for sizes
 const selectedSize = ref(null) // Reactive reference for selected size
 const quantity = ref(1) // Reactive reference for quantity
 
@@ -110,28 +107,8 @@ const fetchProductDetails = async () => {
   }
 }
 
-const fetchSizes = async () => {
-  try {
-    const response = await axiosInstance.get('/sizes')
-    sizes.value = response.data.data
-  } catch (error) {
-    console.error('Error fetching sizes:', error)
-  }
-}
-
-const fetchColors = async () => {
-  try {
-    const response = await axiosInstance.get('/colors')
-    colors.value = response.data.data
-  } catch (error) {
-    console.error('Error fetching colors:', error)
-  }
-}
-
 onMounted(() => {
   fetchProductDetails()
-  fetchColors()
-  fetchSizes()
 })
 
 const getImageUrl = (imagePath) => {
@@ -178,30 +155,6 @@ const toggleColorSelection = (colorId: number) => {
 
 .color-options .color-circle.selected {
   border: 2px solid #000;
-}
-
-.bg-red {
-  background-color: red;
-}
-
-.bg-black {
-  background-color: black;
-}
-
-.bg-white {
-  background-color: white;
-}
-
-.bg-pink {
-  background-color: pink;
-}
-
-.bg-yellow {
-  background-color: yellow;
-}
-
-.bg-blue {
-  background-color: blue;
 }
 
 .btn {
