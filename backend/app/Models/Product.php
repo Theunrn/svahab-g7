@@ -15,6 +15,15 @@ class Product extends Model
     {
         return $this->belongsTo(Category::class);
     }
+    public function colors()
+    {
+        return $this->belongsToMany(Color::class, 'product_colors');
+    }
+
+    public function sizes()
+    {
+        return $this->belongsToMany(Size::class, 'product_sizes');
+    }
 
     public function orders()
     {
