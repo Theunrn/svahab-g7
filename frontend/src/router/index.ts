@@ -68,9 +68,14 @@ const router = createRouter({
     },
     
     {
-      path: '/product/detail',
+      path: '/product/detail/:id',
       name: 'Card',
       component: () => import('../views/Web/Products/CardView.vue')
+    },
+    {
+      path: '/category/show/:id',
+      name: 'category-show',
+      component: () => import('../views/Web/Products/ProductView.vue')
     },
     {
       path: '/register',
