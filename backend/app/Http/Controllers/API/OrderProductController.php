@@ -21,7 +21,7 @@ class OrderProductController extends Controller
         // Retrieve orders for the authenticated user
         $orders = Order::where('user_id', $user->id)->with('products')->get();
 
-        return response()->json(['orders' => $orders], 200);
+        return response()->json(['success'=>true,'data' => $orders], 200);
     }
 
 
@@ -47,7 +47,7 @@ class OrderProductController extends Controller
         // Find the order with products for the authenticated user
         $order = Order::where('user_id', $user->id)->with('products')->findOrFail($id);
 
-        return response()->json(['order' => $order], 200);
+        return response()->json(['success'=>true, 'data' => $order], 200);
     }
 
 

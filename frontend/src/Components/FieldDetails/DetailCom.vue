@@ -4,15 +4,15 @@
       <div class="form-select absolute p-2 mt-17 bg-green bg-opacity-90 z-20 rounded-lg w-full md:w-5/5 lg:w-9/10 ml-16">
         <div class="flex items-center justify-center space-x-2">
           <div class="relative flex gap-10 w-[334px]">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="absolute top-1/2 left-4 transform -translate-y-1/2">
+            <svg v-if="!selectedOption" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="absolute top-1/2 left-4 transform -translate-y-1/2">
               <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="#4B5563" />
             </svg>
             <select v-model="selectedOption" class="flex-1 text-center pl-10 rounded-md text-black border-2 border-transparent focus:border-yellow-500" @change="handleChange" style="padding: 13px;" >
-              <option disabled value="">Choose field for play</option>
-              <option value="option1">PNC Stadium</option>
-              <option value="option2">PSE Stadium</option>
-              <option value="option3">Borey Solar Stadium</option>
-              <option value="option3">G7 Stadium</option>
+              <option disabled value="">Province Name</option>
+              <option class="text-start" value="option1">PNC Stadium</option>
+              <option class="text-start" value="option2">PSE Stadium</option>
+              <option class="text-start" value="option3">Borey Solar Stadium</option>
+              <option class="text-start" value="option3">G7 Stadium</option>
             </select>
           </div>
 
@@ -22,25 +22,24 @@
                 <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
               </svg>
             </div>
-            <VueFlatpickr v-model="dateRange" :config="flatpickrConfig" class="px-4 py-3 text-center bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date" />
+            <VueFlatpickr @change="bookingDate" v-model="booking_date" :config="flatpickrConfig" class="px-4 py-3 text-center bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date" />
           </div>
 
-          <form class="w-[334px] ">
-            <div class="flex ">
-            <!-- Time input -->
-              <input type="time" id="time" class="px-4 py-3 rounded-none rounded-s-lg bg-gray-50 border text-gray-900 leading-none focus:ring-blue-500 focus:border-blue-500 block flex-1 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" min="09:00" max="18:00" value="00:00" required>
-              
+          <form class="w-[334px] flex gap-2">
+            <div class="flex gap-2">
+              <label for="start_time" class="text-sm text-white" style="margin-top: 20px;">Start</label>
+              <input @change="start" v-model="start_time" type="time" id="start_time" class="px-4 py-3 rounded-none rounded-s-lg bg-gray-50 border text-gray-900 leading-none focus:ring-blue-500 focus:border-blue-500 block flex-1 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" min="09:00" max="18:00" required>
+            </div>
+            <div class="flex gap-2">
+              <label for="end_time" class="text-sm text-white" style="margin-top: 20px;">End</label>
+              <input @change="end" v-model="end_time" type="time" id="end_time" class="px-4 py-3 rounded-none rounded-s-lg bg-gray-50 border text-gray-900 leading-none focus:ring-blue-500 focus:border-blue-500 block flex-1 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" min="09:00" max="18:00" required>
             </div>
           </form>
-
-          <button type="button" class="w-30 rounded-md bg-blue-500 text-white border-2 border-transparent focus:border-yellow-500" style="padding: 13px;">
-            Search
-          </button>
         </div>
       </div>
     </div>
 
-    <div class="mt-5 flex gap-5 ml-13">
+    <div class="mt-5 flex gap-5 ml-13 container">
       <div class="map-left w-80">
         <!-- w-96 sets a fixed width for the left div -->
         <div class="card-me">
@@ -53,36 +52,37 @@
               </div>
             </div>
             <div class="text text-start bg-white p-4 flex flex-col">
-              <h5 class="text-xl font-bold text-grey-900 mb-2">Available</h5>
-              <h5 class="text-grey">Price:</h5>
+              <h5 class="text-2xl font-bold text-white py-2 mb-2 bg-green-500">Available</h5>
+              <h5 class="text-orange-600 ">Price: $10.00/Hour</h5>
             </div>
           </div>
         </div>
         <div class="user-detail">
-          <h1>User Detial</h1>
+          <h2 class="text-center">CUSTOMER INFO</h2><hr>
           <form>
             <div class="form-group half-width">
-              <label for="first-name">Team Name *</label>
+              <label for="first-name">First Name (English only) *</label>
+              <input type="text" id="first-name" />
+            </div>
+            <div class="form-group half-width">
+              <label for="first-name">Last Name (Engish only) *</label>
               <input type="text" id="first-name" />
             </div>
             <div class="clearfix"></div>
+            <div class="form-group">
+              <label for="phoneNumber">E-mail *</label>
+              <input type="tel" id="phoneNumber">
+            </div>
             <div class="form-group">
               <label for="phoneNumber">Phone Number *</label>
               <input type="tel" id="phoneNumber">
             </div>
             <div class="form-group">
-              <label for="field-type">Field Type</label>
-              <select id="field-type">
-                <option value="">Please Select</option>
-                <!-- Add more options as needed -->
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="number-of-guests">Number of water</label>
-              <input type="number" id="number-of-guests" />
+              <label for="number-of-guests">Total Price ($) *</label>
+              <input type="number" id="number-of-guests" v-model="total_price" />
             </div>
             <div class="wrapper-card relative w-full mx-2 my-2 rounded-md">  
-                  <h2>Optional</h2>
+                  <h2>Your Option (optional)</h2>
                   <div class="flex items-center">
                     <input id="vue-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
                     <label for="vue-checkbox" class="w-full py-2 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Water</label>
@@ -100,8 +100,8 @@
                     <label for="laravel-checkbox" class="w-full py-2 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Team Duncing</label>
                   </div>
             </div>
-            <router-link to="/field/book" class="btn-book match-btn mr-2 bg-orange-500 w-40 text-white rounded-md px-3 py-1 mt-2 mb-2 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50 shadow-md hover:shadow-lg z-20">
-              Book Now
+            <router-link to="/field/book" @click="submitBooking" class="btn-book match-btn mr-2 bg-orange-500 w-40 text-white rounded-md px-3 py-1 mt-2 mb-2 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50 shadow-md hover:shadow-lg z-20">
+              Payment
             </router-link>
           </form>
         </div>
@@ -144,7 +144,7 @@
                   </div>
                   <div class="text-gray-700">
                     <p class="mt-2 cursor-pointer">
-                      <span class="price bg-blue-500 text-white p-2 rounded-md mr-2">8.8 $</span
+                      <span class="price bg-blue-500 text-white p-2 rounded-md mr-2">$10.00</span
                       >
                     </p>
                     <div class="rating mt-3">
@@ -169,21 +169,64 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import VueFlatpickr from 'vue-flatpickr-component'
+import { ref, computed, watch } from 'vue';
+import VueFlatpickr from 'vue-flatpickr-component';
 import 'flatpickr/dist/flatpickr.css';
-const dateRange = ref(null);
-const flatpickrConfig = {
-  dateFormat: 'Y-m-d',
-  // other options...
-};
+import { useRoute } from 'vue-router';
+import axiosInstance from '@/plugins/axios';
 
-const selectedOption = ref('')
-const handleChange = () => {
-  console.log('Selected option:', selectedOption.value)
+const route = useRoute();
+const selectedOption = ref('');
+const userId = computed(() => route.query.user);
+const fieldId = computed(() => route.params.id); // Assuming fieldId is always present
+const bookings = ref<any[]>([]) // Initialize bookings array with any type for flexibility
+const start_time = ref('');
+const end_time = ref('');
+const total_price = ref('00.00');
+const booking_date = ref<Date | null>(null); // Adjust date type as needed
+
+const start = () => start_time.value;
+const end = () => end_time.value;
+
+const calculateTotalPrice = () => {
+  const startTimeParts = start_time.value.split(':').map(Number);
+  const endTimeParts = end_time.value.split(':').map(Number);
+  
+  const startMinutes = startTimeParts[0] * 60 + startTimeParts[1];
+  const endMinutes = endTimeParts[0] * 60 + endTimeParts[1];
+  
+  const durationInMinutes = endMinutes - startMinutes;
+  const pricePerMinute = 10 / 60; // Assuming the price is $10 per hour
+  
+  total_price.value = (durationInMinutes * pricePerMinute).toFixed(2);
 }
 
+const bookingDate = () => booking_date.value;
+
+const submitBooking = async () => {
+  try {
+    const response = await axiosInstance.post('/booking/create', {
+      user_id: userId.value,
+      field_id: fieldId.value,
+      start_time: start(),
+      end_time: end(),
+      booking_date: bookingDate(),
+      total_price: total_price.value,
+      status: 'pending',
+      payment_status: 'unpaid',
+    });
+
+    console.log('Booking created:', response.data);
+    bookings.value.push(response.data);
+  } catch (error) {
+    console.error('Error creating booking:', error);
+  }
+}
+
+watch([start_time, end_time], calculateTotalPrice);
+
 </script>
+
 
 
 <style scoped>

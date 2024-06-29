@@ -37,7 +37,6 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanc
 
 Route::get('/me', [AuthController::class, 'index'])->middleware('auth:sanctum');
 Route::get('/post/list', [PostController::class, 'index'])->middleware('auth:sanctum');
-Route::get('/order/list', [OrderController::class, 'index'])->middleware('auth:sanctum');
 
 Route::get('field/list', [FildController::class,'index'])->name('field.list');
 Route::post('field/create', [FildController::class,'store'])->name('field.create');

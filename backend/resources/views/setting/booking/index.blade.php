@@ -22,29 +22,31 @@
             <table class="border-collapse table-auto w-full whitespace-no-wrap bg-white table-striped relative">
                 <thead>
                     <tr class="text-left">
-                        <th class="py-2 px-2 sticky top-0 bg-gray-200 border-b border-gray-300">ID</th>
-                        <th class="py-2 px-2 sticky top-0 bg-gray-200 border-b border-gray-300">Customer</th>
-                        <th class="py-2 px-2 sticky top-0 bg-gray-200 border-b border-gray-300">Field Name</th>
-                        <th class="py-2 px-2 sticky top-0 bg-gray-200 border-b border-gray-300">Start Time</th>
-                        <th class="py-2 px-2 sticky top-0 bg-gray-200 border-b border-gray-300">End Time</th>
-                        <th class="py-2 px-2 sticky top-0 bg-gray-200 border-b border-gray-300">Booking Date</th>
-                        <th class="py-2 px-2 sticky top-0 bg-gray-200 border-b border-gray-300">Status</th>
-                        <th class="py-2 px-2 sticky top-0 bg-gray-200 border-b border-gray-300">Payment Status</th>
-                        <th class="py-2 px-2 sticky top-0 bg-gray-200 border-b border-gray-300">Actions</th>
+                        <th class="py-2 px-1 sticky top-0 bg-gray-200 border-b border-gray-300">ID</th>
+                        <th class="py-2 px-1 sticky top-0 bg-gray-200 border-b border-gray-300">Customer</th>
+                        <th class="py-2 px-1 sticky top-0 bg-gray-200 border-b border-gray-300">Field Name</th>
+                        <th class="py-2 px-1 sticky top-0 bg-gray-200 border-b border-gray-300">Start Time</th>
+                        <th class="py-2 px-1 sticky top-0 bg-gray-200 border-b border-gray-300">End Time</th>
+                        <th class="py-2 px-1 sticky top-0 bg-gray-200 border-b border-gray-300">Booking Date</th>
+                        <th class="py-2 px-1 sticky top-0 bg-gray-200 border-b border-gray-300">Total Price</th>
+                        <th class="py-2 px-1 sticky top-0 bg-gray-200 border-b border-gray-300">Status</th>
+                        <th class="py-2 px-1 sticky top-0 bg-gray-200 border-b border-gray-300">Payment Status</th>
+                        <th class="py-2 px-1 sticky top-0 bg-gray-200 border-b border-gray-300">Actions</th>
                     </tr>
                 </thead>
                 <tbody id="booking-list">
                     @foreach ($bookings->where('status', '!=', 'cancelled') as $booking)
                     @if ($booking->status !== 'rejected')
                     <tr class="text-left booking-row" data-status="{{ $booking->status }}">
-                        <td class="py-2 px-3 border-b border-gray-300">{{ $booking->id }}</td>
-                        <td class="py-2 px-3 border-b border-gray-300">{{ $booking->customer->name }}</td>
-                        <td class="py-2 px-3 border-b border-gray-300">{{ $booking->field->name }}</td>
-                        <td class="py-2 px-3 border-b border-gray-300">{{ $booking->start_time }}</td>
-                        <td class="py-2 px-3 border-b border-gray-300">{{ $booking->end_time }}</td>
-                        <td class="py-2 px-3 border-b border-gray-300">{{ $booking->booking_date }}</td>
-                        <td class="py-2 px-3 border-b border-gray-300">
-                            <span class="inline-block px-3 py-1 text-white text-xs font-semibold mr-2 rounded-full
+                        <td class="py-2 px-1 border-b border-gray-300">{{ $booking->id }}</td>
+                        <td class="py-2 px-1 border-b border-gray-300">{{ $booking->customer->name }}</td>
+                        <td class="py-2 px-1 border-b border-gray-300">{{ $booking->field->name }}</td>
+                        <td class="py-2 px-1 border-b border-gray-300">{{ $booking->start_time }}</td>
+                        <td class="py-2 px-1 border-b border-gray-300">{{ $booking->end_time }}</td>
+                        <td class="py-2 px-1 border-b border-gray-300">{{ $booking->booking_date }}</td>
+                        <td class="py-2 px-1 border-b border-gray-300">${{ $booking->total_price }}</td>
+                        <td class="py-2 px-1 border-b border-gray-300">
+                            <span class="inline-block px-2 py-1 text-white text-xs font-semibold rounded-full
                                     {{ $booking->status === 'comfirmed' ? 'bg-green-500 text-gray-700' : '' }}
                                     {{ $booking->status === 'rejected' ? 'bg-red-500 text-gray-700' : '' }}
                                     {{ $booking->status === 'cancelled' ? 'bg-red-500 text-gray-700' : '' }}
@@ -53,7 +55,7 @@
                             </span>
                         </td>
                         <td class="py-2 px-3 border-b border-gray-300">
-                            <span class="inline-block px-3 py-1 text-white text-xs font-semibold mr-2 rounded-full
+                            <span class="inline-block px-2 py-1 text-white text-xs font-semibold rounded-full
                                     {{ $booking->payment_status === 'paid' ? 'bg-green-500 text-gray-700' : '' }}
                                     {{ $booking->payment_status === 'unpaid' ? 'bg-red-500 text-white-300' : '' }}">
                                 {{ $booking->payment_status }}

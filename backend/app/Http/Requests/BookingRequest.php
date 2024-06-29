@@ -20,6 +20,7 @@ class BookingRequest extends DefaultRequest
             'booking_date' => 'required|date', 
             'start_time' => 'required', 
             'end_time' => 'required', 
+            'total_price' => 'required', 
             'status' => 'required|string', 
             'payment_status' => 'required|string', 
 
