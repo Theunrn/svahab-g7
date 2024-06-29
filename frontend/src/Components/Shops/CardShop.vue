@@ -86,7 +86,7 @@ export default {
     };
   },
   created() {
-    this.fetchProducts(); // Fetch products when the component is created
+    this.fetchProducts();
   },
   methods: {
     async fetchProducts() {
@@ -95,6 +95,7 @@ export default {
         const products = response.data.map(product => ({
           ...product,
           colors: product.colors.map(color => color.name), // Assuming colors are fetched as an array of objects with 'name' property
+          sizes: product.sizes.map(size => size.name) // Assuming sizes are fetched as an array of objects with 'name' property
         }));
         
         this.products = products;
@@ -140,20 +141,12 @@ export default {
   cursor: pointer;
 }
 
-.card:hover{
+.card:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 .card-body {
   background-color: #f8f9fa;
-}
-
-.rating .star {
-  font-size: 20px;
-}
-
-.text-warning {
-  color: #ffcc00;
 }
 
 .title h4 {
@@ -166,20 +159,7 @@ export default {
   font-family: 'Poppins', sans-serif;
 }
 
-.title .text-s {
-  text-align: center;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  font-size: 20px;
-  color: #000;
-}
-
-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-.cart-icon{
+.cart-icon {
   display: flex;
   justify-content: end;
   font-size: 25px;
@@ -187,7 +167,7 @@ button {
   border-radius: 50%;
   margin-right: 10px;
 }
-.shop-icon{
+.shop-icon {
   margin-right: 10px;
   color: rgb(248, 163, 5);
 }
@@ -201,5 +181,4 @@ button {
     width: 100%;
   }
 }
-
 </style>
