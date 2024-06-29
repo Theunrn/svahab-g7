@@ -9,11 +9,16 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
+
     public function up(): void
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id');
+            $table->enum('order_status', ['comfirmed', 'cancelled'])->default('comfirmed');
+            $table->enum('payment_status', ['paid', 'unpaid'])->default('unpaid')->nullable();
+            $table->date('order_date')->nullable();
+            $table->integer('total_amount')->nullable();
             $table->timestamps();
         });
     }

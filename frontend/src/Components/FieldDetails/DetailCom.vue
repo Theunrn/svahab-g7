@@ -1,19 +1,18 @@
 <template>
-  <WebHeaderMenu />
   <div class="header-text mt-5">
     <div class="header-detail">
       <div class="form-select absolute p-2 mt-17 bg-green bg-opacity-90 z-20 rounded-lg w-full md:w-5/5 lg:w-9/10 ml-16">
         <div class="flex items-center justify-center space-x-2">
           <div class="relative flex gap-10 w-[334px]">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="absolute top-1/2 left-4 transform -translate-y-1/2">
+            <svg v-if="!selectedOption" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="absolute top-1/2 left-4 transform -translate-y-1/2">
               <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="#4B5563" />
             </svg>
             <select v-model="selectedOption" class="flex-1 text-center pl-10 rounded-md text-black border-2 border-transparent focus:border-yellow-500" @change="handleChange" style="padding: 13px;" >
-              <option disabled value="">Choose field for play</option>
-              <option value="option1">PNC Stadium</option>
-              <option value="option2">PSE Stadium</option>
-              <option value="option3">Borey Solar Stadium</option>
-              <option value="option3">G7 Stadium</option>
+              <option disabled value="">Province Name</option>
+              <option class="text-start" value="option1">PNC Stadium</option>
+              <option class="text-start" value="option2">PSE Stadium</option>
+              <option class="text-start" value="option3">Borey Solar Stadium</option>
+              <option class="text-start" value="option3">G7 Stadium</option>
             </select>
           </div>
 
@@ -23,25 +22,24 @@
                 <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
               </svg>
             </div>
-            <VueFlatpickr v-model="dateRange" :config="flatpickrConfig" class="px-4 py-3 text-center bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date" />
+            <VueFlatpickr @change="bookingDate" v-model="booking_date" :config="flatpickrConfig" class="px-4 py-3 text-center bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date" />
           </div>
 
-          <form class="w-[334px] ">
-            <div class="flex ">
-            <!-- Time input -->
-              <input type="time" id="time" class="px-4 py-3 rounded-none rounded-s-lg bg-gray-50 border text-gray-900 leading-none focus:ring-blue-500 focus:border-blue-500 block flex-1 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" min="09:00" max="18:00" value="00:00" required>
-              
+          <form class="w-[334px] flex gap-2">
+            <div class="flex gap-2">
+              <label for="start_time" class="text-sm text-white" style="margin-top: 20px;">Start</label>
+              <input @change="start" v-model="start_time" type="time" id="start_time" class="px-4 py-3 rounded-none rounded-s-lg bg-gray-50 border text-gray-900 leading-none focus:ring-blue-500 focus:border-blue-500 block flex-1 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" min="09:00" max="18:00" required>
+            </div>
+            <div class="flex gap-2">
+              <label for="end_time" class="text-sm text-white" style="margin-top: 20px;">End</label>
+              <input @change="end" v-model="end_time" type="time" id="end_time" class="px-4 py-3 rounded-none rounded-s-lg bg-gray-50 border text-gray-900 leading-none focus:ring-blue-500 focus:border-blue-500 block flex-1 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" min="09:00" max="18:00" required>
             </div>
           </form>
-
-          <button type="button" class="w-30 rounded-md bg-blue-500 text-white border-2 border-transparent focus:border-yellow-500" style="padding: 13px;">
-            Search
-          </button>
         </div>
       </div>
     </div>
 
-    <div class="mt-5 flex gap-5 ml-13">
+    <div class="mt-5 flex gap-5 ml-13 container">
       <div class="map-left w-80">
         <!-- w-96 sets a fixed width for the left div -->
         <div class="card-me">
@@ -53,58 +51,74 @@
                 </button>
               </div>
             </div>
-            <div class="text-start bg-white p-4 flex flex-col">
-              <p class="text-xl font-bold text-grey-900 mb-2">Available:</p>
-              <p class="text-grey">Price:</p>
-              <button class="match-btn mr-2 bg-orange-500 w-40 text-white rounded-md px-3 py-1 mt-2 mb-2 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50 shadow-md hover:shadow-lg z-20">
-                Booking Now
-              </button>
+            <div class="text text-start bg-white p-4 flex flex-col">
+              <h5 class="text-2xl font-bold text-white py-2 mb-2 bg-green-500">Available</h5>
+              <h5 class="text-orange-600 ">Price: $10.00/Hour</h5>
             </div>
           </div>
-          <div class="wrapper-card relative w-full mx-2 my-2 rounded-md">  
-            <h3 class="mb-3 mt-2 font-semibold text-gray-900 dark:text-white">Technology</h3>
-            <ul class="w-100 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-              <li class="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
-                <div class="flex items-center ps-3">
-                  <input id="vue-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                  <label for="vue-checkbox" class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Water</label>
-                </div>
-              </li>
-              <li class="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
-                <div class="flex items-center ps-3">
-                  <input id="react-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                  <label for="react-checkbox" class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Towel</label>
-                </div>
-              </li>
-              <li class="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
-                <div class="flex items-center ps-3">
-                  <input id="angular-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                  <label for="angular-checkbox" class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Ball</label>
-                </div>
-              </li>
-              <li class="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
-                <div class="flex items-center ps-3">
-                  <input id="laravel-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                  <label for="laravel-checkbox" class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Bag</label>
-                </div>
-              </li>
-            </ul>
-          </div>
         </div>
-  
+        <div class="user-detail">
+          <h2 class="text-center">CUSTOMER INFO</h2><hr>
+          <form>
+            <div class="form-group half-width">
+              <label for="first-name">First Name (English only) *</label>
+              <input type="text" id="first-name" />
+            </div>
+            <div class="form-group half-width">
+              <label for="first-name">Last Name (Engish only) *</label>
+              <input type="text" id="first-name" />
+            </div>
+            <div class="clearfix"></div>
+            <div class="form-group">
+              <label for="phoneNumber">E-mail *</label>
+              <input type="tel" id="phoneNumber">
+            </div>
+            <div class="form-group">
+              <label for="phoneNumber">Phone Number *</label>
+              <input type="tel" id="phoneNumber">
+            </div>
+            <div class="form-group">
+              <label for="number-of-guests">Total Price ($) *</label>
+              <input type="number" id="number-of-guests" v-model="total_price" />
+            </div>
+            <div class="wrapper-card relative w-full mx-2 my-2 rounded-md">  
+                  <h2>Your Option (optional)</h2>
+                  <div class="flex items-center">
+                    <input id="vue-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                    <label for="vue-checkbox" class="w-full py-2 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Water</label>
+                  </div>
+                  <div class="flex items-center">
+                    <input id="react-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                    <label for="react-checkbox" class="w-full py-2 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Live</label>
+                  </div>
+                  <div class="flex items-center">
+                    <input id="angular-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                    <label for="angular-checkbox" class="w-full py-2 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Take Photo</label>
+                  </div>
+                  <div class="flex items-center">
+                    <input id="laravel-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                    <label for="laravel-checkbox" class="w-full py-2 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Team Duncing</label>
+                  </div>
+            </div>
+            <router-link to="/field/book" @click="submitBooking" class="btn-book match-btn mr-2 bg-orange-500 w-40 text-white rounded-md px-3 py-1 mt-2 mb-2 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50 shadow-md hover:shadow-lg z-20">
+              Payment
+            </router-link>
+          </form>
+        </div>
       </div>
-      <div class="map-right w-215 mt-2">
+      
+      <div class="map-right w-244 mt-2">
         <!-- w-96 sets a fixed width for the right div -->
         <div class="w-full w-214">
           <!-- <h2 class="text-2xl font-bold">7Seasons Apartments offers</h2> -->
           <img src="../../assets/image/contact-imag.jpg" alt="" class="w-full h-74 object-cover" />
         </div>
         <div class="gap-2">
-          <div class="card-text mt-4">
+          <div class="card-text mt-4" >
             <div class="card-display-container gap-3 flex flex-col">
-              <div class="card-display border border-gray-400 rounded-lg shadow-lg flex overflow-hidden">
-                <div class="relative w-1/3 p-2">
-                  <img
+              <div class="card-display border border-gray-400 rounded-lg shadow-lg flex overflow-hidden" v-for="index in 2" :key="index">
+                <div class="relative w-1/3 p-2" >
+                  <img 
                     src="../../assets/image/contact-imag.jpg"
                     alt=""
                     class="w-full h-66 object-cover rounded-md"
@@ -112,7 +126,6 @@
                   />
                   <span
                     class="absolute top-5 right-5 bg-white rounded-full p-1 shadow-md cursor-pointer"
-                    @click="tongleFevorite"
                   >
                     <img src="../../assets/image/heart.png" alt="Heart icon" class="w-8 h-8 p-1" />
                   </span>
@@ -131,46 +144,17 @@
                   </div>
                   <div class="text-gray-700">
                     <p class="mt-2 cursor-pointer">
-                      <span class="price bg-blue-500 text-white p-2 rounded-md mr-2">8.8 $</span
-                      >2,965 reviews
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div
-                class="card-display border border-gray-400 rounded-lg shadow-lg flex overflow-hidden"
-              >
-                <div class="relative w-1/3 p-2">
-                  <img
-                    src="../../assets/contact-piture/match.jpg"
-                    alt=""
-                    class="w-full h-66 object-cover rounded-md"
-                    style="border-radius: 10px"
-                  />
-                  <span
-                    class="absolute top-5 right-5 bg-white rounded-full p-1 shadow-md cursor-pointer"
-                    @click="tongleFevorite"
-                  >
-                    <img src="../../assets/image/heart.png" alt="Heart icon" class="w-8 h-8 p-1" />
-                  </span>
-                </div>
-                <div class="flex flex-col justify-between p-4 w-2/3">
-                  <div class="mb-2">
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">
-                      <strong class="text-orange font-bold"
-                        >7Seasons Apartments BudapestOpens in new window</strong
+                      <span class="price bg-blue-500 text-white p-2 rounded-md mr-2">$10.00</span
                       >
-                    </h3>
-                    <p class="text-gray-700">
-                      Metro access Featuring a 24-hour reception, the 7Seasons Apartments offers you
-                      from Deak Ferenc tér, which is a major public transport...
                     </p>
-                  </div>
-                  <div class="text-gray-700">
-                    <p class="mt-2 cursor-pointer">
-                      <span class="price bg-blue-500 text-white p-2 rounded-md mr-2">8.8 $</span
-                      >2,965 reviews
-                    </p>
+                    <div class="rating mt-3">
+                      <span class="star">&#9733;</span>
+                      <span class="star">&#9733;</span>
+                      <span class="star">&#9733;</span>
+                      <span class="star">&#9733;</span>
+                      <span class="star">&#9734;</span>
+                    </div>
+                    <span class="viewer">2,965 reviews</span>
                   </div>
                 </div>
               </div>
@@ -185,46 +169,105 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import WebHeaderMenu from '@/Components/WebHeaderMenu.vue'
-import VueFlatpickr from 'vue-flatpickr-component'
+import { ref, computed, watch } from 'vue';
+import VueFlatpickr from 'vue-flatpickr-component';
 import 'flatpickr/dist/flatpickr.css';
+import { useRoute } from 'vue-router';
+import axiosInstance from '@/plugins/axios';
 
-const dateRange = ref(null);
-const flatpickrConfig = {
-  dateFormat: 'Y-m-d',
-  // other options...
-};
+const route = useRoute();
+const selectedOption = ref('');
+const userId = computed(() => route.query.user);
+const fieldId = computed(() => route.params.id); // Assuming fieldId is always present
+const bookings = ref<any[]>([]) // Initialize bookings array with any type for flexibility
+const start_time = ref('');
+const end_time = ref('');
+const total_price = ref('00.00');
+const booking_date = ref<Date | null>(null); // Adjust date type as needed
 
-const selectedOption = ref('')
-const handleChange = () => {
-  console.log('Selected option:', selectedOption.value)
+const start = () => start_time.value;
+const end = () => end_time.value;
+
+const calculateTotalPrice = () => {
+  const startTimeParts = start_time.value.split(':').map(Number);
+  const endTimeParts = end_time.value.split(':').map(Number);
+  
+  const startMinutes = startTimeParts[0] * 60 + startTimeParts[1];
+  const endMinutes = endTimeParts[0] * 60 + endTimeParts[1];
+  
+  const durationInMinutes = endMinutes - startMinutes;
+  const pricePerMinute = 10 / 60; // Assuming the price is $10 per hour
+  
+  total_price.value = (durationInMinutes * pricePerMinute).toFixed(2);
 }
 
+const bookingDate = () => booking_date.value;
+
+const submitBooking = async () => {
+  try {
+    const response = await axiosInstance.post('/booking/create', {
+      user_id: userId.value,
+      field_id: fieldId.value,
+      start_time: start(),
+      end_time: end(),
+      booking_date: bookingDate(),
+      total_price: total_price.value,
+      status: 'pending',
+      payment_status: 'unpaid',
+    });
+
+    console.log('Booking created:', response.data);
+    bookings.value.push(response.data);
+  } catch (error) {
+    console.error('Error creating booking:', error);
+  }
+}
+
+watch([start_time, end_time], calculateTotalPrice);
+
 </script>
+
 
 
 <style scoped>
 /* Additional styling if needed */
 
 .header-text {
-  height: 100vh;
+  color: #000;
 }
 .header-detail {
   height: 100px;
   background-color: rgb(144, 124, 91);
 }
+h2{
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 20px;
+  font-weight: bold;
 
-.card-me {
-  justify-content: start;
-  align-items: start;
-  text-align: left;
+}
+h5{
+  font-size: 15px;
+  font-weight: bold;
+  text-align: center;
 }
 
+.rating .star {
+  color: #ffcc00;
+  font-size: 20px;
+}
+.viewer{
+  font-size: 15px;
+  text-align: center;
+  color: #808080;
+}
 .card-wrapper {
   border-radius: 20px 20px 0px 0px;
 }
-
+ .btn-book{
+   display:flex;
+   justify-content: center;
+ }
 .bg-overlay {
   background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
     url('../../assets/image/field.png');
@@ -240,6 +283,7 @@ const handleChange = () => {
   padding: 20px;
   border-radius: 10px 10px 0px 0px;
   position: relative;
+  
 }
 
 .price {
@@ -251,4 +295,38 @@ const handleChange = () => {
     width: 100%;
   }
 }
+
+.user-detail {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  color: #000;
+  margin-bottom: 20px;
+}
+
+h1 {
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+  color: #000;
+}
+
+
+.form-group label {
+  display: block;
+  margin-top: 10px;
+}
+
+.form-group input,
+.form-group select {
+  width: calc(100% - 20px);
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+
+
+
 </style>

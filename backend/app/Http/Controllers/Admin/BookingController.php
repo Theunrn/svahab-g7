@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\BookingResource;
 use App\Models\Booking;
 use Illuminate\Http\Request;
 
@@ -20,7 +21,8 @@ class BookingController extends Controller
     }
     public function index()
     {
-        $bookings = Booking::all();
+        $bookings = Booking::latest()->get();
+        $bookings = BookingResource::collection($bookings);
         return view('setting.booking.index', compact('bookings'));
         
     }
@@ -34,39 +36,80 @@ class BookingController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Accept the booking
      */
     public function store(Request $request)
     {
         //
     }
-
+    
     /**
      * Display the specified resource.
      */
     public function show(string $id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+        $booking = Booking::find($id);
+        $booking = new BookingResource($booking);
+        return view('setting.booking.show', compact('booking'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(string $id)
     {
-        //
+       
+    }
+    public function cancel($id)
+    {
+        $booking = Booking::find($id);
+        if (!$booking) {
+            return redirect()->back()->with('error', 'Booking not found');
+        }
+        $booking->status = 'cancelled';
+        $booking->save();
+    
+        return redirect()->route('admin.bookings.index')->with('success', 'Booking cancelled successfully');
+    }
+
+    public function reject(string $id)
+    {
+        $booking = Booking::find($id);
+        if (!$booking) {
+            return redirect()->back()->with('error', 'Booking not found');
+        }
+        $booking->status = 'rejected';
+        $booking->save();
+    
+        return redirect()->route('admin.bookings.index')->with('success', 'Booking rejected successfully');
+    }
+
+    public function accept(string $id)
+    {
+        $booking = Booking::find($id);
+        if (!$booking) {
+            return redirect()->back()->with('error', 'Booking not found');
+        }
+        $booking->status = 'comfirmed';
+        $booking->save();
+    
+        return redirect()->route('admin.bookings.index')->with('success', 'Booking accepted successfully');
+    }
+
+    public function reBook(string $id)
+    {
+        $booking = Booking::find($id);
+        if (!$booking) {
+            return redirect()->back()->with('error', 'Booking not found');
+        }
+        $booking->status = 'comfirmed';
+        $booking->save();
+    
+        return redirect()->route('admin.bookings.index')->with('success', 'Booking rebooked successfully');
     }
 
     /**
-     * Remove the specified resource from storage.
+     * remove the booking
      */
     public function destroy(string $id)
     {

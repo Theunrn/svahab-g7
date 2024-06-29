@@ -22,13 +22,11 @@ class FieldController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'field_name' => 'required|string|max:255',
-            'field_location' => 'required|string|max:255',
-            'surface_type' => 'required|string|max:255',
-            'dimensions' => 'required|string|max:255',
-            'capacity' => 'nullable|integer',
+            'name' => 'required|string|max:255',
+            'location' => 'required|string|max:255',
+            'field_type' => 'required|string|max:255',
+            'owner_id' => 'required|integer',
             'availablity' => 'required|boolean',
-            'home_team' => 'required|string|max:255',
         ]);
 
         Field::create($request->all());
@@ -50,13 +48,11 @@ class FieldController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'field_name' => 'required|string|max:255',
-            'field_location' => 'required|string|max:255',
-            'surface_type' => 'required|string|max:255',
-            'dimensions' => 'required|string|max:255',
-            'capacity' => 'required|integer',
+            'name' => 'required|string|max:255',
+            'location' => 'required|string|max:255',
+            'field_type' => 'required|string|max:255',
+            'owner_id' => 'required|integer',
             'availablity' => 'required|boolean',
-            'home_team' => 'required|string|max:255'
         ]);
 
         $field = Field::findOrFail($id);

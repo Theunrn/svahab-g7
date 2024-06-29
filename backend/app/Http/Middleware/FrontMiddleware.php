@@ -14,11 +14,17 @@ class FrontMiddleware
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle(Request $request, Closure $next)
+    // public function handle(Request $request, Closure $next)
+    // {
+    //     if(!Auth::guard('front')->check()){
+    //         return redirect('login');
+    //     }
+    //     return $next($request);
+    // }
+    public function handle($request, Closure $next)
     {
-        if(!Auth::guard('front')->check()){
-            return redirect('login');
-        }
-        return $next($request);
+        return $next($request)
+            ->header('Access-Control-Allow-Origin', '*')
+            ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     }
 }

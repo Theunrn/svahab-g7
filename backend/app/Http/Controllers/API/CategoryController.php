@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -17,6 +18,7 @@ class CategoryController extends Controller
         $categories = Category::all();
         return response()->json($categories);
     }
+    
 
     /**
      * Store a newly created category in storage.
@@ -37,10 +39,18 @@ class CategoryController extends Controller
     /**
      * Display the specified category.
      */
-    public function show($id): JsonResponse
+    public function show($categoryId)
     {
-        $category = Category::findOrFail($id);
-        return response()->json($category);
+        $category = Category::find($categoryId);
+        if (!$category) {
+            return response()->json(['error' => 'Category not found'], 404);
+        }
+
+        $products = Product::where('category_id', $categoryId)->get();
+        return response()->json([
+            'category' => $category,
+            'products' => $products
+        ]);
     }
 
     /**
