@@ -15,6 +15,20 @@
                     @endforeach
                 </select>
             </div>
+            <div class="inline-flex rounded-md shadow-sm space-x-2 justify-end">
+                <a href="#" id="filter-last-month" 
+                    class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-l-lg hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700">
+                    Last Month
+                </a>
+                <a href="#" id="filter-last-week" 
+                    class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700">
+                    Last Week
+                </a>
+                <a href="#" id="filter-today"
+                    class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-r-lg hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700">
+                    Today
+                </a>
+            </div>
         </div>
 
         {{-- Table of Bookings --}}
@@ -44,7 +58,7 @@
                         <td class="py-2 px-3 border-b border-gray-300">{{ $booking->end_time }}</td>
                         <td class="py-2 px-3 border-b border-gray-300">{{ $booking->booking_date }}</td>
                         <td class="py-2 px-3 border-b border-gray-300">
-                            <span class="inline-block px-3 py-1 text-white text-xs font-semibold mr-2 rounded-full
+                            <span class="inline-block px-3 py-1 text-black text-xs font-semibold mr-2 rounded-full
                                     {{ $booking->status === 'comfirmed' ? 'bg-green-500 text-gray-700' : '' }}
                                     {{ $booking->status === 'rejected' ? 'bg-red-500 text-gray-700' : '' }}
                                     {{ $booking->status === 'cancelled' ? 'bg-red-500 text-gray-700' : '' }}
@@ -53,7 +67,7 @@
                             </span>
                         </td>
                         <td class="py-2 px-3 border-b border-gray-300">
-                            <span class="inline-block px-3 py-1 text-white text-xs font-semibold mr-2 rounded-full
+                            <span class="inline-block px-3 py-1 text-black text-xs font-semibold mr-2 rounded-full
                                     {{ $booking->payment_status === 'paid' ? 'bg-green-500 text-gray-700' : '' }}
                                     {{ $booking->payment_status === 'unpaid' ? 'bg-red-500 text-white-300' : '' }}">
                                 {{ $booking->payment_status }}
@@ -174,6 +188,54 @@
                     }
                 });
             });
+        });
+
+        // Filter by booking date for today
+        document.addEventListener('DOMContentLoaded', function () {
+            const filterToday = document.getElementById('filter-today');
+            const filterLastWeek = document.getElementById('filter-last-week');
+            const filterLastMonth = document.getElementById('filter-last-month');
+
+            const filterByDateRange = (startDate, endDate) => {
+                const bookingRows = document.querySelectorAll('.booking-row');
+                bookingRows.forEach(function (row) {
+                    const bookingDate = row.querySelector('td:nth-child(6)').textContent.trim();
+                    if (bookingDate >= startDate && bookingDate <= endDate) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            };
+
+            filterToday.addEventListener('click', function () {
+                const today = new Date().toISOString().split('T')[0];
+                filterByDateRange(today, today);
+            });
+
+            filterLastWeek.addEventListener('click', function () {
+                const today = new Date().toISOString().split('T')[0];
+                const lastWeekStart = new Date(new Date().setDate(new Date().getDate() - 7)).toISOString().split('T')[0];
+                filterByDateRange(lastWeekStart, today);
+            });
+
+            filterLastMonth.addEventListener('click', function () {
+                const today = new Date().toISOString().split('T')[0];
+                const lastMonthStart = new Date(new Date().setMonth(new Date().getMonth() - 1)).toISOString().split('T')[0];
+                const lastMonthEnd = new Date(new Date().setDate(new Date().getDate() - 7)).toISOString().split('T')[0];
+                filterBookingsByDate(lastMonthStart, lastMonthEnd);
+            });
+            function filterBookingsByDate(startDate, endDate) {
+                const bookingRows = document.querySelectorAll('.booking-row');
+                bookingRows.forEach(function(row) {
+                    const bookingDate = row.querySelector('td:nth-child(6)').textContent.trim();
+                    if (bookingDate >= startDate && bookingDate <= endDate) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            }
         });
     </script>
 </x-app-layout>
