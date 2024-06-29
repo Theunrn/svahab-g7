@@ -6,9 +6,9 @@
         <div class="container bg-overlay">
           <div class="row text-center flex flex-col items-center justify-center h-full">
             <div class="btn-group">
-              <router-link :to="'/field/detail/' + index">
-                <button type="button" class="btn btn-primary btn-details btn-sm py-1 me-2">
-                  <font-awesome-icon :icon="['fas', 'info-circle']" class="me-1" /> See Details
+              <router-link :to="{ path: '/field/detail/' + index, query: { user: user.id } }">
+                <button type="button" class="btn btn-warning btn-details py-1 me-2 text-secondary">
+                  <font-awesome-icon :icon="['fas', 'info-circle']" class="me-1" /> Book Now
                 </button>
               </router-link>
             </div>
@@ -56,7 +56,10 @@
 
 <script>
 export default {
-  name: 'FootballFields'
+  name: 'FootballFields',
+  props:{
+    user:Object
+  },
   // Your component's logic here
 }
 </script>

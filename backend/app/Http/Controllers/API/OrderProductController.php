@@ -21,7 +21,7 @@ class OrderProductController extends Controller
         // Retrieve orders for the authenticated user
         $orders = Order::where('user_id', $user->id)->with('products')->get();
 
-        return response()->json(['orders' => $orders], 200);
+        return response()->json(['success'=>true,'data' => $orders], 200);
     }
 
     /**
@@ -48,7 +48,7 @@ class OrderProductController extends Controller
             $product = Product::findOrFail($validatedData['product_id']);
             $order->products()->attach($product->id, ['qty' => $validatedData['qty']]);
 
-            return response()->json(['message' => 'Order created successfully', 'order' => $order], 201);
+            return response()->json(['message' => 'Order created successfully'], 201);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Failed to create order', 'error' => $e->getMessage()], 500);
         }
@@ -62,7 +62,7 @@ class OrderProductController extends Controller
         // Find the order with products for the authenticated user
         $order = Order::where('user_id', $user->id)->with('products')->findOrFail($id);
 
-        return response()->json(['order' => $order], 200);
+        return response()->json(['success'=>true, 'data' => $order], 200);
     }
 
 
