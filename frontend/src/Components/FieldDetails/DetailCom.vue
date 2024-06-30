@@ -62,24 +62,24 @@
           <form>
             <div class="form-group half-width">
               <label for="first-name">First Name (English only) *</label>
-              <input type="text" id="first-name" />
+              <input type="text" id="first-name" v-model="first_name" />
             </div>
             <div class="form-group half-width">
               <label for="first-name">Last Name (Engish only) *</label>
-              <input type="text" id="first-name" />
+              <input type="text" id="first-name" v-model="last_name"/>
             </div>
             <div class="clearfix"></div>
             <div class="form-group">
               <label for="phoneNumber">E-mail *</label>
-              <input type="tel" id="phoneNumber">
+              <input type="email" id="phoneNumber" v-model="email">
             </div>
             <div class="form-group">
               <label for="phoneNumber">Phone Number *</label>
-              <input type="tel" id="phoneNumber">
+              <input type="tel" id="phoneNumber" v-model="phone_number">
             </div>
             <div class="form-group">
               <label for="number-of-guests">Total Price ($) *</label>
-              <input type="number" id="number-of-guests" v-model="total_price" />
+              <input disabled type="number" id="number-of-guests" v-model="total_price" />
             </div>
             <div class="wrapper-card relative w-full mx-2 my-2 rounded-md">  
                   <h2>Your Option (optional)</h2>
@@ -116,7 +116,7 @@
         <div class="gap-2">
           <div class="card-text mt-4" >
             <div class="card-display-container gap-3 flex flex-col">
-              <div class="card-display border border-gray-400 rounded-lg shadow-lg flex overflow-hidden" v-for="index in 2" :key="index">
+              <div class="card-display border border-gray-400 rounded-lg shadow-lg flex overflow-hidden" v-for="index in 3" :key="index">
                 <div class="relative w-1/3 p-2" >
                   <img 
                     src="../../assets/image/contact-imag.jpg"
@@ -134,7 +134,7 @@
                   <div class="mb-2">
                     <h3 class="text-xl font-bold text-gray-900 mb-2">
                       <strong class="text-orange font-bold"
-                        >7Seasons Apartments BudapestOpens in new window</strong
+                        >7 Seasons Apartments BudapestOpens in new window</strong
                       >
                     </h3>
                     <p class="text-gray-700">
@@ -169,7 +169,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch,onMounted } from 'vue';
 import VueFlatpickr from 'vue-flatpickr-component';
 import 'flatpickr/dist/flatpickr.css';
 import { useRoute } from 'vue-router';
@@ -178,15 +178,20 @@ import axiosInstance from '@/plugins/axios';
 const route = useRoute();
 const selectedOption = ref('');
 const userId = computed(() => route.query.user);
-const fieldId = computed(() => route.params.id); // Assuming fieldId is always present
-const bookings = ref<any[]>([]) // Initialize bookings array with any type for flexibility
+const fieldId = computed(() => route.params.id); 
 const start_time = ref('');
 const end_time = ref('');
 const total_price = ref('00.00');
-const booking_date = ref<Date | null>(null); // Adjust date type as needed
+const booking_date = ref<Date | null>(null);
+const bookings = ref<any[]>([])
+const first_name = ref('')
+const last_name = ref('')
+const email = ref('')
+const phone_number = ref('')
 
 const start = () => start_time.value;
 const end = () => end_time.value;
+const bookingDate = () => booking_date.value;
 
 const calculateTotalPrice = () => {
   const startTimeParts = start_time.value.split(':').map(Number);
@@ -196,13 +201,10 @@ const calculateTotalPrice = () => {
   const endMinutes = endTimeParts[0] * 60 + endTimeParts[1];
   
   const durationInMinutes = endMinutes - startMinutes;
-  const pricePerMinute = 10 / 60; // Assuming the price is $10 per hour
+  const pricePerMinute = 10 / 60; 
   
   total_price.value = (durationInMinutes * pricePerMinute).toFixed(2);
 }
-
-const bookingDate = () => booking_date.value;
-
 const submitBooking = async () => {
   try {
     const response = await axiosInstance.post('/booking/create', {
@@ -223,7 +225,10 @@ const submitBooking = async () => {
   }
 }
 
+
 watch([start_time, end_time], calculateTotalPrice);
+
+
 
 </script>
 
