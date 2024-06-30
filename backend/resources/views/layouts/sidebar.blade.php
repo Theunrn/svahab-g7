@@ -66,6 +66,11 @@
          <i class='bx bxl-product-hunt text-2xl'></i>
          <span class="mx-3">Products</span>
         </a>
+        <a class="flex items-center mt-4 py-2 px-6 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 {{ Route::currentRouteNamed('admin.orders.index') ? 'active' : '' }}"
+            href="{{ route('admin.orders.index') }}">
+            <i class='bx bx-cart-add text-2xl'></i>
+            <span class="mx-3">Orders</span>
+        </a>
      @endcanany
         @canany(['Payment access','Payment add','Payment edit','Payment delete'])
         <a class="flex items-center mt-4 py-2 px-6 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 {{ Route::currentRouteNamed('admin.payments.index') ? 'active' : '' }}"

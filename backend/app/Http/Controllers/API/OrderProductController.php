@@ -28,10 +28,10 @@ class OrderProductController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'product_id' => 'nullable|exists:products,id',
+            'product_id' => 'required|exists:products,id',
             'qty' => 'required|integer|min:1',
-            'color' => 'nullable|string|max:255',
-            'size' => 'nullable|string|in:S,M,L,XL,XXL,1XL,2XL,3XL',
+            'color_id' => 'nullable|exists:colors,id',
+            'size_id' => 'nullable|exists:sizes,id',
         ]);
 
         $order = Order::createOrder($validatedData);
