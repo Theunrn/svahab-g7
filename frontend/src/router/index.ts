@@ -87,6 +87,11 @@ const router = createRouter({
       name: 'addtocart',
       component: () => import('../views/Web/AddToCardView.vue')
     },
+    {
+      path: '/history',
+      name: 'history',
+      component: () => import('../views/Web/HistoryView.vue')
+    },
 
   ]
 })
