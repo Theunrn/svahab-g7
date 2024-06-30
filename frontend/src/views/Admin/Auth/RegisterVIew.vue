@@ -93,7 +93,12 @@ export default {
         };
 
         // Register the customer
-        const response = await axios.post('http://127.0.0.1:8000/api/register', customer);
+        const response = await axios.post('http://127.0.0.1:8000/api/register', {
+          name: this.name,
+          email: this.email,
+          password: hashedPassword,
+          phone_number: this.phone_number,
+        });
         
         // Store the token
         const token = response.data.access_token;
