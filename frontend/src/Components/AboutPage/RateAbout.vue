@@ -1,6 +1,6 @@
 <template>
   <div class="flex justify-center items-center bg-gray-100">
-    <section class="w-88% bg-gray-50 dark:bg-gray-800 mb-10">
+    <section class="w-90% bg-gray-50 dark:bg-gray-800 mb-10">
       <div class="px-4 py-8 mx-auto text-center lg:py-24 lg:px-6">
         <figure class="max-w-screen-md mx-auto">
           <svg

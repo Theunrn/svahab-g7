@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="card-me flex flex-wrap justify-content-start align-items-start ml-10">
+    <div class="card-me flex flex-wrap justify-content-start align-items-start ml-18">
       <!-- Loop to generate 6 cards -->
       <div class="card-wrapper rounded-md shadow-lg relative w-1/3 sm:w-full mx-2 my-2" v-for="index in 8" :key="index">
         <div class="container bg-overlay">

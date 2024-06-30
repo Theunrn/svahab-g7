@@ -1,7 +1,7 @@
 <template>
   <div class="team d-flex justify-content-between">
     <div class="container flex pt-3 font-sans flex items-center justify-center">
-      <div class="picture-match w-300 mt-5 flex flex-col justify-center items-center">
+      <div class="ml-10 picture-match w-300 mt-5 flex flex-col justify-center items-center">
         <div class="header text-center">
           <h1 class="text-5xl font-bold text-orange-500">WE ARE FINDING</h1>
           <h2 class="text-3xl font-bold text-gray-700 mt-2">MATCH TEAM FOR PLAYING!</h2>
@@ -10,10 +10,10 @@
           <img src="../../assets/contact-piture/download-ball.png" alt="" class="w-80 h-80" />
         </div>
       </div>
-      <div class="find-match flex items-center justify-center w-400">
+      <div class="find-match flex items-center justify-center w-400 ml-20 mb-10">
         <div class="match-items grid grid-cols-1 gap-10">
           <div
-            class="match-item text-center rounded-lg shadow-lg p-3 mb-3 w-130 hover:scale-105 transition-transform duration-300"
+            class="match-item text-center rounded-lg shadow-lg p-3 mb-3 w-160 hover:scale-105 transition-transform duration-300"
           >
             <div class="flex justify-center">
               <div class="bg-blue w-30 rounded-2xl relative mb-2">

@@ -1,6 +1,6 @@
 <template>
   <section class="bg-gray-100">
-    <div class="w-11/12 mx-auto">
+    <div class="w-90% mx-auto">
       <div class="mb-10 rounded overflow-hidden flex flex-col mx-auto">
         <div class="relative">
           <img class="w-full" src="../../assets/image/team.jpg" alt="Football field management" />
