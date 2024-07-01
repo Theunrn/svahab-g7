@@ -33,13 +33,14 @@
           <h5 class="mb-2">Color:</h5>
           <div class="d-flex flex-wrap">
             <div
-              v-for="color in product.colors"
+              v-for="color in colors"
               :key="color.id"
-              :style="{ backgroundColor: color.name.toLowerCase() }"
+              :style="{ backgroundColor: color.hex_code }"
               :class="[
                 'color-circle',
                 'mr-2',
                 'cursor-pointer',
+                `bg-${color.name.toLowerCase()}`,
                 { selected: selectedColor === color.id }
               ]"
               @click="toggleColorSelection(color.id)"
@@ -49,7 +50,7 @@
         <div class="size-options mb-3">
           <h5 class="mb-2">Size:</h5>
           <select class="form-select w-auto" v-model="selectedSize">
-            <option v-for="size in product.sizes" :key="size.id" :value="size.id">{{ size.name }}</option>
+            <option v-for="size in sizes" :key="size.id" :value="size.id">{{ size.name }}</option>
           </select>
         </div>
         <div class="quantity mb-4">
@@ -59,14 +60,15 @@
               <button @click="decrementQuantity" class="decrement btn btn-outline-secondary">
                 -
               </button>
-              <input class="input-group min-max" type="text" v-model.number="quantity" />
+              <input class="input-group min-max" type="text" v-model="quantity" />
               <button @click="incrementQuantity" class="increment btn btn-outline-secondary">
                 +
               </button>
             </div>
           </div>
         </div>
-        <router-link to="/payment" class="btn btn-warning btn-block mb-4"> Pay Now</router-link>
+        <!-- <a @click="createOrder" class="btn btn-warning btn-block mb-4"> Order Now</a> -->
+        <router-link @click="createOrder" to="/payment" class="btn btn-warning btn-block ml-4 mb-4"> Pay Now</router-link>
         <div class="delivery-info mb-4">
           <p class="mb-1"><strong>Home Delivery:</strong> Available within 48 hours</p>
           <p class="mb-0"><strong>Click & Collect:</strong> Pickup in store within 4 hours</p>
@@ -87,47 +89,87 @@
 </template>
 
 <script setup lang="ts">
-import { useRoute } from 'vue-router'
-import { ref, computed, onMounted } from 'vue'
-import axiosInstance from '@/plugins/axios'
+import { ref, computed, onMounted } from 'vue';
+import axiosInstance from '@/plugins/axios';
+import { useRoute } from 'vue-router';
 
-const route = useRoute()
-const productId = computed(() => route.params)
-const product = ref({})
-const selectedColor = ref(null) // Reactive reference for selected color
-const selectedSize = ref(null) // Reactive reference for selected size
-const quantity = ref(1) // Reactive reference for quantity
+const route = useRoute();
+const productId = computed(() => route.params);
+const product = ref({});
+const colors = ref([]); // Reactive reference for colors
+const selectedColor = ref(null); // Reactive reference for selected color
+const sizes = ref([]); // Reactive reference for sizes
+const selectedSize = ref(null); // Reactive reference for selected size
+const quantity = ref(1); // Reactive reference for quantity
 
 const fetchProductDetails = async () => {
   try {
-    const response = await axiosInstance.get(`/product/show/${productId.value.id}`)
-    product.value = response.data.data
+    const response = await axiosInstance.get(`/product/show/${productId.value.id}`);
+    product.value = response.data.data;
   } catch (error) {
-    console.error('Error fetching product details:', error)
+    console.error('Error fetching product details:', error);
   }
-}
+};
+
+const fetchSizes = async () => {
+  try {
+    const response = await axiosInstance.get('/sizes');
+    sizes.value = response.data.data;
+  } catch (error) {
+    console.error('Error fetching sizes:', error);
+  }
+};
+
+const fetchColors = async () => {
+  try {
+    const response = await axiosInstance.get('/colors');
+    colors.value = response.data.data;
+  } catch (error) {
+    console.error('Error fetching colors:', error);
+  }
+};
 
 onMounted(() => {
-  fetchProductDetails()
-})
+  fetchProductDetails();
+  fetchColors();
+  fetchSizes();
+});
 
 const getImageUrl = (imagePath) => {
-  return imagePath ? `http://127.0.0.1:8000/storage/${imagePath}` : '/default-image.jpg'
-}
+  return imagePath ? `http://127.0.0.1:8000/storage/${imagePath}` : '/default-image.jpg';
+};
 
 const incrementQuantity = () => {
-  quantity.value++
-}
+  quantity.value++;
+};
 
 const decrementQuantity = () => {
   if (quantity.value > 1) {
-    quantity.value--
+    quantity.value--;
   }
-}
+};
 
-const toggleColorSelection = (colorId: number) => {
-  selectedColor.value = colorId
-}
+const toggleColorSelection = (colorId) => {
+  selectedColor.value = colorId;
+};
+
+const createOrder = async () => {
+  const orderProduct = {
+    product_id: productId.value.id,
+    color_id: selectedColor.value,
+    size_id: selectedSize.value,
+    qty: quantity.value,
+  };
+
+  try {
+    const response = await axiosInstance.post('/orders/create', orderProduct);
+    console.log('Order product:', orderProduct); // Logging orderProduct
+    console.log('Order created successfully:', response.data);
+  } catch (error) {
+    console.error('Error creating order:', error);
+  }
+};
+
 </script>
 
 <style scoped>
@@ -155,6 +197,30 @@ const toggleColorSelection = (colorId: number) => {
 
 .color-options .color-circle.selected {
   border: 2px solid #000;
+}
+
+.bg-red {
+  background-color: red;
+}
+
+.bg-black {
+  background-color: black;
+}
+
+.bg-white {
+  background-color: white;
+}
+
+.bg-pink {
+  background-color: pink;
+}
+
+.bg-yellow {
+  background-color: yellow;
+}
+
+.bg-blue {
+  background-color: blue;
 }
 
 .btn {
