@@ -17,11 +17,7 @@
     <!-- Authentication Button -->
     <div class="auth flex gap-2">
       <!-- Conditionally render Register, Login or Logout button -->
-<<<<<<< HEAD
-      <template v-if="isAuthenticated = false">
-=======
       <template v-if="!authStore.isAuthenticated">
->>>>>>> interface-home
         <a href="/register"><button class="hover:bg-red-400 text-dark bg-white px-4 py-1 border-1 border-red-700 hover:border-red-500 rounded">Register</button></a>
         <a href="/login"><button class="hover:bg-red-400 text-dark bg-white px-4 py-1 border-1 border-red-700 hover:border-red-500 rounded">Login</button></a>
       </template>
@@ -57,21 +53,16 @@
 </template>
 
 <script setup lang="ts">
-<<<<<<< HEAD
-=======
 import { ref, onMounted } from 'vue';
->>>>>>> interface-home
 import { useRoute } from 'vue-router';
 import { useAuthStore } from '@/stores/auth-store'; // Adjust the import path based on your actual file structure
 
 const route = useRoute();
 const authStore = useAuthStore();
 
-<<<<<<< HEAD
 // Access isAuthenticated from authStore
 let isAuthenticated = authStore.isAuthenticated;
 // Function to trigger logout
-=======
 const showAddToCart= ref(false);
 const showNotifications= ref(false);
 const showText = ref(false);
@@ -80,7 +71,6 @@ onMounted(() => {
   authStore.initialize();
 });
 
->>>>>>> interface-home
 const logout = () => {
   authStore.isAuthenticated = false;
   authStore.logout();
@@ -110,9 +100,4 @@ const logout = () => {
 body {
   padding-top: 60px; /* Adjust based on navbar height to prevent content overlay */
 }
-<<<<<<< HEAD
 </style>
-=======
-
-</style>
->>>>>>> interface-home
