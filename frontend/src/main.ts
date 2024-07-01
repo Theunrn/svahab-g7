@@ -16,15 +16,13 @@ import axios from './plugins/axios'
 import 'uno.css'
 import { configure } from 'vee-validate'
 import './boxicons.css'
-import { useAuthStore } from '@/stores/auth-store'; 
-import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
-const pinia = createPinia();
-pinia.use(piniaPluginPersistedstate);
+
+
 
 configure({
   validateOnInput: true
 })
-app.use(pinia);
+
 app.use(createPinia())
 app.use(router.router)
 app.use(ElementPlus)
@@ -33,8 +31,3 @@ app.use(router.simpleAcl)
 app.config.globalProperties.$axios = axios
 
 app.mount('#app')
-const authStore = useAuthStore();
-const token = localStorage.getItem('access_token');
-if (token) {
-  authStore.setToken(token);
-}

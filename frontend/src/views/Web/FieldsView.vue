@@ -24,7 +24,6 @@
 import WebHeaderMenu from '@/Components/WebHeaderMenu.vue'
 import WebFooter from '../../Components/WebFooter.vue'
 import CardCom from '../../Components/Cards/CardField.vue'
-
 </script>
   
   <style scoped>
