@@ -1,47 +1,51 @@
 import { defineStore } from 'pinia';
-import { ref, watch } from 'vue';
 
-export const useAuthStore = defineStore('auth', () => {
-  const user = ref(null);
-  const isAuthenticated = ref(false); // Start with isAuthenticated as false initially
-  const permissions = ref([]);
-  const roles = ref([]);
+export const useAuthStore = defineStore('auth', {
+  state: () => ({
+    user: null,
+    isAuthenticated: false,
+    permissions: [],
+    roles: [],
+    token: null, // Add token state
+  }),
 
-  function login(userInfo) {
-    user.value = userInfo;
-    isAuthenticated.value = true;
-    localStorage.setItem('isAuthenticated', 'true');
-    localStorage.setItem('user', JSON.stringify(userInfo));
-  }
+  actions: {
+    setUserAndToken(user, token) {
+      this.user = user;
+      this.setToken(token);
+    },
 
-  function logout() {
-    user.value = null;
-    isAuthenticated.value = false;
-    localStorage.removeItem('isAuthenticated');
-    localStorage.removeItem('user');
-  }
+    setToken(token) {
+      this.token = token;
+      this.isAuthenticated = !!token;
+      // Update localStorage with the token
+      localStorage.setItem('access_token', token);
+    },
 
-  function initialize() {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      user.value = JSON.parse(storedUser);
-      isAuthenticated.value = true; // Only set isAuthenticated to true if there is a stored user
+    getToken() {
+      return this.token;
+    },
+
+    logout() {
+      this.user = null;
+      this.isAuthenticated = false;
+      this.token = null;
+      localStorage.removeItem('access_token'); // Remove token from localStorage
+      // Perform any other cleanup or API calls for logout
+    },
+    register(user){
+      this.isAuthenticated = true;
+      this.user = user;
+      
     }
-  }
-
-  watch(isAuthenticated, (newVal) => {
-    if (!newVal) {
-      user.value = null;
-    }
-  });
-
-  return {
-    user,
-    roles,
-    permissions,
-    isAuthenticated,
-    login,
-    logout,
-    initialize,
-  };
+  },
+  persist: {
+    enabled: true,
+    strategies: [
+      {
+        key: 'auth',
+        storage: localStorage,
+      },
+    ],
+  },
 });

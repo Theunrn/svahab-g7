@@ -40,23 +40,25 @@ class OrderController extends Controller
         $ordersQuery = Order::query();
 
         if ($status === 'cancelled') {
-            $ordersQuery->where('status', 'cancelled');
+            $ordersQuery->where('order_status', 'cancelled');
         }
 
         if ($date) {
             $ordersQuery->whereDate('created_at', $date);
         }
 
-        // Retrieve orders with products and pivot data
+        // Retrieve orders with products, including colors and sizes
         $orders = $ordersQuery->with(['products' => function ($query) {
-            $query->withPivot('qty', 'color', 'size');
-        }])->get();
+            $query->withPivot('qty', 'color_id', 'size_id');
+        }, 'products.colors', 'products.sizes'])->get();
 
         // Check if orders are found
         if ($orders->isNotEmpty()) {
             // Transform orders using resource for consistent JSON response
             $orders = OrderProductResource::collection($orders);
         }
+
         return view('setting.orders.index', compact('orders'));
     }
 }
+

@@ -92,12 +92,18 @@ const router = createRouter({
       name: 'addtocart',
       component: () => import('../views/Web/AddToCardView.vue')
     },
+    {
+      path: '/history',
+      name: 'history',
+      component: () => import('../views/Web/HistoryView.vue')
+    },
 
   ]
 })
 
 router.beforeEach(async (to, from, next) => {
   const publicPages = ['/', '/about','/shop', '/contact', '/login', '/register', '/addtocart','/payment','/product/detail','product','field/detail/:id' ]
+  // const publicPages = ['/login' ]
   const authRequired = !publicPages.includes(to.path)
   const store = useAuthStore()
 
