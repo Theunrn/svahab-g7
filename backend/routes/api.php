@@ -95,5 +95,4 @@ Route::post('/discount/create',[DiscountProductController::class,'store'])->name
 Route::get('/discount/show/{id}',[DiscountProductController::class,'show'])->name('discount.show');
 Route::put('/discount/update/{id}',[DiscountProductController::class,'update'])->name('discount.update');
 Route::delete('/discount/delete/{id}',[DiscountProductController::class,'destroy'])->name('discount.destroy');
-Route::get('/products/with-discounts', [DiscountProductController::class, 'productsWithDiscount']);
 
