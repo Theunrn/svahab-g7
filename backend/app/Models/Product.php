@@ -32,10 +32,27 @@ class Product extends Model
                     ->withPivot('qty', 'color_id', 'size_id');
     }
 
+    public function discounts()
+    {
+        return $this->hasMany(Discount::class);
+    }
+
     protected $casts = [
         'color' => 'array', // Cast the 'color' attribute to array
         'size' => 'array',  // Cast the 'size' attribute to array
     ];
+
+    public function getDiscountedPriceAttribute()
+    {
+        $latestDiscount = $this->discounts()->latest()->first();
+
+        if ($latestDiscount) {
+            $discountedPrice = $this->price - ($this->price * ($latestDiscount->discount / 100));
+            return $discountedPrice;
+        }
+
+        return $this->price; // Return original price if no discount found
+    }
 
     public static function store($request, $id = null)
     {

@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\FeedbackController;
 use App\Http\Controllers\Api\FildController;
 use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\ColorController;
+use App\Http\Controllers\API\DiscountProductController;
 use App\Http\Controllers\API\PostController;
 use App\Http\Controllers\API\ProductController as APIProductController;
 use App\Http\Controllers\API\SizeController;
@@ -87,3 +88,12 @@ Route::delete('/product/delete/{id}', [APIProductController::class, 'destroy'])-
 
 Route::get('/sizes', [SizeController::class, 'index']);
 Route::get('/colors', [ColorController::class, 'index']);
+
+
+Route::get('/discount/list',[DiscountProductController::class,'index'])->name('discount.list');
+Route::post('/discount/create',[DiscountProductController::class,'store'])->name('discount.create');
+Route::get('/discount/show/{id}',[DiscountProductController::class,'show'])->name('discount.show');
+Route::put('/discount/update/{id}',[DiscountProductController::class,'update'])->name('discount.update');
+Route::delete('/discount/delete/{id}',[DiscountProductController::class,'destroy'])->name('discount.destroy');
+Route::get('/products/with-discounts', [DiscountProductController::class, 'productsWithDiscount']);
+
