@@ -51,6 +51,7 @@
 
         <!-- Add another card here -->
       </div>
+      
     </div>
   </div>
 </template>
@@ -78,7 +79,9 @@
 }
 
 .match-items {
-  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  transition: transform 0.3s ease-in-out;
 }
 
 
