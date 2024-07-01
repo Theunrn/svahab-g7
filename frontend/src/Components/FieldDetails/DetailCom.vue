@@ -4,16 +4,7 @@
       <div class="form-select absolute p-2 mt-17 bg-green bg-opacity-90 z-20 rounded-lg w-full md:w-5/5 lg:w-9/10 ml-16">
         <div class="flex items-center justify-center space-x-2">
           <div class="relative flex gap-10 w-[334px]">
-            <svg v-if="!selectedOption" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="absolute top-1/2 left-4 transform -translate-y-1/2">
-              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="#4B5563" />
-            </svg>
-            <select v-model="selectedOption" class="flex-1 text-center pl-10 rounded-md text-black border-2 border-transparent focus:border-yellow-500" @change="handleChange" style="padding: 13px;" >
-              <option disabled value="">Province Name</option>
-              <option class="text-start" value="option1">PNC Stadium</option>
-              <option class="text-start" value="option2">PSE Stadium</option>
-              <option class="text-start" value="option3">Borey Solar Stadium</option>
-              <option class="text-start" value="option3">G7 Stadium</option>
-            </select>
+            <input type="text" placeholder="Search Field" class="p-2 rounded border w-80 h-13" />
           </div>
 
           <div class="relative flex gap-10 w-[334px]">
