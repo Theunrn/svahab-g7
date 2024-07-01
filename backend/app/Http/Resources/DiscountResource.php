@@ -7,18 +7,17 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class DiscountResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
-     */
-
     public function toArray(Request $request): array
     {
+        $product = $this->products()->first();
+        $discountedPrice = $product ? $product->discounted_price : null;
+
         return [
             'id' => $this->id,
             'title' => $this->title,
             'discount' => $this->discount,
+            'discount_price' => $discountedPrice,
         ];
     }
 }
+
