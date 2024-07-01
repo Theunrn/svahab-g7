@@ -8,66 +8,21 @@
     </div>
     <!-- Menu Items -->
     <nav class="flex justify-center space-x-4">
-      <a
-        :href="'/'"
-        :class="[
-          'font-bold-200 py-2 text-white custom-hover text-decoration-none me-3',
-          { active: route.path === '/' }
-        ]"
-        >HOME</a
-      >
-      <a
-        :href="'/about'"
-        :class="[
-          'font-bold-200 py-2 text-white custom-hover text-decoration-none me-3',
-          { active: route.path === '/about' }
-        ]"
-        >ABOUT</a
-      >
-      <a
-        :href="'/shop'"
-        :class="[
-          'font-bold-200 py-2 text-white custom-hover text-decoration-none me-3',
-          { active: route.path === '/shop' }
-        ]"
-        >SHOP</a
-      >
-      <a
-        :href="'/contact'"
-        :class="[
-          'font-bold-200 py-2 me-5 text-white custom-hover text-decoration-none me-5',
-          { active: route.path === '/contact' }
-        ]"
-        >CONTACT</a
-      >
+      <a :href="'/'" :class="['font-bold-200 py-2 text-white custom-hover text-decoration-none me-3', { 'active': route.path === '/' }]">HOME</a>
+      <a :href="'/about'" :class="['font-bold-200 py-2 text-white custom-hover text-decoration-none me-3', { 'active': route.path === '/about' }]">ABOUT</a>
+      <a :href="'/shop'" :class="['font-bold-200 py-2 text-white custom-hover text-decoration-none me-3', { 'active': route.path === '/shop' }]">SHOP</a>
+      <a :href="'/contact'" :class="['font-bold-200 py-2 me-5 text-white custom-hover text-decoration-none me-5', { 'active': route.path === '/contact' }]">CONTACT</a>
     </nav>
 
     <!-- Authentication Button -->
     <div class="auth flex gap-2">
       <!-- Conditionally render Register, Login or Logout button -->
-      <template v-if="!authStore.isAuthenticated">
-        <a href="/register"
-          ><button
-            class="hover:bg-red-400 text-dark bg-white px-4 py-1 border-1 border-red-700 hover:border-red-500 rounded"
-          >
-            Register
-          </button></a
-        >
-        <a href="/login"
-          ><button
-            class="hover:bg-red-400 text-dark bg-white px-4 py-1 border-1 border-red-700 hover:border-red-500 rounded"
-          >
-            Login
-          </button></a
-        >
+      <template v-if="isAuthenticated = false">
+        <a href="/register"><button class="hover:bg-red-400 text-dark bg-white px-4 py-1 border-1 border-red-700 hover:border-red-500 rounded">Register</button></a>
+        <a href="/login"><button class="hover:bg-red-400 text-dark bg-white px-4 py-1 border-1 border-red-700 hover:border-red-500 rounded">Login</button></a>
       </template>
       <template v-else>
-        <button
-          @click="logout"
-          class="hover:bg-red-400 text-dark bg-white px-4 py-1 border-1 border-red-700 hover:border-red-500 rounded"
-        >
-          Logout
-        </button>
+        <button @click="logout" class="hover:bg-red-400 text-dark bg-white px-4 py-1 border-1 border-red-700 hover:border-red-500 rounded">Logout</button>
       </template>
     </div>
 
@@ -80,26 +35,23 @@
         <i class='bx bxs-cart-add text-4xl ml-4 text-white'></i>
       </router-link>
     </button>
-    
-    
-
   </header>
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import { useAuthStore } from '@/stores/auth-store';
+import { useAuthStore } from '@/stores/auth-store'; // Adjust the import path based on your actual file structure
 
 const route = useRoute();
 const authStore = useAuthStore();
 
-onMounted(() => {
-  authStore.initialize();
-});
-
+// Access isAuthenticated from authStore
+let isAuthenticated = authStore.isAuthenticated;
+// Function to trigger logout
 const logout = () => {
+  authStore.isAuthenticated = false;
   authStore.logout();
+  
 };
 </script>
 
@@ -123,5 +75,4 @@ const logout = () => {
 body {
   padding-top: 60px; /* Adjust based on navbar height to prevent content overlay */
 }
-
 </style>
