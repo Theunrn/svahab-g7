@@ -8,6 +8,11 @@
                             Discounts
                         </h2>
                     </div>
+                    <div class="mr-5 mt-2">
+                        <a href="{{ route('admin.discounts.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            Create Discount
+                        </a>
+                    </div>
                 </div>
                 <div class="p-3 bg-white border-b border-gray-200">
                     <table class="w-full border-collapse">
