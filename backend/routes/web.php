@@ -83,5 +83,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('products', ProductController::class);
 });
 
+Route::get('/admin/bookings/{id}/cancel', [BookingController::class, 'cancel'])->name('admin.bookings.cancel');
+    Route::get('/admin/bookings/{id}/rebook', [BookingController::class, 'reBook'])->name('admin.bookings.rebook');
+    Route::get('/admin/bookings/{id}/accept', [BookingController::class, 'accept'])->name('admin.bookings.accept');
+    Route::get('/admin/bookings/{id}/reject', [BookingController::class, 'reject'])->name('admin.bookings.reject');
+
 
     
