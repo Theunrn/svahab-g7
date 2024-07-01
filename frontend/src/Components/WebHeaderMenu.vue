@@ -1,5 +1,5 @@
 <template>
-  <header style="padding-left: 60px; padding-right: 60px;"
+  <header style=" m-5 padding-left: 60px; padding-right: 60px;"
     class="flex justify-between py-2 items-center shadow-md navbar-light fixed top-0 left-0 right-0 bg-green-600 z-50"
   >
     <!-- Logo -->
@@ -17,7 +17,7 @@
     <!-- Authentication Button -->
     <div class="auth flex gap-2">
       <!-- Conditionally render Register, Login or Logout button -->
-      <template v-if="isAuthenticated = false">
+      <template v-if="!authStore.isAuthenticated">
         <a href="/register"><button class="hover:bg-red-400 text-dark bg-white px-4 py-1 border-1 border-red-700 hover:border-red-500 rounded">Register</button></a>
         <a href="/login"><button class="hover:bg-red-400 text-dark bg-white px-4 py-1 border-1 border-red-700 hover:border-red-500 rounded">Login</button></a>
       </template>
@@ -27,12 +27,26 @@
     </div>
 
     <!-- Cart Button -->
-    <button class="relative m-6 inline-flex w-fit">
-      <div
-        class="absolute bottom-auto left-auto right-0 top-0 z-10 inline-block -translate-y-1/2 translate-x-2/4 rotate-0 skew-x-0 skew-y-0 scale-x-100 scale-y-100 text-white rounded-full bg-red-600 py-1 px-2 text-sx">1</div>
-      <router-link  to="/addtocart"
-        class="flex items-center justify-center rounded-lg bg-primary-500 text-center text-white dark:text-gray-200">
-        <i class='bx bxs-cart-add text-4xl ml-4 text-white'></i>
+    <router-link to="/addtocart" class="relative m-6 inline-flex w-fit">
+      <div class="absolute bottom-auto left-auto right-0 top-0 z-10 inline-block -translate-y-1/2 translate-x-2/4 rotate-0 skew-x-0 skew-y-0 scale-x-100 scale-y-100 text-white rounded-full bg-red-600 py-1 px-2 text-sx">1</div>
+      <i class='bx bxs-cart-add text-4xl ml-4 text-white'></i>
+    </router-link>
+
+    <!-- Notification Button -->
+    <button class="relative inline-flex w-fit">
+      <div  class="absolute top-0 right-0 transform translate-x-2/4 -translate-y-1/2 z-10 flex items-center justify-center h-8 w-8 bg-red-600 rounded-full text-white text-xs font-bold">
+        1 <!-- Notification count -->
+      </div>
+      <router-link class="flex items-center justify-center rounded-lg bg-primary-500 text-white dark:text-gray-200">
+        <i class="bx bx-bell text-4xl"></i> <!-- Larger bell icon -->
+      </router-link>
+    </button>
+    <button class="relative inline-flex items-center m-8">
+      <router-link to="/history" class="flex items-center justify-center rounded-lg bg-primary-500 text-white dark:text-gray-200">
+        <span v-if="showText" class="absolute top-0 left-3/2 transform -translate-x-1/2 -translate-y-full text-lg font-semibold ">History</span>
+        <i class="bx bx-history text-4xl"
+           @mouseover="showText = true"
+           @mouseleave="showText = false"></i>
       </router-link>
     </button>
     <!-- Notification Button -->
@@ -56,6 +70,7 @@
 </template>
 
 <script setup lang="ts">
+import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useAuthStore } from '@/stores/auth-store'; // Adjust the import path based on your actual file structure
 
@@ -65,11 +80,21 @@ const authStore = useAuthStore();
 // Access isAuthenticated from authStore
 let isAuthenticated = authStore.isAuthenticated;
 // Function to trigger logout
+const showAddToCart= ref(false);
+const showNotifications= ref(false);
+const showText = ref(false);
+
+onMounted(() => {
+  authStore.initialize();
+});
+
 const logout = () => {
   authStore.isAuthenticated = false;
   authStore.logout();
   
 };
+
+
 </script>
 
 <style scoped>
