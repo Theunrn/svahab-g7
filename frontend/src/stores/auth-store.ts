@@ -1,51 +1,25 @@
-import { defineStore } from 'pinia';
+import { defineStore } from 'pinia'
+import { ref } from 'vue'
 
-export const useAuthStore = defineStore('auth', {
-  state: () => ({
-    user: null,
-    isAuthenticated: false,
-    permissions: [],
-    roles: [],
-    token: null, // Add token state
-  }),
+export const useAuthStore = defineStore('auth', () => {
+  const user = ref()
+  const isAuthenticated = ref(false)
+  const permissions = ref()
+  const roles = ref()
 
-  actions: {
-    setUserAndToken(user, token) {
-      this.user = user;
-      this.setToken(token);
-    },
+  function login() {
+    isAuthenticated.value = true;
+  }
 
-    setToken(token) {
-      this.token = token;
-      this.isAuthenticated = !!token;
-      // Update localStorage with the token
-      localStorage.setItem('access_token', token);
-    },
-
-    getToken() {
-      return this.token;
-    },
-
-    logout() {
-      this.user = null;
-      this.isAuthenticated = false;
-      this.token = null;
-      localStorage.removeItem('access_token'); // Remove token from localStorage
-      // Perform any other cleanup or API calls for logout
-    },
-    register(user){
-      this.isAuthenticated = true;
-      this.user = user;
-      
-    }
-  },
-  persist: {
-    enabled: true,
-    strategies: [
-      {
-        key: 'auth',
-        storage: localStorage,
-      },
-    ],
-  },
-});
+  function logout() {
+    isAuthenticated.value = false;
+  }
+  return {
+    user,
+    roles,
+    permissions,
+    isAuthenticated,
+    login,
+    logout
+  }
+})

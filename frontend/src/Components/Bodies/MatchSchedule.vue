@@ -1,5 +1,5 @@
 <template>
-  <div class="py-12 bg-gray-50">
+  <div class="py-12 bg-gray-50 mb-5">
     <!-- <body class="bg-gray-100 text-gray-800"> -->
     <div class="container mx-auto p-4">
       <h1 class="text-3xl font-bold text-center mb-8">Football Match Schedule</h1>

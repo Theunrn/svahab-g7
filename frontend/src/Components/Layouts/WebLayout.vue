@@ -28,12 +28,13 @@
               <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="#4B5563" />
             </svg>
             <select  v-model="selectedProvince" class="flex-1 text-center pl-10 rounded-md text-black border-2 border-transparent focus:border-yellow-500" @change="handleChange" style="padding: 13px;">
-              <option disabled value="">Find your field for playing</option>
+              <option disabled value="" >Find your field for playing</option>
               <option class="text-start" v-for="province in provinces" :key="province.value" :value="province.value">
                 {{ province.icon }} {{ province.name }}
               </option>
             </select>
           </div>
+
           <div class="relative flex gap-10 w-[334px]">
             <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
               <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
@@ -43,16 +44,11 @@
             <VueFlatpickr v-model="dateRange" :config="flatpickrConfig" class="px-4 py-3 text-center bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date" />
           </div>
 
-          <form class="w-[334px] flex gap-2">
-            <div class="flex">
-              <!-- Start Time -->
-              <label for="start-time" class="sr-only">Start Time</label>
-              <input type="time" id="start-time" class="px-4 py-3 rounded-none rounded-s-lg bg-gray-50 border text-gray-900 leading-none focus:ring-blue-500 focus:border-blue-500 block flex-1 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" min="09:00" max="18:00" value="00:00" placeholder="Start Time" required>
-            </div>
-            <div class="flex">
-              <!-- End Time -->
-              <label for="end-time" class="sr-only">End Time</label>
-              <input type="time" id="end-time" class="px-4 py-3 rounded-none rounded-s-lg bg-gray-50 border text-gray-900 leading-none focus:ring-blue-500 focus:border-blue-500 block flex-1 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" min="09:00" max="18:00" value="00:00" placeholder="End Time" required>
+          <form class="w-[334px] ">
+            <div class="flex ">
+            <!-- Time input -->
+              <input type="time" id="time" class="px-4 py-3 rounded-none rounded-s-lg bg-gray-50 border text-gray-900 leading-none focus:ring-blue-500 focus:border-blue-500 block flex-1 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" min="09:00" max="18:00" value="00:00" required>
+              
             </div>
           </form>
 
@@ -67,11 +63,12 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import WebHeaderMenu from '@/Components/WebHeaderMenu.vue';
+import WebHeaderMenu from '@/Components/WebHeaderMenu.vue'
 import VueFlatpickr from 'vue-flatpickr-component';
 import 'flatpickr/dist/flatpickr.css';
 
-const selectedProvince = ref('');
+const showDatePicker = ref(false);
+const selectedProvince = ref('')
 const dateRange = ref(null);
 const flatpickrConfig = {
   mode: 'range',
@@ -103,9 +100,7 @@ const provinces = ref([
   { name: 'Tboung Khmum', value: 'tboung_khmum', icon: '📍' },
 ]);
 
-const handleChange = () => {
-  console.log('Selected province:', selectedProvince.value);
-};
+
 </script>
 
 <style scoped>
