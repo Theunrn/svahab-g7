@@ -41,6 +41,7 @@
                                 <th class="py-4 px-6 bg-gray-100 font-bold text-sm text-gray-800 border-b border-gray-200">Price</th>
                                 <th class="py-4 px-6 bg-gray-100 font-bold text-sm text-gray-800 border-b border-gray-200">Colors</th>
                                 <th class="py-4 px-6 bg-gray-100 font-bold text-sm text-gray-800 border-b border-gray-200">Sizes</th>
+                                <th class="py-4 px-6 bg-gray-100 font-bold text-sm text-gray-800 border-b border-gray-200">Discounts</th>
                                 <th class="py-4 px-6 bg-gray-100 font-bold text-sm text-gray-800 border-b border-gray-200">Action</th>
                             </tr>
                         </thead>
@@ -67,6 +68,17 @@
                                                 {{ $size->name }}
                                             </span>
                                         @endforeach
+                                    </td>
+                                    <td class="px-4 py-2 whitespace-nowrap">
+                                        @if ($product->discounts->isNotEmpty())
+                                            <ul>
+                                                @foreach ($product->discounts as $discount)
+                                                    <li>{{ $discount->title }} - {{ $discount->discount }}% off</li>
+                                                @endforeach
+                                            </ul>
+                                        @else
+                                            No discounts applied
+                                        @endif
                                     </td>
                                     <td class="px-4 py-2 whitespace-nowrap">
                                         <a href="{{ route('admin.products.edit', $product->id) }}" class="text-blue-500 hover:text-blue-700 mr-2">
