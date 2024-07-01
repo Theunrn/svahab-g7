@@ -43,11 +43,18 @@ class AuthController extends Controller
 
     public function index(Request $request)
     {
-        $user = $request->user();
-        return response()->json([
-            'message' => 'Login success',
-            'data' => $user,
-        ]);
+        if (Auth::check()) {
+            $user = $request->user();
+            // $token = $request->bearerToken();
+            return response()->json([
+                'message' => 'Login success',
+                'data' => $user,
+                // 'access_token'  => $token,
+                // 'token_type'    => 'Bearer'
+            ]);
+        } else {
+            return  response()->json(['error' => 'User not found'], 404);
+        }
     }
     public function register(RegisterRequest $request)
     {
@@ -61,15 +68,15 @@ class AuthController extends Controller
     public function updateRole(Request $request, $id)
     {
         $user = User::findOrFail($id);
-        $user->syncRoles($request->role); 
+        $user->syncRoles($request->role);
         return response()->json(['message' => 'Role updated successfully', 'role' => $user->getRoleNames()], 200);
     }
 
     public function logout(Request $request)
     {
+
         $request->user()->currentAccessToken()->delete();
-        return response()->json([
-            'message' => 'Logout successful'
-        ]);
+        
+        return response()->json(['message' => 'Successfully logged out']);
     }
 }

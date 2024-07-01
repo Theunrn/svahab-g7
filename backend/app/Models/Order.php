@@ -22,9 +22,10 @@ class Order extends Model
 
     public function products()
     {
-        return $this->belongsToMany(Product::class, 'product_orders')->withPivot('qty');
+        return $this->belongsToMany(Product::class, 'product_orders')
+            ->withPivot('qty', 'color_id', 'size_id');
     }
-
+    
     public static function createOrder($validatedData)
     {
         $user = Auth::user();
@@ -35,10 +36,12 @@ class Order extends Model
         $order->save();
 
         $product = Product::findOrFail($validatedData['product_id']);
+
+        // Associate product with color and size
         $order->products()->attach($product, [
             'qty' => $validatedData['qty'],
-            'color' => $validatedData['color'],
-            'size' => $validatedData['size'],
+            'color_id' => $validatedData['color_id'], // Assuming color_id is passed from the request
+            'size_id' => $validatedData['size_id'], // Assuming size_id is passed from the request
         ]);
 
         return $order;
@@ -64,5 +67,4 @@ class Order extends Model
         }
         return false;
     }
-
 }

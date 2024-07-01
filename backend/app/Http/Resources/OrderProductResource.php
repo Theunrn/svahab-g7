@@ -2,19 +2,11 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Carbon\Carbon;
 
 class OrderProductResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @param Request $request
-     * @return array<string, mixed>
-     */
-
     public function toArray($request): array
     {
         return [
@@ -31,9 +23,10 @@ class OrderProductResource extends JsonResource
                     'qty' => $product->pivot->qty,
                     'price' => number_format($product->price, 2),
                     'total' => number_format($totalPrice, 2),
+                   'color' => $product->pivot->color_id ? $product->colors->firstWhere('id', $product->pivot->color_id)->name ?? null : null,
+                    'size' => $product->pivot->size_id ? $product->sizes->firstWhere('id', $product->pivot->size_id)->name ?? null : null,
                 ];
             }),
         ];
     }
-
 }
