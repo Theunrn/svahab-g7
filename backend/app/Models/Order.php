@@ -15,9 +15,9 @@ class Order extends Model
         'user_id',
     ];
 
-    public function customer()
+    public function user()
     {
-        return $this->belongsTo(Customer::class, 'user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function products()

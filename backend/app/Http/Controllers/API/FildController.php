@@ -3,8 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\FieldRequest;
+use App\Http\Resources\FieldResource;
+use App\Http\Resources\FieldShowResource;
 use App\Models\Field;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class FildController extends Controller
 {
@@ -14,27 +18,26 @@ class FildController extends Controller
     public function index()
     {
         $fields = Field::all();
-        return response()->json($fields);
+        $fields = FieldResource::collection($fields);
+        return response()->json(
+            [
+                'success' => true,
+                'data' => $fields
+            ]
+        ); 
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(FieldRequest $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'location' => 'required|string|max:255',
-            'field_type' => 'required|string|max:255',
-            'owner_id' => 'required|integer',
-            'availablity' => 'required|boolean',
-        ]);
 
-        $field = Field::create($request->all());
+        Field::store($request);
 
         return response()->json(
             [
-                'field' => $field,
+                'success' => true,
                 'message' => 'Field created successfully'
             ]
         );
@@ -46,31 +49,26 @@ class FildController extends Controller
     public function show(string $id)
     {
         $field = Field::find($id);
-        if (is_null($field)) {
+        $field = new FieldShowResource($field);
+        if ((!$field)) {
             return response()->json(['message' => 'Field not found'], 404);
         }
-        return response()->json($field);
+        return response()->json(['success'=>true, 'data' => $field]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(FieldRequest $request, string $id)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'location' => 'required|string|max:255',
-            'field_type' => 'required|string|max:255',
-            'owner_id' => 'required|integer',
-            'availablity' => 'required|boolean',
-        ]);
-
-        $field = Field::find($id);
-        if (is_null($field)) {
-            return response()->json(['message' => 'Field not found'], 404);
-        }
-        $field->update($request->all());
-        return response()->json($field);
+        
+        Field::store($request, $id);
+        return response()->json(
+            [
+                'success' => true,
+                'message' => 'Field updated successfully'
+            ]
+        );
     }
 
     /**
@@ -83,6 +81,6 @@ class FildController extends Controller
             return response()->json(['message' => 'Field not found'], 404);
         }
         $field->delete();
-        return response()->json(['message' => 'Field was delete'], 200);
+        return response()->json(['success'=>true, 'message' => 'Field deleted successfully'], 200);
     }
 }

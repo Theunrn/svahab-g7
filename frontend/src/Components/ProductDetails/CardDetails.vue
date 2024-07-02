@@ -8,7 +8,7 @@
     <div class="row" style="margin-left: -50px">
       <!-- Image Section -->
       <div class="col-md-6">
-        <div class="product-images">
+        <div class="product-images mt-5">
           <img :src="getImageUrl(product.image)" class="img-fluid" :alt="product.name" />
         </div>
       </div>
@@ -33,7 +33,7 @@
           <h5 class="mb-2">Color:</h5>
           <div class="d-flex flex-wrap">
             <div
-              v-for="color in colors"
+              v-for="color in product.colors"
               :key="color.id"
               :style="{ backgroundColor: color.hex_code }"
               :class="[
@@ -50,7 +50,7 @@
         <div class="size-options mb-3">
           <h5 class="mb-2">Size:</h5>
           <select class="form-select w-auto" v-model="selectedSize">
-            <option v-for="size in sizes" :key="size.id" :value="size.id">{{ size.name }}</option>
+            <option v-for="size in product.sizes" :key="size.id" :value="size.id">{{ size.name }}</option>
           </select>
         </div>
         <div class="quantity mb-4">
