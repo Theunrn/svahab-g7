@@ -17,4 +17,8 @@ class Field extends Model
         'owner_id',
         'availablity',
     ];
+    public function feedbacks()
+    {
+        return $this->hasMany(Feedback::class);
+    }
 }

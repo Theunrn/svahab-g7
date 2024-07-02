@@ -1,8 +1,8 @@
 <template>
-  <div class="py-12 bg-gray-50 mb-5">
+  <div class="py-12 bg-gray-50 mb-5 ">
     <!-- <body class="bg-gray-100 text-gray-800"> -->
     <div class="container mx-auto p-4">
-      <h1 class="text-3xl font-bold text-center mb-8">Football Match Schedule</h1>
+      <h1 class="text-3xl  font-bold text-center mb-8">Football Match Schedule</h1>
       <!-- Match Card -->
       <div class="bg-white shadow rounded-lg py-1 px-8 ml-9 mr-9">
         <div class="flex items-center justify-between p-2">

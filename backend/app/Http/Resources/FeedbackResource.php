@@ -20,7 +20,7 @@ class FeedbackResource extends JsonResource
             'field_id' => $this->field_id,
             'feedback_text' => $this->feedback_text,
             'user' => optional($this->users)->name,
-            'field' => optional($this->field)->field_name,
+            'field' => optional($this->field)->name,
         ];
     }
 }

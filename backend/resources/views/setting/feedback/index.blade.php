@@ -30,7 +30,7 @@
                                         {{ optional($feedback->users)->name }}
                                     </td>
                                     <td class="py-4 px-6 border-b border-gray-200">
-                                        {{ optional($feedback->field)->field_name }}
+                                        {{ optional($feedback->field)->name }}
                                     </td>
                                     <td class="py-4 px-6 border-b border-gray-200">{{ $feedback->feedback_text }}</td>
                                     <td class="px-4 py-4 whitespace-nowrap">
