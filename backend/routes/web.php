@@ -57,10 +57,11 @@ Route::namespace('App\Http\Controllers\Admin')->name('admin.')->prefix('admin')
         Route::resource('fields', 'FieldController');
         Route::resource('bookings', 'BookingController');
         Route::resource('settings', 'SettingController');
+        Route::resource('slideshows', 'slideshowController');
         Route::resource('products', 'ProductController');
         Route::resource('categories', 'CategoryController');
         Route::resource('payments', 'PaymentController');
-        Route::resource('feedbacks', FeedbackController::class);
+        Route::resource('feedbacks', 'FeedbackController');
         Route::resource('orders', 'OrderController');
 
 
