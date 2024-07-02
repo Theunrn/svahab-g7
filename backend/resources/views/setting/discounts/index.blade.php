@@ -20,35 +20,54 @@
                             <tr class="bg-gray-200">
                                 <th class="px-4 py-2 text-left">ID</th>
                                 <th class="px-4 py-2 text-left">Title</th>
-                                <th class="px-4 py-2 text-left">Discount number</th>
-                                <th class="px-4 py-2 text-left">Original Price</th>
-                                <th class="px-4 py-2 text-left">Discounted Price</th>
+                                <th class="px-4 py-2 text-left">Name</th>
+                                <th class="px-4 py-2 text-left">Discount</th>
+                                <th class="px-4 py-2 text-left">Original</th>
+                                <th class="px-4 py-2 text-left">Discounted</th>
+                                <th class="px-4 py-2 text-left">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($discounts as $discount)
                                 <tr>
-                                    <td class="px-6 py-4 border-b border-gray-200">{{ $discount->id }}</td>
-                                    <td class="px-6 py-4 border-b border-gray-200">{{ $discount->title }}</td>
-                                    <td class="px-6 py-4 border-b border-gray-200">{{ number_format($discount->discount, 2) }} %</td>
-                                    <td class="px-6 py-4 border-b border-gray-200">
+                                    <td class="px-6 py-4 ">{{ $discount->id }}</td>
+                                    <td class="px-6 py-4 ">{{ $discount->title }}</td>
+                                    <td class="px-6 py-4 ">{{ number_format($discount->discount, 2) }} %</td>
+                                    <td class="px-6 py-4 ">
                                         @foreach ($discount->products as $product)
                                             <div class="mb-2">
-                                                {{ $product->name }} - ${{ number_format($product->price, 2) }}
+                                                {{ $product->name }}
                                             </div>
                                         @endforeach
                                     </td>
-                                    <td class="px-6 py-4 border-b border-gray-200 flex">
+                                    <td class="px-6 py-4 ">
+                                        @foreach ($discount->products as $product)
+                                            <div class="mb-2">
+                                                {{ number_format($product->price, 2) }}
+                                            </div>
+                                        @endforeach
+                                    </td>
+                                    <td class="px-6 py-4">
                                         @foreach ($discount->products as $product)
                                             <div class="mb-2 flex">
                                                 @if ($product->discountedPrice !== null)
-                                                    {{ $product->name }} - ${{ number_format($product->discountedPrice, 2) }}
+                                                    {{ number_format($product->discountedPrice, 2) }}
                                                 @else
                                                     No discount applied
                                                 @endif
                                             </div>
                                         @endforeach
                                     </td>
+                                    <td class="px-4 py-4 whitespace-nowrap">
+                                        <a href="{{ route('admin.discounts.edit', $discount->id) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded inline-block">
+                                        <i class='bx bx-edit text-2xl'></i>
+                                        </a>
+                                        <form action="{{ route('admin.discounts.destroy', $discount->id) }}" method="POST" class="inline-block">
+                                          @csrf
+                                          @method('DELETE')
+                                          <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded inline-block">  <i class='bx bx-trash text-2xl'></i></button>
+                                        </form>
+                                      </td>
                                 </tr>
                             @endforeach
                         </tbody>
