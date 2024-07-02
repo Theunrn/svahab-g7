@@ -52,7 +52,6 @@ class ProductController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Product created successfully',
-                'data' => $product->load(['category', 'colors', 'sizes']),
             ], 201);
         } else {
             return response()->json(['error' => 'User not authenticated'], 401);
@@ -71,49 +70,49 @@ class ProductController extends Controller
             return response()->json(['error' => 'Product not found'], 404);
         }
     }
-    /**
- * Update the specified resource in storage.
- */
-public function update(ProductRequest $request, $id)
-{
-    if (!Auth::check()) {
-        return response()->json(['error' => 'User not authenticated'], 401);
-    }
 
-    $validatedData = $request->validated();
 
-    $product = Product::findOrFail($id);
-
-    if ($request->hasFile('image')) {
-        // Delete old image if exists
-        if ($product->image) {
-            Storage::delete('public/' . $product->image);
+    public function update(ProductRequest $request, $id)
+    {
+        if (!Auth::check()) {
+            return response()->json(['error' => 'User not authenticated'], 401);
         }
-        $imageName = time() . '.' . $request->image->extension();
-        $request->image->storeAs('public/images', $imageName);
-        $product->image = 'images/' . $imageName;
+
+        $validatedData = $request->validated();
+
+        $product = Product::findOrFail($id);
+
+        if ($request->hasFile('image')) {
+            // Delete old image if exists
+            if ($product->image) {
+                Storage::delete('public/' . $product->image);
+            }
+            $imageName = time() . '.' . $request->image->extension();
+            $request->image->storeAs('public/images', $imageName);
+            $product->image = 'images/' . $imageName;
+        }
+
+        $product->name = $validatedData['name'];
+        $product->description = $validatedData['description'];
+        $product->price = $validatedData['price'];
+        $product->category_id = $validatedData['category_id'];
+        $product->save();
+
+        if (isset($validatedData['color_ids'])) {
+            $product->colors()->sync($validatedData['color_ids']);
+        }
+
+        if (isset($validatedData['size_ids'])) {
+            $product->sizes()->sync($validatedData['size_ids']);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Product updated successfully',
+        ]);
     }
 
-    $product->name = $validatedData['name'];
-    $product->description = $validatedData['description'];
-    $product->price = $validatedData['price'];
-    $product->category_id = $validatedData['category_id'];
-    $product->save();
-
-    if (isset($validatedData['color_ids'])) {
-        $product->colors()->sync($validatedData['color_ids']);
-    }
-
-    if (isset($validatedData['size_ids'])) {
-        $product->sizes()->sync($validatedData['size_ids']);
-    }
-
-    return response()->json([
-        'success' => true,
-        'message' => 'Product updated successfully',
-        'data' => $product->load(['category', 'colors', 'sizes']),
-    ]);
-}
+    
 
 
     /**
@@ -137,4 +136,5 @@ public function update(ProductRequest $request, $id)
             return response()->json(['error' => 'User not authenticated'], 401);
         }
     }
+    
 }

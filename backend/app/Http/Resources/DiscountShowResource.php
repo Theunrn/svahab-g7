@@ -7,25 +7,22 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class DiscountShowResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
-     */
-    public function toArray(Request $request): array
+    public function toArray($request)
     {
         return [
             'id' => $this->id,
             'title' => $this->title,
-            'discount' => $this->discount,
-            'products' => $this->products->map(function($product) {
-                return [
-                    'id' => $product->id,
-                    'name' => $product->name
-                ];
-            })
-            
-
+            'discount' => number_format($this->discount, 2),
+            'products' => $this->whenLoaded('products', function () {
+                return $this->products->map(function ($product) {
+                    return [
+                        'id' => $product->id,
+                        'name' => $product->name,
+                        'price' => $product->price,
+                        'discounted_price' => $product->discountedPrice, 
+                    ];
+                });
+            }, [])
         ];
     }
 }

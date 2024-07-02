@@ -9,13 +9,13 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
+    
     public function up(): void
     {
         Schema::create('discount_products', function (Blueprint $table) {
             $table->id();
-            $table->integer('discount_id');
-            $table->integer('product_id');
-            $table->softDeletes();
+            $table->foreignId('discount_id');
+            $table->foreignId('product_id');
             $table->timestamps();
         });
     }

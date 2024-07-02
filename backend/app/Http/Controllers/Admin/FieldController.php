@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\FieldRequest;
+use App\Http\Resources\FieldResource;
 use App\Models\Field;
 use Illuminate\Http\Request;
 
@@ -11,28 +13,23 @@ class FieldController extends Controller
     public function index()
     {
         $fields = Field::all();
+        $fields = FieldResource::collection($fields);
         return view('setting.fields.index', compact('fields'));
     }
 
     public function create()
     {
-        return view('setting.fields.create');
+        $fields = Field::all();
+        return view('setting.fields.create', compact('fields'));
     }
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'location' => 'required|string|max:255',
-            'field_type' => 'required|string|max:255',
-            'owner_id' => 'required|integer',
-            'availablity' => 'required|boolean',
-        ]);
+    public function store(FieldRequest $request)
+{
+    $validated = $request->validated();
+    $field = Field::create($validated);
 
-        Field::create($request->all());
-
-        return redirect()->route('admin.fields.index')->with('success', 'Field created successfully.');
-    }
+    return redirect()->route('admin.fields.index')->with('success', 'Field created successfully.');
+}
 
     public function show($id)
     {
@@ -50,6 +47,8 @@ class FieldController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'location' => 'required|string|max:255',
+            'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'price' => 'required|numeric|min:0',
             'field_type' => 'required|string|max:255',
             'owner_id' => 'required|integer',
             'availablity' => 'required|boolean',

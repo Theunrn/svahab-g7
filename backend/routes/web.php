@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\FieldController;
 use App\Http\Controllers\Admin\MailSettingController;
 use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\DiscountController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\BookingController;
 use App\Http\Controllers\Admin\SettingController;
@@ -59,19 +60,23 @@ Route::get('/storage/{filename}', function ($filename) {
 
 
 Route::namespace('App\Http\Controllers\Admin')->name('admin.')->prefix('admin')
-->group(function () {
-    Route::resource('roles', 'RoleController');
-    Route::resource('permissions', 'PermissionController');
-    Route::resource('users', 'UserController');
-    Route::resource('posts', 'PostController');
-    Route::resource('fields', 'FieldController');
-    Route::resource('bookings', 'BookingController');
-    Route::resource('settings', 'SettingController');
-    Route::resource('products', 'ProductController');
-    Route::resource('categories', 'CategoryController');
-    Route::resource('payments', 'PaymentController');
-    Route::resource('feedbacks', 'FeedbackController');
-    Route::resource('orders', 'OrderController');
+    ->group(function(){
+        Route::put('orders/{id}/reactivate', [OrderController::class, 'reactivate'])
+            ->name('orders.reactivate');
+
+        Route::resource('roles', 'RoleController');
+        Route::resource('permissions', 'PermissionController');
+        Route::resource('users', 'UserController');
+        Route::resource('posts', 'PostController');
+        Route::resource('fields', 'FieldController');
+        Route::resource('bookings', 'BookingController');
+        Route::resource('settings', 'SettingController');
+        Route::resource('products', 'ProductController');
+        Route::resource('categories', 'CategoryController');
+        Route::resource('payments', 'PaymentController');
+        Route::resource('feedbacks', 'FeedbackController');
+        Route::resource('orders', 'OrderController');
+        Route::resource('discounts', 'DiscountController');
 
 
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
