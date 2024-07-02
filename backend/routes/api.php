@@ -1,14 +1,5 @@
 <?php
 
-<<<<<<< HEAD
-use App\Http\Controllers\Admin\BookingController;
-use App\Http\Controllers\Admin\FeedbackController;
-use App\Http\Controllers\Admin\FieldController;
-use App\Http\Controllers\Admin\ProductController;
-// use App\Http\Controllers\Api\FeedbackController;
-use App\Http\Controllers\Api\FildController;
-use App\Http\Controllers\API\OrderProductController;
-=======
 use App\Http\Controllers\Admin\FieldController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\API\BookingController;
@@ -18,7 +9,6 @@ use App\Http\Controllers\Api\FildController;
 use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\ColorController;
 use App\Http\Controllers\API\DiscountProductController;
->>>>>>> 7e10cb21feb62e9628c5b23807cc51f76926fd9f
 use App\Http\Controllers\API\PostController;
 use App\Http\Controllers\API\ProductController as APIProductController;
 use App\Http\Controllers\API\SizeController;

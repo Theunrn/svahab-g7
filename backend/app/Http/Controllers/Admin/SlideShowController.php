@@ -18,6 +18,8 @@ class SlideShowController extends Controller
         return view('setting.slideshow.index', compact('slideshow'));
     }
 
+  
+
     public function create()
     {
         return view('setting.fields.create');
@@ -25,17 +27,7 @@ class SlideShowController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'location' => 'required|string|max:255',
-            'field_type' => 'required|string|max:255',
-            'owner_id' => 'required|integer',
-            'availablity' => 'required|boolean',
-        ]);
-
-        Field::create($request->all());
-
-        return redirect()->route('admin.fields.index')->with('success', 'Field created successfully.');
+///       
     }
 
     public function show($id)
@@ -45,32 +37,18 @@ class SlideShowController extends Controller
 
     public function edit($id)
     {
-        $field = Field::find($id);
-        return view('setting.fields.edit', compact('field'));
+        // 
     }
 
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'location' => 'required|string|max:255',
-            'field_type' => 'required|string|max:255',
-            'owner_id' => 'required|integer',
-            'availablity' => 'required|boolean',
-        ]);
+    //    
 
-        $field = Field::findOrFail($id);
-        $field->update($request->all());
-
-        return redirect()->route('admin.fields.index')->with('success', 'Field updated successfully.');
     }
 
 
     public function destroy($id)
     {
-        $field = Field::findOrFail($id);
-        $field->delete();
-
-        return redirect()->route('admin.fields.index')->with('success', 'Field deleted successfully.');
+    //   
     }
 }
