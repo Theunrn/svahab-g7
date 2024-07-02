@@ -1,6 +1,6 @@
 <template>
     <div class="contaner">
-        <div class="head"><h1> Comment feedback</h1></div>
+        <div class="head"><h1> Customers' feedback</h1></div>
         <div><span id="comment">1</span> Comment</div>
         <div class="comment">
             <div class="comment-item">
@@ -23,7 +23,7 @@
                         </div>
                     </div>
                 </div>
-                <p class="policy">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Adipisci, nam.</p>
+                <p class="policy">Your feedback is very important for us to improve more and make it more better.</p>
             </div>
         </div>
     </div>

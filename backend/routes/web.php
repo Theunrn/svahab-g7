@@ -5,9 +5,17 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\FieldController;
 use App\Http\Controllers\Admin\MailSettingController;
 use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\DiscountController;
 use App\Http\Controllers\Admin\ProfileController;
+<<<<<<< HEAD
 use App\Http\Controllers\API\BookingController;
 use App\Http\Controllers\Admin\SettingController;
+=======
+use App\Http\Controllers\Admin\BookingController;
+use App\Http\Controllers\Admin\SettingController;
+use Faker\Core\File;
+use GuzzleHttp\Psr7\Response;
+>>>>>>> 7e10cb21feb62e9628c5b23807cc51f76926fd9f
 
 /*
 |--------------------------------------------------------------------------
@@ -42,11 +50,22 @@ Route::get('/admin/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('admin.dashboard');
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';
+Route::get('/storage/{filename}', function ($filename) {
+    $path = storage_path('app/public/' . $filename);
+    if (!File::exists($path)) {
+        abort(404);
+    }
+    $file = File::get($path);
+    $type = File::mimeType($path);
+    $response = Response::make($file, 200);
+    $response->header("Content-Type", $type);
+    return $response;
+})->where('filename', '.*');
+
 
 Route::namespace('App\Http\Controllers\Admin')->name('admin.')->prefix('admin')
-    ->group(function () {
-
+    ->group(function(){
         Route::put('orders/{id}/reactivate', [OrderController::class, 'reactivate'])
             ->name('orders.reactivate');
 
@@ -63,6 +82,7 @@ Route::namespace('App\Http\Controllers\Admin')->name('admin.')->prefix('admin')
         Route::resource('payments', 'PaymentController');
         Route::resource('feedbacks', 'FeedbackController');
         Route::resource('orders', 'OrderController');
+        Route::resource('discounts', 'DiscountController');
 
 
 
@@ -72,7 +92,7 @@ Route::namespace('App\Http\Controllers\Admin')->name('admin.')->prefix('admin')
         Route::put('/mail-update/{mailsetting}', [MailSettingController::class, 'update'])->name('mail.update');
 
     });
-    Route::get('/admin/bookings/{id}/cancel', [AdminBookingController::class, 'cancel'])->name('admin.bookings.cancel');
-    Route::get('/admin/bookings/{id}/rebook', [AdminBookingController::class, 'reBook'])->name('admin.bookings.rebook');
-    Route::get('/admin/bookings/{id}/accept', [AdminBookingController::class, 'accept'])->name('admin.bookings.accept');
-    Route::get('/admin/bookings/{id}/reject', [AdminBookingController::class, 'reject'])->name('admin.bookings.reject');
+    Route::get('/admin/bookings/{id}/cancel', [BookingController::class, 'cancel'])->name('admin.bookings.cancel');
+    Route::get('/admin/bookings/{id}/rebook', [BookingController::class, 'reBook'])->name('admin.bookings.rebook');
+    Route::get('/admin/bookings/{id}/accept', [BookingController::class, 'accept'])->name('admin.bookings.accept');
+    Route::get('/admin/bookings/{id}/reject', [BookingController::class, 'reject'])->name('admin.bookings.reject');

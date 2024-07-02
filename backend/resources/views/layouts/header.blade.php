@@ -19,13 +19,50 @@
     </div>
 
     <div class="flex items-center">
+        <!-- Notifications-->
+        <div class="relative mr-4" x-data="{ isOpen: false, filter: 'all' }" >
+            <button @click="isOpen = !isOpen" class="mt-3">
+                <svg class="h-6 w-6 text-gray-500" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                    <path d="M13.73 21a2 2 0 01-3.46 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                    <path d="M13 21H11V19.5C11 19.2239 11.2239 19 11.5 19H13V21Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+                <!-- Notification indicator -->
+                <span class="absolute top-0 right-0 h-2.5 w-2.5 bg-red-500 rounded-full"></span>
+            </button>
+            <div x-show="isOpen" class="absolute right-0 mt-2 w-96 bg-white rounded-md overflow-hidden shadow-xl z-10">
+                <div class="px-4 py-2 text-lg text-gray-700">
+                    <p class="font-bold">Notifications</p>
+                </div>
+                <div class="px-4 py-2 text-lg text-gray-600 flex justify-around">
+                    <p @click="filter = 'all'" :class="{'text-indigo-600': filter === 'all'}" class="font-bold cursor-pointer">All</p>
+                    <p @click="filter = 'order'" :class="{'text-indigo-600': filter === 'order'}" class="font-bold cursor-pointer">Order</p>
+                    <p @click="filter = 'booking'" :class="{'text-indigo-600': filter === 'booking'}" class="font-bold cursor-pointer">Booking</p>
+                </div>
+                <hr>
+                <div class="px-4 py-2 text-sm text-gray-700" x-show="filter === 'all' || filter === 'booking'">
+                    <ul class="list-disc list-inside">
+                        <li><span class="font-bold">John Doe</span>: Booking #1234 - Confirmed (Hotel)</li>
+                        <li><span class="font-bold">Jane Smith</span>: Booking #1235 - Pending (Flight)</li>
+                    </ul>
+                </div>
+                <div class="px-4 py-2 text-sm text-gray-700" x-show="filter === 'all' || filter === 'order'">
+                    <ul class="list-disc list-inside">
+                        <li><span class="font-bold">John Doe</span>: Order #1234 - Confirmed (Hotel)</li>
+                        <li><span class="font-bold">Jane Smith</span>: Order #1235 - Pending (Flight)</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+        
+        <!-- Dropdown for user profile -->
         <div x-data="{ dropdownOpen: false }" class="relative">
-            <button @click="dropdownOpen = ! dropdownOpen" class="relative block h-8 w-8 rounded-full overflow-hidden shadow focus:outline-none">
-                @if (auth()->check() && auth()->user()->profile)
-                <img class="h-full w-full object-cover" src="/images/{{ auth()->user()->profile }}" alt="Your avatar">
-                @else
-                <img class="h-full w-full object-cover" src="/images/default-avatar.png" alt="Default avatar">
-                @endif
+            <button @click="dropdownOpen = ! dropdownOpen"
+                class="relative block h-8 w-8 rounded-full overflow-hidden shadow focus:outline-none">
+                <img class="h-full w-full object-cover"
+                    src="{{auth()->user()->profile  ? asset('images/' .  auth()->user()->profile ) : asset('images/default-profile.jpg') }}"
+                    alt="Your avatar">
             </button>
 
             <div x-show="dropdownOpen" @click="dropdownOpen = false" class="fixed inset-0 h-full w-full z-10" style="display: none;"></div>

@@ -57,7 +57,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import axios from 'axios';
 import bcrypt from 'bcryptjs';
 import { useRouter } from 'vue-router';
@@ -98,7 +98,7 @@ export default {
         });
         const customerId = userResponse.data.id;
         // Update the role to 'customer'
-        await axios.put(`http://127.0.0.1:8000/api/customers/${customerId}/role`, {
+        const roleUpdateResponse = await axios.put(`http://127.0.0.1:8000/api/customers/${customerId}/role`, {
           role: 'customer'
         }, {
           headers: {
@@ -121,6 +121,7 @@ export default {
     },
   },
 };
+
 </script>
 
 <style>

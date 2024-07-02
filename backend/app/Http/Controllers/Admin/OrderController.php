@@ -24,14 +24,12 @@
 //     }
 // }
 
-
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Order;
 use App\Http\Resources\OrderProductResource;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Carbon\Carbon;
 
 class OrderController extends Controller
 {
@@ -42,20 +40,28 @@ class OrderController extends Controller
         $ordersQuery = Order::query();
 
         if ($status === 'cancelled') {
-            $ordersQuery->where('status', 'cancelled');
+            $ordersQuery->where('order_status', 'cancelled');
         }
 
         if ($date) {
-            $orders = Order::whereDate('created_at', $date)->get();
-        } else {
-            $orders = Order::all();
+            $ordersQuery->whereDate('created_at', $date);
         }
 
-        if($orders !== null) {
+        // Include user relationship to retrieve user's name
+        $orders = $ordersQuery->with(['user', 'products' => function ($query) {
+            $query->withPivot('qty', 'color_id', 'size_id');
+        }, 'products.colors', 'products.sizes'])->get();
+
+        // Check if orders are found
+        if ($orders->isNotEmpty()) {
+            // Transform orders using resource for consistent JSON response
             $orders = OrderProductResource::collection($orders);
-            return view('setting.orders.index', compact('orders'));
-        } else {
-            return response()->json(['status' => false, 'message' => 'No orders found'], 404);
         }
+
+        return view('setting.orders.index', compact('orders'));
     }
+
+    
 }
+
+

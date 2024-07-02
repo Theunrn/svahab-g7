@@ -9,6 +9,7 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
+
     public function up(): void
     {
         Schema::create('product_orders', function (Blueprint $table) {
@@ -16,6 +17,8 @@ return new class extends Migration
             $table->integer('order_id');
             $table->integer('product_id');
             $table->integer('qty');
+            $table->foreignId('color_id')->nullable();
+            $table->foreignId('size_id')->nullable();
             $table->timestamps();
         });
     }
