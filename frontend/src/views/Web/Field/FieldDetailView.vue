@@ -14,7 +14,7 @@
     import DetailCom from '../../../Components/FieldDetails/DetailCom.vue'
     import WebHeaderMenu from '../../../Components/WebHeaderMenu.vue';
     import UserFeedback from '../../../Components/FieldDetails/UserFeedback.vue';
-    import WebFooter from '../../../Components/WebFooter.vue';
+    import WebFooter from '../../../Components/WebFooter.vue';zzz
 </script>
 
 <style>
