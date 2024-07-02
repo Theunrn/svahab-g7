@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('location');
+            $table->string('image');
+            $table->string('price');
             $table->string('field_type');
             $table->integer('owner_id');
             $table->boolean('availablity');

@@ -31,7 +31,7 @@
                         <thead>
                             <tr class="bg-gray-200">
                                 <th class="px-4 py-2 text-left">ID</th>
-                                <th class="px-4 py-2 text-left">Name</th>
+                                <th class="px-4 py-2 text-left">Customer Name</th>
                                 <th class="px-4 py-2 text-left">Product</th>
                                 <th class="px-4 py-2 text-left">Quantity</th>
                                 <th class="px-4 py-2 text-left">Price</th>
@@ -88,12 +88,19 @@
                                             @endif
                                         </td>
                                         <td class="px-4 py-2">
-                                            {{ $product->pivot->color_id ? $product->colors->firstWhere('id', $product->pivot->color_id)->name : 'Color Empty' }}
+                                            @if ($product->pivot->color_id && $product->colors->isNotEmpty())
+                                                {{ $product->colors->firstWhere('id', $product->pivot->color_id)->name ?? 'Not Found' }}
+                                            @else
+                                                Not Found
+                                            @endif
                                         </td>
                                         <td class="px-4 py-2">
-                                            {{ $product->pivot->size_id ? $product->sizes->firstWhere('id', $product->pivot->size_id)->name : 'Size Empty' }}
-                                        </td>                                                                     
-                                        <td class="px-4 py-2">{{ \Carbon\Carbon::parse($order->order_date)->isoFormat('dddd, D MMMM, YYYY') }}</td>
+                                            @if ($product->pivot->size_id && $product->sizes->isNotEmpty())
+                                                {{ $product->sizes->firstWhere('id', $product->pivot->size_id)->name ?? 'Not Found' }}
+                                            @else
+                                                Not Found
+                                            @endif
+                                        </td>
                                     </tr>
                                 @endforeach
                             @endforeach

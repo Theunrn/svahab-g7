@@ -56,7 +56,7 @@
          @canany(['Category access','Category add','Category edit','Category delete'])
             <a class="flex items-center mt-4 py-2 px-6 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 {{ Route::currentRouteNamed('admin.categories.index') ? 'active' : '' }}"
             href="{{route('admin.categories.index')}}">
-            <i class='bx bxl-product-hunt text-2xl'></i>
+            <i class='bx bx-category text-2xl'></i>
             <span class="mx-3">Categories</span>
             </a>
        @endcanany
@@ -73,7 +73,7 @@
         </a>
         <a class="flex items-center mt-4 py-2 px-6 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 {{ Route::currentRouteNamed('admin.discounts.index') ? 'active' : '' }}"
             href="{{ route('admin.discounts.index') }}">
-            <i class='bx bx-cart-add text-2xl'></i>
+            <i class='bx bxs-discount text-2xl' ></i>
             <span class="mx-3">Discounts</span>
         </a>
      @endcanany

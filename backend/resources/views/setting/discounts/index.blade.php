@@ -20,7 +20,7 @@
                             <tr class="bg-gray-200">
                                 <th class="px-4 py-2 text-left">ID</th>
                                 <th class="px-4 py-2 text-left">Title</th>
-                                <th class="px-4 py-2 text-left">Discount number</th>
+                                <th class="px-4 py-2 text-left">Discount (%)</th>
                                 <th class="px-4 py-2 text-left">Original Price</th>
                                 <th class="px-4 py-2 text-left">Discounted Price</th>
                             </tr>
@@ -30,7 +30,7 @@
                                 <tr>
                                     <td class="px-6 py-4 border-b border-gray-200">{{ $discount->id }}</td>
                                     <td class="px-6 py-4 border-b border-gray-200">{{ $discount->title }}</td>
-                                    <td class="px-6 py-4 border-b border-gray-200">{{ number_format($discount->discount, 2) }} %</td>
+                                    <td class="px-6 py-4 border-b border-gray-200">{{ number_format($discount->discount, 2)}}</td>
                                     <td class="px-6 py-4 border-b border-gray-200">
                                         @foreach ($discount->products as $product)
                                             <div class="mb-2">

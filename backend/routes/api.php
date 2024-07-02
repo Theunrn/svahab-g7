@@ -42,7 +42,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanc
 Route::get('/me', [AuthController::class, 'index'])->middleware('auth:sanctum');
 Route::get('/post/list', [PostController::class, 'index'])->middleware('auth:sanctum');
 
-Route::get('field/list', [FildController::class,'index'])->name('field.list');
+Route::get('fields/list', [FildController::class,'index'])->name('field.list');
 Route::post('field/create', [FildController::class,'store'])->name('field.create');
 Route::get('field/show/{id}', [FildController::class,'show'])->name('field.show');
 Route::put('field/update/{id}', [FildController::class,'update'])->name('field.update');

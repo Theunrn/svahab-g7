@@ -52,7 +52,6 @@ class ProductController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Product created successfully',
-                'data' => $product->load(['category', 'colors', 'sizes']),
             ], 201);
         } else {
             return response()->json(['error' => 'User not authenticated'], 401);
@@ -112,7 +111,6 @@ class ProductController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Product updated successfully',
-            'data' => $product->load(['category', 'colors', 'sizes']),
         ]);
     }
 
