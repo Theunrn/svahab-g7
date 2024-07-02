@@ -7,15 +7,8 @@ use App\Http\Controllers\Admin\MailSettingController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\DiscountController;
 use App\Http\Controllers\Admin\ProfileController;
-<<<<<<< HEAD
 use App\Http\Controllers\API\BookingController;
 use App\Http\Controllers\Admin\SettingController;
-=======
-use App\Http\Controllers\Admin\BookingController;
-use App\Http\Controllers\Admin\SettingController;
-use Faker\Core\File;
-use GuzzleHttp\Psr7\Response;
->>>>>>> 7e10cb21feb62e9628c5b23807cc51f76926fd9f
 
 /*
 |--------------------------------------------------------------------------
