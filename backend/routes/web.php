@@ -59,6 +59,12 @@ Route::get('/storage/{filename}', function ($filename) {
     return $response;
 })->where('filename', '.*');
 
+// routes/web.php
+
+Route::get('/dropdown', function () {
+    return view('dropdown');
+});
+
 
 Route::namespace('App\Http\Controllers\Admin')->name('admin.')->prefix('admin')
     ->group(function () {
@@ -85,8 +91,7 @@ Route::namespace('App\Http\Controllers\Admin')->name('admin.')->prefix('admin')
         Route::get('/mail', [MailSettingController::class, 'index'])->name('mail.index');
         Route::put('/mail-update/{mailsetting}', [MailSettingController::class, 'update'])->name('mail.update');
     });
-
-Route::get('/admin/bookings/{id}/cancel', [BookingController::class, 'cancel'])->name('admin.bookings.cancel');
-Route::get('/admin/bookings/{id}/rebook', [BookingController::class, 'reBook'])->name('admin.bookings.rebook');
-Route::get('/admin/bookings/{id}/accept', [BookingController::class, 'accept'])->name('admin.bookings.accept');
-Route::get('/admin/bookings/{id}/reject', [BookingController::class, 'reject'])->name('admin.bookings.reject');
+    Route::get('/admin/bookings/{id}/cancel', [BookingController::class, 'cancel'])->name('admin.bookings.cancel');
+    Route::get('/admin/bookings/{id}/rebook', [BookingController::class, 'reStore'])->name('admin.bookings.rebook');
+    Route::get('/admin/bookings/{id}/accept', [BookingController::class, 'accept'])->name('admin.bookings.accept');
+    Route::get('/admin/bookings/{id}/reject', [BookingController::class, 'reject'])->name('admin.bookings.reject');

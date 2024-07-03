@@ -45,6 +45,7 @@ class DiscountController extends Controller
         $products = Product::all(); // Adjust as per your needs
         return view('setting.discounts.edit', compact('discount', 'products'));
     }
+    
 
     public function update(Request $request, Discount $discount)
     {
