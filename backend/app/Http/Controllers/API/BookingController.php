@@ -45,7 +45,6 @@ class BookingController extends Controller
         $booking = Booking::find($id);
         $booking = new BookingResource($booking);
         return response()->json(['success' => true, 'data' => $booking]);
-
     }
 
     /**
@@ -66,10 +65,10 @@ class BookingController extends Controller
             // Handle the case where the booking is not found
             return response()->json(['error', 'Booking not found'], 404);
         }
-    
+
         $booking->status = 'confirmed';
         $booking->save(); // Save the updated status to the database
-    
+
         return  response()->json(['success', 'Booking confirmed successfully'], 200);
     }
 
@@ -83,10 +82,10 @@ class BookingController extends Controller
             // Handle the case where the booking is not found
             return response()->json(['error', 'Booking not found'], 404);
         }
-    
+
         $booking->status = 'rejected';
         $booking->save(); // Save the updated status to the database
-    
+
         return  response()->json(['success', 'Booking rejected successfully'], 200);
     }
     public function cancelBooking(string $id)
@@ -96,10 +95,20 @@ class BookingController extends Controller
             // Handle the case where the booking is not found
             return response()->json(['error', 'Booking not found'], 404);
         }
-    
+
         $booking->status = 'cancelled';
         $booking->save(); // Save the updated status to the database
-    
+
         return  response()->json(['success', 'Booking cancelled successfully'], 200);
+    }
+    // app/Http/Controllers/BookingController.php
+    public function getBookingsByUserId($id)
+    {
+        $bookings = Booking::where('user_id', $id)->get();
+        $bookings = BookingResource::collection($bookings);
+        if ($bookings->isEmpty()) {
+            return response()->json(['error' => 'No bookings found for this user'], 404);
+        }
+        return response()->json($bookings, 200);
     }
 }

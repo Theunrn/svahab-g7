@@ -17,7 +17,7 @@ class FieldRequest extends DefaultRequest
         return [
             'name' => 'required|string|max:255',
             'location' => 'required|string|max:255',
-            'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg,jfif|max:2048',
+            'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg,jfif,webp|max:2048',
             'price' => 'required|numeric|min:0',
             'field_type' => 'required|string|max:255',
             'owner_id' => 'required|integer',
