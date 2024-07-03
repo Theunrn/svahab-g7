@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class SlideShow extends Model
 {
     use HasFactory;
+
+    protected $table = 'slide_shows';
+
+    protected $fillable = [
+        'image',
+    ];
 }

@@ -10,7 +10,7 @@ use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\API\BookingController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\SlideShowController as AdminSlideShowController;
-use App\Http\Controllers\API\SlideShowController;
+use App\Http\Controllers\Admin\SlideShowController;
 
 /*
 |--------------------------------------------------------------------------
@@ -71,13 +71,15 @@ Route::namespace('App\Http\Controllers\Admin')->name('admin.')->prefix('admin')
         Route::resource('fields', 'FieldController');
         Route::resource('bookings', 'BookingController');
         Route::resource('settings', 'SettingController');
-        Route::resource('slideshows', 'slideshowController');
+        Route::resource('slideshow', 'SlideshowController');
         Route::resource('products', 'ProductController');
         Route::resource('categories', 'CategoryController');
         Route::resource('payments', 'PaymentController');
         Route::resource('feedbacks', 'FeedbackController');
         Route::resource('orders', 'OrderController');
         Route::resource('discounts', 'DiscountController');
+
+
 
         // routes/web.php
 
@@ -96,4 +98,4 @@ Route::get('/admin/bookings/{id}/rebook', [BookingController::class, 'reBook'])-
 Route::get('/admin/bookings/{id}/accept', [BookingController::class, 'accept'])->name('admin.bookings.accept');
 Route::get('/admin/bookings/{id}/reject', [BookingController::class, 'reject'])->name('admin.bookings.reject');
 
-Route::get('/slideshow/list', [SlideShowController::class, 'index'])->name('slides.index');
+// Route::get('/slideshow/list', [SlideShowController::class, 'index'])->name('slides.index');
