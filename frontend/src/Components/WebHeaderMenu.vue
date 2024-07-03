@@ -4,7 +4,7 @@
   >
     <!-- Logo -->
     <div class="flex items-center space-x-2">
-      <a href="/"><img width="25%" height="32%" src="../assets/image/logo.png" alt="Logo" /></a>
+      <a href="/"><img width="28%" height="35%" src="../assets/image/logo.png" alt="Logo" /></a>
     </div>
     <!-- Menu Items -->
     <nav class="flex justify-center space-x-4">
@@ -14,6 +14,34 @@
       <a :href="'/contact'" :class="['font-bold-200 py-2 me-5 text-white custom-hover text-decoration-none me-5', { 'active': route.path === '/contact' }]">CONTACT</a>
     </nav>
 
+    
+
+    <!-- Cart Button -->
+
+    <button class="relative inline-flex w-fit mx-4">
+      <div  class="absolute top-0 right-0 transform translate-x-2/4 -translate-y-1/2 z-10 flex items-center justify-center h-5 w-5 bg-red-600 rounded-full text-white text-xs font-bold">
+        1 
+      </div>
+      <router-link to="/addtocart" class="flex items-center justify-center rounded-lg bg-primary-500 text-white dark:text-gray-200">
+        <i class='bx bxs-cart-add text-3xl ml-4 text-white'></i> <!-- Larger bell icon -->
+      </router-link>
+    </button>
+    <button class="relative inline-flex w-fit">
+      <div  class="absolute top-0 right-0 transform translate-x-2/4 -translate-y-1/2 z-10 flex items-center justify-center h-5 w-5 bg-red-600 rounded-full text-white text-xs font-bold">
+        1 
+      </div>
+      <router-link class="flex items-center justify-center rounded-lg bg-primary-500 text-white dark:text-gray-200">
+        <i class="bx bx-bell text-3xl"></i> <!-- Larger bell icon -->
+      </router-link>
+    </button>
+    <button class="relative inline-flex items-center m-4">
+      <router-link to="/history" class="flex items-center justify-center rounded-lg bg-primary-500 text-white dark:text-gray-200">
+        <span v-if="showText" class="absolute top-0 left-3/2 transform -translate-x-1/2 -translate-y-full text-lg font-semibold ">History</span>
+        <i class="bx bx-history text-3xl"
+           @mouseover="showText = true"
+           @mouseleave="showText = false"></i>
+      </router-link>
+    </button>
     <!-- Authentication Button -->
     <div class="auth flex gap-2">
       <!-- Conditionally render Register, Login or Logout button -->
@@ -25,33 +53,6 @@
         <button @click="logout" class="hover:bg-red-400 text-dark bg-white px-4 py-1 border-1 border-red-700 hover:border-red-500 rounded">Logout</button>
       </template>
     </div>
-
-    <!-- Cart Button -->
-    <button class="relative m-6 inline-flex w-fit">
-      <div
-        class="absolute bottom-auto left-auto right-0 top-0 z-10 inline-block -translate-y-1/2 translate-x-2/4 rotate-0 skew-x-0 skew-y-0 scale-x-100 scale-y-100 text-white rounded-full bg-red-600 py-1 px-2 text-sx">1</div>
-      <router-link  to="/addtocart"
-        class="flex items-center justify-center rounded-lg bg-primary-500 text-center text-white dark:text-gray-200">
-        <i class='bx bxs-cart-add text-4xl ml-4 text-white'></i>
-      </router-link>
-    </button>
-    <!-- Notification Button -->
-    <button class="relative inline-flex w-fit">
-      <div  class="absolute top-0 right-0 transform translate-x-2/4 -translate-y-1/2 z-10 flex items-center justify-center h-8 w-8 bg-red-600 rounded-full text-white text-xs font-bold">
-        1 <!-- Notification count -->
-      </div>
-      <router-link class="flex items-center justify-center rounded-lg bg-primary-500 text-white dark:text-gray-200">
-        <i class="bx bx-bell text-4xl"></i> <!-- Larger bell icon -->
-      </router-link>
-    </button>
-    <button class="relative inline-flex items-center m-8">
-      <router-link to="/history" class="flex items-center justify-center rounded-lg bg-primary-500 text-white dark:text-gray-200">
-        <span v-if="showText" class="absolute top-0 left-3/2 transform -translate-x-1/2 -translate-y-full text-lg font-semibold ">History</span>
-        <i class="bx bx-history text-4xl"
-           @mouseover="showText = true"
-           @mouseleave="showText = false"></i>
-      </router-link>
-    </button>
   </header>
 </template>
 

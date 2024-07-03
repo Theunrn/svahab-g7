@@ -4,13 +4,9 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     </head>
     <div>
-        <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-200">
+        <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-200 mt-5">
             <div class="container mx-auto px-6 py-2">
-                <div class="flex justify-end mb-4">
-                    <a href="{{ route('admin.feedbacks.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                        Create Feedback
-                    </a>
-                </div>
+                <strong class="text-2xl font-semibold mt-5">Feedbacks list</strong>
                 <div class="bg-white shadow-md rounded my-6">
                     <table class="text-left w-full border-collapse">
                         <thead>
