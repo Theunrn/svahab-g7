@@ -27,7 +27,7 @@
       <div  class="absolute top-0 right-0 transform translate-x-2/4 -translate-y-1/2 z-10 flex items-center justify-center h-5 w-5 bg-red-600 rounded-full text-white text-xs font-bold">
         1 
       </div>
-      <router-link class="flex items-center justify-center rounded-lg bg-primary-500 text-white dark:text-gray-200">
+      <router-link :to="{path: '/notification/' + authStore.user.id}" class="flex items-center justify-center rounded-lg bg-primary-500 text-white dark:text-gray-200">
         <i class="bx bx-bell text-3xl"></i> <!-- Larger bell icon -->
       </router-link>
     </button>
