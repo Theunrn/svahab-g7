@@ -5,8 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Notification extends Model
+class SlideShow extends Model
 {
     use HasFactory;
-    protected $fillable = ['title', 'description', 'type', 'user_id'];
+
+    protected $table = 'slide_shows';
+
+    protected $fillable = [
+        'image',
+    ];
 }

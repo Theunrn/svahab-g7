@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Notification;
 use Illuminate\Http\Request;
 
 class NotificationController extends Controller
@@ -11,10 +10,9 @@ class NotificationController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function getNotificationsByUserId($userId)
+    public function index()
     {
-        $notifications = Notification::where('user_id', $userId)->get();
-        return response()->json($notifications);
+        //
     }
 
     /**
@@ -60,20 +58,8 @@ class NotificationController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function deleteNotifications(Request $request)
+    public function destroy(string $id)
     {
-        $notificationIds = $request->input('notifications', []);
-
-        // Validate input if needed
-        // Example validation: $request->validate(['notifications' => 'required|array']);
-
-        try {
-            // Perform deletion
-            Notification::whereIn('id', $notificationIds)->delete();
-
-            return response()->json(['message' => 'Notifications deleted successfully']);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Failed to delete notifications'], 500);
-        }
+        //
     }
 }

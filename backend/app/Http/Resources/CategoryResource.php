@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class FeedbackResource extends JsonResource
+class CategoryResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,11 +16,7 @@ class FeedbackResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'user_id' => $this->user_id,
-            'field_id' => $this->field_id,
-            'feedback_text' => $this->feedback_text,
-            'user' => optional($this->users)->name,
-            'field' => optional($this->field)->name,
+            'name' => $this->name,
         ];
     }
 }
