@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\DiscountController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\BookingController;
 use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\SlideshowAdminController; // Add this line
 use Faker\Core\File;
 use GuzzleHttp\Psr7\Response;
 
@@ -45,7 +46,7 @@ Route::get('/admin/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('admin.dashboard');
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 Route::get('/storage/{filename}', function ($filename) {
     $path = storage_path('app/public/' . $filename);
     if (!File::exists($path)) {
@@ -66,7 +67,7 @@ Route::get('/dropdown', function () {
 
 
 Route::namespace('App\Http\Controllers\Admin')->name('admin.')->prefix('admin')
-    ->group(function(){
+    ->group(function () {
         Route::put('orders/{id}/reactivate', [OrderController::class, 'reactivate'])
             ->name('orders.reactivate');
 
@@ -77,6 +78,7 @@ Route::namespace('App\Http\Controllers\Admin')->name('admin.')->prefix('admin')
         Route::resource('fields', 'FieldController');
         Route::resource('bookings', 'BookingController');
         Route::resource('settings', 'SettingController');
+        Route::resource('slideshow', 'SlideShowController'); // Update this line
         Route::resource('products', 'ProductController');
         Route::resource('categories', 'CategoryController');
         Route::resource('payments', 'PaymentController');
@@ -84,13 +86,10 @@ Route::namespace('App\Http\Controllers\Admin')->name('admin.')->prefix('admin')
         Route::resource('orders', 'OrderController');
         Route::resource('discounts', 'DiscountController');
 
-
-
         Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
         Route::put('/profile-update', [ProfileController::class, 'update'])->name('profile.update');
         Route::get('/mail', [MailSettingController::class, 'index'])->name('mail.index');
         Route::put('/mail-update/{mailsetting}', [MailSettingController::class, 'update'])->name('mail.update');
-
     });
     Route::get('/admin/bookings/{id}/cancel', [BookingController::class, 'cancel'])->name('admin.bookings.cancel');
     Route::get('/admin/bookings/{id}/rebook', [BookingController::class, 'reStore'])->name('admin.bookings.rebook');
