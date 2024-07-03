@@ -13,9 +13,6 @@
       <a :href="'/shop'" :class="['font-bold-200 py-2 text-white custom-hover text-decoration-none me-3', { 'active': route.path === '/shop' }]">SHOP</a>
       <a :href="'/contact'" :class="['font-bold-200 py-2 me-5 text-white custom-hover text-decoration-none me-5', { 'active': route.path === '/contact' }]">CONTACT</a>
     </nav>
-
-    
-
     <!-- Cart Button -->
 
     <button class="relative inline-flex w-fit mx-4">
@@ -35,7 +32,7 @@
       </router-link>
     </button>
     <button class="relative inline-flex items-center m-4">
-      <router-link to="/history" class="flex items-center justify-center rounded-lg bg-primary-500 text-white dark:text-gray-200">
+      <router-link :to="{ path: '/history/' + authStore.user.id }" class="flex items-center justify-center rounded-lg bg-primary-500 text-white dark:text-gray-200">
         <span v-if="showText" class="absolute top-0 left-3/2 transform -translate-x-1/2 -translate-y-full text-lg font-semibold ">History</span>
         <i class="bx bx-history text-3xl"
            @mouseover="showText = true"

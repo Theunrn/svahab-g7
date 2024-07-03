@@ -43,18 +43,40 @@
       </div>
       <div class="History">
         <h3 class="text-lg font-semibold mb-2">Today - Saturday, June 29, 2024</h3>
+        <div class="label flex justify-between">
+          <span class="text-gray-500">Date</span>
+          <span class="text-gray-400">Field Name</span>
+          <span class="text-gray-400">Start Time</span>
+          <span class="text-gray-400">End Time</span>
+          <span class="text-gray-400">Status</span>
+          <span class="text-gray-400">Payment Status</span>
+          <span class="text-gray-400">Action</span>
+        </div>
         <hr>
         <ul v-if="filter === 'data'">
           <li 
-            v-for="(entry, index) in filteredEntries" 
+            v-for="(booking, index) in bookings" 
             :key="index" 
             class="flex items-center space-x-4 mb-2 p-2 hover:bg-gray-100 rounded-lg"
           >
             <input type="checkbox" />
-            <p class="text-gray-500">{{ entry.time }}</p>
+            <p class="text-gray-500">{{ booking.created_at }}</p>
             <div class="flex-1">
-              <p class="text-base font-medium">{{ entry.title }}</p>
+              <p class="text-base font-medium">{{ booking.field_name }}</p>
             </div>
+            <div class="flex-1">
+              <p class="text-base font-medium">{{ booking.start_time }}</p>
+            </div>
+            <div class="flex-1">
+              <p class="text-base font-medium">{{ booking.end_time }}</p>
+            </div>
+            <div class="flex-1">
+              <p class="text-base font-medium">{{ booking.status }}</p>
+            </div>
+            <div class="flex-1">
+              <p class="text-base font-medium">{{ booking.payment_status}}</p>
+            </div>
+
             <button class="text-gray-500 hover:text-gray-700">
               <i class="bx bx-dots-vertical-rounded"></i>
             </button>
@@ -66,14 +88,14 @@
             <hr class="mb-2">
             <ul>
               <li 
-                v-for="(entry, index) in group" 
+                v-for="(booking, index) in bookings" 
                 :key="index" 
                 class="flex items-center space-x-4 mb-2 p-2 hover:bg-gray-100 rounded-lg"
               >
                 <input type="checkbox" />
-                <p class="text-gray-500">{{ entry.time }}</p>
+                <p class="text-gray-500">{{booking.created_at }}</p>
                 <div class="flex-1">
-                  <p class="text-base font-medium">{{ entry.title }}</p>
+                  <p class="text-base font-medium">{{ booking.field_name }}</p>
                 </div>
                 <button class="text-gray-500 hover:text-gray-700">
                   <i class="bx bx-dots-vertical-rounded"></i>
@@ -88,25 +110,38 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
+import axiosInstance from '@/plugins/axios';
+import { useRoute } from 'vue-router';
+const route = useRoute();
 
-const historyEntries = ref([
-  {
-    time: '2:32 PM',
-    title: 'Booking Field',
-  },
-  {
-    time: '2:00 PM',
-    title: 'Order Ball in the shop',
-  },
-  {
-    time: '9:00 AM',
-    title: 'Booking field name Hongda',
-  },
-]);
-
+const bookings = ref([]);
+const orders = ref([]);
+const userId = computed(() => route.params.id);
 const filter = ref('data'); // reactive property to store the filter type
 const searchHistory = ref(''); // reactive property to store the search query
+
+const fetchBookingByUserId = async () => {
+      try {
+        const response = await axiosInstance.get(`/customer/bookings/${userId.value}`);
+        bookings.value = response.data;
+      } catch (error) {
+        console.error('Error fetching bookings:', error);
+      }
+};
+const fetchOrdersByUserId = async () => {
+      try {
+        const response = await axiosInstance.get(`/customer/orders/${userId.value}`);
+        orders.value = response.data;
+        console.log(orders.value);
+      } catch (error) {
+        console.error('Error fetching orders:', error);
+      }
+};
+onMounted(() => {
+  fetchBookingByUserId();
+  fetchOrdersByUserId();
+});
 
 // computed property to filter entries based on the filter type and search query
 const filteredEntries = computed(() => {
