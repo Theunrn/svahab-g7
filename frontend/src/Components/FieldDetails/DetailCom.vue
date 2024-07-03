@@ -36,7 +36,10 @@
         <!-- w-96 sets a fixed width for the left div -->
         <div class="card-me">
           <div class="card-wrapper relative w-full mx-2 my-2 border-1 border-gray-400 rounded-md">
-            <div class="container bg-overlay">
+            <div class="container bg-overlay" 
+            :style="{
+              background: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(${getImageUrl(field.image)})`,
+            }">
               <div class="row text-center flex flex-col items-center justify-center h-full">
                 <button type="button" class="btn btn-primary btn-details py-2 me-2">
                   Show on map
@@ -45,7 +48,7 @@
             </div>
             <div class="text text-start bg-white p-4 flex flex-col">
               <h5 class="text-2xl font-bold text-white py-2 mb-2 bg-green-500">Available</h5>
-              <h5 class="text-orange-600 ">Price: $10.00/Hour</h5>
+              <h5 class="text-orange-600 ">Price: ${{field.price}}.00/Hour</h5>
             </div>
           </div>
         </div>
@@ -103,9 +106,9 @@
         <!-- w-96 sets a fixed width for the right div -->
         <div class="w-full w-214">
           <!-- <h2 class="text-2xl font-bold">7Seasons Apartments offers</h2> -->
-          <img src="../../assets/image/contact-imag.jpg" alt="" class="w-full h-74 object-cover" />
+          <img :src="getImageUrl(field.image)" alt="" class="w-full h-74 object-cover" />
         </div>
-        <div class="gap-2">
+        <div class="gap-2 overflow-y-auto h-50">
           <div class="card-text mt-4" >
             <div class="card-display-container gap-3 flex flex-col">
               <div class="card-display border border-gray-400 rounded-lg shadow-lg flex overflow-hidden" v-for="index in 3" :key="index">
@@ -177,11 +180,12 @@ const end_time = ref('');
 const total_price = ref('00.00');
 const booking_date = ref<Date | null>(null);
 const bookings = ref<any[]>([])
+const field = ref({})
 const first_name = ref('')
 const last_name = ref('')
 const email = ref('')
 const phone_number = ref('')
-
+const price = ref(0);
 const start = () => start_time.value;
 const end = () => end_time.value;
 const bookingDate = () => booking_date.value;
@@ -194,7 +198,7 @@ const calculateTotalPrice = () => {
   const endMinutes = endTimeParts[0] * 60 + endTimeParts[1];
   
   const durationInMinutes = endMinutes - startMinutes;
-  const pricePerMinute = 10 / 60; 
+  const pricePerMinute = price.value / 60; 
   
   total_price.value = (durationInMinutes * pricePerMinute).toFixed(2);
 }
@@ -217,7 +221,21 @@ const submitBooking = async () => {
     console.error('Error creating booking:', error);
   }
 }
-
+const fetchFields = async () => {
+      try {
+        const response = await axiosInstance.get(`/field/show/${fieldId.value}`);
+        field.value = response.data.data;
+        price.value = field.value.price;
+      } catch (error) {
+        console.error('Error fetching fields:', error);
+      }
+};
+onMounted(() => {
+      fetchFields();
+});
+const getImageUrl = (imagePath) => {
+      return imagePath ? `http://127.0.0.1:8000/storage/${imagePath}` : '/default-image.jpg';
+};
 
 watch([start_time, end_time], calculateTotalPrice);
 
@@ -267,8 +285,8 @@ h5{
    justify-content: center;
  }
 .bg-overlay {
-  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
-    url('../../assets/image/field.png');
+  /* background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+    url('../../assets/image/field.png'); */
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center;

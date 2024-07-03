@@ -9,9 +9,11 @@ use App\Http\Controllers\Api\FildController;
 use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\ColorController;
 use App\Http\Controllers\API\DiscountProductController;
+use App\Http\Controllers\API\HistoryController;
 use App\Http\Controllers\API\PostController;
 use App\Http\Controllers\API\ProductController as APIProductController;
 use App\Http\Controllers\API\SizeController;
+use App\Http\Controllers\API\SlideShowController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\OrderController;
 use Illuminate\Http\Request;
@@ -96,3 +98,11 @@ Route::get('/discount/show/{id}',[DiscountProductController::class,'show'])->nam
 Route::put('/discount/update/{id}',[DiscountProductController::class,'update'])->name('discount.update');
 Route::delete('/discount/delete/{id}',[DiscountProductController::class,'destroy'])->name('discount.destroy');
 
+Route::get('/slideshow/list', [SlideShowController::class,'index'])->name('slideshow.list');
+
+//History
+
+Route::get('/histories/list',[HistoryController::class,'index'])->name('history.list');
+Route::post('/histories/create',[HistoryController::class,'store'])->name('history.store');
+Route::get('/customer/bookings/{id}', [BookingController::class, 'getBookingsByUserId']);
+Route::get('/customer/orders/{id}', [OrderProductController::class, 'getOrdersByUserId']);

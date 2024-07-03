@@ -27,6 +27,8 @@ class OrderProductResource extends JsonResource
                     'size' => $product->pivot->size_id ? $product->sizes->firstWhere('id', $product->pivot->size_id)->name ?? null : null,
                 ];
             }),
+            'created_at' => $this->created_at->format('d-m-Y'),
+            'updated_at' => $this->updated_at->format('d-m-Y'),
         ];
     }
 }

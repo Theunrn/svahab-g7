@@ -101,6 +101,7 @@
                                                 Not Found
                                             @endif
                                         </td>
+                                        <td class="px-4 py-2">{{ \Carbon\Carbon::parse($order->order_date)->isoFormat('dddd, D MMMM, YYYY') }}</td>
                                     </tr>
                                 @endforeach
                             @endforeach
