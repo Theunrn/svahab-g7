@@ -20,6 +20,17 @@
             @csrf
             @method('PUT')
 
+            <!-- Image Preview -->
+            <div class="mb-4">
+                <label for="image" class="block text-gray-700 text-sm font-bold mb-2">Current Image:</label>
+                <img src="{{ asset('storage/' . $field->image) }}" alt="{{ $field->name }}" class="h-32 w-32 object-cover rounded">
+            </div>
+
+            <!-- Upload New Image -->
+            <div class="mb-4">
+                <label for="image" class="block text-gray-700 text-sm font-bold mb-2">Update Image:</label>
+                <input type="file" name="image" id="image" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            </div>
             <div class="flex flex-col space-y-2 mb-4">
                 <label for="name" class="text-gray-700 select-none font-medium">Name</label>
                 <input type="text" id="name" name="name" value="{{ old('name', $field->name) }}" class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-200">
@@ -28,6 +39,10 @@
             <div class="flex flex-col space-y-2 mb-4">
                 <label for="location" class="text-gray-700 select-none font-medium">Location</label>
                 <input type="text" id="location" name="location" value="{{ old('location', $field->location) }}" class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-200">
+            </div>
+            <div class="flex flex-col space-y-2 mb-4">
+                <label for="price" class="text-gray-700 select-none font-medium">Location</label>
+                <input type="text" id="price" name="price" value="{{ old('price', $field->price) }}" class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-200">
             </div>
 
             <div class="flex flex-col space-y-2 mb-4">

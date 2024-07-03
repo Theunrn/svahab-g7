@@ -1,27 +1,6 @@
 <template>
   <div class="form-container ">
     <form>
-      <h1>Checkout</h1>
-      <div class="success-message"></div>
-      <div class="form-group">
-        <label for="firstName">Full Name *</label>
-        <div class="name-container">
-          <input type="text" id="firstName" class="half-width" placeholder="First Name" required>
-          <input type="text" id="lastName" class="half-width" placeholder="Last Name" required>
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="email">E-mail *</label>
-        <input type="email" id="email" placeholder="example@example.com" required>
-      </div>
-      <div class="form-group">
-        <label for="phoneNumber">Phone Number *</label>
-        <input type="tel" id="phoneNumber" placeholder="123-456-7890" required>
-      </div>
-      <div class="form-group">
-        <label for="address">Address *</label>
-        <input type="text" id="address" placeholder="Your address" required>
-      </div>
       <div>
         <h1>Payment By Debit or Credit Card *</h1>
         <div class="form-group">

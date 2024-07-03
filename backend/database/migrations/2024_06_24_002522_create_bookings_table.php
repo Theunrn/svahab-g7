@@ -18,6 +18,7 @@ return new class extends Migration
             $table->date('booking_date');
             $table->time('start_time');
             $table->time('end_time');
+            $table->decimal('total_price');
             $table->string('status');
             $table->string('payment_status');
             $table->timestamps();

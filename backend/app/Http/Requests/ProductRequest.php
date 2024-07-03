@@ -4,24 +4,25 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ProductRequest extends DefaultRequest
+class ProductRequest extends FormRequest
 {
-    
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
-    public function rules(): array
+   public function authorize()
+    {
+        return true; // Adjust based on your authentication logic
+    }
+
+    public function rules()
     {
         return [
             'name' => 'required|string|max:255',
             'description' => 'required|string',
             'price' => 'required|numeric|min:0',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // adjust max file size if needed
-            'category_id' => 'required|exists:categories,id', // ensure category exists in database
-            'color' => 'nullable', // optional, if colors are required
-            'size' => 'nullable', // optional, if sizes are required,
+            'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Adjust max file size if needed
+            'category_id' => 'nullable|exists:categories,id',
+            'color_ids' => 'nullable|array',
+            'color_ids.*' => 'exists:colors,id',
+            'size_ids' => 'nullable|array',
+            'size_ids.*' => 'exists:sizes,id',
         ];
     }
 }

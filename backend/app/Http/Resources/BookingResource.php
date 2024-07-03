@@ -7,6 +7,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class BookingResource extends JsonResource
 {
+    
     /**
      * Transform the resource into an array.
      *
@@ -14,13 +15,15 @@ class BookingResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+
+        $startTime = new \DateTime($this->start_time);
+        $endTime = new \DateTime($this->end_time);
         return [
             'id' => $this->id,
             'customer' => $this->customer->name,
-            'field_name' => $this->field->field_name,
-            // 'location' => $this->location,
-            'start_time' => $this->start_time,
-            'end_time' => $this->end_time,
+            'field_name' => $this->field->name,
+            'start_time' => $startTime->format('h:i A'),
+            'end_time' => $endTime->format('h:i A'),
             'status' => $this->status,
             'payment_status' => $this->payment_status,
             'created_at' => $this->created_at->format('d-m-Y'),
@@ -28,4 +31,5 @@ class BookingResource extends JsonResource
             
         ];
     }
+    
 }

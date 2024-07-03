@@ -9,6 +9,7 @@ return new class extends Migration
     /*
      * Run the migrations.
      */
+    
     public function up(): void
     {
         Schema::create('products', function (Blueprint $table) {
@@ -17,8 +18,6 @@ return new class extends Migration
             $table->string('name');
             $table->text('description');
             $table->decimal('price');
-            $table->json('color')->nullable(); // Change to JSON
-            $table->json('size')->nullable();  // Change to JSON
             $table->foreignId('category_id')->nullable()->constrained()->onDelete('set null');
             $table->timestamps();
         });

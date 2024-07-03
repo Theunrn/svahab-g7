@@ -24,14 +24,14 @@
       <div class="form-select absolute p-2 mt-17 bg-green bg-opacity-90 z-20 rounded-lg w-full md:w-5/5 lg:w-9/10 ml-16">
         <div class="flex items-center justify-center space-x-2">
           <div class="relative flex gap-10 w-[334px]">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="absolute top-1/2 left-4 transform -translate-y-1/2">
+            <svg v-if="!selectedProvince" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="absolute top-1/2 left-4 transform -translate-y-1/2">
               <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="#4B5563" />
             </svg>
-            <select v-model="selectedOption" class="flex-1 text-center pl-10 rounded-md text-black border-2 border-transparent focus:border-yellow-500" @change="handleChange" style="padding: 13px;" >
-              <option disabled value="">Choose field for play</option>
-              <option value="option1">Option 1</option>
-              <option value="option2">Option 2</option>
-              <option value="option3">Option 3</option>
+            <select  v-model="selectedProvince" class="flex-1 text-center pl-10 rounded-md text-black border-2 border-transparent focus:border-yellow-500" @change="handleChange" style="padding: 13px;">
+              <option disabled value="" >Find your field for playing</option>
+              <option class="text-start" v-for="province in provinces" :key="province.value" :value="province.value">
+                {{ province.icon }} {{ province.name }}
+              </option>
             </select>
           </div>
 
@@ -68,11 +68,38 @@ import VueFlatpickr from 'vue-flatpickr-component';
 import 'flatpickr/dist/flatpickr.css';
 
 const showDatePicker = ref(false);
+const selectedProvince = ref('')
 const dateRange = ref(null);
 const flatpickrConfig = {
   mode: 'range',
   dateFormat: 'Y-m-d'
 };
+const provinces = ref([
+  { name: 'Phnom Penh', value: 'phnom_penh', icon: '📍' },
+  { name: 'Battambang', value: 'battambang', icon: '📍' },
+  { name: 'Siem Reap', value: 'siem_reap', icon: '📍' },
+  { name: 'Sihanoukville', value: 'sihanoukville', icon: '📍' },
+  { name: 'Kampong Cham', value: 'kampong_cham', icon: '📍' },
+  { name: 'Kampong Chhnang', value: 'kampong_chhnang', icon: '📍' },
+  { name: 'Kampong Speu', value: 'kampong_speu', icon: '📍' },
+  { name: 'Kampong Thom', value: 'kampong_thom', icon: '📍' },
+  { name: 'Kampot', value: 'kampot', icon: '📍' },
+  { name: 'Kandal', value: 'kandal', icon: '📍' },
+  { name: 'Koh Kong', value: 'koh_kong', icon: '📍' },
+  { name: 'Kratié', value: 'kratie', icon: '📍' },
+  { name: 'Mondulkiri', value: 'mondulkiri', icon: '📍' },
+  { name: 'Pailin', value: 'pailin', icon: '📍' },
+  { name: 'Preah Vihear', value: 'preah_vihear', icon: '📍' },
+  { name: 'Prey Veng', value: 'prey_veng', icon: '📍' },
+  { name: 'Pursat', value: 'pursat', icon: '📍' },
+  { name: 'Ratanakiri', value: 'ratanakiri', icon: '📍' },
+  { name: 'Stung Treng', value: 'stung_treng', icon: '📍' },
+  { name: 'Svay Rieng', value: 'svay_rieng', icon: '📍' },
+  { name: 'Takéo', value: 'takeo', icon: '📍' },
+  { name: 'Oddar Meanchey', value: 'oddar_meanchey', icon: '📍' },
+  { name: 'Tboung Khmum', value: 'tboung_khmum', icon: '📍' },
+]);
+
 
 </script>
 
