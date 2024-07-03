@@ -2,20 +2,11 @@
   <div>
     <div class="card-me flex flex-wrap justify-content-start align-items-start ml-10">
       <!-- Loop to generate 6 cards -->
-<<<<<<< HEAD
-      <div
-        class="card-wrapper rounded-md shadow-lg relative w-1/3 sm:w-full mx-2 my-2"
-        v-for="index in 8"
-        :key="index"
-      >
-        <div class="container bg-overlay">
-=======
       <div class="card-wrapper rounded-md shadow-lg relative w-1/3 sm:w-full mx-2 my-2" v-for="field in fields" :key="field">
         <div class="container bg-overlay" 
           :style="{
             background: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(${getImageUrl(field.image)})`,
           }">
->>>>>>> fadfab1f11b9bef4f911922537386fdbcc4e5401
           <div class="row text-center flex flex-col items-center justify-center h-full">
             <div class="btn-group">
               <router-link :to="{ path: '/field/detail/' + field.id, query: { user: user.id } }">
@@ -30,88 +21,28 @@
           <div class="text-start">
             <h3 class="text-1xl font-bold text-gray-900 mb-2">{{ field.name }}</h3>
             <p class="mt-3 flex items-center gap-2">
-<<<<<<< HEAD
-              <span class="dollar bg-blue text-white p-1 rounded-md"> 8.8 $ </span>
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27z"
-                  fill="#FCD34D"
-                />
-=======
               <span class="dollar bg-blue text-white p-1 rounded-md">
                 ${{ field.price }}.00
               </span>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27z" fill="#FCD34D" />
->>>>>>> fadfab1f11b9bef4f911922537386fdbcc4e5401
               </svg>
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27z"
-                  fill="#FCD34D"
-                />
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27z" fill="#FCD34D" />
               </svg>
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27z"
-                  fill="#FCD34D"
-                />
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27z" fill="#FCD34D" />
               </svg>
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27z"
-                  fill="#FCD34D"
-                />
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27z" fill="#FCD34D" />
               </svg>
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27z"
-                  fill="#FCD34D"
-                />
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27z" fill="#FCD34D" />
               </svg>
             </p>
             <p class="mt-2 flex items-center gap-2">
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"
-                  fill="#4B5563"
-                />
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="#4B5563" />
               </svg>
               2.4 km {{ field.location }}
             </p>
@@ -134,11 +65,6 @@ export default {
   name: 'FootballFields',
   props: {
     user: Object
-<<<<<<< HEAD
-  }
-  // Your component's logic here
-}
-=======
   },
   setup() {
     const fields = ref([]);
@@ -165,7 +91,6 @@ export default {
     };
   }
 };
->>>>>>> fadfab1f11b9bef4f911922537386fdbcc4e5401
 </script>
 
 <style scoped>
@@ -181,6 +106,7 @@ export default {
   height: 40%;
   transition: transform 0.3s ease;
   position: relative;
+
 }
 
 .card-wrapper:hover {
@@ -215,9 +141,7 @@ export default {
   display: flex;
   justify-content: center;
   opacity: 0;
-  transition:
-    opacity 0.3s ease,
-    transform 0.3s ease;
+  transition: opacity 0.3s ease, transform 0.3s ease;
   transform: translateY(20px);
 }
 
