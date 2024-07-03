@@ -13,6 +13,7 @@ use App\Http\Controllers\API\HistoryController;
 use App\Http\Controllers\API\PostController;
 use App\Http\Controllers\API\ProductController as APIProductController;
 use App\Http\Controllers\API\SizeController;
+use App\Http\Controllers\API\SlideShowController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\OrderController;
 use Illuminate\Http\Request;
@@ -96,6 +97,8 @@ Route::post('/discount/create',[DiscountProductController::class,'store'])->name
 Route::get('/discount/show/{id}',[DiscountProductController::class,'show'])->name('discount.show');
 Route::put('/discount/update/{id}',[DiscountProductController::class,'update'])->name('discount.update');
 Route::delete('/discount/delete/{id}',[DiscountProductController::class,'destroy'])->name('discount.destroy');
+
+Route::get('/slideshow/list', [SlideShowController::class,'index'])->name('slideshow.list');
 
 //History
 
