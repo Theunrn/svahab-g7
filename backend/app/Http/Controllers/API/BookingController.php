@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\BookingRequest;
 use App\Http\Resources\BookingResource;
 use App\Models\Booking;
+use App\Models\Notification;
 use Illuminate\Http\Request;
 
 class BookingController extends Controller
@@ -63,14 +64,24 @@ class BookingController extends Controller
         $booking = Booking::find($id);
         if (!$booking) {
             // Handle the case where the booking is not found
-            return response()->json(['error', 'Booking not found'], 404);
+            return response()->json(['error' => 'Booking not found'], 404);
         }
 
         $booking->status = 'confirmed';
         $booking->save(); // Save the updated status to the database
 
-        return  response()->json(['success', 'Booking confirmed successfully'], 200);
+        // Create a new notification
+        $notification = new Notification();
+        $notification->user_id = $booking->user_id; // Assuming Booking has a user_id field
+        $notification->notification_type = 'booking_confirmed';
+        $notification->notification_text = 'Your booking has been confirmed.';
+        $notification->notification_data = json_encode(['booking_id' => $booking->id]);
+        $notification->read = false;
+        $notification->save();
+
+        return response()->json(['success' => 'Booking confirmed successfully'], 200);
     }
+
 
     /**
      * Remove the specified resource from storage.

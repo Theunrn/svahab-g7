@@ -39,7 +39,7 @@
                                             </div>
                                         @endforeach
                                     </td>
-                                    <td class="px-6 py-4">{{ number_format($discount->discount, 2) }} %</td>
+                                    <td class="px-6 py-4">{{ number_format($discount->discount, 2) }}</td>
                                     <td class="px-6 py-4">
                                         @foreach ($discount->products as $product)
                                             <div>
