@@ -7,10 +7,11 @@ use App\Http\Controllers\Admin\MailSettingController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\DiscountController;
 use App\Http\Controllers\Admin\ProfileController;
-use App\Http\Controllers\API\BookingController;
+use App\Http\Controllers\Admin\BookingController;
 use App\Http\Controllers\Admin\SettingController;
-use App\Http\Controllers\Admin\SlideShowController as AdminSlideShowController;
-use App\Http\Controllers\Admin\SlideShowController;
+use App\Http\Controllers\Admin\SlideshowAdminController; // Add this line
+use Faker\Core\File;
+use GuzzleHttp\Psr7\Response;
 
 /*
 |--------------------------------------------------------------------------
@@ -71,7 +72,7 @@ Route::namespace('App\Http\Controllers\Admin')->name('admin.')->prefix('admin')
         Route::resource('fields', 'FieldController');
         Route::resource('bookings', 'BookingController');
         Route::resource('settings', 'SettingController');
-        Route::resource('slideshow', 'SlideshowController');
+        Route::resource('slideshow', 'SlideShowController'); // Update this line
         Route::resource('products', 'ProductController');
         Route::resource('categories', 'CategoryController');
         Route::resource('payments', 'PaymentController');
@@ -79,23 +80,13 @@ Route::namespace('App\Http\Controllers\Admin')->name('admin.')->prefix('admin')
         Route::resource('orders', 'OrderController');
         Route::resource('discounts', 'DiscountController');
 
-
-
-        // routes/web.php
-
-
-
-
-
-
         Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
         Route::put('/profile-update', [ProfileController::class, 'update'])->name('profile.update');
         Route::get('/mail', [MailSettingController::class, 'index'])->name('mail.index');
         Route::put('/mail-update/{mailsetting}', [MailSettingController::class, 'update'])->name('mail.update');
     });
+
 Route::get('/admin/bookings/{id}/cancel', [BookingController::class, 'cancel'])->name('admin.bookings.cancel');
 Route::get('/admin/bookings/{id}/rebook', [BookingController::class, 'reBook'])->name('admin.bookings.rebook');
 Route::get('/admin/bookings/{id}/accept', [BookingController::class, 'accept'])->name('admin.bookings.accept');
 Route::get('/admin/bookings/{id}/reject', [BookingController::class, 'reject'])->name('admin.bookings.reject');
-
-// Route::get('/slideshow/list', [SlideShowController::class, 'index'])->name('slides.index');
