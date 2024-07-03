@@ -16,7 +16,7 @@ class SlideShowController extends Controller
         $slides = SlideShow::all();
         return response()->json($slides);
     }
-  
+
 
     /**
      * Store a newly created resource in storage.
