@@ -30,26 +30,26 @@
                         <tbody>
                             @foreach ($discounts as $discount)
                                 <tr>
-                                    <td class="px-6 py-4 ">{{ $discount->id }}</td>
-                                    <td class="px-6 py-4 ">{{ $discount->title }}</td>
-                                    <td class="px-6 py-4 ">
+                                    <td class="px-6 py-4">{{ $discount->id }}</td>
+                                    <td class="px-6 py-4">{{ $discount->title }}</td>
+                                    <td class="px-6 py-4">
                                         @foreach ($discount->products as $product)
-                                            <div class="mb-2">
+                                            <div>
                                                 {{ $product->name }}
                                             </div>
                                         @endforeach
                                     </td>
-                                    <td class="px-6 py-4 ">{{ number_format($discount->discount, 2) }}</td>
-                                    <td class="px-6 py-4 ">
+                                    <td class="px-6 py-4">{{ number_format($discount->discount, 2) }} %</td>
+                                    <td class="px-6 py-4">
                                         @foreach ($discount->products as $product)
-                                            <div class="mb-2">
-                                                ${{ number_format($product->price, 2) }}
+                                            <div>
+                                                {{ number_format($product->price, 2) }}
                                             </div>
                                         @endforeach
                                     </td>
                                     <td class="px-6 py-4">
                                         @foreach ($discount->products as $product)
-                                            <div class="mb-2 flex">
+                                            <div>
                                                 @if ($product->discountedPrice !== null)
                                                     ${{ number_format($product->discountedPrice, 2) }}
                                                 @else
@@ -60,7 +60,7 @@
                                     </td>
                                     <td class="px-4 py-4 whitespace-nowrap">
                                         <a href="{{ route('admin.discounts.edit', $discount->id) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded inline-block">
-                                        <i class='bx bx-edit text-xl'></i>
+                                            <i class='bx bx-edit text-2xl'></i>
                                         </a>
                                         <form action="{{ route('admin.discounts.destroy', $discount->id) }}" method="POST" class="inline-block">
                                           @csrf

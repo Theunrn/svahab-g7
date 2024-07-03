@@ -59,6 +59,12 @@ Route::get('/storage/{filename}', function ($filename) {
     return $response;
 })->where('filename', '.*');
 
+// routes/web.php
+
+Route::get('/dropdown', function () {
+    return view('dropdown');
+});
+
 
 Route::namespace('App\Http\Controllers\Admin')->name('admin.')->prefix('admin')
     ->group(function () {
