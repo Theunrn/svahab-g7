@@ -94,7 +94,7 @@ const router = createRouter({
     },
     ,
     {
-      path: '/history',
+      path: '/history/:id',
       name: 'history',
       component: () => import('../views/Web/HistoryView.vue')
     },

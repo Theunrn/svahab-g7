@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\OrderProductResource;
 use App\Models\Order;
 use App\Models\product;
 use Illuminate\Http\Request;
@@ -21,7 +22,7 @@ class OrderProductController extends Controller
         // Retrieve orders for the authenticated user
         $orders = Order::where('user_id', $user->id)->with('products')->get();
 
-        return response()->json(['success'=>true,'data' => $orders], 200);
+        return response()->json(['success' => true, 'data' => $orders], 200);
     }
 
 
@@ -47,7 +48,7 @@ class OrderProductController extends Controller
         // Find the order with products for the authenticated user
         $order = Order::where('user_id', $user->id)->with('products')->findOrFail($id);
 
-        return response()->json(['success'=>true, 'data' => $order], 200);
+        return response()->json(['success' => true, 'data' => $order], 200);
     }
 
 
@@ -72,5 +73,14 @@ class OrderProductController extends Controller
             return response()->json(['message' => 'Order is not cancelled, cannot reactivate'], 400);
         }
     }
-    
+    // app/Http/Controllers/OrderController.php
+    public function getOrdersByUserId($id)
+    {
+        $orders = Order::where('user_id', $id)->get();
+        $orders = OrderProductResource::collection($orders);
+        if ($orders->isEmpty()) {
+            return response()->json(['error' => 'No orders found for this user'], 404);
+        }
+        return response()->json($orders, 200);
+    }
 }
