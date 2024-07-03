@@ -1,9 +1,9 @@
 <template>
   <div class="container" style="margin-top: 120px;">
     <div class="d-flex justify-content-between align-items-center mb-4">
-      <router-link to="/shop" class="btn btn-outline-primary">Back</router-link>
+      <router-link to="/shop" class="btn btn-outline-primary ml-5">Back</router-link>
       <h2 class="text-center font-bold fs-2 mb-0 text-info">{{ category.name }}</h2>
-      <div class="d-flex align-items-center">
+      <div class="d-flex align-items-center mr-5">
         <span class="me-2 fw-bold">SORT BY:</span>
         <select class="form-select form-select-sm w-auto" v-model="sortBy" @change="fetchProductsByCategory">
           <option value="price">Lowest Price</option>
@@ -13,34 +13,43 @@
       </div>
     </div>
 
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 mb-4">
-      <div class="col" v-for="product in products" :key="product.id">
+    <div class="container-card card-me">
+      <div class="card-wrapper" v-for="product in all_products" :key="product.id">
         <div class="card h-100 shadow-sm position-relative">
-          <div class="cart-icon">
-            <div class="shop-icon">
-              <i class="fa fa-shopping-cart"></i>
+          <div class="image-container">
+            <div class="flex justify-between absolute w-full mt-1">
+              <div class="discount-banner mt-1">
+                <span  v-if="product.discounted_price !== null" class="discount-text bg-orange-500 px-4 py-2 rounded-md text-white text-2xl">
+                  {{ product.discount }}% OFF
+                </span>
+              </div>
+              <div class="cart-icon">
+                <div class="shop-icon">
+                  <i class="fa fa-shopping-cart"></i>
+                </div>
+                <div class="favorite-icon">
+                  <i :class="['fa', product.isFavorite ? 'fa-heart' : 'fa-heart-o']"></i>
+                </div>
+              </div>
             </div>
-            <div class="favorite-icon">
-              <i :class="['fa', product.isFavorite ? 'fa-heart' : 'fa-heart-o']"></i>
+            <div class="image-container">
+              <router-link :to="'/product/detail/' + product.id">
+                <img :src="getImageUrl(product.image)" class="card-img-top" alt="Product Image">
+              </router-link>
             </div>
           </div>
-          <router-link :to="'/product/detail/' + product.id" class="image-container mt-2 flex items-center justify-center mb-4 text-3xl text-blue-500">
-            <img :src="getImageUrl(product.image)" class="card-img-top" alt="Product Image">
-          </router-link>
-          <div class="card-body d-flex flex-column justify-content-between">
-            <div>
-              <h5 class="card-title">{{ product.name }}</h5>
-              <p class="card-text text-danger fw-bold">${{ product.price }}</p>
-              <p class="card-text">{{ product.description }}</p>
-              <!-- Optionally display other product details like colors, sizes, etc. -->
-            </div>
-            <div class="group">
-              <router-link
-                :to="'/product/detail/' + product.id"
-                class="button me-2 items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-              >
-                Buy Now
-              </router-link>
+          <div class="text-start p-4">
+            <h5 class="card-title">{{ product.name }}</h5>
+            <p class="card-text text-danger fw-bold" v-if="product.discounted_price !== null">
+              <span class="text-danger fw-bold" style="text-decoration: line-through;">${{ product.price }}</span>
+              <span class="text-success ms-2">${{ product.discounted_price }}</span>
+            </p>
+            <p class="card-text text-danger fw-bold" v-else>
+              ${{ product.price }}
+            </p>
+            <p class="card-text">{{ product.description }}</p>
+            <div class="group mt-2">
+              <router-link :to="'/product/detail/' + product.id" class="button"> Buy Now</router-link>
             </div>
           </div>
         </div>
@@ -56,7 +65,7 @@ import { useRoute } from 'vue-router';
 
 const route = useRoute();
 const categoryId = ref(route.params.id); // Note: 'id' should match the param name in your route definition
-const products = ref([]);
+const all_products = ref([]);
 const category = ref({});
 const sortBy = ref('price');
 
@@ -64,7 +73,12 @@ const fetchCategory = async () => {
   try {
     const response = await axios.get(`http://127.0.0.1:8000/api/category/show/${categoryId.value}`);
     category.value = response.data.category;
-    products.value = response.data.products;
+    all_products.value = response.data.all_products.map(product => ({
+      ...product,
+      discounted_price: calculateDiscountedPrice(product),
+      discount: product.discounts && product.discounts.length > 0 ? product.discounts[0].discount : null
+    }));
+    console.log(all_products.value);
   } catch (error) {
     console.error('Error fetching category:', error);
   }
@@ -73,7 +87,12 @@ const fetchCategory = async () => {
 const fetchProductsByCategory = async () => {
   try {
     const response = await axios.get(`http://127.0.0.1:8000/api/category/show/${categoryId.value}?sortBy=${sortBy.value}`);
-    products.value = response.data.products;
+    all_products.value = response.data.all_products.map(product => ({
+      ...product,
+      discounted_price: calculateDiscountedPrice(product),
+      discount: product.discounts && product.discounts.length > 0 ? product.discounts[0].discount : null
+    }));
+    console.log(all_products.value);
   } catch (error) {
     console.error('Error fetching products by category:', error);
   }
@@ -85,11 +104,73 @@ onMounted(() => {
 });
 
 const getImageUrl = (imagePath) => {
-  return imagePath ? `http://127.0.0.1:8000/storage/${imagePath}` : '/default-image.jpg'
+  return imagePath ? `http://127.0.0.1:8000/storage/${imagePath}` : '/default-image.jpg';
+};
+
+const calculateDiscountedPrice = (product) => {
+  if (product.discounts && product.discounts.length > 0) {
+    const discount = product.discounts[0];
+    const discountedPrice = product.price - (product.price * (discount.discount / 100));
+    return parseFloat(discountedPrice.toFixed(2)).toString();
+  }
+  return null;
 };
 </script>
 
 <style scoped>
+
+.container-card {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin-left: 10px;
+}
+
+.card-wrapper {
+  width: 23%;
+  margin: 10px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 15px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.card-wrapper:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.image-container {
+  height: 240px;
+  display: flex;
+  overflow: hidden;
+  background-color: #f0f0f0;
+}
+
+.image-container {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+}
+
+.button {
+  display: inline-block;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  color: white;
+  background-color: #007bff;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.button:hover {
+  background-color: #0056b3;
+}
+
 .card {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   border-radius: 15px;
@@ -142,7 +223,7 @@ button {
   display: flex;
   justify-content: end;
   font-size: 25px;
-  color: #000;
+  color: orange;
   border-radius: 50%;
   margin-right: 10px;
 }
