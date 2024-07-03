@@ -17,6 +17,7 @@ class CategoryController extends Controller
     {
         $categories = Category::all();
         return response()->json($categories);
+        
     }
     
 
@@ -40,18 +41,32 @@ class CategoryController extends Controller
      * Display the specified category.
      */
     public function show($categoryId)
-    {
-        $category = Category::find($categoryId);
-        if (!$category) {
-            return response()->json(['error' => 'Category not found'], 404);
-        }
+{
+    // Find the category by ID
+    $category = Category::find($categoryId);
 
-        $products = Product::where('category_id', $categoryId)->get();
-        return response()->json([
-            'category' => $category,
-            'products' => $products
-        ]);
+    // Check if the category exists
+    if (!$category) {
+        return response()->json(['error' => 'Category not found'], 404);
     }
+
+    // Retrieve products within the specified category, along with related data
+    $products = Product::with(['category', 'colors', 'sizes', 'discounts'])
+        ->where('category_id', $categoryId)
+        ->get();
+
+    // Filter products that have discounts
+    $productsWithDiscounts = $products->filter(function ($product) {
+        return $product->discounts->isNotEmpty();
+    });
+
+    return response()->json([
+        'category' => $category,
+        'all_products' => $products,
+        'products_with_discounts' => $productsWithDiscounts,
+    ]);
+}
+
 
     /**
      * Update the specified category in storage.

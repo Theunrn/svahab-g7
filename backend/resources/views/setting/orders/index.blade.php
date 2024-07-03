@@ -31,7 +31,8 @@
                         <thead>
                             <tr class="bg-gray-200">
                                 <th class="px-4 py-2 text-left">ID</th>
-                                <th class="px-4 py-2 text-left">Product Name</th>
+                                <th class="px-4 py-2 text-left">Customer Name</th>
+                                <th class="px-4 py-2 text-left">Product</th>
                                 <th class="px-4 py-2 text-left">Quantity</th>
                                 <th class="px-4 py-2 text-left">Price</th>
                                 <th class="px-4 py-2 text-left">Total</th>
@@ -47,6 +48,7 @@
                                 @foreach($order->products as $product)
                                     <tr class="border-b">
                                         <td class="px-4 py-4">{{ $order->id }}</td>
+                                        <td class="px-4 py-4">{{ $order->user->name }}</td>
                                         <td class="px-4 py-2">{{ $product->name }}</td>
                                         <td class="px-4 py-2">{{ $product->pivot->qty }}</td>
                                         <td class="px-4 py-2">${{ number_format($product->price, 2) }}</td>
@@ -86,11 +88,19 @@
                                             @endif
                                         </td>
                                         <td class="px-4 py-2">
-                                            {{ $product->pivot->color_id ? $product->colors->firstWhere('id', $product->pivot->color_id)->name : 'Color Empty' }}
+                                            @if ($product->pivot->color_id && $product->colors->isNotEmpty())
+                                                {{ $product->colors->firstWhere('id', $product->pivot->color_id)->name ?? 'Not Found' }}
+                                            @else
+                                                Not Found
+                                            @endif
                                         </td>
                                         <td class="px-4 py-2">
-                                            {{ $product->pivot->size_id ? $product->sizes->firstWhere('id', $product->pivot->size_id)->name : 'Size Empty' }}
-                                        </td>                                                                     
+                                            @if ($product->pivot->size_id && $product->sizes->isNotEmpty())
+                                                {{ $product->sizes->firstWhere('id', $product->pivot->size_id)->name ?? 'Not Found' }}
+                                            @else
+                                                Not Found
+                                            @endif
+                                        </td>
                                         <td class="px-4 py-2">{{ \Carbon\Carbon::parse($order->order_date)->isoFormat('dddd, D MMMM, YYYY') }}</td>
                                     </tr>
                                 @endforeach

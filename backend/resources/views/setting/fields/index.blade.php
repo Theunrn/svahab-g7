@@ -20,11 +20,14 @@
       <table class="min-w-full w-full bg-white shadow-md border border-gray-200">
         <thead class="bg-gray-800 text-white">
           <tr>
+            <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">ID</th>
             <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Name</th>
             <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Location</th>
+            <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Image</th>
+            <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Price</th>
             <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">field_type
             </th>
-            <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">owner_id</th>
+            <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">owner</th>
             <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Availability</th>
             <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Actions</th>
           </tr>
@@ -32,19 +35,31 @@
         <tbody class="divide-y divide-gray-200">
           @foreach($fields as $field)
           <tr>
+            <td class="px-4 py-4 whitespace-nowrap">{{ $field->id }}</td>
             <td class="px-4 py-4 whitespace-nowrap">{{ $field->name }}</td>
             <td class="px-4 py-4 whitespace-nowrap">{{ $field->location }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <img src="{{ asset('storage/' . $field->image) }}" alt="{{ $field->name }}" class="h-16 w-16 object-cover rounded">
+            </td>
+            <td class="px-4 py-4 whitespace-nowrap">${{ $field->price }}.00</td>
             <td class="px-4 py-4 whitespace-nowrap">{{ $field->field_type }}</td>
-            <td class="px-4 py-4 whitespace-nowrap">{{ $field->owner_id }}</td>
-            <td class="px-4 py-4 whitespace-nowrap">{{ $field->availablity ? 'Yes' : 'No' }}</td>
+
+            <td class="px-4 py-4 whitespace-nowrap">{{ $field->owner->name}}</td>
+            <td class="py-2 px-3 border-b border-gray-300">
+              <span class="inline-block px-3 py-1 text-white text-xs font-semibold mr-2 rounded-full
+                      {{ $field->availablity === 1 ? 'bg-green-500 text-gray-700' : '' }}
+                      {{ $field->availablity === 0 ? 'bg-red-500 text-white-300' : '' }}">
+                      {{ $field->availablity ? 'Yes' : 'No' }}
+              </span>
+          </td>
             <td class="px-4 py-4 whitespace-nowrap">
               <a href="{{ route('admin.fields.edit', $field->id) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded inline-block">
-              <i class='bx bx-edit text-2xl'></i>
+              <i class='bx bx-edit text-sm'></i>
               </a>
               <form action="{{ route('admin.fields.destroy', $field->id) }}" method="POST" class="inline-block">
                 @csrf
                 @method('DELETE')
-                <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded inline-block">  <i class='bx bx-trash text-2xl'></i></button>
+                <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded inline-block">  <i class='bx bx-trash text-sm'></i></button>
               </form>
             </td>
           </tr>

@@ -8,9 +8,13 @@ use App\Http\Controllers\Api\FeedbackController;
 use App\Http\Controllers\Api\FildController;
 use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\ColorController;
+use App\Http\Controllers\API\DiscountProductController;
+use App\Http\Controllers\API\HistoryController;
+use App\Http\Controllers\API\NotificationController;
 use App\Http\Controllers\API\PostController;
 use App\Http\Controllers\API\ProductController as APIProductController;
 use App\Http\Controllers\API\SizeController;
+use App\Http\Controllers\API\SlideShowController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\OrderController;
 use Illuminate\Http\Request;
@@ -41,7 +45,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanc
 Route::get('/me', [AuthController::class, 'index'])->middleware('auth:sanctum');
 Route::get('/post/list', [PostController::class, 'index'])->middleware('auth:sanctum');
 
-Route::get('field/list', [FildController::class,'index'])->name('field.list');
+Route::get('fields/list', [FildController::class,'index'])->name('field.list');
 Route::post('field/create', [FildController::class,'store'])->name('field.create');
 Route::get('field/show/{id}', [FildController::class,'show'])->name('field.show');
 Route::put('field/update/{id}', [FildController::class,'update'])->name('field.update');
@@ -87,3 +91,23 @@ Route::delete('/product/delete/{id}', [APIProductController::class, 'destroy'])-
 
 Route::get('/sizes', [SizeController::class, 'index']);
 Route::get('/colors', [ColorController::class, 'index']);
+
+
+Route::get('/discount/list',[DiscountProductController::class,'index'])->name('discount.list');
+Route::post('/discount/create',[DiscountProductController::class,'store'])->name('discount.create');
+Route::get('/discount/show/{id}',[DiscountProductController::class,'show'])->name('discount.show');
+Route::put('/discount/update/{id}',[DiscountProductController::class,'update'])->name('discount.update');
+Route::delete('/discount/delete/{id}',[DiscountProductController::class,'destroy'])->name('discount.destroy');
+
+Route::get('/slideshow/list', [SlideShowController::class,'index'])->name('slideshow.list');
+
+//History
+
+Route::get('/histories/list',[HistoryController::class,'index'])->name('history.list');
+Route::post('/histories/create',[HistoryController::class,'store'])->name('history.store');
+Route::get('/customer/bookings/{id}', [BookingController::class, 'getBookingsByUserId']);
+Route::get('/customer/orders/{id}', [OrderProductController::class, 'getOrdersByUserId']);
+
+//Notifications
+Route::get('/notifications/list/{id}', [NotificationController::class, 'getNotificationsByUserId']);
+Route::delete('/notification/delete/{id}', [NotificationController::class, 'deleteNotifications']);

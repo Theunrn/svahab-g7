@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import axiosInstance from '@/plugins/axios'
 import { useAuthStore } from '@/stores/auth-store'
 import { createAcl, defineAclRules } from 'vue-simple-acl'
-
+import NotificationCom from '../views/Web/NotificationView.vue';
 const simpleAcl = createAcl({})
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -66,7 +66,7 @@ const router = createRouter({
       name: 'Products',
       component: () => import('../views/Web/Products/ProductView.vue')
     },
-    
+
     {
       path: '/product/detail/:id',
       name: 'Card',
@@ -92,18 +92,35 @@ const router = createRouter({
       name: 'addtocart',
       component: () => import('../views/Web/AddToCardView.vue')
     },
+    ,
     {
-      path: '/history',
+      path: '/history/:id',
       name: 'history',
       component: () => import('../views/Web/HistoryView.vue')
     },
-
+    ,
+    {
+      path: '/notification/:id',
+      name: 'notification',
+      component: () => import('../views/Web/NotificationView.vue')
+    },
+    {
+      path: '/bookings/:id',
+      name: 'Bookings',
+      component: NotificationCom,
+      props: { tab: 'bookings' }
+    },
+    {
+      path: '/orders/:id',
+      name: 'Orders',
+      component: NotificationCom,
+      props: { tab: 'orders' }
+    }
   ]
 })
 
 router.beforeEach(async (to, from, next) => {
-  const publicPages = ['/', '/about','/shop', '/contact', '/login', '/register', '/addtocart','/payment','/product/detail','product','field/detail/:id' ]
-  // const publicPages = ['/login' ]
+  const publicPages = ['/login']
   const authRequired = !publicPages.includes(to.path)
   const store = useAuthStore()
 

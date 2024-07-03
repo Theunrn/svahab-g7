@@ -2,15 +2,23 @@
   <div>
     <div class="card-me flex flex-wrap justify-content-start align-items-start ml-10">
       <!-- Loop to generate 6 cards -->
+<<<<<<< HEAD
       <div
         class="card-wrapper rounded-md shadow-lg relative w-1/3 sm:w-full mx-2 my-2"
         v-for="index in 8"
         :key="index"
       >
         <div class="container bg-overlay">
+=======
+      <div class="card-wrapper rounded-md shadow-lg relative w-1/3 sm:w-full mx-2 my-2" v-for="field in fields" :key="field">
+        <div class="container bg-overlay" 
+          :style="{
+            background: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(${getImageUrl(field.image)})`,
+          }">
+>>>>>>> fadfab1f11b9bef4f911922537386fdbcc4e5401
           <div class="row text-center flex flex-col items-center justify-center h-full">
             <div class="btn-group">
-              <router-link :to="{ path: '/field/detail/' + index, query: { user: user.id } }">
+              <router-link :to="{ path: '/field/detail/' + field.id, query: { user: user.id } }">
                 <button type="button" class="btn btn-warning btn-details py-1 me-2 text-secondary">
                   <font-awesome-icon :icon="['fas', 'info-circle']" class="me-1" /> Book Now
                 </button>
@@ -20,8 +28,9 @@
         </div>
         <div class="text-start p-4">
           <div class="text-start">
-            <h3 class="text-1xl font-bold text-gray-900 mb-2">LXY Stadium</h3>
+            <h3 class="text-1xl font-bold text-gray-900 mb-2">{{ field.name }}</h3>
             <p class="mt-3 flex items-center gap-2">
+<<<<<<< HEAD
               <span class="dollar bg-blue text-white p-1 rounded-md"> 8.8 $ </span>
               <svg
                 width="16"
@@ -34,6 +43,13 @@
                   d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27z"
                   fill="#FCD34D"
                 />
+=======
+              <span class="dollar bg-blue text-white p-1 rounded-md">
+                ${{ field.price }}.00
+              </span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27z" fill="#FCD34D" />
+>>>>>>> fadfab1f11b9bef4f911922537386fdbcc4e5401
               </svg>
               <svg
                 width="16"
@@ -97,12 +113,12 @@
                   fill="#4B5563"
                 />
               </svg>
-              2.4 km from centre
+              2.4 km {{ field.location }}
             </p>
           </div>
           <div class="text-right">
             <p class="mt-2">Starting from</p>
-            <h3 class="text-1xl font-bold text-gray-900 mb-1">KHR 155,999</h3>
+            <h3 class="text-1xl font-bold text-gray-900 mb-1">KHR {{ field.price * 4050 }}</h3>
           </div>
         </div>
       </div>
@@ -111,13 +127,45 @@
 </template>
 
 <script>
+import { ref, onMounted } from 'vue';
+import axiosInstance from '@/plugins/axios';
+
 export default {
   name: 'FootballFields',
   props: {
     user: Object
+<<<<<<< HEAD
   }
   // Your component's logic here
 }
+=======
+  },
+  setup() {
+    const fields = ref([]);
+
+    const fetchFields = async () => {
+      try {
+        const response = await axiosInstance.get('/fields/list');
+        fields.value = response.data.data;
+        console.log(fields.value);
+      } catch (error) {
+        console.error('Error fetching fields:', error);
+      }
+    };
+
+    onMounted(() => {
+      fetchFields();
+    });
+    const getImageUrl = (imagePath) => {
+      return imagePath ? `http://127.0.0.1:8000/storage/${imagePath}` : '/default-image.jpg';
+    };
+    return {
+      fields,
+      getImageUrl
+    };
+  }
+};
+>>>>>>> fadfab1f11b9bef4f911922537386fdbcc4e5401
 </script>
 
 <style scoped>

@@ -8,7 +8,7 @@
                 <select id="status_filter" name="status_filter"
                     class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                     <option value="">All Bookings</option>
-                    @foreach (['comfirmed', 'cancelled', 'pending'] as $status)
+                    @foreach (['confirmed', 'cancelled', 'pending'] as $status)
                     <option value="{{ $status }}" {{ request('status')==$status ? 'selected' : '' }}>
                         {{ ucfirst($status) }}
                     </option>
@@ -61,7 +61,7 @@
                         <td class="py-2 px-1 border-b border-gray-300">${{ $booking->total_price }}</td>
                         <td class="py-2 px-1 border-b border-gray-300">
                             <span class="inline-block px-2 py-1 text-white text-xs font-semibold rounded-full
-                                    {{ $booking->status === 'comfirmed' ? 'bg-green-500 text-gray-700' : '' }}
+                                    {{ $booking->status === 'confirmed' ? 'bg-green-500 text-gray-700' : '' }}
                                     {{ $booking->status === 'rejected' ? 'bg-red-500 text-gray-700' : '' }}
                                     {{ $booking->status === 'cancelled' ? 'bg-red-500 text-gray-700' : '' }}
                                     {{ $booking->status === 'pending' ? 'bg-blue-500 text-white-300' : '' }}">
@@ -78,7 +78,7 @@
                         <td class="py-3 px-3 border-b border-gray-300">
                             <a href="{{ route('admin.bookings.show', $booking->id) }}"
                                 class="bg-blue-500 text-xs hover:bg-blue-400 text-white font-bold py-1 px-3 border-blue-700 hover:border-blue-500 rounded">View</a>
-                            @if ($booking->status == 'comfirmed' || $booking->status == 'rejected')
+                            @if ($booking->status == 'confirmed' || $booking->status == 'rejected')
                             <a href="{{ route('admin.bookings.cancel', $booking->id) }}"
                                 class="bg-red-500 hover:bg-red-400 mx-1 text-xs text-white font-bold py-1 px-3 border-red-700 hover:border-red-500 rounded">Cancel</a>
                             @else
@@ -99,15 +99,16 @@
                 <tbody id="cancelled-booking-list">
                     @foreach ($bookings->where('status', 'cancelled') as $booking)
                     <tr class="text-left booking-row" data-status="{{ $booking->status }}">
-                        <td class="py-2 px-3 border-b border-gray-300">{{ $booking->id }}</td>
-                        <td class="py-2 px-3 border-b border-gray-300">{{ $booking->customer->name }}</td>
-                        <td class="py-2 px-3 border-b border-gray-300">{{ $booking->field->field_name }}</td>
-                        <td class="py-2 px-3 border-b border-gray-300">{{ $booking->start_time }}</td>
-                        <td class="py-2 px-3 border-b border-gray-300">{{ $booking->end_time }}</td>
-                        <td class="py-2 px-3 border-b border-gray-300">{{ $booking->booking_date }}</td>
-                        <td class="py-2 px-3 border-b border-gray-300">
-                            <span class="inline-block px-3 py-1 text-white text-xs font-semibold mr-2 rounded-full
-                                    {{ $booking->status === 'comfirmed' ? 'bg-green-500 text-gray-700' : '' }}
+                        <td class="py-2 px-1 border-b border-gray-300">{{ $booking->id }}</td>
+                        <td class="py-2 px-1 border-b border-gray-300">{{ $booking->customer->name }}</td>
+                        <td class="py-2 px-1 border-b border-gray-300">{{ $booking->field->name }}</td>
+                        <td class="py-2 px-1 border-b border-gray-300">{{ $booking->start_time }}</td>
+                        <td class="py-2 px-1 border-b border-gray-300">{{ $booking->end_time }}</td>
+                        <td class="py-2 px-1 border-b border-gray-300">{{ $booking->booking_date }}</td>
+                        <td class="py-2 px-1 border-b border-gray-300">{{ $booking->total_price }}</td>
+                        <td class="py-2 px-1 border-b border-gray-300">
+                            <span class="inline-block px-2 py-1 text-white text-xs font-semibold rounded-full
+                                    {{ $booking->status === 'confirmed' ? 'bg-green-500 text-gray-700' : '' }}
                                     {{ $booking->status === 'rejected' ? 'bg-red-500 text-gray-700' : '' }}
                                     {{ $booking->status === 'cancelled' ? 'bg-red-500 text-gray-700' : '' }}
                                     {{ $booking->status === 'pending' ? 'bg-blue-500 text-white-300' : '' }}">
@@ -125,7 +126,7 @@
                             <a href="{{ route('admin.bookings.cancel', $booking->id) }}"
                                 class="bg-blue-500 text-xs hover:bg-blue-400 text-white font-bold py-1 px-3 border-blue-700 hover:border-blue-500 rounded">View</a>
                             <a href="{{ route('admin.bookings.rebook', $booking->id) }}"
-                                class="bg-yellow-500 text-xs hover:bg-yellow-400 text-white font-bold py-1 px-3 rounded ml-1">Rebook</a>
+                                class="bg-yellow-500 text-xs hover:bg-yellow-400 text-white font-bold py-1 px-3 rounded ml-1">Restore</a>
                         </td>
                     </tr>
                     @endforeach

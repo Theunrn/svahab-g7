@@ -47,8 +47,8 @@ class OrderController extends Controller
             $ordersQuery->whereDate('created_at', $date);
         }
 
-        // Retrieve orders with products, including colors and sizes
-        $orders = $ordersQuery->with(['products' => function ($query) {
+        // Include user relationship to retrieve user's name
+        $orders = $ordersQuery->with(['user', 'products' => function ($query) {
             $query->withPivot('qty', 'color_id', 'size_id');
         }, 'products.colors', 'products.sizes'])->get();
 
@@ -60,5 +60,8 @@ class OrderController extends Controller
 
         return view('setting.orders.index', compact('orders'));
     }
+
+    
 }
+
 

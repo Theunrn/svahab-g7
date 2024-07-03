@@ -8,7 +8,7 @@
     <div class="row" style="margin-left: -50px">
       <!-- Image Section -->
       <div class="col-md-6">
-        <div class="product-images">
+        <div class="product-images mt-5">
           <img :src="getImageUrl(product.image)" class="img-fluid" :alt="product.name" />
         </div>
       </div>
@@ -17,10 +17,18 @@
         <h2 class="mb-2 mt-4 fs-3 font-bold">{{ product.name }}</h2>
         <h3 class="mb-2">{{ product.description }}</h3>
         <p class="mb-1"><strong>Call: </strong> 098753527</p>
-        <p class="price text-success font-weight-bold mb-2">
-          <strong>Price: </strong> ${{ product.price }}
+        <div class="flex gap-3">
+          <p class="price text-danger font-weight-bold mb-2" :class="{ 'text-decoration-line-through': product.discounts && product.discounts.length > 0 }">
+            <strong>Price: </strong> ${{ product.price }}
+          </p>
+          <p class="price text-success font-weight-bold mb-2" v-if="product.discounts && product.discounts.length > 0">
+            ${{ calculateDiscountedPrice(product.price, product.discounts[0].discount) }}
+          </p>
+        </div>
+
+        <p class="bg-white text-gray-700 border-2 border-green-300 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-40" >
+          <span>Total: </span> ${{ total }}
         </p>
-        <p class="mb-2">Tax included</p>
         <div class="rating mb-2">
           <span class="star text-warning">&#9733;</span>
           <span class="star text-warning">&#9733;</span>
@@ -35,11 +43,12 @@
             <div
               v-for="color in product.colors"
               :key="color.id"
-              :style="{ backgroundColor: color.name.toLowerCase() }"
+              :style="{ backgroundColor: color.hex_code }"
               :class="[
                 'color-circle',
                 'mr-2',
                 'cursor-pointer',
+                `bg-${color.name.toLowerCase()}`,
                 { selected: selectedColor === color.id }
               ]"
               @click="toggleColorSelection(color.id)"
@@ -105,6 +114,9 @@ const fetchProductDetails = async () => {
   try {
     const response = await axiosInstance.get(`/product/show/${productId.value.id}`);
     product.value = response.data.data;
+    product.discounts = product.value.discounts || []; // Initialize discounts
+    console.log(product.value);
+    
   } catch (error) {
     console.error('Error fetching product details:', error);
   }
@@ -128,6 +140,13 @@ const fetchColors = async () => {
   }
 };
 
+const total = computed(() => {
+  if (product.value.price && quantity.value) {
+    return product.value.price * quantity.value;
+  }
+  return 0;
+});
+
 onMounted(() => {
   fetchProductDetails();
   fetchColors();
@@ -150,6 +169,12 @@ const decrementQuantity = () => {
 
 const toggleColorSelection = (colorId) => {
   selectedColor.value = colorId;
+};
+
+
+const calculateDiscountedPrice = (originalPrice, discountPercentage) => {
+  const discount = (originalPrice * discountPercentage) / 100;
+  return originalPrice - discount;
 };
 
 const createOrder = async () => {
@@ -186,6 +211,10 @@ const createOrder = async () => {
   font-size: 1.2em;
 }
 
+.text-decoration-line-through {
+  text-decoration: line-through;
+}
+
 .color-options .color-circle {
   width: 30px;
   height: 30px;
@@ -196,6 +225,30 @@ const createOrder = async () => {
 
 .color-options .color-circle.selected {
   border: 2px solid #000;
+}
+
+.bg-red {
+  background-color: red;
+}
+
+.bg-black {
+  background-color: black;
+}
+
+.bg-white {
+  background-color: white;
+}
+
+.bg-pink {
+  background-color: pink;
+}
+
+.bg-yellow {
+  background-color: yellow;
+}
+
+.bg-blue {
+  background-color: blue;
 }
 
 .btn {

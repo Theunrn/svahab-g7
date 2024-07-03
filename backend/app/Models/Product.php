@@ -29,13 +29,34 @@ class Product extends Model
     public function orders()
     {
         return $this->belongsToMany(Order::class, 'product_orders')
-                    ->withPivot('qty', 'color_id', 'size_id');
+            ->withPivot('qty', 'color_id', 'size_id');
+    }
+
+    public function discounts()
+    {
+        return $this->belongsToMany(Discount::class, 'discount_products', 'product_id', 'discount_id')
+            ->withTimestamps();
+    }
+
+    public function getDiscountedPriceAttribute()
+    {
+        $originalPrice = $this->price;
+        $discountedPrice = $originalPrice;
+
+        foreach ($this->discounts as $discount) {
+            $discountAmount = $originalPrice * ($discount->discount / 100);
+            $discountedPrice -= $discountAmount; 
+            break;
+        }
+
+        return $discountedPrice;
     }
 
     protected $casts = [
         'color' => 'array', // Cast the 'color' attribute to array
         'size' => 'array',  // Cast the 'size' attribute to array
     ];
+
 
     public static function store($request, $id = null)
     {
@@ -53,6 +74,7 @@ class Product extends Model
 
         $product = self::updateOrCreate(['id' => $id], $data);
         return $product;
-    }
 
+    }
+    
 }

@@ -57,11 +57,10 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import axios from 'axios';
 import bcrypt from 'bcryptjs';
 import { useRouter } from 'vue-router';
-import { useAuthStore } from '@/stores/auth-store';
 
 export default {
   data() {
@@ -75,52 +74,38 @@ export default {
   },
   setup() {
     const router = useRouter();
-    const authStore = useAuthStore();
-    return { router, authStore };
+    return { router };
   },
   methods: {
     async createCustomer() {
       try {
-        // Hash the password
         const hashedPassword = await bcrypt.hash(this.password, 10);
-        
-        // Prepare customer data
-        const customer = {
+
+        // Register the customer
+        const response = await axios.post('http://127.0.0.1:8000/api/register', {
           name: this.name,
           email: this.email,
           password: hashedPassword,
           phone_number: this.phone_number,
-        };
+        });
 
-        // Register the customer
-        const response = await axios.post('http://127.0.0.1:8000/api/register', customer);
-        
-        // Store the token
         const token = response.data.access_token;
-
         // Fetch user details using the token
         const userResponse = await axios.get('http://127.0.0.1:8000/api/user', {
           headers: {
-            Authorization: `Bearer ${token}`,  // Fix the string interpolation
-          },
+            Authorization: `Bearer ${token}`
+          }
         });
-
         const customerId = userResponse.data.id;
-
         // Update the role to 'customer'
-        await axios.put(`http://127.0.0.1:8000/api/customers/${customerId}/role`, {
-          role: 'customer',
+        const roleUpdateResponse = await axios.put(`http://127.0.0.1:8000/api/customers/${customerId}/role`, {
+          role: 'customer'
         }, {
           headers: {
-            Authorization: `Bearer ${token}`,  // Fix the string interpolation
-          },
+            Authorization: `Bearer ${token}`
+          }
         });
-
-        // Update local state or perform other necessary actions
-        this.authStore.register(customer); // Use the customer object directly
-
         this.customers = response.data;
-        
         // Display success message
         alert('Customer registered and role updated successfully');
 
@@ -136,6 +121,7 @@ export default {
     },
   },
 };
+
 </script>
 
 <style>
