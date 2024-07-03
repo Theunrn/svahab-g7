@@ -27,11 +27,13 @@
                     </div>
                     <a href="{{ route('admin.products.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Add New</a>
                 </div>
+                
 
                 @if ($products->isEmpty())
                     <p>No products found.</p>
+                   
                 @else
-                    <table class="min-w-full divide-y divide-gray-200">
+                    <table class="min-w-full​ divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
                                 <th class="py-4 px-6 bg-gray-100 font-bold text-sm text-gray-800 border-b border-gray-200">Image</th>
@@ -69,17 +71,7 @@
                                             </span>
                                         @endforeach
                                     </td>
-                                    <td class="px-4 py-2 whitespace-nowrap">
-                                        @if ($product->discounts->isNotEmpty())
-                                            <ul>
-                                                @foreach ($product->discounts as $discount)
-                                                    <li>{{ $discount->title }} - {{ $discount->discount }}% off</li>
-                                                @endforeach
-                                            </ul>
-                                        @else
-                                            No discounts applied
-                                        @endif
-                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">${{ $product->discounted_price }}</td>
                                     <td class="px-4 py-2 whitespace-nowrap">
                                         <a href="{{ route('admin.products.edit', $product->id) }}" class="text-blue-500 hover:text-blue-700 mr-2">
                                             <i class='bx bx-edit text-2xl'></i>
