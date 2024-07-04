@@ -2,6 +2,7 @@
     <HeaderAbout></HeaderAbout>
     <CardService></CardService>
     <MvvAbout></MvvAbout>
+    <HomeBody></HomeBody>
     <RateAbout></RateAbout>
     <FeedAbout></FeedAbout>
    <WebFooter></WebFooter>
@@ -15,7 +16,7 @@
   import RateAbout from '@/Components/AboutPage/RateAbout.vue';
   import FeedAbout from '@/Components/AboutPage/FeedAbout.vue';
   import WebFooter from '../../Components/WebFooter.vue';
-
+  import HomeBody from '../../Components/Bodies/HomeBody.vue'
   </script>
   
   <style scoped>

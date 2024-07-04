@@ -67,4 +67,11 @@ class Order extends Model
         }
         return false;
     }
+    public function confirmOrder()
+    {
+        $this->order_status = 'confirmed';
+        $this->save();
+        
+        return $this;
+    }
 }

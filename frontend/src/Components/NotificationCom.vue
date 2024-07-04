@@ -45,9 +45,10 @@
           <!-- Notifications for Primary/Bookings/Orders -->
           <template v-if="isActive('/notification') || isActive('/bookings')">
             <div
-              class="notification-item"
+              class="notification-item" @click="updateNotification(notification.id)"
               v-for="notification in notifications"
               :key="notification.id"
+              :class="{ 'unread': !notification.read, 'read': notification.read }"
             >
               <div class="group">
                 <div class="notification-header">
@@ -59,10 +60,11 @@
                   />
                   <div :class="['notification-type', notification.notification_type.toLowerCase()]">
                     {{ notification.notification_type }}
+                    <span v-if="!notification.read" class="badge bg-danger">New</span>
                   </div>
                 </div>
                 <div class="notification-content mt-2">
-                  <h3>{{ notification.notification_text }}</h3>
+                  <h3 :class="{ 'bold': !notification.read }">{{ notification.notification_text }}</h3>
                 </div>
               </div>
               <div class="notification-date">
@@ -76,6 +78,7 @@
               class="notification-item"
               v-for="notification in ordersNotifications"
               :key="notification.id"
+              :class="{ 'unread': !notification.read, 'read': notification.read }"
             >
               <div class="group">
                 <div class="notification-header">
@@ -87,10 +90,11 @@
                   />
                   <div :class="['notification-type', notification.notification_type.toLowerCase()]">
                     {{ notification.notification_type }}
+                    <span v-if="!notification.read" class="badge bg-danger">New</span>
                   </div>
                 </div>
                 <div class="notification-content mt-2">
-                  <h3>{{ notification.notification_text }}</h3>
+                  <h3 :class="{ 'bold': !notification.read }">{{ notification.notification_text }}</h3>
                 </div>
               </div>
               <div class="notification-date">
@@ -121,46 +125,28 @@ export default {
     const fetchNotifications = async () => {
       try {
         const response = await axiosInstance.get(`/notifications/list/${userId.value}`);
-        notifications.value = response.data;
+        notifications.value = response.data.data;
+        // Filter notifications for orders
+        ordersNotifications.value = response.data.data.filter(notification => {
+          ordersNotifications.push(notification.notification_type.includes('order'));
+        });
+
       } catch (error) {
         console.error('Error fetching notifications:', error);
       }
     };
-
-    const fetchOrdersNotifications = async () => {
+    const updateNotification = async (id) => {
       try {
-        const response = await axiosInstance.get(`/orders/list/${userId.value}`);
-        ordersNotifications.value = response.data;
+        const response = await axiosInstance.put(`/notification/update/${id}`);
+        notifications.value = response.data.data;
+        console.log('Updated notification successfully');
       } catch (error) {
-        console.error('Error fetching orders notifications:', error);
+        console.error('Error fetching notifications:', error);
       }
     };
-
-    const deleteSelectedNotifications = async () => {
-      try {
-        const response = await axiosInstance.post('/notifications/delete', {
-          notifications: selectedNotifications.value
-        });
-
-        // Handle success response if needed
-        console.log(response.data);
-
-        // After successful deletion, refresh notifications
-        await fetchNotifications();
-        await fetchOrdersNotifications();
-
-        // Clear selected notifications
-        selectedNotifications.value = [];
-      } catch (error) {
-        console.error('Error deleting notifications:', error);
-        // Handle error if needed
-      }
-    };
-
     // Fetch notifications and orders notifications on component mount
     onMounted(() => {
       fetchNotifications();
-      fetchOrdersNotifications();
     });
 
     const isActive = (tab) => {
@@ -170,14 +156,15 @@ export default {
     return {
       userId,
       notifications,
-      ordersNotifications,
       selectedNotifications,
       isActive,
-      deleteSelectedNotifications
+      updateNotification
+
     };
   }
 };
 </script>
+
 <style scoped>
 .booking-list {
   width: 100%;
@@ -224,6 +211,12 @@ export default {
   padding-left: 20px;
   gap: 10px;
 }
+.notification-item.unread {
+  background-color: white; /* Background color for unread notifications */
+}
+.notification-item.read {
+  background-color: #f0f0f0; /* Background color for read notifications */
+}
 .notification-header {
   display: flex;
   align-items: center;
@@ -235,12 +228,21 @@ export default {
   color: #fff;
   margin-right: 10px;
 }
+.notification-type.unread {
+  background-color: #f00; /* Change background color for unread notifications */
+}
+.notification-type.read {
+  background-color: #999; /* Change background color for read notifications */
+}
 .notification-content {
   flex: 1;
 }
 h3 {
   font-size: 16px;
   margin: 0 0 5px;
+}
+h3.bold {
+  font-weight: bold; /* Font weight for unread notifications */
 }
 .notification-sender {
   color: #f00;
@@ -256,7 +258,8 @@ h3 {
 .notification-date span {
   margin-left: 5px;
 }
-.notification-type.booking_confirmed {
+.notification-type.booking_confirmed,
+.notification-type.order_confirmed {
   background-color: green;
 }
 .notification-type.other_type {
@@ -266,7 +269,8 @@ h3 {
 .notification-type.booking_rejected {
   background-color: red; /* Fallback color */
 }
-.notification-type.booking_cancelled {
+.notification-type.booking_cancelled,
+.notification-type.order_cancelled {
   background-color: red; /* Fallback color */
 }
 .notification-type.booking_rebooked {
