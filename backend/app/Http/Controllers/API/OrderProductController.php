@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\OrderProductResource;
+use App\Models\Notification;
 use App\Models\Order;
 use App\Models\product;
 use Illuminate\Http\Request;
@@ -54,13 +55,51 @@ class OrderProductController extends Controller
 
     public function cancel($id)
     {
-        $user = Auth::user();
-        $order = Order::where('user_id', $user->id)->findOrFail($id);
-
-        $response = $order->cancelOrder();
-
-        return response()->json($response, $response['message'] === 'Order cancelled successfully' ? 200 : 400);
+        {
+            $user = Auth::user();
+            $order = Order::where('user_id', $user->id)->findOrFail($id);
+    
+            $order->status = 'cancelled';
+            $order->save();
+    
+            // Create a notification for order cancellation
+            Notification::create([
+                'user_id' => $user->id,
+                'notification_type' => 'order_cancelled',
+                'notification_text' => 'Your order has been cancelled.',
+                'notification_data' => json_encode([
+                    'order_id' => $order->id,
+                    'cancelled_at' => now(),
+                ]),
+                'read' => false,
+            ]);
+    
+            return response()->json(['message' => 'Order cancelled successfully'], 200);
+        }
     }
+    public function confirm(Request $request, $id)
+    {
+        $user = Auth::user();
+        $order = Order::findOrFail($id);
+
+        // Confirm the order
+        $order->confirmOrder();
+
+        // Create a notification for order confirmation
+        Notification::create([
+            'user_id' => $order->user_id,
+            'notification_type' => 'order_confirmed',
+            'notification_text' => 'Your order has been confirmed.',
+            'notification_data' => json_encode([
+                'order_id' => $order->id,
+                'confirmed_at' => now(),
+            ]),
+            'read' => false,
+        ]);
+
+        return response()->json(['message' => 'Order confirmed successfully'], 200);
+    }
+
 
 
     public function reactivate($id)
