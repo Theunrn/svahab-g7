@@ -99,7 +99,10 @@ Route::delete('/discount/delete/{id}',[DiscountProductController::class,'destroy
 
 //History
 
-Route::get('/histories/list',[HistoryController::class,'index'])->name('history.list');
-Route::post('/histories/create',[HistoryController::class,'store'])->name('history.store');
+// Route::get('/histories/list',[HistoryController::class,'index'])->name('history.list');
+// Route::post('/histories/create',[HistoryController::class,'store'])->name('history.store');
+// Route::delete('/history/delete/{id}',[HistoryController::class,'destroy'])->name('history.destroy');
 Route::get('/customer/bookings/{id}', [BookingController::class, 'getBookingsByUserId']);
+Route::delete('/customer/bookings/delete/{id}', [BookingController::class, 'destroy'])->name('booking.destroy');
 Route::get('/customer/orders/{id}', [OrderProductController::class, 'getOrdersByUserId']);
+Route::delete('/customer/orders/delete/{id}', [OrderProductController::class,'deleteOrder']);
