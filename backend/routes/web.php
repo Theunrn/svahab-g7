@@ -101,3 +101,4 @@ Route::namespace('App\Http\Controllers\Admin')->name('admin.')->prefix('admin')
     Route::get('/admin/orders/{id}/cancel', [OrderController::class, 'cancel'])->name('admin.orders.cancel');
     Route::get('/admin/orders/{id}/accept', [OrderController::class, 'confirm'])->name('admin.orders.confirm');
 
+    

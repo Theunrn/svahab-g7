@@ -24,6 +24,7 @@ class BookingResource extends JsonResource
             'field_name' => $this->field->name,
             'start_time' => $startTime->format('h:i A'),
             'end_time' => $endTime->format('h:i A'),
+            'total_price' => $this->total_price,
             'status' => $this->status,
             'payment_status' => $this->payment_status,
             'created_at' => $this->created_at->format('d-m-Y'),
