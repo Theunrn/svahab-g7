@@ -105,9 +105,11 @@ export default {
       this.uniqueProductsByCategory = uniqueProducts
       console.log(uniqueProducts)
     },
+
     getImageUrl(imagePath) {
       return `http://127.0.0.1:8000/storage/${imagePath}` // Adjust URL if needed
     },
+
     addToCart(product) {
       // Implement add to cart functionality
       console.log('Adding to cart:', product)
@@ -122,7 +124,30 @@ export default {
         return parseFloat(discountedPrice.toFixed(2)).toString() // Adjust to match your backend response format
       }
       return null
-    }
+    },
+
+    addToCart(product, color, size) {
+      axios.post('http://127.0.0.1:8000/api/cart/create', {
+        product_id: product.id,
+        quantity: 1,
+        // color_id: color.id,
+        // size_id: size.id,
+        color_id: 2,
+        size_id: 3,
+      }, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        }
+      })
+      .then(response => {
+        console.log('Product added to cart:', product, color, size);
+        alert(`${product.name} add to card successfully.`);
+      })
+      .catch(error => {
+        console.error('Error adding to cart:', error);
+      });
+    },
+
   }
 }
 </script>
@@ -134,7 +159,6 @@ export default {
   flex-wrap: wrap;
   justify-content: flex-start;
   align-items: flex-start;
-  margin-left: 10px;
 }
 
 .card-wrapper {

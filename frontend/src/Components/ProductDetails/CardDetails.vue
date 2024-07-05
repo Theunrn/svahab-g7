@@ -1,11 +1,12 @@
 <template>
   <div class="product-detail my-5">
+    <!-- Other code remains the same -->
     <div class="row mb-3">
       <div class="col-12">
         <router-link to="/product" class="btn btn-outline-primary"> Back </router-link>
       </div>
     </div>
-    <div class="row" style="margin-left: -50px">
+    <div v-for="(product, index) in orderProducts" :key="index" class="row" style="margin-left: -50px">
       <!-- Image Section -->
       <div class="col-md-6">
         <div class="product-images mt-5">
@@ -49,15 +50,15 @@
                 'mr-2',
                 'cursor-pointer',
                 `bg-${color.name.toLowerCase()}`,
-                { selected: selectedColor === color.id }
+                { selected: selectedColor[index] === color.id }
               ]"
-              @click="toggleColorSelection(color.id)"
+              @click="toggleColorSelection(index, color.id)"
             ></div>
           </div>
         </div>
         <div class="size-options mb-3">
           <h5 class="mb-2">Size:</h5>
-          <select class="form-select w-auto" v-model="selectedSize">
+          <select class="form-select w-auto" v-model="selectedSize[index]">
             <option v-for="size in product.sizes" :key="size.id" :value="size.id">{{ size.name }}</option>
           </select>
         </div>
@@ -65,32 +66,17 @@
           <h5 class="mb-2">Quantity:</h5>
           <div class="input-group w-auto">
             <div class="quantity-input">
-              <button @click="decrementQuantity" class="decrement btn btn-outline-secondary">
+              <button @click="decrementQuantity(index)" class="decrement btn btn-outline-secondary">
                 -
               </button>
-              <input class="input-group min-max" type="text" v-model="quantity" />
-              <button @click="incrementQuantity" class="increment btn btn-outline-secondary">
+              <input class="input-group min-max" type="text" v-model="quantities[index]" />
+              <button @click="incrementQuantity(index)" class="increment btn btn-outline-secondary">
                 +
               </button>
             </div>
           </div>
         </div>
-        <!-- <a @click="createOrder" class="btn btn-warning btn-block mb-4"> Order Now</a> -->
         <router-link @click="createOrder" to="/payment" class="btn btn-warning btn-block ml-4 mb-4"> Pay Now</router-link>
-        <div class="delivery-info mb-4">
-          <p class="mb-1"><strong>Home Delivery:</strong> Available within 48 hours</p>
-          <p class="mb-0"><strong>Click & Collect:</strong> Pickup in store within 4 hours</p>
-        </div>
-        <div class="product-description">
-          <p>
-            Our product designers, themselves football players, designed the Sunny 300 mini ball for
-            kids starting to dribble, shoot, or juggle with their hands or feet.
-          </p>
-          <p class="mb-0">
-            Looking for a ball to learn the basics of football? This mini plastic football is
-            perfect. Plus, it's ideal for playing barefoot.
-          </p>
-        </div>
       </div>
     </div>
   </div>
@@ -104,73 +90,56 @@ import { useRoute } from 'vue-router';
 const route = useRoute();
 const productId = computed(() => route.params);
 const product = ref({});
-const colors = ref([]); // Reactive reference for colors
-const selectedColor = ref(null); // Reactive reference for selected color
-const sizes = ref([]); // Reactive reference for sizes
-const selectedSize = ref(null); // Reactive reference for selected size
-const quantity = ref(1); // Reactive reference for quantity
+const orderProducts = ref([]); // Reactive reference for order products
+const selectedColor = ref([]); // Reactive reference for selected color
+const selectedSize = ref([]); // Reactive reference for selected size
+const quantities = ref([]); // Reactive reference for quantities
 
 const fetchProductDetails = async () => {
   try {
     const response = await axiosInstance.get(`/product/show/${productId.value.id}`);
-    product.value = response.data.data;
-    product.discounts = product.value.discounts || []; // Initialize discounts
-    console.log(product.value);
+    const productData = response.data.data;
+    orderProducts.value.push(productData);
+    selectedColor.value.push(null);
+    selectedSize.value.push(null);
+    quantities.value.push(1);
+    console.log(orderProducts.value);
     
   } catch (error) {
     console.error('Error fetching product details:', error);
   }
 };
 
-const fetchSizes = async () => {
-  try {
-    const response = await axiosInstance.get('/sizes');
-    sizes.value = response.data.data;
-  } catch (error) {
-    console.error('Error fetching sizes:', error);
-  }
-};
-
-const fetchColors = async () => {
-  try {
-    const response = await axiosInstance.get('/colors');
-    colors.value = response.data.data;
-  } catch (error) {
-    console.error('Error fetching colors:', error);
-  }
-};
-
 const total = computed(() => {
-  if (product.value.price && quantity.value) {
-    return product.value.price * quantity.value;
-  }
-  return 0;
+  return orderProducts.value.reduce((sum, product, index) => {
+    if (product.price && quantities.value[index]) {
+      return sum + (product.price * quantities.value[index]);
+    }
+    return sum;
+  }, 0);
 });
 
 onMounted(() => {
   fetchProductDetails();
-  fetchColors();
-  fetchSizes();
 });
 
 const getImageUrl = (imagePath) => {
   return imagePath ? `http://127.0.0.1:8000/storage/${imagePath}` : '/default-image.jpg';
 };
 
-const incrementQuantity = () => {
-  quantity.value++;
+const incrementQuantity = (index) => {
+  quantities.value[index]++;
 };
 
-const decrementQuantity = () => {
-  if (quantity.value > 1) {
-    quantity.value--;
+const decrementQuantity = (index) => {
+  if (quantities.value[index] > 1) {
+    quantities.value[index]--;
   }
 };
 
-const toggleColorSelection = (colorId) => {
-  selectedColor.value = colorId;
+const toggleColorSelection = (index, colorId) => {
+  selectedColor.value[index] = colorId;
 };
-
 
 const calculateDiscountedPrice = (originalPrice, discountPercentage) => {
   const discount = (originalPrice * discountPercentage) / 100;
@@ -179,10 +148,10 @@ const calculateDiscountedPrice = (originalPrice, discountPercentage) => {
 
 const createOrder = async () => {
   const orderProduct = {
-    product_id: productId.value.id,
+    product_id: orderProducts.value.map(product => product.id),
     color_id: selectedColor.value,
     size_id: selectedSize.value,
-    qty: quantity.value,
+    qty: quantities.value,
   };
 
   try {
@@ -195,6 +164,8 @@ const createOrder = async () => {
 };
 
 </script>
+
+
 
 <style scoped>
 .product-detail {

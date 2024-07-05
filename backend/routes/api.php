@@ -16,6 +16,7 @@ use App\Http\Controllers\API\ProductController as APIProductController;
 use App\Http\Controllers\API\SizeController;
 use App\Http\Controllers\API\SlideShowController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\API\AddToCardController;
 use App\Http\Controllers\OrderController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -111,3 +112,20 @@ Route::get('/customer/orders/{id}', [OrderProductController::class, 'getOrdersBy
 //Notifications
 Route::get('/notifications/list/{id}', [NotificationController::class, 'getNotificationsByUserId']);
 Route::delete('/notification/delete/{id}', [NotificationController::class, 'deleteNotifications']);
+
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('cart/list', [AddToCardController::class, 'index']);
+    Route::post('cart/create', [AddToCardController::class, 'store']);
+    Route::get('cart/show/{id}', [AddToCardController::class, 'show']);
+    Route::put('cart/update/{id}', [AddToCardController::class, 'update']);
+    Route::delete('cart/delete/{id}', [AddToCardController::class, 'destroy']);
+});
+
+// Route::get('cart/list', [AddToCardController::class, 'index']);
+// Route::post('cart/create', [AddToCardController::class, 'store'])->middleware('auth:sanctum');
+// Route::get('cart/show/{id}', [AddToCardController::class, 'show']);
+// Route::put('cart/update/{id}', [AddToCardController::class, 'update'])->middleware('auth:sanctum');
+// Route::delete('cart/delete/{id}', [AddToCardController::class, 'destroy'])->middleware('auth:sanctum');
+
+

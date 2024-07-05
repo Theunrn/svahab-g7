@@ -38,6 +38,11 @@ class Product extends Model
             ->withTimestamps();
     }
 
+    public function addToCards()
+    {
+        return $this->hasMany(AddToCard::class);
+    }
+
     public function getDiscountedPriceAttribute()
     {
         $originalPrice = $this->price;

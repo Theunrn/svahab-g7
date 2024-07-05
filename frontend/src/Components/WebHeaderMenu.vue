@@ -14,10 +14,9 @@
       <a :href="'/contact'" :class="['font-bold-200 py-2 me-5 text-white custom-hover text-decoration-none me-5', { 'active': route.path === '/contact' }]">CONTACT</a>
     </nav>
     <!-- Cart Button -->
-
     <button class="relative inline-flex w-fit mx-4">
       <div  class="absolute top-0 right-0 transform translate-x-2/4 -translate-y-1/2 z-10 flex items-center justify-center h-5 w-5 bg-red-600 rounded-full text-white text-xs font-bold">
-        1 
+        {{ itemCount }}
       </div>
       <router-link to="/addtocart" class="flex items-center justify-center rounded-lg bg-primary-500 text-white dark:text-gray-200">
         <i class='bx bxs-cart-add text-3xl ml-4 text-white'></i> <!-- Larger bell icon -->
@@ -42,7 +41,7 @@
     <!-- Authentication Button -->
     <div class="auth flex gap-2">
       <!-- Conditionally render Register, Login or Logout button -->
-      <template v-if="isAuthenticated = false">
+      <template v-if="!isAuthenticated">
         <a href="/register"><button class="hover:bg-red-400 text-dark bg-white px-4 py-1 border-1 border-red-700 hover:border-red-500 rounded">Register</button></a>
         <a href="/login"><button class="hover:bg-red-400 text-dark bg-white px-4 py-1 border-1 border-red-700 hover:border-red-500 rounded">Login</button></a>
       </template>
@@ -54,7 +53,9 @@
 </template>
 
 <script setup lang="ts">
+import { ref, computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
+import axiosInstance from '@/plugins/axios';
 import { useAuthStore } from '@/stores/auth-store'; // Adjust the import path based on your actual file structure
 
 const route = useRoute();
@@ -66,8 +67,33 @@ let isAuthenticated = authStore.isAuthenticated;
 const logout = () => {
   authStore.isAuthenticated = false;
   authStore.logout();
-  
 };
+
+// Define itemCount and fetch it from API
+let itemCount = ref(3);
+
+// Fetch cart items count
+const fetchCartItemsCount = async () => {
+  try {
+    const response = await axiosInstance.get('http://127.0.0.1:8000/api/cart/list', {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('access_token')}`
+      }
+    });
+    if (response.data.success) {
+      itemCount.value = response.data.data.reduce((total, item) => total + item.quantity, 0);
+      // console.log(itemCount.value);
+    } else {
+      console.error('Failed to fetch cart items count');
+    }
+  } catch (error) {
+    console.error('Error fetching cart items count:', error);
+  }
+};
+
+// Call fetchCartItemsCount when component is mounted
+onMounted(fetchCartItemsCount);
+
 </script>
 
 <style scoped>

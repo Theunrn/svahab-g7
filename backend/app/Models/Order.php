@@ -25,7 +25,7 @@ class Order extends Model
         return $this->belongsToMany(Product::class, 'product_orders')
             ->withPivot('qty', 'color_id', 'size_id');
     }
-    
+
     public static function createOrder($validatedData)
     {
         $user = Auth::user();
@@ -46,6 +46,41 @@ class Order extends Model
 
         return $order;
     }
+    
+
+    // public static function createOrder($validatedData)
+    // {
+    //     $user = Auth::user();
+
+    //     $order = new self();
+    //     $order->user_id = $user->id;
+    //     $order->order_date = now()->format('Y-m-d');
+    //     $order->save();
+
+    //     $product = Product::findOrFail($validatedData['product_id']);
+    //     $colorIds = $validatedData['color_id'];
+    //     $sizeIds = $validatedData['size_id'];
+    //     $qty = $validatedData['qty'];
+
+    //     foreach ($productIds as $index => $productId) {
+    //         $product = Product::findOrFail($productId);
+
+    //         // Use the corresponding color_id and size_id for each product
+    //         $colorId = $colorIds[$index];
+    //         $sizeId = $sizeIds[$index];
+
+    //         $order->products()->sync([
+    //             $productId => [
+    //                 'qty' => $qty[$index],
+    //                 'color_id' => $colorId,
+    //                 'size_id' => $sizeId,
+    //             ],
+    //         ]);
+    //     }
+
+    //     return $order;
+    // }
+
 
     public function cancelOrder()
     {
@@ -58,6 +93,7 @@ class Order extends Model
         }
     }
 
+
     public function reactivate()
     {
         if ($this->order_status === 'cancelled') {
@@ -67,4 +103,5 @@ class Order extends Model
         }
         return false;
     }
+
 }
