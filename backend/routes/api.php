@@ -111,7 +111,6 @@ Route::get('/slideshow/list', [SlideShowController::class,'index'])->name('slide
 Route::get('/customer/bookings/{id}', [BookingController::class, 'getBookingsByUserId']);
 Route::delete('/customer/bookings/delete/{id}', [BookingController::class, 'destroy'])->name('booking.destroy');
 Route::get('/customer/orders/{id}', [OrderProductController::class, 'getOrdersByUserId']);
-<<<<<<< HEAD
 
 //Notifications
 Route::get('/notifications/list/{id}', [NotificationController::class, 'getNotificationsByUserId']);
@@ -128,6 +127,4 @@ Route::delete('/notifications/{id}', [NotificationController::class, 'destroy'])
 Route::post('/stripe/payment', [StripePaymentController::class, 'makePayment']);
 Route::put('/update/payment/booking/{id}', [BookingController::class, 'updateStatusPaymentBooking']);
 Route::put('/update/payment/order/{id}', [OrderController::class, 'updateStatusPaymentOrder']);
-=======
 Route::delete('/customer/orders/delete/{id}', [OrderProductController::class,'deleteOrder']);
->>>>>>> history
