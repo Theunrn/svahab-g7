@@ -59,7 +59,7 @@ class OrderController extends Controller
             return response()->json(['status' => false, 'message' => 'Order not found'], 404);
         }
 
-        $order->order_status = 'comfirmed';
+        $order->order_status = 'confirmed';
         $order->save();
 
         $this->createNotification($order->user_id, 'order_confirmed', 'Your order has been confirmed.', $order->id);

@@ -60,7 +60,7 @@
                   />
                   <div :class="['notification-type', notification.notification_type.toLowerCase()]">
                     {{ notification.notification_type }}
-                    <span v-if="!notification.read" class="badge bg-danger">New</span>
+                    <span v-if="!notification.read" class="badge bg-warning text-dark">New</span>
                   </div>
                 </div>
                 <div class="notification-content mt-2">
@@ -229,7 +229,7 @@ export default {
   margin-right: 10px;
 }
 .notification-type.unread {
-  background-color: #f00; /* Change background color for unread notifications */
+  background-color: black; /* Change background color for unread notifications */
 }
 .notification-type.read {
   background-color: #999; /* Change background color for read notifications */
