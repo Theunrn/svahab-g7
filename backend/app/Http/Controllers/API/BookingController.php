@@ -137,4 +137,11 @@ class BookingController extends Controller
         return  response()->json(['success', 'Payment status updated successfully'], 200);
     }
 
+    public function destroy($id)
+    {
+        $booking = Booking::findOrFail($id);
+        $booking->delete();
+
+        return response()->json(['message' => 'Booking deleted successfully']);
+    }
 }

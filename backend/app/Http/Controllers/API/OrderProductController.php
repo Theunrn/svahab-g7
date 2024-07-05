@@ -21,7 +21,7 @@ class OrderProductController extends Controller
         $user = Auth::user();
 
         // Retrieve orders for the authenticated user
-        $orders = Order::where('user_id', $user->id)->with('products')->get();
+        $orders = Order::where('user_id', $user->id)->with('product')->get();
 
         return response()->json(['success' => true, 'data' => $orders], 200);
     }
@@ -121,5 +121,12 @@ class OrderProductController extends Controller
             return response()->json(['error' => 'No orders found for this user'], 404);
         }
         return response()->json($orders, 200);
+    }
+    
+    public function deleteOrder($id)
+    {
+        $order = Order::findOrFail($id);
+        $order->delete();
+        return response()->json(['message' => 'Order deleted successfully'], 200);
     }
 }

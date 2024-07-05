@@ -61,8 +61,11 @@ class HistoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $history = History::find($id);
+        dd($history);
+        // $history->delete();
+        // return response()->json(['success'=>true, 'message'=>'History deleted successfully'], 200);
     }
 }

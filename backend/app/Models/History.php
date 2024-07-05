@@ -15,4 +15,5 @@ class History extends Model
         $data = self::updateOrCreate(['id' => $id], $data);
         return $data;
     }
+
 }
