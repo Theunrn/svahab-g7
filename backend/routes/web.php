@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ProductController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\FieldController;
@@ -109,3 +110,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
 
     Route::resource('dashboards', DashboardController::class);
 });
+
+
+Route::get('/admin/categories', [CategoryController::class, 'index'])->name('admin.categories.index');
+

@@ -45,7 +45,10 @@
                     </tr>
                 </thead>
                 <tbody id="booking-list">
-                    @foreach ($bookings->where('status', '!=', 'cancelled') as $index => $booking)
+                    @php
+                    $totalBookings = 0;
+                    @endphp
+                    @foreach ($bookings->where('status', '!=', 'cancelled') as $booking)
                     @if ($booking->status !== 'rejected')
                     @php
                     $totalBookings++;
@@ -92,7 +95,10 @@
                     @endforeach
                 </tbody>
                 <tbody id="cancelled-booking-list">
-                    @foreach ($bookings->where('status', 'cancelled') as $index => $booking)
+                    @foreach ($bookings->where('status', 'cancelled') as $booking)
+                    @php
+                    $totalBookings++;
+                    @endphp
                     <tr class="text-left booking-row" data-status="{{ $booking->status }}">
                         <td class="py-2 px-1 border-b border-gray-300">{{ $index +1 }}</td>
                         <td class="py-2 px-1 border-b border-gray-300">{{ $booking->customer->name }}</td>
