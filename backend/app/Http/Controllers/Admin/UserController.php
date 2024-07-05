@@ -39,11 +39,6 @@ class UserController extends Controller
         return view('setting.user.index', ['users' => $user]);
     }
 
-    // public function totalUser()
-    // {
-    //     $totalUsers = User::count();
-    //     return view('user', compact('totalUsers'));
-    // }
 
     /**
      * Show the form for creating a new resource.

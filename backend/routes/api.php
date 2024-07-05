@@ -17,6 +17,7 @@ use App\Http\Controllers\API\SizeController;
 use App\Http\Controllers\API\SlideShowController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\StripePaymentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -57,6 +58,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('orders/create', [OrderProductController::class, 'store']);
     Route::get('orders/show/{id}', [OrderProductController::class, 'show']);
     Route::delete('orders/cancel/{id}', [OrderProductController::class, 'cancel']);
+    Route::post('/orders/{id}/confirm', [OrderProductController::class, 'confirm']);
     Route::put('orders/reactivate/{id}', [OrderProductController::class, 'reactivate']);
 });
 
@@ -110,4 +112,16 @@ Route::get('/customer/orders/{id}', [OrderProductController::class, 'getOrdersBy
 
 //Notifications
 Route::get('/notifications/list/{id}', [NotificationController::class, 'getNotificationsByUserId']);
+Route::put('/notification/update/{id}', [NotificationController::class, 'updateNotification']);
 Route::delete('/notification/delete/{id}', [NotificationController::class, 'deleteNotifications']);
+
+// Notification routes
+Route::get('/notifications', [NotificationController::class, 'index']);
+Route::post('/notifications', [NotificationController::class, 'store']);
+Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead']);
+Route::delete('/notifications/{id}', [NotificationController::class, 'destroy']);
+
+//Payment
+Route::post('/stripe/payment', [StripePaymentController::class, 'makePayment']);
+Route::put('/update/payment/booking/{id}', [BookingController::class, 'updateStatusPaymentBooking']);
+Route::put('/update/payment/order/{id}', [OrderController::class, 'updateStatusPaymentOrder']);

@@ -32,7 +32,7 @@
             <table class="border-collapse table-auto w-full whitespace-no-wrap bg-white table-striped relative">
                 <thead>
                     <tr class="text-left">
-                        <th class="py-2 px-1 sticky top-0 bg-gray-200 border-b border-gray-300">ID</th>
+                        <th class="py-2 px-1 sticky top-0 bg-gray-200 border-b border-gray-300">#</th>
                         <th class="py-2 px-1 sticky top-0 bg-gray-200 border-b border-gray-300">Customer</th>
                         <th class="py-2 px-1 sticky top-0 bg-gray-200 border-b border-gray-300">Field Name</th>
                         <th class="py-2 px-1 sticky top-0 bg-gray-200 border-b border-gray-300">Start Time</th>
@@ -45,16 +45,13 @@
                     </tr>
                 </thead>
                 <tbody id="booking-list">
-                    @php
-                    $totalBookings = 0;
-                    @endphp
-                    @foreach ($bookings->where('status', '!=', 'cancelled') as $booking)
+                    @foreach ($bookings->where('status', '!=', 'cancelled') as $index => $booking)
                     @if ($booking->status !== 'rejected')
                     @php
                     $totalBookings++;
                     @endphp
                     <tr class="text-left booking-row" data-status="{{ $booking->status }}">
-                        <td class="py-2 px-1 border-b border-gray-300">{{ $booking->id }}</td>
+                        <td class="py-2 px-1 border-b border-gray-300">{{ $index + 1 }}</td>
                         <td class="py-2 px-1 border-b border-gray-300">{{ $booking->customer->name }}</td>
                         <td class="py-2 px-1 border-b border-gray-300">{{ $booking->field->name }}</td>
                         <td class="py-2 px-1 border-b border-gray-300">{{ $booking->start_time }}</td>
@@ -95,12 +92,9 @@
                     @endforeach
                 </tbody>
                 <tbody id="cancelled-booking-list">
-                    @foreach ($bookings->where('status', 'cancelled') as $booking)
-                    @php
-                    $totalBookings++;
-                    @endphp
+                    @foreach ($bookings->where('status', 'cancelled') as $index => $booking)
                     <tr class="text-left booking-row" data-status="{{ $booking->status }}">
-                        <td class="py-2 px-1 border-b border-gray-300">{{ $booking->id }}</td>
+                        <td class="py-2 px-1 border-b border-gray-300">{{ $index +1 }}</td>
                         <td class="py-2 px-1 border-b border-gray-300">{{ $booking->customer->name }}</td>
                         <td class="py-2 px-1 border-b border-gray-300">{{ $booking->field->name }}</td>
                         <td class="py-2 px-1 border-b border-gray-300">{{ $booking->start_time }}</td>
