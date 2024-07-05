@@ -2,7 +2,7 @@
   <WebLayout></WebLayout>
  <CardCom :user="authStore.user"></CardCom>
  <MatchTeam></MatchTeam>
- <HomeBody></HomeBody>
+
  <MatchSchedule></MatchSchedule>
  <WeatherCom></WeatherCom>
  <WebFooter></WebFooter>
@@ -15,7 +15,6 @@ import WebLayout from '@/Components/Layouts/WebLayout.vue'
 import CardCom from '../../Components/Cards/CardCom.vue'
 import WebFooter from '../../Components/WebFooter.vue'
 import WeatherCom from '../../Components/Weathers/WeatherCom.vue'
-import HomeBody from '../../Components/Bodies/HomeBody.vue'
 import MatchTeam from '../../Components/Bodies/MatchTeam.vue'
 import MatchSchedule from '../../Components/Bodies/MatchSchedule.vue'
 const authStore = useAuthStore();

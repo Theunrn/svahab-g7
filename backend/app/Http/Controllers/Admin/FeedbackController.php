@@ -94,3 +94,5 @@ class FeedbackController extends Controller
         return redirect()->route('admin.feedbacks.index')->with('success', 'Feedback deleted successfully');
     }
 }
+
+
