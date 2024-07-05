@@ -21,6 +21,7 @@
     "@fortawesome/vue-fontawesome": "^3.0.8",
     "@headlessui/vue": "^1.7.22",
     "@heroicons/vue": "^2.1.4",
+    "@stripe/stripe-js": "^4.1.0",
     "@syncfusion/ej2-vue-calendars": "^26.1.38",
     "axios": "^1.7.2",
     "bcryptjs": "^2.4.3",

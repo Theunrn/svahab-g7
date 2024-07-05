@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
+use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -12,18 +13,22 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+   
     public function index()
     {
-        $products = Product::with(['category', 'colors', 'sizes'])->get();
-        return response()->json($products);
+        $products = Product::with(['category', 'colors', 'sizes', 'discounts'])->get();
+        // Filter products with discounts
+        $productsWithDiscounts = $products->filter(function ($product) {
+            return $product->discounts->isNotEmpty();
+        });
+
+        return response()->json([
+            'all_products' => $products,
+            'products_with_discounts' => $productsWithDiscounts,
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    
     public function store(ProductRequest $request)
     {
         if (Auth::check()) {
@@ -57,16 +62,14 @@ class ProductController extends Controller
             return response()->json(['error' => 'User not authenticated'], 401);
         }
     }
-
     public function show($id)
     {
         try {
-            $product = Product::with(['category', 'colors', 'sizes', 'discounts'])->findOrFail($id);
+            $product = Product::with(['category', 'colors', 'sizes'])->findOrFail($id);
 
             return response()->json([
                 'success' => true,
                 'data' => $product,
-                'discounted_price' => $product->discounted_price,
             ]);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Product not found'], 404);
@@ -113,6 +116,8 @@ class ProductController extends Controller
             'message' => 'Product updated successfully',
         ]);
     }
+
+    
 
 
     /**
