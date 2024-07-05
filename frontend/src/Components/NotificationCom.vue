@@ -23,14 +23,14 @@
                 :class="{ active: isActive('/bookings') }"
               >
                 <i class="bx bx-calendar-check text-xl"></i> Bookings
-                <span class="badge">{{ notifications.length }} new</span>
+                <span class="badge">{{ bookingNotifications.length }} new</span>
               </router-link>
               <router-link
                 :to="{ path: '/orders/' + userId }"
                 class="tab text-white text-center me-2"
                 :class="{ active: isActive('/orders') }"
               >
-                <i class="bx bx-cart-add text-xl"></i> Orders <span class="badge">0 new</span>
+                <i class="bx bx-cart-add text-xl"></i> Orders <span class="badge">{{ orderNotifications.length }} new</span>
               </router-link>
             </div>
           </div>
@@ -43,7 +43,7 @@
 
         <div class="notification-list">
           <!-- Notifications for Primary/Bookings/Orders -->
-          <template v-if="isActive('/notification') || isActive('/bookings')">
+          <template v-if="isActive('/notification')">
             <div
               class="notification-item" @click="updateNotification(notification.id)"
               v-for="notification in notifications"
@@ -73,10 +73,40 @@
               </div>
             </div>
           </template>
+          <template v-if="isActive('/bookings')">
+            <div
+              class="notification-item" @click="updateNotification(notification.id)"
+              v-for="notification in bookingNotifications"
+              :key="notification.id"
+              :class="{ 'unread': !notification.read, 'read': notification.read }"
+            >
+              <div class="group">
+                <div class="notification-header">
+                  <input
+                    type="checkbox"
+                    v-model="selectedNotifications"
+                    :value="notification.id"
+                    class="checkbox me-3"
+                  />
+                  <div :class="['notification-type', notification.notification_type.toLowerCase()]">
+                    {{ notification.notification_type }}
+                    <span v-if="!notification.read" class="badge bg-warning text-dark">New</span>
+                  </div>
+                </div>
+                <div class="notification-content mt-2">
+                  <h3 :class="{ 'bold': !notification.read }">{{ notification.notification_text }}</h3>
+                </div>
+              </div>
+              <div class="notification-date">
+                <i class="bx bx-time-five"></i>
+                <span>{{ notification.created_at }}</span>
+              </div>
+            </div>
+          </template>
           <template v-if="isActive('/orders')">
             <div
               class="notification-item"
-              v-for="notification in ordersNotifications"
+              v-for="notification in orderNotifications"
               :key="notification.id"
               :class="{ 'unread': !notification.read, 'read': notification.read }"
             >
@@ -108,7 +138,6 @@
     </div>
   </main>
 </template>
-
 <script>
 import axiosInstance from '@/plugins/axios';
 import { useRoute } from 'vue-router';
@@ -119,31 +148,43 @@ export default {
     const route = useRoute();
     const userId = computed(() => route.params.id);
     const notifications = ref([]);
-    const ordersNotifications = ref([]);
+    const bookingNotifications = ref([]);
+    const orderNotifications = ref([]);
     const selectedNotifications = ref([]);
 
     const fetchNotifications = async () => {
       try {
         const response = await axiosInstance.get(`/notifications/list/${userId.value}`);
         notifications.value = response.data.data;
-        // Filter notifications for orders
-        ordersNotifications.value = response.data.data.filter(notification => {
-          ordersNotifications.push(notification.notification_type.includes('order'));
-        });
-
+        // Filter notifications for bookings and orders
+        bookingNotifications.value = notifications.value.filter(notification => notification.notification_type.toLowerCase().includes('booking'));
+        orderNotifications.value = notifications.value.filter(notification => notification.notification_type.toLowerCase().includes('order'));
       } catch (error) {
         console.error('Error fetching notifications:', error);
       }
     };
+
     const updateNotification = async (id) => {
       try {
-        const response = await axiosInstance.put(`/notification/update/${id}`);
-        notifications.value = response.data.data;
+        await axiosInstance.put(`/notification/update/${id}`);
+        fetchNotifications(); // Re-fetch notifications after updating
         console.log('Updated notification successfully');
       } catch (error) {
-        console.error('Error fetching notifications:', error);
+        console.error('Error updating notifications:', error);
       }
     };
+
+    const deleteSelectedNotifications = async () => {
+      try {
+        await axiosInstance.post('/notifications/delete', { ids: selectedNotifications.value });
+        fetchNotifications(); // Re-fetch notifications after deletion
+        selectedNotifications.value = []; // Clear selected notifications
+        console.log('Deleted selected notifications successfully');
+      } catch (error) {
+        console.error('Error deleting notifications:', error);
+      }
+    };
+
     // Fetch notifications and orders notifications on component mount
     onMounted(() => {
       fetchNotifications();
@@ -156,14 +197,17 @@ export default {
     return {
       userId,
       notifications,
+      bookingNotifications,
+      orderNotifications,
       selectedNotifications,
       isActive,
-      updateNotification
-
+      updateNotification,
+      deleteSelectedNotifications
     };
   }
 };
 </script>
+
 
 <style scoped>
 .booking-list {
