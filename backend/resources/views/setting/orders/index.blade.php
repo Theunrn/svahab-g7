@@ -56,7 +56,7 @@
                                         <td class="px-2 py-2">${{ number_format($product->pivot->qty * $product->price, 2) }}</td>
                                         <td class="py-2 px-1 border-b border-gray-300">
                                             <span class="inline-block px-2 py-1 text-white text-xs font-semibold rounded-full
-                                                    {{ $order->order_status === 'comfirmed' ? 'bg-green-500 text-gray-700' : '' }}
+                                                    {{ $order->order_status === 'confirmed' ? 'bg-green-500 text-gray-700' : '' }}
                                                     {{ $order->order_status === 'cancelled' ? 'bg-red-500 text-gray-700' : '' }}
                                                     {{ $order->order_status === 'pending' ? 'bg-blue-500 text-white-300' : '' }}">
                                                 {{ $order->order_status }}
@@ -106,7 +106,7 @@
                                                 <a href="{{ route('admin.orders.cancel', $order->id) }}"
                                                     class="bg-red-500 text-xs hover:bg-red-400 text-white font-bold py-1 px-3 rounded ml-1">Cancel</a>
                                             
-                                            @elseif ($order->order_status === 'comfirmed')
+                                            @elseif ($order->order_status === 'confirmed')
                                                 {{-- Hide Cancel button when order is confirmed --}}
                                                 <a href="{{ route('admin.orders.cancel', $order->id) }}"
                                                     class="bg-red-500 text-xs hover:bg-red-400 text-white font-bold py-1 px-3 rounded ml-1">Cancel</a>
