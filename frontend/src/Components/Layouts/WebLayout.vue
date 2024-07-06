@@ -1,25 +1,25 @@
 <template>
   <WebHeaderMenu />
-  <div class="relative h-screen w-screen mb-5">
-    <!-- Full-screen background image -->
-    <img
-      src="@/assets/image/bg.jpg"
-      alt="Background"
-      class="absolute inset-0 w-full h-full object-cover"
-    />
-    <!-- Full-screen black overlay with content centered -->
-    <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-75">
-      <div class="text-center max-w-md mx-auto">
-        <p class="text-white text-lg md:text-3xl mb-4 font-bold">Book Your Football Field Now.</p>
-        <p class="text-white mb-8 md:text-xl">Find the best fields near you and start your game!</p>
-        <div class="relative w-full">
-          <input type="text" placeholder="Search Find Field..." class="w-full px-4 py-2 rounded-md text-black"/>
-          <button type="button" class="absolute right-0 top-0 bg-red-500 text-white px-4 py-2 rounded-md">
-            Search
-          </button>
+    <div class="relative h-screen w-screen mb-5">
+      <!-- Full-screen background image -->
+      <img
+        src="@/assets/image/bg.jpg"
+        alt="Background"
+        class="absolute inset-0 w-full h-full object-cover"
+      />
+      <!-- Full-screen black overlay with content centered -->
+      <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-75">
+        <div class="text-center max-w-md mx-auto">
+          <p class="text-white text-lg md:text-3xl mb-4 font-bold">Book Your Football Field Now.</p>
+          <p class="text-white mb-8 md:text-xl">Find the best fields near you and start your game!</p>
+          <div class="relative w-full">
+            <input v-model="searchQuery" @input="searchFields" type="text" placeholder="Search Find Field..." class="w-full px-4 py-2 rounded-md text-black"/>
+            <button @click="searchFields" type="button" class="absolute right-0 top-0 bg-red-500 text-white px-4 py-2 rounded-md">
+              Search
+            </button>
+          </div>
         </div>
       </div>
-    </div>
     <div class="header-detail">
       <div class="form-select absolute p-2 mt-17 bg-green bg-opacity-90 z-20 rounded-lg w-full md:w-5/5 lg:w-9/10 ml-16">
         <div class="flex items-center justify-center space-x-2">
@@ -59,13 +59,58 @@
       </div>
     </div>
   </div>
+  <div class="div flex justify-content-center mt-3 relative z-10">
+    <img width="18%" height="18%" src="../../assets/image/logo1.png" alt="">
+  </div>
+  <FootballFields :fields="filteredFields" :user="user" />
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import WebHeaderMenu from '@/Components/WebHeaderMenu.vue'
 import VueFlatpickr from 'vue-flatpickr-component';
 import 'flatpickr/dist/flatpickr.css';
+import FootballFields from '../../Components/Cards/CardCom.vue'; // Assuming this is your field display component
+import axiosInstance from '@/plugins/axios';
+
+const searchQuery = ref('');
+const user = { id: 'your_user_id' }; // Replace with actual user object or ID
+
+const fields = ref([]);
+const filteredFields = ref([]);
+
+const fetchFields = async () => {
+  try {
+    const response = await axiosInstance.get('/fields/list');
+    fields.value = response.data.data;
+    filterFields(); // Initial fetch, also filters if searchQuery already has a value
+  } catch (error) {
+    console.error('Error fetching fields:', error);
+  }
+};
+
+const filterFields = () => {
+  if (!searchQuery.value.trim()) {
+    filteredFields.value = [...fields.value];
+  } else {
+    const query = searchQuery.value.toLowerCase();
+    filteredFields.value = fields.value.filter(field =>
+      field.name.toLowerCase().includes(query)
+    );
+  }
+};
+
+const searchFields = () => {
+  filterFields();
+};
+
+// Watcher to detect changes in searchQuery and auto-update filteredFields
+watch(searchQuery, () => {
+  filterFields();
+});
+
+fetchFields();
+
 
 const showDatePicker = ref(false);
 const selectedProvince = ref('')
