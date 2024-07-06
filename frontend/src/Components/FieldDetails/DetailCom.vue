@@ -36,45 +36,38 @@
         <!-- w-96 sets a fixed width for the left div -->
         <div class="card-me">
           <div class="card-wrapper relative w-full mx-2 my-2 border-1 border-gray-400 rounded-md">
-            <div class="container bg-overlay" 
-            :style="{
-              background: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(${getImageUrl(field.image)})`,
-            }">
-            <div class="flex">
-              <div class="row text-center flex justify-start h-full " style="margin-top: -78px; margin-left: -86px;">
-                <button class="bg-yellow-400 w-30 p-2 text-dark text-bold rounded-l">${{field.price}}.00/Hour</button>
-              </div>
+            <div class="container bg-overlay">
               <div class="row text-center flex flex-col items-center justify-center h-full">
                 <button type="button" class="btn btn-primary btn-details py-2 me-2">
                   Show on map
                 </button>
               </div>
             </div>
-            </div>
             <div class="text text-start bg-white p-4 flex flex-col">
               <h5 class="text-2xl font-bold text-white py-2 mb-2 bg-green-500">Available</h5>
+              <h5 class="text-orange-600 ">Price: $10.00/Hour</h5>
             </div>
           </div>
         </div>
         <div class="user-detail">
-          <h2 class="text-center">BOOKING FORM</h2><hr>
-          <form @submit.prevent="submitBooking">
+          <h2 class="text-center">CUSTOMER INFO</h2><hr>
+          <form>
             <div class="form-group half-width">
-              <label for="date">Date *</label>
-              <input type="date" id="date" @change="bookingDate" v-model="booking_date" />
+              <label for="first-name">First Name (English only) *</label>
+              <input type="text" id="first-name" v-model="first_name" />
             </div>
             <div class="form-group half-width">
-              <label for="start">Start time *</label>
-              <input type="time" id="start"  @change="start" v-model="start_time"/>
+              <label for="first-name">Last Name (Engish only) *</label>
+              <input type="text" id="first-name" v-model="last_name"/>
             </div>
             <div class="clearfix"></div>
             <div class="form-group">
-              <label for="end">End time *</label>
-              <input type="time" id="end" @change="end" v-model="end_time">
+              <label for="phoneNumber">E-mail *</label>
+              <input type="email" id="phoneNumber" v-model="email">
             </div>
             <div class="form-group">
-              <label for="duration">Your duration (hour) *</label>
-              <input type="text" id="duration" v-model="duration" disabled>
+              <label for="phoneNumber">Phone Number *</label>
+              <input type="tel" id="phoneNumber" v-model="phone_number">
             </div>
             <div class="form-group">
               <label for="number-of-guests">Total Price ($) *</label>
@@ -99,9 +92,9 @@
                     <label for="laravel-checkbox" class="w-full py-2 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Team Duncing</label>
                   </div>
             </div>
-            <button type="submit" class="btn-book match-btn mr-2 bg-orange-500 w-40 text-white rounded-md px-3 py-1 mt-2 mb-2 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50 shadow-md hover:shadow-lg z-20">
+            <router-link to="/field/book" @click="submitBooking" class="btn-book match-btn mr-2 bg-orange-500 w-40 text-white rounded-md px-3 py-1 mt-2 mb-2 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50 shadow-md hover:shadow-lg z-20">
               Payment
-            </button>
+            </router-link>
           </form>
         </div>
       </div>
@@ -110,7 +103,7 @@
         <!-- w-96 sets a fixed width for the right div -->
         <div class="w-full w-214">
           <!-- <h2 class="text-2xl font-bold">7Seasons Apartments offers</h2> -->
-          <img :src="getImageUrl(field.image)" alt="" class="w-full h-74 object-cover" />
+          <img src="../../assets/image/contact-imag.jpg" alt="" class="w-full h-74 object-cover" />
         </div>
         <div v-for="card in filteredCards" :key="card.id" class="gap-2">
           <div class="card-text mt-4">
@@ -156,17 +149,17 @@
 </template>
 
 <script setup lang="ts">
-import WebHeaderMenu from '@/Components/WebHeaderMenu.vue';
-import { ref, computed, watch, onMounted } from 'vue';
+import WebHeaderMenu from '@/Components/WebHeaderMenu.vue'
+import { ref, computed, watch,onMounted } from 'vue';
 import VueFlatpickr from 'vue-flatpickr-component';
 import 'flatpickr/dist/flatpickr.css';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 import axiosInstance from '@/plugins/axios';
 
 const route = useRoute();
-const router = useRouter();
+const selectedOption = ref('');
 const userId = computed(() => route.query.user);
-const fieldId = computed(() => route.params.id);
+const fieldId = computed(() => route.params.id); 
 const start_time = ref('');
 const end_time = ref('');
 const total_price = ref('00.00');
@@ -185,21 +178,19 @@ const searchQuery = ref('');
 const start = () => start_time.value;
 const end = () => end_time.value;
 const bookingDate = () => booking_date.value;
-const duration = ref(0);
+
 const calculateTotalPrice = () => {
   const startTimeParts = start_time.value.split(':').map(Number);
   const endTimeParts = end_time.value.split(':').map(Number);
-
+  
   const startMinutes = startTimeParts[0] * 60 + startTimeParts[1];
   const endMinutes = endTimeParts[0] * 60 + endTimeParts[1];
-
+  
   const durationInMinutes = endMinutes - startMinutes;
-  const pricePerMinute = price.value / 60;
-
+  const pricePerMinute = 10 / 60; 
+  
   total_price.value = (durationInMinutes * pricePerMinute).toFixed(2);
-  duration.value = durationInMinutes/60;
-};
-
+}
 const submitBooking = async () => {
   try {
     const response = await axiosInstance.post('/booking/create', {
@@ -213,39 +204,15 @@ const submitBooking = async () => {
       payment_status: 'unpaid',
     });
 
+    console.log('Booking created:', response.data);
     bookings.value.push(response.data);
-    booking.value = response.data.data;
-
-    // Navigate to the payment route with the booking ID
-    router.push({
-      path: `/payment/${userId.value}`,
-      query: { booking: booking.value.id }
-    });
   } catch (error) {
     console.error('Error creating booking:', error);
   }
-};
+}
 
-const fetchFields = async () => {
-  try {
-    const response = await axiosInstance.get(`/field/show/${fieldId.value}`);
-    field.value = response.data.data;
-    price.value = field.value.price;
-  } catch (error) {
-    console.error('Error fetching fields:', error);
-  }
-};
-
-onMounted(() => {
-  fetchFields();
-});
-
-const getImageUrl = (imagePath) => {
-  return imagePath ? `http://127.0.0.1:8000/storage/${imagePath}` : '/default-image.jpg';
-};
 
 watch([start_time, end_time], calculateTotalPrice);
-
 const filteredCards = computed(() => {
   if (!searchQuery.value.trim()) {
     return cardItems.value;
@@ -286,7 +253,11 @@ const cardItems = ref([
     imageUrl: '../../assets/image/contact-imag.jpg'
   }
 ]);
+
+
+
 </script>
+
 
 
 <style scoped>
@@ -329,8 +300,8 @@ h5{
    justify-content: center;
  }
 .bg-overlay {
-  /* background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
-    url('../../assets/image/field.png'); */
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+    url('../../assets/image/field.png');
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center;
