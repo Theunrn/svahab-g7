@@ -101,15 +101,15 @@ Route::get('/admin/bookings/{id}/reject', [BookingController::class, 'reject'])-
 Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
 
-Route::resource('dashboards', DashboardController::class);
+// Route::resource('dashboards', DashboardController::class);
 
 
 
-Route::prefix('admin')->middleware(['auth'])->group(function () {
-    // Other admin routes...
+// Route::prefix('admin')->middleware(['auth'])->group(function () {
+//     // Other admin routes...
 
-    Route::resource('dashboards', DashboardController::class);
-});
+//     Route::resource('dashboards', DashboardController::class);
+// });
 
 
 Route::get('/admin/categories', [CategoryController::class, 'index'])->name('admin.categories.index');
