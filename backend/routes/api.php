@@ -113,15 +113,10 @@ Route::get('/customer/orders/{id}', [OrderProductController::class, 'getOrdersBy
 //Notifications
 Route::get('/notifications/list/{id}', [NotificationController::class, 'getNotificationsByUserId']);
 Route::put('/notification/update/{id}', [NotificationController::class, 'updateNotification']);
-Route::delete('/notification/delete/{id}', [NotificationController::class, 'deleteNotifications']);
+Route::delete('/notifications/delete/{id}', [NotificationController::class, 'destroy']);
 
 // Notification routes
-Route::get('/notifications', [NotificationController::class, 'index']);
-Route::post('/notifications', [NotificationController::class, 'store']);
-Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead']);
-Route::delete('/notifications/{id}', [NotificationController::class, 'destroy']);
-
-//Payment
-Route::post('/stripe/payment', [StripePaymentController::class, 'makePayment']);
-Route::put('/update/payment/booking/{id}', [BookingController::class, 'updateStatusPaymentBooking']);
-Route::put('/update/payment/order/{id}', [OrderController::class, 'updateStatusPaymentOrder']);
+// Route::get('/notifications', [NotificationController::class, 'index']);
+// Route::post('/notifications', [NotificationController::class, 'store']);
+// Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead']);
+// Route::delete('/notifications/{id}', [NotificationController::class, 'destroy']);
