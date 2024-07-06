@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\FieldController;
+use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\API\BookingController;
 use App\Http\Controllers\API\OrderProductController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\API\ColorController;
 use App\Http\Controllers\API\DiscountProductController;
 use App\Http\Controllers\API\HistoryController;
 use App\Http\Controllers\API\NotificationController;
+use App\Http\Controllers\API\PaymentController as APIPaymentController;
 use App\Http\Controllers\API\PostController;
 use App\Http\Controllers\API\ProductController as APIProductController;
 use App\Http\Controllers\API\SizeController;
@@ -123,5 +125,7 @@ Route::delete('/notifications/{id}', [NotificationController::class, 'destroy'])
 
 //Payment
 Route::post('/stripe/payment', [StripePaymentController::class, 'makePayment']);
+Route::post('/payment/create', [APIPaymentController::class, 'createPayment']);
+Route::get('/payment/list', [APIPaymentController::class, 'index']);
 Route::put('/update/payment/booking/{id}', [BookingController::class, 'updateStatusPaymentBooking']);
 Route::put('/update/payment/order/{id}', [OrderController::class, 'updateStatusPaymentOrder']);

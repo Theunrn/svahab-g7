@@ -32,6 +32,7 @@ class Order extends Model
 
         $order = new self();
         $order->user_id = $user->id;
+        // $order->total_amount = $validatedData->total_amount;
         $order->order_date = now()->format('Y-m-d');
         $order->save();
 

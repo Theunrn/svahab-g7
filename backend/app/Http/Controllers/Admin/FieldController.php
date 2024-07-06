@@ -7,6 +7,7 @@ use App\Http\Requests\FieldRequest;
 use App\Http\Resources\FieldResource;
 use App\Models\Field;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class FieldController extends Controller
 {
@@ -30,6 +31,7 @@ class FieldController extends Controller
     $imageName = time() . '.' . $request->image->extension();
     $request->image->storeAs('public/images', $imageName);
     $validated['image'] = 'images/' . $imageName; 
+    $validated['owner_id'] = Auth::id();
     Field::create($validated);
     return redirect()->route('admin.fields.index')->with('success', 'Field created successfully.');
 }

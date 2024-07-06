@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\PaymentRequest;
+use App\Http\Resources\PaymentResource;
 use App\Models\Payment;
 use Illuminate\Http\Request;
 
@@ -15,7 +15,11 @@ class PaymentController extends Controller
     public function index()
     {
         $payments = Payment::all();
-        return view('setting.payment.index', compact('payments'));
+        $payments = PaymentResource::collection($payments);
+        return response()->json([
+            'success' => true,
+            'data' => $payments
+        ], 200);
     }
 
     /**
@@ -23,16 +27,16 @@ class PaymentController extends Controller
      */
     public function create()
     {
-        
+        //
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(PaymentRequest $request)
+    public function createPayment(Request $request)
     {
         Payment::store($request);
-        // return redirect()->route('admin.payment.index')->with('success', 'Payment method added successfully.');
+        return response()->json(['success' => true, 'message' =>'payment created successfully'], 200);
     }
 
     /**

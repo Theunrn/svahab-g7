@@ -36,13 +36,13 @@
             <p class="card-text mt-2 mb-2">{{ product.description }}</p>
             <div class="group mt-3">
               <router-link
-                :to="'/category/show/' + product.category_id"
+                :to="{path: '/category/show/' + product.category_id, query:{user:user.id}}"
                 :state="{ products: products }"
                 class="button me-2 inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                 See More
               </router-link>
               <router-link
-                :to="'/product/detail/' + product.id"
+                :to=" {path: '/product/detail/' + product.id, query:{user:user.id}}"
                 class="button inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-orange-500 rounded-lg hover:bg-orange-600 focus:ring-4 focus:outline-none focus:ring-orange-300 dark:bg-orange-400 dark:hover:bg-orange-500 dark:focus:ring-orange-600"
                 style="margin-left: auto">
                 Buy Now
@@ -59,6 +59,9 @@
 import axios from 'axios'
 
 export default {
+  props:{
+    user:Object,
+  },
   data() {
     return {
       products: [],
