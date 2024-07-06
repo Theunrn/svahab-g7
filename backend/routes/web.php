@@ -105,6 +105,7 @@ Route::get('/admin/bookings/{id}/reject', [BookingController::class, 'reject'])-
 Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
 
+<<<<<<< HEAD
 // Route::resource('dashboards', DashboardController::class);
 
 
@@ -118,3 +119,6 @@ Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('adm
 
 Route::get('/admin/categories', [CategoryController::class, 'index'])->name('admin.categories.index');
 
+=======
+    
+>>>>>>> 31150e730a19d8eab7053bc14e91f8a1ce5f763e
