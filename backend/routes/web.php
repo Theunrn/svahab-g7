@@ -9,7 +9,7 @@ use App\Http\Controllers\Admin\DiscountController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\BookingController;
 use App\Http\Controllers\Admin\SettingController;
-use App\Http\Controllers\Admin\SlideshowAdminController; // Add this line
+use App\Http\Controllers\Admin\SlideshowController; // Add this line
 use Faker\Core\File;
 use GuzzleHttp\Psr7\Response;
 
@@ -78,7 +78,7 @@ Route::namespace('App\Http\Controllers\Admin')->name('admin.')->prefix('admin')
         Route::resource('fields', 'FieldController');
         Route::resource('bookings', 'BookingController');
         Route::resource('settings', 'SettingController');
-        Route::resource('slideshow', 'SlideShowController'); // Update this line
+        Route::resource('slideshow', 'SlideShowController'); 
         Route::resource('products', 'ProductController');
         Route::resource('categories', 'CategoryController');
         Route::resource('payments', 'PaymentController');
