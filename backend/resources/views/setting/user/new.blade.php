@@ -10,6 +10,10 @@
               <label for="name" class="text-gray-700 select-none font-medium">User Name</label>
               <input id="name" type="text" name="name" value="{{ old('name') }}" placeholder="Enter name" class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-200" />
             </div>
+<<<<<<< HEAD
+
+=======
+>>>>>>> 90be5300ae5b7555a88fe2dd72c80698482024bd
 
             <div class="flex flex-col space-y-2">
               <label for="email" class="text-gray-700 select-none font-medium">Email</label>
@@ -17,10 +21,8 @@
             </div>
             <div class="flex flex-col space-y-2">
               <label for="phone_number" class="text-gray-700 select-none font-medium">Phone Number</label>
-              <input id="phone_number" type="text" name="phone_number" value="{{ old('phone_number') }}"
-                placeholder="Enter Phone Number" class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-200"
-              />
-          </div>
+              <input id="phone_number" type="text" name="phone_number" value="{{ old('phone_number') }}" placeholder="Enter Phone Number" class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-200" />
+            </div>
 
             <div class="flex flex-col space-y-2">
               <label for="password" class="text-gray-700 select-none font-medium">Password</label>
