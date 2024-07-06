@@ -22,7 +22,7 @@ class PaymentController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**
