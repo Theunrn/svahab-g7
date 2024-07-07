@@ -27,7 +27,7 @@
             <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Price</th>
             <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">field_type
             </th>
-            <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">owner</th>
+            {{-- <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">owner</th> --}}
             <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Availability</th>
             <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Actions</th>
           </tr>
@@ -44,7 +44,7 @@
             <td class="px-4 py-4 whitespace-nowrap">${{ $field->price }}.00</td>
             <td class="px-4 py-4 whitespace-nowrap">{{ $field->field_type }}</td>
 
-            <td class="px-4 py-4 whitespace-nowrap">{{ $field->owner_id}}</td>
+            {{-- <td class="px-4 py-4 whitespace-nowrap">{{ $field->owner_id}}</td> --}}
             <td class="py-2 px-3 border-b border-gray-300">
               <span class="inline-block px-3 py-1 text-white text-xs font-semibold mr-2 rounded-full
                       {{ $field->availablity === 1 ? 'bg-green-500 text-gray-700' : '' }}

@@ -48,7 +48,7 @@
                     @php
                     $totalBookings = 0;
                     @endphp
-                    @foreach ($bookings->where('status', '!=', 'cancelled') as $booking)
+                    @foreach ($bookings->where('status', '!=', 'cancelled') as $index =>$booking)
                     @if ($booking->status !== 'rejected')
                     @php
                     $totalBookings++;
@@ -95,7 +95,7 @@
                     @endforeach
                 </tbody>
                 <tbody id="cancelled-booking-list">
-                    @foreach ($bookings->where('status', 'cancelled') as $booking)
+                    @foreach ($bookings->where('status', 'cancelled') as $index => $booking)
                     @php
                     $totalBookings++;
                     @endphp

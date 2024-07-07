@@ -76,7 +76,13 @@ class User extends Authenticatable
         ]);
     
         // Assign the role
-        $user->assignRole('owner');
+        if( $request->roles){
+            $user->assignRole($request->roles);
+        }
+        else{
+            $user->assignRole('owner');
+        }
+        
 
         // Create the token for API access
         $token = $user->createToken('auth_token')->plainTextToken;

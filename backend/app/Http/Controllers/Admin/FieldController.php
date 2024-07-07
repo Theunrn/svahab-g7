@@ -57,7 +57,7 @@ class FieldController extends Controller
             'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg,jfif,webp|max:2048',
             'price' => 'required|numeric|min:0',
             'field_type' => 'required|string|max:255',
-            'owner_id' => 'required|integer',
+            'owner_id' => 'nullable',
             'availablity' => 'required|boolean',
         ]);
 
@@ -73,7 +73,7 @@ class FieldController extends Controller
         $field->location = $validatedData['location'];
         $field->price = $validatedData['price'];
         $field->field_type = $validatedData['field_type'];
-        $field->owner_id = $validatedData['owner_id'];
+        // $field->owner_id = $validatedData['owner_id'];
         $field->availablity = $validatedData['availablity'];
        
         $field->save();

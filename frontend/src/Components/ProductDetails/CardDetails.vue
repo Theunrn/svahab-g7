@@ -99,6 +99,7 @@
 import { ref, computed, onMounted } from 'vue';
 import axiosInstance from '@/plugins/axios';
 import { useRoute,useRouter  } from 'vue-router';
+import { useOrderedChildren } from 'element-plus';
 const route = useRoute();
 const router = useRouter();
 const productId = computed(() => route.params);
@@ -109,7 +110,7 @@ const sizes = ref([]); // Reactive reference for sizes
 const selectedSize = ref(null); // Reactive reference for selected size
 const quantity = ref(1);
 const order = ref({});
-const userId = computed(() => route.query.user);
+const userId = computed(() => route.query.customer);
 console.log(userId);
 
 const fetchProductDetails = async () => {
@@ -189,12 +190,9 @@ const submitOrder = async () => {
       total_amount: total.value
     });
 
-    order.value = response.data.order
-    // alert('Order created successfully');
-    // router.push({
-    //   path: `/payment/${userId.value}`,
-    //   query: { order: order.value.id }
-    // });
+    order.value = response.data.order;
+    const orderId = order.value.id;
+    localStorage.setItem("orderId", orderId)
   } catch (error) {
     console.error('Error creating order:', error);
   }

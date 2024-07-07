@@ -19,6 +19,7 @@ class Order extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+  
 
     public function products()
     {
@@ -32,11 +33,13 @@ class Order extends Model
 
         $order = new self();
         $order->user_id = $user->id;
-        // $order->total_amount = $validatedData->total_amount;
         $order->order_date = now()->format('Y-m-d');
+        $product = Product::findOrFail($validatedData['product_id']);
+        $totalAmount = $product->price * $validatedData['qty'];
+        $order->total_amount = $totalAmount;
         $order->save();
 
-        $product = Product::findOrFail($validatedData['product_id']);
+        
 
         // Associate product with color and size
         $order->products()->attach($product, [
