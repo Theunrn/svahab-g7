@@ -43,11 +43,11 @@
                     <label for="field_type" class="text-gray-700 select-none font-medium">Field Type</label>
                     <input type="text" id="field_type" name="field_type" value="{{ old('field_type') }}" class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-200">
                 </div>
-
+{{-- 
                 <div class="flex flex-col space-y-2">
                     <label for="owner_id" class="text-gray-700 select-none font-medium">Owner ID</label>
                     <input type="number" id="owner_id" name="owner_id" value="{{ old('owner_id') }}" class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-200">
-                </div>
+                </div> --}}
 
                 <div class="flex flex-col space-y-2">
                     <label class="text-gray-700 select-none font-medium">Availability</label>

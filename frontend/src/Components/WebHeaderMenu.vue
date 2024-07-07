@@ -5,7 +5,7 @@
   >
     <!-- Logo -->
     <div class="flex items-center space-x-2">
-      <a href="/"><img width="28%" height="35%" src="../assets/image/logo.png" alt="Logo" /></a>
+      <a href="/"><img width="33%" height="40%" src="../assets/image/logo.png" alt="Logo" /></a>
     </div>
     <!-- Menu Items -->
     <nav class="flex justify-center space-x-4">

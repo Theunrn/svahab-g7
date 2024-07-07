@@ -34,6 +34,7 @@ class OrderProductController extends Controller
             'qty' => 'required|integer|min:1',
             'color_id' => 'nullable|exists:colors,id',
             'size_id' => 'nullable|exists:sizes,id',
+            'total_amount' => 'nullable',
         ]);
 
         $order = Order::createOrder($validatedData);
