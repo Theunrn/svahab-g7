@@ -49,6 +49,6 @@ class RegisteredUserController extends Controller
 
         Auth::guard('front')->login($user);
 
-        return redirect(RouteServiceProvider::HOME);
+        return redirect(RouteServiceProvider::ADMIN_HOME);
     }
 }

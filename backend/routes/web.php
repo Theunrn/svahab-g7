@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\BookingController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\SlideshowController; // Add this line
+use App\Http\Controllers\Admin\UserController;
 use Faker\Core\File;
 use GuzzleHttp\Psr7\Response;
 
@@ -100,5 +101,10 @@ Route::namespace('App\Http\Controllers\Admin')->name('admin.')->prefix('admin')
     //Order
     Route::get('/admin/orders/{id}/cancel', [OrderController::class, 'cancel'])->name('admin.orders.cancel');
     Route::get('/admin/orders/{id}/accept', [OrderController::class, 'confirm'])->name('admin.orders.confirm');
+
+    //User
+    Route::get('/users/create', [UserController::class, 'createAccount'])->name('users.create');
+    Route::post('/register/store', [UserController::class, 'register'])->name('register.store');
+    Route::get('/admin/loginform', [UserController::class, 'loginform'])->name('admin.loginform');
 
     

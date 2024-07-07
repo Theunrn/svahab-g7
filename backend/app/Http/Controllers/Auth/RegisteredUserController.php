@@ -51,4 +51,7 @@ class RegisteredUserController extends Controller
 
         return redirect(RouteServiceProvider::ADMIN_HOME);
     }
+    public function register(){
+        return view('auth.register');
+    }
 }
