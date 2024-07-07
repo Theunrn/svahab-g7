@@ -32,16 +32,15 @@ class OrderProductController extends Controller
         $validatedData = $request->validate([
             'product_id' => 'required|exists:products,id',
             'qty' => 'required|integer|min:1',
-            'color_id' => 'nullable|exists:colors,id',
-            'size_id' => 'nullable|exists:sizes,id',
-            'total_amount' => 'nullable',
+            'color_id' => 'required|exists:colors,id',
+            'size_id' => 'required|exists:sizes,id',
         ]);
 
         $order = Order::createOrder($validatedData);
 
         return response()->json(['message' => 'Order created successfully', 'order' => $order], 201);
     }
-
+   
     public function show($id)
     {
         // Get authenticated user (customer)
@@ -113,21 +112,6 @@ class OrderProductController extends Controller
             return response()->json(['message' => 'Order is not cancelled, cannot reactivate'], 400);
         }
     }
-    // app/Http/Controllers/OrderController.php
-    public function getOrdersByUserId($id)
-    {
-        $orders = Order::where('user_id', $id)->get();
-        $orders = OrderProductResource::collection($orders);
-        if ($orders->isEmpty()) {
-            return response()->json(['error' => 'No orders found for this user'], 404);
-        }
-        return response()->json($orders, 200);
-    }
-    
-    public function deleteOrder($id)
-    {
-        $order = Order::findOrFail($id);
-        $order->delete();
-        return response()->json(['message' => 'Order deleted successfully'], 200);
-    }
+
+
 }

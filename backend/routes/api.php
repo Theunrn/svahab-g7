@@ -18,6 +18,8 @@ use App\Http\Controllers\API\ProductController as APIProductController;
 use App\Http\Controllers\API\SizeController;
 use App\Http\Controllers\API\SlideShowController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\API\AddToCardController;
+use App\Http\Controllers\API\DeliveryController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\StripePaymentController;
 use Illuminate\Http\Request;
@@ -132,3 +134,22 @@ Route::get('/payment/list', [APIPaymentController::class, 'index']);
 Route::put('/update/payment/booking/{id}', [BookingController::class, 'updateStatusPaymentBooking']);
 Route::put('/update/payment/order/{id}', [OrderController::class, 'updateStatusPaymentOrder']);
 Route::delete('/customer/orders/delete/{id}', [OrderProductController::class,'deleteOrder']);
+Route::delete('/notification/delete/{id}', [NotificationController::class, 'deleteNotifications']);
+
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('cart/list', [AddToCardController::class, 'index']);
+    Route::post('cart/create', [AddToCardController::class, 'store']);
+    Route::get('cart/show/{id}', [AddToCardController::class, 'show']);
+    Route::put('cart/update/{id}', [AddToCardController::class, 'update']);
+    Route::delete('cart/delete/{id}', [AddToCardController::class, 'destroy']);
+});
+
+Route::get('delivery/list', [DeliveryController::class, 'index'])->middleware('auth:sanctum');
+Route::post('delivery/create', [DeliveryController::class, 'store']);
+Route::get('delivery/show/{id}', [DeliveryController::class, 'show']);
+Route::put('delivery/update/{id}', [DeliveryController::class, 'update']);
+Route::delete('delivery/delete/{id}', [DeliveryController::class, 'destroy']);
+
+
+

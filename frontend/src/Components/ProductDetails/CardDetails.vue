@@ -40,19 +40,7 @@
         <div class="color-options mb-3">
           <h5 class="mb-2">Color:</h5>
           <div class="d-flex flex-wrap">
-            <div
-              v-for="color in product.colors"
-              :key="color.id"
-              :style="{ backgroundColor: color.hex_code }"
-              :class="[
-                'color-circle',
-                'mr-2',
-                'cursor-pointer',
-                `bg-${color.name.toLowerCase()}`,
-                { selected: selectedColor === color.id }
-              ]"
-              @click="toggleColorSelection(color.id)"
-            ></div>
+            <div v-for="color in product.colors" :key="color.id" :style="{ backgroundColor: color.hex_code }" :class="[ 'color-circle', 'mr-2', 'cursor-pointer', `bg-${color.name.toLowerCase()}`, { selected: selectedColor === color.id } ]"  @click="toggleColorSelection(color.id)" ></div>
           </div>
         </div>
         <div class="size-options mb-3 flex gap-3">
@@ -74,9 +62,7 @@
           <h5 class="mb-2">Quantity:</h5>
           <div class="input-group w-auto">
             <div class="quantity-input">
-              <button @click="decrementQuantity" class="decrement btn btn-outline-secondary">
-                -
-              </button>
+              <button @click="decrementQuantity" class="decrement btn btn-outline-secondary">  -  </button>
               <input class="input-group min-max" type="text" v-model="quantity" />
               <button @click="incrementQuantity" class="increment btn btn-outline-secondary">
                 +

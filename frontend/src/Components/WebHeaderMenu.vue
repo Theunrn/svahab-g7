@@ -16,8 +16,8 @@
     </nav>
     <!-- Cart Button -->
     <button class="relative inline-flex w-fit mx-4">
-      <div class="absolute top-0 right-0 transform translate-x-2/4 -translate-y-1/2 z-10 flex items-center justify-center h-5 w-5 bg-red-600 rounded-full text-white text-xs font-bold">
-        1
+      <div  class="absolute top-0 right-0 transform translate-x-2/4 -translate-y-1/2 z-10 flex items-center justify-center h-5 w-5 bg-red-600 rounded-full text-white text-xs font-bold">
+        1 
       </div>
       <router-link to="/addtocart" class="flex items-center justify-center rounded-lg bg-primary-500 text-white dark:text-gray-200">
         <i class='bx bxs-cart-add text-3xl ml-4 text-white'></i> <!-- Larger cart icon -->
@@ -58,8 +58,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import { useAuthStore } from '@/stores/auth-store';
-import axiosInstance from '@/plugins/axios';
+import { useAuthStore } from '@/stores/auth-store'; // Adjust the import path based on your actual file structure
 
 const route = useRoute();
 const authStore = useAuthStore();
@@ -81,11 +80,8 @@ const getNewCount = (notificationList) => {
 
 const logout = () => {
   authStore.logout();
+  
 };
-
-onMounted(() => {
-  fetchNotifications();
-});
 </script>
 
 <style scoped>

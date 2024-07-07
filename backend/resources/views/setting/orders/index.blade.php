@@ -30,18 +30,17 @@
                     <table class="w-full border-collapse">
                         <thead>
                             <tr class="bg-gray-200">
-                                <th class="px-2 py-2 text-left">#</th>
-                                <th class="px-2 py-2 text-left">Customer Name</th>
-                                <th class="px-2 py-2 text-left">Product</th>
-                                <th class="px-2 py-2 text-left">Quantity</th>
-                                {{-- <th class="px-2 py-2 text-left">Price</th> --}}
-                                <th class="px-2 py-2 text-left">Total</th>
-                                <th class="px-2 py-2 text-left">Status</th>
-                                <th class="px-2 py-2 text-left">Payment</th>
-                                {{-- <th class="px-2 py-2 text-left">Color</th>
-                                <th class="px-2 py-2 text-left">Size</th> --}}
-                                <th class="px-2 py-2 text-left">Date</th>
-                                <th class="px-2 py-2 text-left">Action</th>
+                                <th class="px-4 py-2 text-left">ID</th>
+                                <th class="px-4 py-2 text-left">Customer</th>
+                                <th class="px-4 py-2 text-left">Product</th>
+                                <th class="px-4 py-2 text-left">Quantity</th>
+                                <th class="px-4 py-2 text-left">Price</th>
+                                <th class="px-4 py-2 text-left">Total</th>
+                                <th class="px-4 py-2 text-left">Order</th>
+                                <th class="px-4 py-2 text-left">Payment</th>
+                                <th class="px-4 py-2 text-left">Color</th>
+                                <th class="px-4 py-2 text-left">Size</th>
+                                <th class="px-4 py-2 text-left">Date</th>
                             </tr>
                         </thead>
                         <tbody class="p-2">
@@ -118,6 +117,7 @@
                                             
                                             @endif
                                         </td>
+                                        <td class="px-4 py-2">{{ \Carbon\Carbon::parse($order->order_date)->isoFormat('dddd, D MMMM, YYYY') }}</td>
                                     </tr>
                                 @endforeach
                             @endforeach

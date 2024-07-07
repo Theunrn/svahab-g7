@@ -88,5 +88,15 @@ class User extends Authenticatable
     {
         return $this->hasOne(Customer::class);
     }
+
+    public function addToCards()
+    {
+        return $this->hasMany(AddToCard::class);
+    }
+
+    public function deliveries()
+    {
+        return $this->hasMany(Delivery::class);
+    }
     
 }
