@@ -8,6 +8,7 @@ use App\Models\Color;
 use App\Models\Product;
 use App\Models\Size;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
@@ -69,20 +70,19 @@ class ProductController extends Controller
         $imageName = time() . '.' . $request->image->extension();
         $request->image->storeAs('public/images', $imageName);
 
-        // Create new product
+        // // Create new product
         $product = new Product();
+        $product->owner_id = Auth::user()->id;
         $product->name = $validatedData['name'];
         $product->description = $validatedData['description'];
         $product->price = $validatedData['price'];
         $product->image = 'images/' . $imageName; // assuming storage symlink is set up
         $product->category_id = $validatedData['category_id'];
-        
         $product->save();
 
         // Attach colors and sizes
         $product->colors()->attach($validatedData['colors'] ?? []);
         $product->sizes()->attach($validatedData['sizes'] ?? []);
-        // dd($product->colors()->attach($validatedData['colors'] ?? []));
 
         // Redirect to a success page or back to the form with a success message
         return redirect()->route('admin.products.index')->with('success', 'Product created successfully.');

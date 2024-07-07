@@ -58,12 +58,12 @@ Route::delete('field/delete/{id}', [FildController::class,'destroy'])->name('fie
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('orders/list', [OrderProductController::class, 'index']);
     Route::post('orders/create', [OrderProductController::class, 'store']);
-    Route::get('orders/show/{id}', [OrderProductController::class, 'show']);
+    
     Route::delete('orders/cancel/{id}', [OrderProductController::class, 'cancel']);
     Route::post('/orders/{id}/confirm', [OrderProductController::class, 'confirm']);
     Route::put('orders/reactivate/{id}', [OrderProductController::class, 'reactivate']);
 });
-
+Route::get('orders/show/{id}', [OrderProductController::class, 'show']);
 
 //Booking
 Route::get('/booking/list', [BookingController::class, 'index']);
@@ -119,16 +119,10 @@ Route::get('/notifications/list/{id}', [NotificationController::class, 'getNotif
 Route::put('/notification/update/{id}', [NotificationController::class, 'updateNotification']);
 Route::delete('/notifications/delete/{id}', [NotificationController::class, 'destroy']);
 
-// Notification routes
-// Route::get('/notifications', [NotificationController::class, 'index']);
-// Route::post('/notifications', [NotificationController::class, 'store']);
-// Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead']);
-// Route::delete('/notifications/{id}', [NotificationController::class, 'destroy']);
-
 //Payment
 Route::post('/stripe/payment', [StripePaymentController::class, 'makePayment']);
 Route::post('/payment/create', [APIPaymentController::class, 'createPayment']);
 Route::get('/payment/list', [APIPaymentController::class, 'index']);
 Route::put('/update/payment/booking/{id}', [BookingController::class, 'updateStatusPaymentBooking']);
-Route::put('/update/payment/order/{id}', [OrderController::class, 'updateStatusPaymentOrder']);
+Route::put('/update/payment/order/{id}', [OrderProductController::class, 'updateStatusPaymentOrder']);
 Route::delete('/customer/orders/delete/{id}', [OrderProductController::class,'deleteOrder']);

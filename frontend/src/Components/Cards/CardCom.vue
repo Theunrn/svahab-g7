@@ -1,16 +1,15 @@
 <template>
   <div>
-
-    <div class="card-me flex flex-wrap justify-content-start align-items-start ml-18">
+    <div class="card-me flex flex-wrap justify-content-start align-items-start ml-10">
       <!-- Loop to generate 6 cards -->
-      <div class="card-wrapper rounded-md shadow-lg relative w-1/3 sm:w-full mx-2 my-2" v-for="field in filteredFields" :key="field.id">
+      <div class="card-wrapper rounded-md shadow-lg relative w-1/3 sm:w-full mx-2 my-2" v-for="field in fields" :key="field">
         <div class="container bg-overlay" 
           :style="{
             background: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(${getImageUrl(field.image)})`,
           }">
           <div class="row text-center flex flex-col items-center justify-center h-full">
             <div class="btn-group">
-              <router-link :to="{ path: '/field/detail/' + field.id, query: { user: user.id } }">
+              <router-link :to="{ path: '/field/detail/' + field.id, query: { customer: customer.id } }">
                 <button type="button" class="btn btn-warning btn-details py-1 me-2 text-secondary">
                   <font-awesome-icon :icon="['fas', 'info-circle']" class="me-1" /> Book Now
                 </button>
@@ -58,38 +57,41 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed, watch } from 'vue';
+<script>
+import { ref, onMounted } from 'vue';
 import axiosInstance from '@/plugins/axios';
 
-const props = defineProps({
-  fields: Array,
-  user: Object
-});
+export default {
+  name: 'FootballFields',
+  props: {
+    customer: Object
+  },
+  
+  setup() {
+    const fields = ref([]);
 
-const searchQuery = ref('');
+    const fetchFields = async () => {
+      try {
+        const response = await axiosInstance.get('/fields/list');
+        fields.value = response.data.data;
+        console.log(fields.value);
+      } catch (error) {
+        console.error('Error fetching fields:', error);
+      }
+    };
 
-// Use computed property to filter fields based on searchQuery
-const filteredFields = computed(() => {
-  if (!searchQuery.value.trim()) {
-    return props.fields;
-  } else {
-    const query = searchQuery.value.toLowerCase();
-    return props.fields.filter(field =>
-      field.name.toLowerCase().includes(query)
-    );
+    onMounted(() => {
+      fetchFields();
+    });
+    const getImageUrl = (imagePath) => {
+      return imagePath ? `http://127.0.0.1:8000/storage/${imagePath}` : '/default-image.jpg';
+    };
+    return {
+      fields,
+      getImageUrl
+    };
   }
-});
-
-const getImageUrl = (imagePath) => {
-  return imagePath ? `http://127.0.0.1:8000/storage/${imagePath}` : '/default-image.jpg';
 };
-
-// Watch for changes in searchQuery to update filteredFields
-watch(searchQuery, () => {
-  filteredFields.value = filteredFields();
-});
-
 </script>
 
 <style scoped>

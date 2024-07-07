@@ -120,3 +120,6 @@ Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('adm
 Route::get('/admin/categories', [CategoryController::class, 'index'])->name('admin.categories.index');
 
     
+//Order
+Route::get('/admin/orders/{id}/cancel', [OrderController::class, 'cancel'])->name('admin.orders.cancel');
+Route::get('/admin/orders/{id}/accept', [OrderController::class, 'confirm'])->name('admin.orders.confirm');

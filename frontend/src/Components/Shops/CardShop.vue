@@ -42,7 +42,7 @@
                 See More
               </router-link>
               <router-link
-                :to=" {path: '/product/detail/' + product.id, query:{user:user.id}}"
+                :to=" {path: '/product/detail/' + product.id, query:{customer:user.id}}"
                 class="button inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-orange-500 rounded-lg hover:bg-orange-600 focus:ring-4 focus:outline-none focus:ring-orange-300 dark:bg-orange-400 dark:hover:bg-orange-500 dark:focus:ring-orange-600"
                 style="margin-left: auto">
                 Buy Now

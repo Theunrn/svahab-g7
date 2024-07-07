@@ -24,21 +24,21 @@
                 <div style="width: 19%;" class="flex gap-5 p-6 bg-yellow-100 border border-gray-200 rounded-lg shadow transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 hover:bg-blue-900 hover:text-white">
                     <i class='bx bx-calendar-check text-3xl'></i>
                     <div class="content">
-                        <strong style="font-size: 25px">{{ $totalBookings }} </strong>
+                        <strong style="font-size: 25px">{{ $totalBookings }}+</strong>
                         <p class="mb-3 font-normal text-black-500">Total Booking</p>
                     </div>
                 </div>
                 <div style="width: 19%;" class="flex gap-5 p-6 border border-gray-200 rounded-lg shadow transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 hover:bg-blue-900 hover:text-white">
                     <i class='bx bx-user text-3xl'></i>
                     <div class="content">
-                    <strong style="font-size: 25px">{{$totalUsers}}</strong>
+                    <strong style="font-size: 25px">{{$totalUsers}}+</strong>
                         <p class="mb-3 font-normal text-black-500">Total User</p>
                     </div>
                 </div>
                 <div style="width: 19%;" class="flex gap-5 p-6 border bg-pink-200 border-gray-200 rounded-lg shadow transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 hover:bg-blue-900 hover:text-white">
                     <i class='bx bx-clipboard text-3xl'></i>
                     <div class="content">
-                        <strong style="font-size: 25px">{{$totalFiels}}</strong>
+                        <strong style="font-size: 25px">{{$totalFiels}}+</strong>
                         <p class="mb-3 font-normal text-black-500">Total Fields</p>
                     </div>
                 </div>
