@@ -33,7 +33,7 @@
                     <p>No products found.</p>
                    
                 @else
-                    <table class="min-w-full​ divide-y divide-gray-200">
+                    <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
                                 <th class="py-4 px-6 bg-gray-100 font-bold text-sm text-gray-800 border-b border-gray-200">Image</th>

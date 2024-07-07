@@ -37,7 +37,7 @@ const router = createRouter({
       component: () => import('../views/Web/Profile/ProfileView.vue')
     },
     {
-      path: '/fields',
+      path: '/fields/detail/:id',
       name: 'fields',
       component: () => import('../views/Web/FieldsView.vue')
     },
@@ -83,9 +83,9 @@ const router = createRouter({
       component: () => import('../views/Admin/Auth/RegisterVIew.vue')
     },
     {
-      path: '/payment',
+      path: '/payment/:id',
       name: 'payment',
-      component: () => import('../views/Web/Products/PaymentView.vue')
+      component: () => import('../views/Web/Payment/PaymentView.vue')
     },
     {
       path: '/addtocart',

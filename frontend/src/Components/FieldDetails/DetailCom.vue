@@ -5,7 +5,7 @@
       <div class="form-select absolute p-2 mt-17 bg-green bg-opacity-90 z-20 rounded-lg w-full md:w-5/5 lg:w-9/10 ml-16">
         <div class="flex items-center justify-center space-x-2">
           <div class="relative flex gap-10 w-[334px]">
-            <input type="text" placeholder="Search Field" class="p-2 rounded border w-80 h-13" />
+            <input type="text" v-model="searchQuery" placeholder="Search cards" class="p-2 rounded border w-80 h-13" />
           </div>
 
           <div class="relative flex gap-10 w-[334px]">
@@ -36,10 +36,7 @@
         <!-- w-96 sets a fixed width for the left div -->
         <div class="card-me">
           <div class="card-wrapper relative w-full mx-2 my-2 border-1 border-gray-400 rounded-md">
-            <div class="container bg-overlay" 
-            :style="{
-              background: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(${getImageUrl(field.image)})`,
-            }">
+            <div class="container bg-overlay">
               <div class="row text-center flex flex-col items-center justify-center h-full">
                 <button type="button" class="btn btn-primary btn-details py-2 me-2">
                   Show on map
@@ -48,7 +45,7 @@
             </div>
             <div class="text text-start bg-white p-4 flex flex-col">
               <h5 class="text-2xl font-bold text-white py-2 mb-2 bg-green-500">Available</h5>
-              <h5 class="text-orange-600 ">Price: ${{field.price}}.00/Hour</h5>
+              <h5 class="text-orange-600 ">Price: $10.00/Hour</h5>
             </div>
           </div>
         </div>
@@ -106,50 +103,38 @@
         <!-- w-96 sets a fixed width for the right div -->
         <div class="w-full w-214">
           <!-- <h2 class="text-2xl font-bold">7Seasons Apartments offers</h2> -->
-          <img :src="getImageUrl(field.image)" alt="" class="w-full h-74 object-cover" />
+          <img src="../../assets/image/contact-imag.jpg" alt="" class="w-full h-74 object-cover" />
         </div>
-        <div class="gap-2 overflow-y-auto h-50">
-          <div class="card-text mt-4" >
+        <div v-for="card in filteredCards" :key="card.id" class="gap-2">
+          <div class="card-text mt-4">
             <div class="card-display-container gap-3 flex flex-col">
-              <div class="card-display border border-gray-400 rounded-lg shadow-lg flex overflow-hidden" v-for="index in 3" :key="index">
-                <div class="relative w-1/3 p-2" >
-                  <img 
-                    src="../../assets/image/contact-imag.jpg"
-                    alt=""
-                    class="w-full h-66 object-cover rounded-md"
-                    style="border-radius: 10px"
-                  />
-                  <span
-                    class="absolute top-5 right-5 bg-white rounded-full p-1 shadow-md cursor-pointer"
-                  >
+              <div class="card-display border border-gray-400 rounded-lg shadow-lg flex overflow-hidden">
+                <div class="relative w-1/3 p-2">
+                  <img src="../../assets/image/contact-imag.jpg" alt="" class="w-full h-66 object-cover rounded-md" style="border-radius: 10px">
+                  <span class="absolute top-5 right-5 bg-white rounded-full p-1 shadow-md cursor-pointer">
                     <img src="../../assets/image/heart.png" alt="Heart icon" class="w-8 h-8 p-1" />
                   </span>
                 </div>
                 <div class="flex flex-col justify-between p-4 w-2/3">
                   <div class="mb-2">
                     <h3 class="text-xl font-bold text-gray-900 mb-2">
-                      <strong class="text-orange font-bold"
-                        >7 Seasons Apartments BudapestOpens in new window</strong
-                      >
+                      <strong class="text-orange font-bold">{{ card.title }}</strong>
                     </h3>
-                    <p class="text-gray-700">
-                      Metro access Featuring a 24-hour reception, the 7Seasons Apartments offers you
-                      from Deak Ferenc tér, which is a major public transport...
-                    </p>
+                    <p class="text-gray-700">{{ card.description }}</p>
                   </div>
                   <div class="text-gray-700">
                     <p class="mt-2 cursor-pointer">
-                      <span class="price bg-blue-500 text-white p-2 rounded-md mr-2">$10.00</span
-                      >
+                      <span class="price bg-blue-500 text-white p-2 rounded-md mr-2">{{ card.price }}</span>
                     </p>
                     <div class="rating mt-3">
-                      <span class="star">&#9733;</span>
-                      <span class="star">&#9733;</span>
-                      <span class="star">&#9733;</span>
-                      <span class="star">&#9733;</span>
-                      <span class="star">&#9734;</span>
+                      <template v-for="n in card.rating">
+                        <span class="star">&#9733;</span>
+                      </template>
+                      <template v-for="n in 5 - card.rating">
+                        <span class="star">&#9734;</span>
+                      </template>
                     </div>
-                    <span class="viewer">2,965 reviews</span>
+                    <span class="viewer">{{ card.reviews }} reviews</span>
                   </div>
                 </div>
               </div>
@@ -179,13 +164,13 @@ const start_time = ref('');
 const end_time = ref('');
 const total_price = ref('00.00');
 const booking_date = ref<Date | null>(null);
-const bookings = ref<any[]>([])
-const field = ref({})
-const first_name = ref('')
-const last_name = ref('')
-const email = ref('')
-const phone_number = ref('')
+const bookings = ref<any[]>([]);
+const field = ref({});
 const price = ref(0);
+const booking = ref({});
+const searchQuery = ref('');
+
+
 const start = () => start_time.value;
 const end = () => end_time.value;
 const bookingDate = () => booking_date.value;
@@ -198,7 +183,7 @@ const calculateTotalPrice = () => {
   const endMinutes = endTimeParts[0] * 60 + endTimeParts[1];
   
   const durationInMinutes = endMinutes - startMinutes;
-  const pricePerMinute = price.value / 60; 
+  const pricePerMinute = 10 / 60; 
   
   total_price.value = (durationInMinutes * pricePerMinute).toFixed(2);
 }
@@ -221,26 +206,91 @@ const submitBooking = async () => {
     console.error('Error creating booking:', error);
   }
 }
-const fetchFields = async () => {
-      try {
-        const response = await axiosInstance.get(`/field/show/${fieldId.value}`);
-        field.value = response.data.data;
-        price.value = field.value.price;
-      } catch (error) {
-        console.error('Error fetching fields:', error);
-      }
-};
-onMounted(() => {
-      fetchFields();
-});
-const getImageUrl = (imagePath) => {
-      return imagePath ? `http://127.0.0.1:8000/storage/${imagePath}` : '/default-image.jpg';
-};
+
 
 watch([start_time, end_time], calculateTotalPrice);
+const filteredCards = computed(() => {
+  if (!searchQuery.value.trim()) {
+    return cardItems.value;
+  }
+  const query = searchQuery.value.trim().toLowerCase();
+  return cardItems.value.filter(card => {
+    // Adjust this based on your card structure and what fields you want to search in
+    return card.title.toLowerCase().includes(query) || card.description.toLowerCase().includes(query);
+  });
+});
+// Mock data for demonstration, replace with actual data from API or Vuex store
+const cardItems = ref([
+  {
+    id: 1,
+    title: '7 Seasons Apartments',
+    description: 'Metro access Featuring a 24-hour reception, the 7Seasons Apartments offers you from Deak Ferenc tér, which is a major public transport...',
+    price: '$10.00',
+    rating: 4,
+    reviews: 2965,
+    imageUrl: '../../assets/image/contact-imag.jpg'
+  },
+  {
+    id: 2,
+    title: 'Window',
+    description: 'Which is a major public transport...',
+    price: '$10.00',
+    rating: 4,
+    reviews: 2965,
+    imageUrl: '../../assets/image/contact-imag.jpg'
+  },
+  {
+    id: 3,
+    title: 'BudapestOpens',
+    description: 'Metro access Featuring...',
+    price: '$10.00',
+    rating: 4,
+    reviews: 2965,
+    imageUrl: '../../assets/image/contact-imag.jpg'
+  }
+]);
 
 
-
+const filteredCards = computed(() => {
+  if (!searchQuery.value.trim()) {
+    return cardItems.value;
+  }
+  const query = searchQuery.value.trim().toLowerCase();
+  return cardItems.value.filter(card => {
+    // Adjust this based on your card structure and what fields you want to search in
+    return card.title.toLowerCase().includes(query) || card.description.toLowerCase().includes(query);
+  });
+});
+// Mock data for demonstration, replace with actual data from API or Vuex store
+const cardItems = ref([
+  {
+    id: 1,
+    title: '7 Seasons Apartments',
+    description: 'Metro access Featuring a 24-hour reception, the 7Seasons Apartments offers you from Deak Ferenc tér, which is a major public transport...',
+    price: '$10.00',
+    rating: 4,
+    reviews: 2965,
+    imageUrl: '../../assets/image/contact-imag.jpg'
+  },
+  {
+    id: 2,
+    title: 'Window',
+    description: 'Which is a major public transport...',
+    price: '$10.00',
+    rating: 4,
+    reviews: 2965,
+    imageUrl: '../../assets/image/contact-imag.jpg'
+  },
+  {
+    id: 3,
+    title: 'BudapestOpens',
+    description: 'Metro access Featuring...',
+    price: '$10.00',
+    rating: 4,
+    reviews: 2965,
+    imageUrl: '../../assets/image/contact-imag.jpg'
+  }
+]);
 </script>
 
 
@@ -285,8 +335,8 @@ h5{
    justify-content: center;
  }
 .bg-overlay {
-  /* background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
-    url('../../assets/image/field.png'); */
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+    url('../../assets/image/field.png');
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center;

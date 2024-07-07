@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\OrderProductResource;
+use App\Models\Notification;
 use App\Models\Order;
 use App\Models\product;
 use Illuminate\Http\Request;
@@ -20,7 +21,7 @@ class OrderProductController extends Controller
         $user = Auth::user();
 
         // Retrieve orders for the authenticated user
-        $orders = Order::where('user_id', $user->id)->with('products')->get();
+        $orders = Order::where('user_id', $user->id)->with('product')->get();
 
         return response()->json(['success' => true, 'data' => $orders], 200);
     }
@@ -33,6 +34,7 @@ class OrderProductController extends Controller
             'qty' => 'required|integer|min:1',
             'color_id' => 'nullable|exists:colors,id',
             'size_id' => 'nullable|exists:sizes,id',
+            'total_amount' => 'nullable',
         ]);
 
         $order = Order::createOrder($validatedData);
@@ -54,13 +56,51 @@ class OrderProductController extends Controller
 
     public function cancel($id)
     {
-        $user = Auth::user();
-        $order = Order::where('user_id', $user->id)->findOrFail($id);
-
-        $response = $order->cancelOrder();
-
-        return response()->json($response, $response['message'] === 'Order cancelled successfully' ? 200 : 400);
+        {
+            $user = Auth::user();
+            $order = Order::where('user_id', $user->id)->findOrFail($id);
+    
+            $order->status = 'cancelled';
+            $order->save();
+    
+            // Create a notification for order cancellation
+            Notification::create([
+                'user_id' => $user->id,
+                'notification_type' => 'order_cancelled',
+                'notification_text' => 'Your order has been cancelled.',
+                'notification_data' => json_encode([
+                    'order_id' => $order->id,
+                    'cancelled_at' => now(),
+                ]),
+                'read' => false,
+            ]);
+    
+            return response()->json(['message' => 'Order cancelled successfully'], 200);
+        }
     }
+    public function confirm(Request $request, $id)
+    {
+        $user = Auth::user();
+        $order = Order::findOrFail($id);
+
+        // Confirm the order
+        $order->confirmOrder();
+
+        // Create a notification for order confirmation
+        Notification::create([
+            'user_id' => $order->user_id,
+            'notification_type' => 'order_confirmed',
+            'notification_text' => 'Your order has been confirmed.',
+            'notification_data' => json_encode([
+                'order_id' => $order->id,
+                'confirmed_at' => now(),
+            ]),
+            'read' => false,
+        ]);
+
+        return response()->json(['message' => 'Order confirmed successfully'], 200);
+    }
+
 
 
     public function reactivate($id)
@@ -82,5 +122,12 @@ class OrderProductController extends Controller
             return response()->json(['error' => 'No orders found for this user'], 404);
         }
         return response()->json($orders, 200);
+    }
+    
+    public function deleteOrder($id)
+    {
+        $order = Order::findOrFail($id);
+        $order->delete();
+        return response()->json(['message' => 'Order deleted successfully'], 200);
     }
 }

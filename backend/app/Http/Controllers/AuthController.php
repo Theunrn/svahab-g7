@@ -56,6 +56,8 @@ class AuthController extends Controller
             return  response()->json(['error' => 'User not found'], 404);
         }
     }
+
+   
     public function register(RegisterRequest $request)
     {
         $token = User::store($request);

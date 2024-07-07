@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\FieldController;
+use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\API\BookingController;
 use App\Http\Controllers\API\OrderProductController;
@@ -11,12 +12,14 @@ use App\Http\Controllers\API\ColorController;
 use App\Http\Controllers\API\DiscountProductController;
 use App\Http\Controllers\API\HistoryController;
 use App\Http\Controllers\API\NotificationController;
+use App\Http\Controllers\API\PaymentController as APIPaymentController;
 use App\Http\Controllers\API\PostController;
 use App\Http\Controllers\API\ProductController as APIProductController;
 use App\Http\Controllers\API\SizeController;
 use App\Http\Controllers\API\SlideShowController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\StripePaymentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -57,6 +60,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('orders/create', [OrderProductController::class, 'store']);
     Route::get('orders/show/{id}', [OrderProductController::class, 'show']);
     Route::delete('orders/cancel/{id}', [OrderProductController::class, 'cancel']);
+    Route::post('/orders/{id}/confirm', [OrderProductController::class, 'confirm']);
     Route::put('orders/reactivate/{id}', [OrderProductController::class, 'reactivate']);
 });
 
@@ -103,11 +107,28 @@ Route::get('/slideshow/list', [SlideShowController::class,'index'])->name('slide
 
 //History
 
-Route::get('/histories/list',[HistoryController::class,'index'])->name('history.list');
-Route::post('/histories/create',[HistoryController::class,'store'])->name('history.store');
+// Route::get('/histories/list',[HistoryController::class,'index'])->name('history.list');
+// Route::post('/histories/create',[HistoryController::class,'store'])->name('history.store');
+// Route::delete('/history/delete/{id}',[HistoryController::class,'destroy'])->name('history.destroy');
 Route::get('/customer/bookings/{id}', [BookingController::class, 'getBookingsByUserId']);
+Route::delete('/customer/bookings/delete/{id}', [BookingController::class, 'destroy'])->name('booking.destroy');
 Route::get('/customer/orders/{id}', [OrderProductController::class, 'getOrdersByUserId']);
 
 //Notifications
 Route::get('/notifications/list/{id}', [NotificationController::class, 'getNotificationsByUserId']);
-Route::delete('/notification/delete/{id}', [NotificationController::class, 'deleteNotifications']);
+Route::put('/notification/update/{id}', [NotificationController::class, 'updateNotification']);
+Route::delete('/notifications/delete/{id}', [NotificationController::class, 'destroy']);
+
+// Notification routes
+// Route::get('/notifications', [NotificationController::class, 'index']);
+// Route::post('/notifications', [NotificationController::class, 'store']);
+// Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead']);
+// Route::delete('/notifications/{id}', [NotificationController::class, 'destroy']);
+
+//Payment
+Route::post('/stripe/payment', [StripePaymentController::class, 'makePayment']);
+Route::post('/payment/create', [APIPaymentController::class, 'createPayment']);
+Route::get('/payment/list', [APIPaymentController::class, 'index']);
+Route::put('/update/payment/booking/{id}', [BookingController::class, 'updateStatusPaymentBooking']);
+Route::put('/update/payment/order/{id}', [OrderController::class, 'updateStatusPaymentOrder']);
+Route::delete('/customer/orders/delete/{id}', [OrderProductController::class,'deleteOrder']);

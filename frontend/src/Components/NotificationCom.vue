@@ -4,9 +4,9 @@
       <router-link to="/" class="btn btn-primary btn-sm mb-3 text-center">
         <i class="bx bx-arrow-back"></i> Back
       </router-link>
+
       <div class="booking-list bg-white">
         <!-- Delete button/icon -->
-
         <div class="tabs bg-dark flex text-center justify-between">
           <div class="title">
             <div class="tabs bg-dark">
@@ -15,7 +15,9 @@
                 class="tab text-white text-center"
                 :class="{ active: isActive('/notification') }"
                 ><i class="bx bx-archive-in text-xl me-2"></i> Primary
-                <span class="badge">{{ notifications.length }} new</span>
+                <span class="badge" v-if="getNewCount(notifications) > 0">{{
+                  getNewCount(notifications)
+                }}</span>
               </router-link>
               <router-link
                 :to="{ path: '/bookings/' + userId }"
@@ -23,31 +25,33 @@
                 :class="{ active: isActive('/bookings') }"
               >
                 <i class="bx bx-calendar-check text-xl"></i> Bookings
-                <span class="badge">{{ notifications.length }} new</span>
+                <span class="badge" v-if="getNewCount(bookingNotifications) > 0">{{
+                  getNewCount(bookingNotifications)
+                }}</span>
               </router-link>
               <router-link
                 :to="{ path: '/orders/' + userId }"
                 class="tab text-white text-center me-2"
                 :class="{ active: isActive('/orders') }"
               >
-                <i class="bx bx-cart-add text-xl"></i> Orders <span class="badge">0 new</span>
+                <i class="bx bx-cart-add text-xl"></i> Orders
+                <span class="badge" v-if="getNewCount(orderNotifications) > 0">{{
+                  getNewCount(orderNotifications)
+                }}</span>
               </router-link>
             </div>
           </div>
-          <div v-if="selectedNotifications.length > 0" class="text-end mt-3">
-            <button class="btn btn-danger btn-sm" @click="deleteSelectedNotifications">
-              <i class="bx bxs-trash text-xl"></i>
-            </button>
-          </div>
         </div>
 
+        <!-- Notification List -->
         <div class="notification-list">
-          <!-- Notifications for Primary/Bookings/Orders -->
-          <template v-if="isActive('/notification') || isActive('/bookings')">
+          <template v-if="isActive('/notification')">
             <div
               class="notification-item"
               v-for="notification in notifications"
               :key="notification.id"
+              :class="{ unread: !notification.read, read: notification.read }"
+              @click="showNotificationDetails(notification)"
             >
               <div class="group">
                 <div class="notification-header">
@@ -59,124 +63,232 @@
                   />
                   <div :class="['notification-type', notification.notification_type.toLowerCase()]">
                     {{ notification.notification_type }}
+                    <span v-if="!notification.read" class="badge bg-warning text-dark">New</span>
                   </div>
                 </div>
                 <div class="notification-content mt-2">
-                  <h3>{{ notification.notification_text }}</h3>
+                  <h3 :class="{ bold: !notification.read }">
+                    {{ notification.notification_text }}
+                  </h3>
                 </div>
               </div>
               <div class="notification-date">
                 <i class="bx bx-time-five"></i>
-                <span>{{ notification.created_at }}</span>
+                <span>{{ formatDate(notification.created_at) }}</span>
               </div>
             </div>
           </template>
-          <template v-if="isActive('/orders')">
-            <div
-              class="notification-item"
-              v-for="notification in ordersNotifications"
-              :key="notification.id"
-            >
-              <div class="group">
-                <div class="notification-header">
-                  <input
-                    type="checkbox"
-                    v-model="selectedNotifications"
-                    :value="notification.id"
-                    class="checkbox"
-                  />
-                  <div :class="['notification-type', notification.notification_type.toLowerCase()]">
-                    {{ notification.notification_type }}
-                  </div>
-                </div>
-                <div class="notification-content mt-2">
-                  <h3>{{ notification.notification_text }}</h3>
-                </div>
-              </div>
-              <div class="notification-date">
-                <i class="bx bx-time-five"></i>
-                <span>{{ notification.created_at }}</span>
-              </div>
-            </div>
-          </template>
+          <!-- Other templates for bookings and orders -->
         </div>
+
+        <!-- Popup Dialog for Notification Details -->
+        <TransitionRoot as="template" :show="showPopup">
+          <Dialog class="relative z-10" @close="showPopup = false">
+            <TransitionChild
+              as="template"
+              enter="ease-out duration-300"
+              enter-from="opacity-0"
+              enter-to="opacity-100"
+              leave="ease-in duration-200"
+              leave-from="opacity-100"
+              leave-to="opacity-0"
+            >
+              <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+            </TransitionChild>
+
+            <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+              <div class="flex min-h-full items-end justify-center p-4 sm:items-center sm:p-0">
+                <TransitionChild
+                  as="template"
+                  enter="ease-out duration-300"
+                  enter-from="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                  enter-to="opacity-100 translate-y-0 sm:scale-100"
+                  leave="ease-in duration-200"
+                  leave-from="opacity-100 translate-y-0 sm:scale-100"
+                  leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                >
+                  <DialogPanel
+                    class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg"
+                  >
+                    <!-- Notification Details Content -->
+                    <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                      <div class="sm:flex sm:items-start">
+                        <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                          <DialogTitle
+                            as="h3"
+                            class="text-base font-semibold leading-6 text-gray-900"
+                          >
+                            Notification Details
+                          </DialogTitle>
+                          <div class="mt-2">
+                            <p class="text-sm text-gray-500">Sent from your owner account!
+                            </p>
+                            <p class="text-sm text-gray-500">Dear customer!
+                              {{ selectedNotification.notification_text }}
+                            </p>
+                            <p class="text-sm text-gray-500">
+                              Date time: {{ formatDate(selectedNotification.created_at) }}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Actions Section (Mark as Read and Delete Buttons) -->
+                    <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                      <!-- Mark as Read Button -->
+                      <button
+                        type="button"
+                        class="ml-3 inline-flex w-full justify-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:w-auto"
+                        @click="markNotificationAsRead(selectedNotification)"
+                      >
+                        Mark as Read
+                      </button>
+
+                      <!-- Delete Button -->
+                      <button
+                        type="button"
+                        class="ml-3 inline-flex w-full justify-center rounded-md bg-red-500 px-3 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-red-600 sm:w-auto"
+                        @click="deleteNotification(selectedNotification)"
+                      >
+                        Delete
+                      </button>
+
+                    </div>
+                  </DialogPanel>
+                </TransitionChild>
+              </div>
+            </div>
+          </Dialog>
+        </TransitionRoot>
       </div>
     </div>
   </main>
 </template>
-
 <script>
-import axiosInstance from '@/plugins/axios';
-import { useRoute } from 'vue-router';
-import { computed, ref, onMounted } from 'vue';
+import axiosInstance from '@/plugins/axios'
+import { useRoute } from 'vue-router'
+import { computed, ref, onMounted } from 'vue'
+import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
+import { ExclamationTriangleIcon } from '@heroicons/vue/24/outline'
 
 export default {
   setup() {
-    const route = useRoute();
-    const userId = computed(() => route.params.id);
-    const notifications = ref([]);
-    const ordersNotifications = ref([]);
-    const selectedNotifications = ref([]);
+    const route = useRoute()
+    const userId = computed(() => route.params.id)
+    const notifications = ref([])
+    const bookingNotifications = ref([])
+    const orderNotifications = ref([])
+    const selectedNotifications = ref([])
+    const showPopup = ref(false)
+    const selectedNotification = ref(null)
 
     const fetchNotifications = async () => {
       try {
-        const response = await axiosInstance.get(`/notifications/list/${userId.value}`);
-        notifications.value = response.data;
+        const response = await axiosInstance.get(`/notifications/list/${userId.value}`)
+        notifications.value = response.data.data
+        // Filter notifications for bookings and orders
+        bookingNotifications.value = notifications.value.filter((notification) =>
+          notification.notification_type.toLowerCase().includes('booking')
+        )
+        orderNotifications.value = notifications.value.filter((notification) =>
+          notification.notification_type.toLowerCase().includes('order')
+        )
       } catch (error) {
-        console.error('Error fetching notifications:', error);
+        console.error('Error fetching notifications:', error)
       }
-    };
+    }
 
-    const fetchOrdersNotifications = async () => {
+    const updateNotification = async (id) => {
       try {
-        const response = await axiosInstance.get(`/orders/list/${userId.value}`);
-        ordersNotifications.value = response.data;
+        await axiosInstance.put(`/notification/update/${id}`)
+        fetchNotifications() // Re-fetch notifications after updating
+        console.log('Updated notification successfully')
       } catch (error) {
-        console.error('Error fetching orders notifications:', error);
+        console.error('Error updating notifications:', error)
       }
-    };
-
-    const deleteSelectedNotifications = async () => {
+    }
+    const deleteNotification = async (notification) => {
       try {
-        const response = await axiosInstance.post('/notifications/delete', {
-          notifications: selectedNotifications.value
-        });
-
-        // Handle success response if needed
-        console.log(response.data);
-
-        // After successful deletion, refresh notifications
-        await fetchNotifications();
-        await fetchOrdersNotifications();
-
-        // Clear selected notifications
-        selectedNotifications.value = [];
+        await axiosInstance.delete(`/notifications/delete/${notification.id}`)
+        fetchNotifications() // Re-fetch notifications after deleting
+        console.log('Deleted notification successfully')
+        showPopup.value = false // Close popup after deleting
       } catch (error) {
-        console.error('Error deleting notifications:', error);
-        // Handle error if needed
+        console.error('Error deleting notification:', error)
       }
-    };
+    }
+
+    const getNewCount = (notificationList) => {
+      return notificationList.filter((notification) => !notification.read).length
+    }
+
+    const showNotificationDetails = (notification) => {
+      selectedNotification.value = notification
+      showPopup.value = true
+    }
+
+    const markNotificationAsRead = async (notification) => {
+      try {
+        await axiosInstance.put(`/notification/update/${notification.id}`)
+        fetchNotifications() // Re-fetch notifications after marking as read
+        console.log('Marked notification as read successfully')
+        showPopup.value = false // Close popup after marking as read
+      } catch (error) {
+        console.error('Error marking notification as read:', error)
+      }
+    }
+
+    // Format date function if needed
+    const formatDate = (dateString) => {
+      const options = {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric',
+        timeZone: 'UTC'
+      }
+      return new Date(dateString).toLocaleString('en-US', options)
+      
+    }
 
     // Fetch notifications and orders notifications on component mount
     onMounted(() => {
-      fetchNotifications();
-      fetchOrdersNotifications();
-    });
+      fetchNotifications()
+    })
 
     const isActive = (tab) => {
-      return route.path.includes(tab);
-    };
+      return route.path.includes(tab)
+    }
 
     return {
       userId,
       notifications,
-      ordersNotifications,
+      bookingNotifications,
+      orderNotifications,
       selectedNotifications,
+      deleteNotification,
       isActive,
-      deleteSelectedNotifications
-    };
+      updateNotification,
+      getNewCount,
+      showPopup,
+      selectedNotification,
+      showNotificationDetails,
+      markNotificationAsRead,
+      formatDate
+    }
+  },
+  components: {
+    Dialog,
+    DialogPanel,
+    DialogTitle,
+    TransitionChild,
+    TransitionRoot,
+    ExclamationTriangleIcon
   }
-};
+}
 </script>
 <style scoped>
 .booking-list {
@@ -224,6 +336,12 @@ export default {
   padding-left: 20px;
   gap: 10px;
 }
+.notification-item.unread {
+  background-color: white; /* Background color for unread notifications */
+}
+.notification-item.read {
+  background-color: #f0f0f0; /* Background color for read notifications */
+}
 .notification-header {
   display: flex;
   align-items: center;
@@ -235,12 +353,21 @@ export default {
   color: #fff;
   margin-right: 10px;
 }
+.notification-type.unread {
+  background-color: black; /* Change background color for unread notifications */
+}
+.notification-type.read {
+  background-color: #999; /* Change background color for read notifications */
+}
 .notification-content {
   flex: 1;
 }
 h3 {
   font-size: 16px;
   margin: 0 0 5px;
+}
+h3.bold {
+  font-weight: bold; /* Font weight for unread notifications */
 }
 .notification-sender {
   color: #f00;
@@ -256,7 +383,8 @@ h3 {
 .notification-date span {
   margin-left: 5px;
 }
-.notification-type.booking_confirmed {
+.notification-type.booking_confirmed,
+.notification-type.order_confirmed {
   background-color: green;
 }
 .notification-type.other_type {
@@ -266,7 +394,8 @@ h3 {
 .notification-type.booking_rejected {
   background-color: red; /* Fallback color */
 }
-.notification-type.booking_cancelled {
+.notification-type.booking_cancelled,
+.notification-type.order_cancelled {
   background-color: red; /* Fallback color */
 }
 .notification-type.booking_rebooked {

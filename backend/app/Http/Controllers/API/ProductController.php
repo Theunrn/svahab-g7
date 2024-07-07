@@ -62,11 +62,10 @@ class ProductController extends Controller
             return response()->json(['error' => 'User not authenticated'], 401);
         }
     }
-
     public function show($id)
     {
         try {
-            $product = Product::with(['category', 'colors', 'sizes', 'discounts'])->findOrFail($id);
+            $product = Product::with(['category', 'colors', 'sizes'])->findOrFail($id);
 
             return response()->json([
                 'success' => true,
@@ -117,6 +116,8 @@ class ProductController extends Controller
             'message' => 'Product updated successfully',
         ]);
     }
+
+    
 
 
     /**
