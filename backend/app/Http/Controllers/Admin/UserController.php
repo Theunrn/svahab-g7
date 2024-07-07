@@ -1,9 +1,14 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+
 use App\Http\Controllers\Controller;
+use App\Http\Requests\RegisterRequest;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Providers\RouteServiceProvider;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
@@ -19,9 +24,9 @@ class UserController extends Controller
      */
     function __construct()
     {
-        $this->middleware('role_or_permission:User access|User create|User edit|User delete', ['only' => ['index','show']]);
-        $this->middleware('role_or_permission:User create', ['only' => ['create','store']]);
-        $this->middleware('role_or_permission:User edit', ['only' => ['edit','update']]);
+        $this->middleware('role_or_permission:User access|User create|User edit|User delete', ['only' => ['index', 'show']]);
+        $this->middleware('role_or_permission:User create', ['only' => ['create', 'store']]);
+        $this->middleware('role_or_permission:User edit', ['only' => ['edit', 'update']]);
         $this->middleware('role_or_permission:User delete', ['only' => ['destroy']]);
     }
 
@@ -32,10 +37,11 @@ class UserController extends Controller
      */
     public function index()
     {
-        $user= User::latest()->get();
+        $user = User::latest()->get();
 
-        return view('setting.user.index',['users'=>$user]);
+        return view('setting.user.index', ['users' => $user]);
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -45,7 +51,7 @@ class UserController extends Controller
     public function create()
     {
         $roles = Role::get();
-        return view('setting.user.new',['roles'=>$roles]);
+        return view('setting.user.new', ['roles' => $roles]);
     }
 
     /**
@@ -54,23 +60,16 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(RegisterRequest $request)
     {
-
-        $request->validate([
-            'name'=>'required',
-            'email' => 'required|email|unique:users',
-            'password'=>'required|confirmed'
-        ]);
-        $user = User::create([
-            'name'=>$request->name,
-            'email'=>$request->email,
-            'password'=> bcrypt($request->password),
-            'phone_number'=> $request->phone_number,
-        ]);
-        $user->assignRole($request->roles);
+    
+    
+        $user = User::store($request);
+        // $user->assignRole($request->roles);
+    
         return redirect()->route('admin.users.index')->with('success', 'User created !!!');
     }
+    
 
     /**
      * Display the specified resource.
@@ -93,7 +92,7 @@ class UserController extends Controller
     {
         $role = Role::get();
         $user->roles;
-       return view('setting.user.edit',['user'=>$user,'roles' => $role]);
+        return view('setting.user.edit', ['user' => $user, 'roles' => $role]);
     }
 
     /**
@@ -106,11 +105,11 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $validated = $request->validate([
-            'name'=>'required',
-            'email' => 'required|email|unique:users,email,'.$user->id.',id',
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email,' . $user->id . ',id',
         ]);
 
-        if($request->password != null){
+        if ($request->password != null) {
             $request->validate([
                 'password' => 'required|confirmed'
             ]);
@@ -123,6 +122,23 @@ class UserController extends Controller
         return redirect()->route('admin.users.index')->withSuccess('User updated !!!');
     }
 
+    public function createAccount(){
+
+        return view('auth.register');
+    }
+
+    public function register(RegisterRequest $request)
+    {
+        $user = User::store($request);
+        Auth::login($user);
+        return redirect(RouteServiceProvider::ADMIN_HOME);
+
+        return view('auth.register');
+        
+    }
+    public function loginform(){
+        return redirect('/');
+    }
     /**
      * Remove the specified resource from storage.
      *

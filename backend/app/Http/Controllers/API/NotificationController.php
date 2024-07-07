@@ -26,63 +26,17 @@ class NotificationController extends Controller
         return response()->json(['success' => true, 'message' => 'updated notification successfully']);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+   
+    public function destroy($id)
     {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function deleteNotifications(Request $request)
-    {
-        $notificationIds = $request->input('notifications', []);
-
-        // Validate input if needed
-        // Example validation: $request->validate(['notifications' => 'required|array']);
-
-        try {
-            // Perform deletion
-            Notification::whereIn('id', $notificationIds)->delete();
-
-            return response()->json(['message' => 'Notifications deleted successfully']);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Failed to delete notifications'], 500);
+        $notification = Notification::find($id);
+        
+        if (!$notification) {
+            return response()->json(['success' => false, 'message' => 'Notification not found'], 404);
         }
+
+        $notification->delete();
+
+        return response()->json(['success' => true, 'message' => 'Notification deleted successfully']);
     }
 }

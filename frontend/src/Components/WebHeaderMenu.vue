@@ -1,5 +1,6 @@
 <template>
-  <header style="padding-left: 60px; padding-right: 60px;"
+  <header
+    style="padding-left: 60px; padding-right: 60px;"
     class="flex justify-between py-2 items-center shadow-md navbar-light fixed top-0 left-0 right-0 bg-green-600 z-50"
   >
     <!-- Logo -->
@@ -14,26 +15,27 @@
       <a :href="'/contact'" :class="['font-bold-200 py-2 me-5 text-white custom-hover text-decoration-none me-5', { 'active': route.path === '/contact' }]">CONTACT</a>
     </nav>
     <!-- Cart Button -->
-
     <button class="relative inline-flex w-fit mx-4">
-      <div  class="absolute top-0 right-0 transform translate-x-2/4 -translate-y-1/2 z-10 flex items-center justify-center h-5 w-5 bg-red-600 rounded-full text-white text-xs font-bold">
-        1 
+      <div class="absolute top-0 right-0 transform translate-x-2/4 -translate-y-1/2 z-10 flex items-center justify-center h-5 w-5 bg-red-600 rounded-full text-white text-xs font-bold">
+        1
       </div>
       <router-link to="/addtocart" class="flex items-center justify-center rounded-lg bg-primary-500 text-white dark:text-gray-200">
-        <i class='bx bxs-cart-add text-3xl ml-4 text-white'></i> <!-- Larger bell icon -->
+        <i class='bx bxs-cart-add text-3xl ml-4 text-white'></i> <!-- Larger cart icon -->
       </router-link>
     </button>
-    <button class="relative inline-flex w-fit">
-      <div  class="absolute top-0 right-0 transform translate-x-2/4 -translate-y-1/2 z-10 flex items-center justify-center h-5 w-5 bg-red-600 rounded-full text-white text-xs font-bold">
-        1 
+    <!-- Notification Button -->
+    <button class="relative inline-flex w-fit" @click="clearNotifications">
+      <div class="absolute top-0 right-0 transform translate-x-2/4 -translate-y-1/2 z-10 flex items-center justify-center h-5 w-5 bg-red-600 rounded-full text-white text-xs font-bold"
+        v-if="notifications.length > 0">{{ getNewCount(notifications) }}
       </div>
       <router-link :to="{path: '/notification/' + authStore.user.id}" class="flex items-center justify-center rounded-lg bg-primary-500 text-white dark:text-gray-200">
         <i class="bx bx-bell text-3xl"></i> <!-- Larger bell icon -->
       </router-link>
     </button>
+    <!-- History Button -->
     <button class="relative inline-flex items-center m-4">
       <router-link :to="{ path: '/history/' + authStore.user.id }" class="flex items-center justify-center rounded-lg bg-primary-500 text-white dark:text-gray-200">
-        <span v-if="showText" class="absolute top-0 left-3/2 transform -translate-x-1/2 -translate-y-full text-lg font-semibold ">History</span>
+        <span v-if="showText" class="absolute top-0 left-3/2 transform -translate-x-1/2 -translate-y-full text-lg font-semibold">History</span>
         <i class="bx bx-history text-3xl"
            @mouseover="showText = true"
            @mouseleave="showText = false"></i>
@@ -42,7 +44,7 @@
     <!-- Authentication Button -->
     <div class="auth flex gap-2">
       <!-- Conditionally render Register, Login or Logout button -->
-      <template v-if="isAuthenticated = false">
+      <template v-if="!isAuthenticated">
         <a href="/register"><button class="hover:bg-red-400 text-dark bg-white px-4 py-1 border-1 border-red-700 hover:border-red-500 rounded">Register</button></a>
         <a href="/login"><button class="hover:bg-red-400 text-dark bg-white px-4 py-1 border-1 border-red-700 hover:border-red-500 rounded">Login</button></a>
       </template>
@@ -54,26 +56,42 @@
 </template>
 
 <script setup lang="ts">
+import { ref, computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import { useAuthStore } from '@/stores/auth-store'; // Adjust the import path based on your actual file structure
+import { useAuthStore } from '@/stores/auth-store';
+import axiosInstance from '@/plugins/axios';
 
 const route = useRoute();
 const authStore = useAuthStore();
+const isAuthenticated = computed(() => authStore.isAuthenticated);
+const notifications = ref([]);
 
-// Access isAuthenticated from authStore
-let isAuthenticated = authStore.isAuthenticated;
-// Function to trigger logout
-const logout = () => {
-  authStore.isAuthenticated = false;
-  authStore.logout();
-  
+const fetchNotifications = async () => {
+  try {
+    const response = await axiosInstance.get(`/notifications/list/${authStore.user.id}`);
+    notifications.value = response.data.data;
+  } catch (error) {
+    console.error('Error fetching notifications:', error);
+  }
 };
+
+const getNewCount = (notificationList) => {
+  return notificationList.filter(notification => !notification.read).length;
+};
+
+const logout = () => {
+  authStore.logout();
+};
+
+onMounted(() => {
+  fetchNotifications();
+});
 </script>
 
 <style scoped>
 .custom-hover {
-  padding-bottom: 2px; /* Reduce bottom padding */
-  line-height: 0.5; /* Set line height to 0.5 */
+  padding-bottom: 2px;
+  line-height: 0.5;
 }
 
 .custom-hover:hover {
@@ -84,10 +102,10 @@ const logout = () => {
 .active {
   border-bottom: 2px solid white;
   border-radius: 5px;
-  font-weight: bold; /* Optionally make the active link bold */
+  font-weight: bold;
 }
 
 body {
-  padding-top: 60px; /* Adjust based on navbar height to prevent content overlay */
+  padding-top: 60px;
 }
 </style>

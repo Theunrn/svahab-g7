@@ -11,18 +11,12 @@ import WebHeaderMenu from '../../Components/WebHeaderMenu.vue'
 import WebFooter from '../../Components/WebFooter.vue'
 import HeaderShop from '../../Components/Shops/HeaderShop.vue'
 import CardShop from '../../Components/Shops/CardShop.vue'
-const authStore = useAuthStore();
+const authStore = useAuthStore()
 </script>
-   
-
-
-
-
- 
-
+  
     
   
-  <style scoped>
+<style scoped>
 html,
 body {
   margin: 0;

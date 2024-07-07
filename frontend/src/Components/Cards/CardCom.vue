@@ -1,8 +1,9 @@
 <template>
   <div>
-    <div class="card-me flex flex-wrap justify-content-start align-items-start ml-10">
+
+    <div class="card-me flex flex-wrap justify-content-start align-items-start ml-18">
       <!-- Loop to generate 6 cards -->
-      <div class="card-wrapper rounded-md shadow-lg relative w-1/3 sm:w-full mx-2 my-2" v-for="field in fields" :key="field">
+      <div class="card-wrapper rounded-md shadow-lg relative w-1/3 sm:w-full mx-2 my-2" v-for="field in filteredFields" :key="field.id">
         <div class="container bg-overlay" 
           :style="{
             background: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(${getImageUrl(field.image)})`,
@@ -57,40 +58,38 @@
   </div>
 </template>
 
-<script>
-import { ref, onMounted } from 'vue';
+<script setup lang="ts">
+import { ref, computed, watch } from 'vue';
 import axiosInstance from '@/plugins/axios';
 
-export default {
-  name: 'FootballFields',
-  props: {
-    user: Object
-  },
-  setup() {
-    const fields = ref([]);
+const props = defineProps({
+  fields: Array,
+  user: Object
+});
 
-    const fetchFields = async () => {
-      try {
-        const response = await axiosInstance.get('/fields/list');
-        fields.value = response.data.data;
-        console.log(fields.value);
-      } catch (error) {
-        console.error('Error fetching fields:', error);
-      }
-    };
+const searchQuery = ref('');
 
-    onMounted(() => {
-      fetchFields();
-    });
-    const getImageUrl = (imagePath) => {
-      return imagePath ? `http://127.0.0.1:8000/storage/${imagePath}` : '/default-image.jpg';
-    };
-    return {
-      fields,
-      getImageUrl
-    };
+// Use computed property to filter fields based on searchQuery
+const filteredFields = computed(() => {
+  if (!searchQuery.value.trim()) {
+    return props.fields;
+  } else {
+    const query = searchQuery.value.toLowerCase();
+    return props.fields.filter(field =>
+      field.name.toLowerCase().includes(query)
+    );
   }
+});
+
+const getImageUrl = (imagePath) => {
+  return imagePath ? `http://127.0.0.1:8000/storage/${imagePath}` : '/default-image.jpg';
 };
+
+// Watch for changes in searchQuery to update filteredFields
+watch(searchQuery, () => {
+  filteredFields.value = filteredFields();
+});
+
 </script>
 
 <style scoped>

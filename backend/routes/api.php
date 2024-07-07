@@ -107,21 +107,23 @@ Route::get('/slideshow/list', [SlideShowController::class,'index'])->name('slide
 
 //History
 
-Route::get('/histories/list',[HistoryController::class,'index'])->name('history.list');
-Route::post('/histories/create',[HistoryController::class,'store'])->name('history.store');
+// Route::get('/histories/list',[HistoryController::class,'index'])->name('history.list');
+// Route::post('/histories/create',[HistoryController::class,'store'])->name('history.store');
+// Route::delete('/history/delete/{id}',[HistoryController::class,'destroy'])->name('history.destroy');
 Route::get('/customer/bookings/{id}', [BookingController::class, 'getBookingsByUserId']);
+Route::delete('/customer/bookings/delete/{id}', [BookingController::class, 'destroy'])->name('booking.destroy');
 Route::get('/customer/orders/{id}', [OrderProductController::class, 'getOrdersByUserId']);
 
 //Notifications
 Route::get('/notifications/list/{id}', [NotificationController::class, 'getNotificationsByUserId']);
 Route::put('/notification/update/{id}', [NotificationController::class, 'updateNotification']);
-Route::delete('/notification/delete/{id}', [NotificationController::class, 'deleteNotifications']);
+Route::delete('/notifications/delete/{id}', [NotificationController::class, 'destroy']);
 
 // Notification routes
-Route::get('/notifications', [NotificationController::class, 'index']);
-Route::post('/notifications', [NotificationController::class, 'store']);
-Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead']);
-Route::delete('/notifications/{id}', [NotificationController::class, 'destroy']);
+// Route::get('/notifications', [NotificationController::class, 'index']);
+// Route::post('/notifications', [NotificationController::class, 'store']);
+// Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead']);
+// Route::delete('/notifications/{id}', [NotificationController::class, 'destroy']);
 
 //Payment
 Route::post('/stripe/payment', [StripePaymentController::class, 'makePayment']);
@@ -129,3 +131,4 @@ Route::post('/payment/create', [APIPaymentController::class, 'createPayment']);
 Route::get('/payment/list', [APIPaymentController::class, 'index']);
 Route::put('/update/payment/booking/{id}', [BookingController::class, 'updateStatusPaymentBooking']);
 Route::put('/update/payment/order/{id}', [OrderController::class, 'updateStatusPaymentOrder']);
+Route::delete('/customer/orders/delete/{id}', [OrderProductController::class,'deleteOrder']);
