@@ -8,15 +8,26 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    
+
+    public function index(Request $request)
     {
-        $categories = Category::all();
+        $search = $request->input('search');
+
+        if ($search) {
+            // Search for categories by name
+            $categories = Category::where('name', 'like', '%' . $search . '%')->get();
+        } else {
+            // Get all categories if no search query
+            $categories = Category::all();
+        }
+
+        if ($request->ajax()) {
+            return response()->json(['categories' => $categories]);
+        }
+
         return view('setting.categories.index', compact('categories'));
     }
-
     /**
      * Show the form for creating a new resource.
      */

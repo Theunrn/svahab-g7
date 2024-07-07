@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterRequest;
 use Illuminate\Http\Request;
@@ -23,9 +24,9 @@ class UserController extends Controller
      */
     function __construct()
     {
-        $this->middleware('role_or_permission:User access|User create|User edit|User delete', ['only' => ['index','show']]);
-        $this->middleware('role_or_permission:User create', ['only' => ['create','store']]);
-        $this->middleware('role_or_permission:User edit', ['only' => ['edit','update']]);
+        $this->middleware('role_or_permission:User access|User create|User edit|User delete', ['only' => ['index', 'show']]);
+        $this->middleware('role_or_permission:User create', ['only' => ['create', 'store']]);
+        $this->middleware('role_or_permission:User edit', ['only' => ['edit', 'update']]);
         $this->middleware('role_or_permission:User delete', ['only' => ['destroy']]);
     }
 
@@ -36,10 +37,11 @@ class UserController extends Controller
      */
     public function index()
     {
-        $user= User::latest()->get();
+        $user = User::latest()->get();
 
-        return view('setting.user.index',['users'=>$user]);
+        return view('setting.user.index', ['users' => $user]);
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -49,7 +51,7 @@ class UserController extends Controller
     public function create()
     {
         $roles = Role::get();
-        return view('setting.user.new',['roles'=>$roles]);
+        return view('setting.user.new', ['roles' => $roles]);
     }
 
     /**
@@ -90,7 +92,7 @@ class UserController extends Controller
     {
         $role = Role::get();
         $user->roles;
-       return view('setting.user.edit',['user'=>$user,'roles' => $role]);
+        return view('setting.user.edit', ['user' => $user, 'roles' => $role]);
     }
 
     /**
@@ -103,11 +105,11 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $validated = $request->validate([
-            'name'=>'required',
-            'email' => 'required|email|unique:users,email,'.$user->id.',id',
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email,' . $user->id . ',id',
         ]);
 
-        if($request->password != null){
+        if ($request->password != null) {
             $request->validate([
                 'password' => 'required|confirmed'
             ]);

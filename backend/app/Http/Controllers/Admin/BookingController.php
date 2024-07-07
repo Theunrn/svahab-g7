@@ -12,9 +12,9 @@ class BookingController extends Controller
 {
     function __construct()
     {
-        $this->middleware('role_or_permission:Booking access|Booking create|Booking edit|Booking delete', ['only' => ['index','show']]);
-        $this->middleware('role_or_permission:Booking create', ['only' => ['create','store']]);
-        $this->middleware('role_or_permission:Booking edit', ['only' => ['edit','update']]);
+        $this->middleware('role_or_permission:Booking access|Booking create|Booking edit|Booking delete', ['only' => ['index', 'show']]);
+        $this->middleware('role_or_permission:Booking create', ['only' => ['create', 'store']]);
+        $this->middleware('role_or_permission:Booking edit', ['only' => ['edit', 'update']]);
         $this->middleware('role_or_permission:Booking delete', ['only' => ['destroy']]);
     }
 

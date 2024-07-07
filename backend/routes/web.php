@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ProductController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\FieldController;
@@ -8,6 +9,7 @@ use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\DiscountController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\BookingController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\SlideshowController; // Add this line
 use App\Http\Controllers\Admin\UserController;
@@ -92,19 +94,29 @@ Route::namespace('App\Http\Controllers\Admin')->name('admin.')->prefix('admin')
         Route::get('/mail', [MailSettingController::class, 'index'])->name('mail.index');
         Route::put('/mail-update/{mailsetting}', [MailSettingController::class, 'update'])->name('mail.update');
     });
-    //Booking
-    Route::get('/admin/bookings/{id}/cancel', [BookingController::class, 'cancel'])->name('admin.bookings.cancel');
-    Route::get('/admin/bookings/{id}/rebook', [BookingController::class, 'reStore'])->name('admin.bookings.rebook');
-    Route::get('/admin/bookings/{id}/accept', [BookingController::class, 'accept'])->name('admin.bookings.accept');
-    Route::get('/admin/bookings/{id}/reject', [BookingController::class, 'reject'])->name('admin.bookings.reject');
+Route::get('/admin/bookings/{id}/cancel', [BookingController::class, 'cancel'])->name('admin.bookings.cancel');
+Route::get('/admin/bookings/{id}/rebook', [BookingController::class, 'reStore'])->name('admin.bookings.rebook');
+Route::get('/admin/bookings/{id}/accept', [BookingController::class, 'accept'])->name('admin.bookings.accept');
+Route::get('/admin/bookings/{id}/reject', [BookingController::class, 'reject'])->name('admin.bookings.reject');
+Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
-    //Order
-    Route::get('/admin/orders/{id}/cancel', [OrderController::class, 'cancel'])->name('admin.orders.cancel');
-    Route::get('/admin/orders/{id}/accept', [OrderController::class, 'confirm'])->name('admin.orders.confirm');
 
     //User
     Route::get('/users/create', [UserController::class, 'createAccount'])->name('users.create');
     Route::post('/register/store', [UserController::class, 'register'])->name('register.store');
     Route::get('/admin/loginform', [UserController::class, 'loginform'])->name('admin.loginform');
+
+// Route::resource('dashboards', DashboardController::class);
+
+
+
+// Route::prefix('admin')->middleware(['auth'])->group(function () {
+//     // Other admin routes...
+
+//     Route::resource('dashboards', DashboardController::class);
+// });
+
+
+Route::get('/admin/categories', [CategoryController::class, 'index'])->name('admin.categories.index');
 
     
