@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('user_id');
             $table->integer('owner_id');
-            $table->integer('amount');
+            $table->decimal('amount', 5, 2);
             $table->date('payment_date');
             $table->string('code');
             $table->string('method');

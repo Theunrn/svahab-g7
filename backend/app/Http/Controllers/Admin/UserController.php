@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+
+
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterRequest;
 use Illuminate\Http\Request;
@@ -10,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Str;
 
 
 
@@ -60,14 +63,20 @@ class UserController extends Controller
      */
     public function store(RegisterRequest $request)
     {
-    
-    
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed',
+            'phone_number' => 'required|string|max:20',
+            'qr' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg|max:20480',
+        ]);
+
         $user = User::store($request);
-        $user->assignRole($request->roles);
-    
-        return redirect()->route('admin.users.index')->with('success', 'User created !!!');
+
+        // Redirect with success message
+        return redirect()->route('admin.users.index')->with('success', 'User created successfully.');
     }
-    
+
 
     /**
      * Display the specified resource.
@@ -120,7 +129,8 @@ class UserController extends Controller
         return redirect()->route('admin.users.index')->withSuccess('User updated !!!');
     }
 
-    public function createAccount(){
+    public function createAccount()
+    {
 
         return view('auth.register');
     }
@@ -132,9 +142,9 @@ class UserController extends Controller
         return redirect(RouteServiceProvider::ADMIN_HOME);
 
         return view('auth.register');
-        
     }
-    public function loginform(){
+    public function loginform()
+    {
         return redirect('/');
     }
     /**

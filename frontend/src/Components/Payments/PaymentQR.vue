@@ -19,13 +19,18 @@
       style="display: flex; justify-content: center; align-items: center; flex-direction: column"
     >
       <div class="info">
-        <h1 class="font-bold text-center text-4xl text-yellow-500 mt-3" style="font-family:fantasy">S<span class="text-dark">vahab</span></h1>
+        <h1
+          class="font-bold text-center text-4xl text-yellow-500 mt-3"
+          style="font-family: fantasy"
+        >
+          S<span class="text-dark">vahab</span>
+        </h1>
       </div>
       <div class="w-full max-w-sm p-4 rounded-lg dark:bg-gray-800 dark-gray-700">
         <div
           class="flex justify-center rounded-md flex-column text-center text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm text-center p-2"
         >
-          <img class="px-2 rounded-md" src="../../assets/image/QR.jpg" alt="product image" />
+          <img class="px-2 rounded-md" :src="image" alt="QR image" />
           <p class="text-bold text-white">Owner Name QR</p>
         </div>
       </div>
@@ -66,7 +71,9 @@ export default {
       paymentDate: null,
       field_id: null,
       product_id: null,
-      token: null
+      token: null,
+      qr: null,
+      image: null,
     }
   },
   async mounted() {
@@ -78,13 +85,19 @@ export default {
       await this.fetchBooking()
     }
     if (this.field_id) {
-      await this.fetchOwner()
+      await this.fetchFieldOwner()
     }
     if (this.orderId) {
       await this.fetchOrder()
     }
     if(this.product_id){
       await this.fetchProductOwner()
+    }
+    if(this.ownerId){
+      await this.fetchOwner()
+    }
+    if(this.qr){
+      await this.getImageUrl()
     }
   },
   methods: {
@@ -148,7 +161,7 @@ export default {
         console.error('Error fetching booking data:', error)
       }
     },
-    async fetchOwner() {
+    async fetchFieldOwner() {
       try {
         const { data } = await axios.get(`http://127.0.0.1:8000/api/field/show/${this.field_id}`)
         this.ownerId = data.data.owner_id
@@ -177,6 +190,17 @@ export default {
       } catch (error) {
         console.error('Error fetching product owner data:', error)
       }
+    },
+    async fetchOwner() {
+      try {
+        const { data } = await axios.get(`http://127.0.0.1:8000/api/owner/show/${this.ownerId}`)
+        this.qr = data.data.qr;
+      } catch (error) {
+        console.error('Error fetching product owner data:', error)
+      }
+    },
+    async getImageUrl()  {
+       this.image = `http://127.0.0.1:8000${this.qr}`     
     }
   }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PaymentRequest;
+use App\Http\Resources\PaymentResource;
 use App\Models\Payment;
 use Illuminate\Http\Request;
 
@@ -15,6 +16,7 @@ class PaymentController extends Controller
     public function index()
     {
         $payments = Payment::all();
+        $payments = PaymentResource::collection($payments);
         return view('setting.payment.index', compact('payments'));
     }
 

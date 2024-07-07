@@ -56,7 +56,11 @@ class AuthController extends Controller
             return  response()->json(['error' => 'User not found'], 404);
         }
     }
+    public function show($id){
+        $user = User::find($id);
+        return response()->json(['success' => true, 'data' =>$user]);
 
+    }
    
     public function register(RegisterRequest $request)
     {

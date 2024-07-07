@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\DiscountController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\BookingController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\SlideshowController; // Add this line
 use App\Http\Controllers\Admin\UserController;
@@ -81,7 +82,7 @@ Route::namespace('App\Http\Controllers\Admin')->name('admin.')->prefix('admin')
         Route::resource('fields', 'FieldController');
         Route::resource('bookings', 'BookingController');
         Route::resource('settings', 'SettingController');
-        Route::resource('slideshow', 'SlideShowController'); 
+        Route::resource('slideshow', 'SlideShowController');
         Route::resource('products', 'ProductController');
         Route::resource('categories', 'CategoryController');
         Route::resource('payments', 'PaymentController');
@@ -101,10 +102,10 @@ Route::get('/admin/bookings/{id}/reject', [BookingController::class, 'reject'])-
 Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
 
-    //User
-    Route::get('/users/create', [UserController::class, 'createAccount'])->name('users.create');
-    Route::post('/register/store', [UserController::class, 'register'])->name('register.store');
-    Route::get('/admin/loginform', [UserController::class, 'loginform'])->name('admin.loginform');
+//User
+Route::get('/users/create', [UserController::class, 'createAccount'])->name('users.create');
+Route::post('/register/store', [UserController::class, 'register'])->name('register.store');
+Route::get('/admin/loginform', [UserController::class, 'loginform'])->name('admin.loginform');
 
 // Route::resource('dashboards', DashboardController::class);
 
@@ -119,7 +120,11 @@ Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('adm
 
 Route::get('/admin/categories', [CategoryController::class, 'index'])->name('admin.categories.index');
 
-    
+
 //Order
 Route::get('/admin/orders/{id}/cancel', [OrderController::class, 'cancel'])->name('admin.orders.cancel');
 Route::get('/admin/orders/{id}/accept', [OrderController::class, 'confirm'])->name('admin.orders.confirm');
+
+//payment
+
+Route::get('/payment/list', [PaymentController::class, 'index'])->name('admin.payment.list');

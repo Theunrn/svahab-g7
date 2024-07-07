@@ -46,6 +46,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanc
 
 
 Route::get('/me', [AuthController::class, 'index'])->middleware('auth:sanctum');
+Route::get('/owner/show/{id}', [AuthController::class, 'show']);
 Route::get('/post/list', [PostController::class, 'index'])->middleware('auth:sanctum');
 
 Route::get('fields/list', [FildController::class,'index'])->name('field.list');
