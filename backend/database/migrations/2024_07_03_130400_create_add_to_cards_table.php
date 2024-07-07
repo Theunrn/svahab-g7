@@ -16,8 +16,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('product_id');
-            $table->unsignedBigInteger('color_id');
-            $table->unsignedBigInteger('size_id');
+            // $table->unsignedBigInteger('color_id');
+            // $table->unsignedBigInteger('size_id');
             $table->unsignedInteger('quantity');
             $table->decimal('price', 10, 2);
             $table->decimal('total_amount', 10, 2);
@@ -25,8 +25,8 @@ return new class extends Migration
 
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('product_id')->references('id')->on('products');
-            $table->foreign('color_id')->references('id')->on('colors');
-            $table->foreign('size_id')->references('id')->on('sizes');
+            // $table->foreign('color_id')->references('id')->on('colors');
+            // $table->foreign('size_id')->references('id')->on('sizes');
         });
     }
 

@@ -20,7 +20,7 @@ class AddToCardController extends Controller
    
     public function index()
     {
-        $cartItems = AddToCard::with(['product', 'user', 'color', 'size']) 
+        $cartItems = AddToCard::with(['product', 'user']) 
             ->get();
         return response()->json(['success' => true, 'data' => $cartItems]);
 
@@ -56,12 +56,13 @@ class AddToCardController extends Controller
     {
         $validatedData = $request->validate([
             'product_id' => 'required|exists:products,id',
-            'color_id' => 'required|exists:colors,id',
-            'size_id' => 'required|exists:sizes,id',
+            // 'color_id' => 'required|exists:colors,id',
+            // 'size_id' => 'required|exists:sizes,id',
             'quantity' => 'required|integer|min:1'
         ]);
 
-        $cartItem = AddToCard::addToCart(Auth::id(), $validatedData['product_id'], $validatedData['quantity'],$validatedData['color_id'], $validatedData['size_id']);
+        // $cartItem = AddToCard::addToCart(Auth::id(), $validatedData['product_id'], $validatedData['quantity'],$validatedData['color_id'], $validatedData['size_id']);
+        $cartItem = AddToCard::addToCart(Auth::id(), $validatedData['product_id'], $validatedData['quantity']);
 
         return response()->json(['message' => 'Item added to cart successfully', $cartItem], 201);
     }

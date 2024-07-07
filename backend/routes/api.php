@@ -17,6 +17,7 @@ use App\Http\Controllers\API\SizeController;
 use App\Http\Controllers\API\SlideShowController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\API\AddToCardController;
+use App\Http\Controllers\API\DeliveryController;
 use App\Http\Controllers\OrderController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -122,10 +123,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('cart/delete/{id}', [AddToCardController::class, 'destroy']);
 });
 
-// Route::get('cart/list', [AddToCardController::class, 'index']);
-// Route::post('cart/create', [AddToCardController::class, 'store'])->middleware('auth:sanctum');
-// Route::get('cart/show/{id}', [AddToCardController::class, 'show']);
-// Route::put('cart/update/{id}', [AddToCardController::class, 'update'])->middleware('auth:sanctum');
-// Route::delete('cart/delete/{id}', [AddToCardController::class, 'destroy'])->middleware('auth:sanctum');
+Route::get('delivery/list', [DeliveryController::class, 'index'])->middleware('auth:sanctum');
+Route::post('delivery/create', [DeliveryController::class, 'store']);
+Route::get('delivery/show/{id}', [DeliveryController::class, 'show']);
+Route::put('delivery/update/{id}', [DeliveryController::class, 'update']);
+Route::delete('delivery/delete/{id}', [DeliveryController::class, 'destroy']);
+
 
 

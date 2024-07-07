@@ -31,7 +31,7 @@
                         <thead>
                             <tr class="bg-gray-200">
                                 <th class="px-4 py-2 text-left">ID</th>
-                                <th class="px-4 py-2 text-left">Customer Name</th>
+                                <th class="px-4 py-2 text-left">Customer</th>
                                 <th class="px-4 py-2 text-left">Product</th>
                                 <th class="px-4 py-2 text-left">Quantity</th>
                                 <th class="px-4 py-2 text-left">Price</th>
@@ -102,6 +102,7 @@
                                             @endif
                                         </td>
                                         <td class="px-4 py-2">{{ \Carbon\Carbon::parse($order->order_date)->isoFormat('dddd, D MMMM, YYYY') }}</td>
+                                       
                                     </tr>
                                 @endforeach
                             @endforeach

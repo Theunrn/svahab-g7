@@ -39,22 +39,7 @@ class OrderProductController extends Controller
 
         return response()->json(['message' => 'Order created successfully', 'order' => $order], 201);
     }
-
-    // public function store(Request $request)
-    // {
-    //     $validatedData = $request->validate([
-    //         'product_id.*' => 'required|integer|exists:products,id',
-    //         'color_id.*' => 'nullable|integer|exists:colors,id',
-    //         'size_id.*' => 'nullable|integer|exists:sizes,id',
-    //         'qty' => 'required|integer|min:1',
-    //     ]);
-
-    //     $order = Order::createOrder($validatedData);
-
-    //     return response()->json(['message' => 'Order created successfully', 'order' => $order], 201);
-    // }
-
-
+   
     public function show($id)
     {
         // Get authenticated user (customer)
@@ -89,15 +74,5 @@ class OrderProductController extends Controller
         }
     }
 
-    // // app/Http/Controllers/OrderController.php
-    // public function getOrdersByUserId($id)
-    // {
-    //     $orders = Order::where('user_id', $id)->get();
-    //     $orders = OrderProductResource::collection($orders);
-    //     if ($orders->isEmpty()) {
-    //         return response()->json(['error' => 'No orders found for this user'], 404);
-    //     }
-    //     return response()->json($orders, 200);
-    // }
 
 }
