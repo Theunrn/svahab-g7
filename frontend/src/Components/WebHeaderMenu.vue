@@ -24,7 +24,7 @@
       </router-link>
     </button>
     <!-- Notification Button -->
-    <button class="relative inline-flex w-fit" @click="clearNotifications">
+    <button class="relative inline-flex w-fit">
       <div class="absolute top-0 right-0 transform translate-x-2/4 -translate-y-1/2 z-10 flex items-center justify-center h-5 w-5 bg-red-600 rounded-full text-white text-xs font-bold"
         v-if="notifications.length > 0">{{ getNewCount(notifications) }}
       </div>
