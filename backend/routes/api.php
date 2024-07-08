@@ -113,7 +113,7 @@ Route::get('/customer/orders/{id}', [OrderProductController::class, 'getOrdersBy
 Route::get('/notifications/list/{id}', [NotificationController::class, 'getNotificationsByUserId']);
 Route::put('/notification/update/{id}', [NotificationController::class, 'updateNotification']);
 Route::delete('/notifications/delete/{id}', [NotificationController::class, 'destroy']);
-
+Route::post('/notifications/store', [NotificationController::class, 'store']);
 // Notification routes
 // Route::get('/notifications', [NotificationController::class, 'index']);
 // Route::post('/notifications', [NotificationController::class, 'store']);
