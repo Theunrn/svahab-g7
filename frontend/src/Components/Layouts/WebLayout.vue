@@ -145,7 +145,6 @@ const provinces = ref([
   { name: 'Tboung Khmum', value: 'tboung_khmum', icon: '📍' },
 ]);
 
-
 </script>
 
 <style scoped>

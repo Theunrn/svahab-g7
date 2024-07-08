@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Order;
@@ -32,5 +33,18 @@ class OrderController extends Controller
         $orders = OrderProductResource::collection($orders);
 
         return view('setting.orders.index', compact('orders'));
+    }
+
+    // OrderController@show method
+    public function show($orderId)
+    {
+        $order = Order::with(['products' => function ($query) {
+            $query->withPivot('qty', 'color_id', 'size_id');
+        }, 'user'])->findOrFail($orderId);
+
+        // Debugging statement
+        // dd($order);
+
+        return view('setting.orders.show', compact('order'));
     }
 }
