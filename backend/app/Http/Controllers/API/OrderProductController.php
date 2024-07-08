@@ -35,14 +35,9 @@ class OrderProductController extends Controller
         $validatedData = $request->validate([
             'product_id' => 'required|exists:products,id',
             'qty' => 'required|integer|min:1',
-<<<<<<< HEAD
             'color_id' => 'nullable|exists:colors,id',
             'size_id' => 'nullable|exists:sizes,id',
             'total_amount' => 'nullable',
-=======
-            'color_id' => 'required|exists:colors,id',
-            'size_id' => 'required|exists:sizes,id',
->>>>>>> 4346b9ed70f9be6db2e1dacccddbbdd1b010acbb
         ]);
 
         $order = Order::createOrder($validatedData);
@@ -120,7 +115,6 @@ class OrderProductController extends Controller
             return response()->json(['message' => 'Order is not cancelled, cannot reactivate'], 400);
         }
     }
-<<<<<<< HEAD
     // app/Http/Controllers/OrderController.php
     public function getOrdersByUserId($id)
     {
@@ -144,8 +138,4 @@ class OrderProductController extends Controller
         $order->save();
         return response()->json(['message' => 'Payment status updated successfully'], 200);
     }
-=======
-
-
->>>>>>> 4346b9ed70f9be6db2e1dacccddbbdd1b010acbb
 }
