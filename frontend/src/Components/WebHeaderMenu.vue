@@ -16,13 +16,8 @@
     </nav>
     <!-- Cart Button -->
     <button class="relative inline-flex w-fit mx-4">
-<<<<<<< HEAD
-      <div class="absolute top-0 right-0 transform translate-x-2/4 -translate-y-1/2 z-10 flex items-center justify-center h-5 w-5 bg-red-600 rounded-full text-white text-xs font-bold">
-        1
-=======
       <div  class="absolute top-0 right-0 transform translate-x-2/4 -translate-y-1/2 z-10 flex items-center justify-center h-5 w-5 bg-red-600 rounded-full text-white text-xs font-bold">
         {{ itemCount }}
->>>>>>> 4346b9ed70f9be6db2e1dacccddbbdd1b010acbb
       </div>
       <router-link to="/addtocart" class="flex items-center justify-center rounded-lg bg-primary-500 text-white dark:text-gray-200">
         <i class='bx bxs-cart-add text-3xl ml-4 text-white'></i> <!-- Larger cart icon -->
@@ -63,20 +58,14 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-<<<<<<< HEAD
 import { useAuthStore } from '@/stores/auth-store';
 import axiosInstance from '@/plugins/axios';
-=======
-import axiosInstance from '@/plugins/axios';
-import { useAuthStore } from '@/stores/auth-store'; // Adjust the import path based on your actual file structure
->>>>>>> 4346b9ed70f9be6db2e1dacccddbbdd1b010acbb
 
 const route = useRoute();
 const authStore = useAuthStore();
 const isAuthenticated = computed(() => authStore.isAuthenticated);
 const notifications = ref([]);
 
-<<<<<<< HEAD
 const fetchNotifications = async () => {
   try {
     const response = await axiosInstance.get(`/notifications/list/${authStore.user.id}`);
@@ -93,19 +82,6 @@ const getNewCount = (notificationList) => {
 const logout = () => {
   authStore.logout();
 };
-
-onMounted(() => {
-  fetchNotifications();
-});
-=======
-// Access isAuthenticated from authStore
-let isAuthenticated = authStore.isAuthenticated;
-// Function to trigger logout
-const logout = () => {
-  authStore.isAuthenticated = false;
-  authStore.logout();
-};
-
 // Define itemCount and fetch it from API
 let itemCount = ref(3);
 
@@ -128,10 +104,11 @@ const fetchCartItemsCount = async () => {
   }
 };
 
-// Call fetchCartItemsCount when component is mounted
-onMounted(fetchCartItemsCount);
 
->>>>>>> 4346b9ed70f9be6db2e1dacccddbbdd1b010acbb
+onMounted(() => {
+  fetchNotifications();
+  fetchCartItemsCount();
+});
 </script>
 
 <style scoped>

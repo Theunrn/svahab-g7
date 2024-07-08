@@ -78,8 +78,6 @@ class User extends Authenticatable
     {
         return $this->hasOne(Customer::class);
     }
-<<<<<<< HEAD
-=======
 
     public function addToCards()
     {
@@ -91,5 +89,4 @@ class User extends Authenticatable
         return $this->hasMany(Delivery::class);
     }
     
->>>>>>> 4346b9ed70f9be6db2e1dacccddbbdd1b010acbb
 }

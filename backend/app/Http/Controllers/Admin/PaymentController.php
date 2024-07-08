@@ -7,6 +7,8 @@ use App\Http\Requests\PaymentRequest;
 use App\Http\Resources\PaymentResource;
 use App\Models\Payment;
 use Illuminate\Http\Request;
+use Stripe\PaymentIntent;
+use Stripe\Stripe;
 
 class PaymentController extends Controller
 {
@@ -27,7 +29,30 @@ class PaymentController extends Controller
     {
         
     }
+    public function showPaymentForm(Request $request)
+    {
+        $clientSecret = $this->createPaymentIntent(50 * 100); // Example amount in cents
+        return view('formPayment.payment.', compact('clientSecret'));
+    }
 
+    public function processPayment(Request $request)
+    {
+        // This method can be used to update the payment status in your database
+        // You can use the Stripe webhook for more secure and reliable updates
+        return response()->json(['success' => true]);
+    }
+    private function createPaymentIntent($amount)
+    {
+        Stripe::setApiKey(env('STRIPE_SECRET'));
+
+        $paymentIntent = PaymentIntent::create([
+            'amount' => $amount,
+            'currency' => 'usd',
+            'payment_method_types' => ['card'],
+        ]);
+
+        return $paymentIntent->client_secret;
+    }
     /**
      * Store a newly created resource in storage.
      */
