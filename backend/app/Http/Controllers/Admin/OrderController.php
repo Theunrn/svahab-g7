@@ -33,4 +33,8 @@ class OrderController extends Controller
 
         return view('setting.orders.index', compact('orders'));
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 4346b9ed70f9be6db2e1dacccddbbdd1b010acbb

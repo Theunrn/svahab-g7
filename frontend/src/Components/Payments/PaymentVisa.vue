@@ -16,8 +16,8 @@
           <input type="text" id="name" v-model="name" class="form-control" required />
         </div>
         <div class="form-group mt-3">
-          <label for="total">Total booking ($) *</label>
-          <input type="number" id="total" v-model="total_price" class="form-control" required disabled />
+          <label for="total">You need to pay ($) *</label>
+          <input type="number" id="total" value="50" class="form-control" required disabled />
         </div>
         <div class="form-group mt-3">
           <label for="amount">Amount ($) *</label>

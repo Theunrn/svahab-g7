@@ -12,15 +12,26 @@ return new class extends Migration
 
     public function up(): void
     {
+        // Schema::create('product_orders', function (Blueprint $table) {
+        //     $table->id();
+        //     $table->integer('order_id');
+        //     $table->integer('product_id');
+        //     $table->integer('qty');
+        //     $table->foreignId('color_id')->nullable();
+        //     $table->foreignId('size_id')->nullable();
+        //     $table->timestamps();
+        // });
+
         Schema::create('product_orders', function (Blueprint $table) {
             $table->id();
-            $table->integer('order_id');
-            $table->integer('product_id');
+            $table->foreignId('order_id');
+            $table->foreignId('product_id')->nullable();
             $table->integer('qty');
             $table->foreignId('color_id')->nullable();
             $table->foreignId('size_id')->nullable();
             $table->timestamps();
         });
+        
     }
 
     /**

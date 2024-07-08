@@ -12,8 +12,10 @@
                 </span>
               </div>
               <div class="cart-icon">
-                <div class="shop-icon" @click="addToCart(product)">
-                  <i class="fa fa-shopping-cart"></i>
+                <div class="relative inline-block text-left">
+                  <div class="shop-icon" @click="addToCart(product)">
+                    <i class="fa fa-shopping-cart"></i>
+                  </div>
                 </div>
                 <div class="favorite-icon" @click="toggleFavorite(product)">
                   <i :class="['fa', product.isFavorite ? 'fa-heart' : 'fa-heart-o']"></i>
@@ -65,7 +67,7 @@ export default {
   data() {
     return {
       products: [],
-      uniqueProductsByCategory: []
+      uniqueProductsByCategory: [],
     }
   },
   created() {
@@ -76,7 +78,6 @@ export default {
       try {
         const response = await axios.get('http://127.0.0.1:8000/api/product/list')
 
-        // Assuming your response structure is { all_products: [...], products_with_discounts: [...] }
         const allProducts = response.data.all_products
         const products = allProducts.map((product) => ({
           ...product,
@@ -86,11 +87,9 @@ export default {
         }))
 
         this.products = products
-        console.log(products)
         this.filterUniqueProductsByCategory()
       } catch (error) {
         console.error('Error fetching products:', error)
-        // Optionally handle errors here (e.g., show a message to the user)
       }
     },
 
@@ -106,29 +105,47 @@ export default {
       })
 
       this.uniqueProductsByCategory = uniqueProducts
-      console.log(uniqueProducts)
     },
+
     getImageUrl(imagePath) {
-      return `http://127.0.0.1:8000/storage/${imagePath}` // Adjust URL if needed
+      return `http://127.0.0.1:8000/storage/${imagePath}`
     },
-    addToCart(product) {
-      // Implement add to cart functionality
-      console.log('Adding to cart:', product)
-    },
+    
     toggleFavorite(product) {
       product.isFavorite = !product.isFavorite
     },
+
     calculateDiscountedPrice(product) {
       if (product.discounts.length > 0) {
         const discount = product.discounts[0]
         const discountedPrice = product.price - (product.price * (discount.discount / 100))
-        return parseFloat(discountedPrice.toFixed(2)).toString() // Adjust to match your backend response format
+        return parseFloat(discountedPrice.toFixed(2)).toString()
       }
       return null
-    }
+    },
+
+  
+    addToCart(product) {
+      axios.post('http://127.0.0.1:8000/api/cart/create', {
+        product_id: product.id,
+        quantity: 1,
+      }, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        }
+      })
+      .then(response => {
+        console.log('Product added to cart:', product);
+        alert(`${product.name} added to cart successfully.`);
+      })
+      .catch(error => {
+        console.error('Error adding to cart:', error);
+      });
+    },
   }
 }
 </script>
+
 
 <style scoped>
 
@@ -137,7 +154,6 @@ export default {
   flex-wrap: wrap;
   justify-content: flex-start;
   align-items: flex-start;
-  margin-left: 10px;
 }
 
 .card-wrapper {
