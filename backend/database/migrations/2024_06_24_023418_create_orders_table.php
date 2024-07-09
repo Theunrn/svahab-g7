@@ -18,10 +18,7 @@ return new class extends Migration
             $table->enum('order_status', ['confirmed', 'cancelled', 'pending'])->default('pending');
             $table->enum('payment_status', ['paid', 'unpaid'])->default('unpaid')->nullable();
             $table->date('order_date')->nullable();
-<<<<<<< HEAD
             $table->decimal('total_amount', 8, 2);
-=======
->>>>>>> 4346b9ed70f9be6db2e1dacccddbbdd1b010acbb
             $table->timestamps();
         });
     }
