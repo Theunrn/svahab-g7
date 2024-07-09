@@ -1,61 +1,54 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\FeedbackRequest;
-use App\Http\Resources\FeedbackResource;
 use App\Models\Feedback;
 use Illuminate\Http\Request;
 
 class FeedbackController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        $feedbacks = Feedback::all();
-        $feedbacks = FeedbackResource::collection($feedbacks);
-        return ['success'=>true, 'data'=>$feedbacks];
+        $feedback = Feedback::all();
+        return response()->json(['success' => true,  'data' => $feedback], 200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(FeedbackRequest $request)
+    public function store(Request $request)
     {
-        Feedback::store($request);
-        return ["success" => true, "Message" =>"feedback created successfully"];
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'field_id' => 'required|exists:fields,id',
+            'feedback_text' => 'required|string',
+        ]);
 
+        $feedback = Feedback::create($request->all());
+
+        return response()->json(['success' => true, 'message' => 'Feedback created successfully', 'data' => $feedback], 200);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(Feedback $feedback)
     {
-        $feedback = Feedback::find($id);
-        $feedback = new FeedbackResource($feedback);
-        return ['success'=>true, 'data'=>$feedback];
-
+        return $feedback;
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(FeedbackRequest $request, string $id)
+    public function update(Request $request, Feedback $feedback)
     {
-        Feedback::store($request, $id);
-        return ["success" => true, "Message" =>"feedback update successfully"];
+        $request->validate([
+            'user_id' => 'exists:users,id',
+            'field_id' => 'exists:fields,id',
+            'feedback_text' => 'string',
+        ]);
+
+        $feedback->update($request->all());
+
+        return response()->json(['success' => true, 'message' => 'Feedback updated successfully'], 200);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(Feedback $feedback)
     {
-        Feedback::destroy($id);
-        return ["success" => true, "Message" =>"feedback deleted successfully"];
+        $feedback->delete();
+
+        return response()->json(['message' => 'Feedback deleted'], 200);
     }
 }

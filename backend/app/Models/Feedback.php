@@ -4,36 +4,23 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Feedback extends Model
+
 {
-    use HasFactory;
+    protected $table = 'feedback';
+
     protected $fillable = [
-        'user_id',
-        'field_id',
-        'feedback_text',
+        'user_id', 'field_id', 'feedback_text'
     ];
 
-    public function users():BelongsTo
+    public function user()
     {
-        return $this->belongsTo(User::class, 'user_id','id');
+        return $this->belongsTo(User::class);
     }
+
     public function field()
     {
         return $this->belongsTo(Field::class);
-    }
-
-    public static function store($request, $id = null){
-        $data = $request->only('user_id', 'field_id', 'feedback_text');
-        $data = self::updateOrCreate(['id' => $id], $data);
-        return $data;
-        
-    }
-    public static function destroy($id)
-    {
-        $data = self::find($id);
-        $data->delete();
-        return $data;
     }
 }

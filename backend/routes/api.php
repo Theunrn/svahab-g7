@@ -1,10 +1,13 @@
 <?php
 
+// use App\Http\Controllers\FeedbackController;
+
+use App\Http\Controllers\Admin\FeedbackController as AdminFeedbackController;
 use App\Http\Controllers\Admin\FieldController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\API\BookingController;
 use App\Http\Controllers\API\OrderProductController;
-use App\Http\Controllers\Api\FeedbackController;
+// use App\Http\Controllers\Api\FeedbackController;
 use App\Http\Controllers\Api\FildController;
 use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\ColorController;
@@ -16,10 +19,16 @@ use App\Http\Controllers\API\ProductController as APIProductController;
 use App\Http\Controllers\API\SizeController;
 use App\Http\Controllers\API\SlideShowController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Controller;
+use App\Http\Controllers\FeedbackController as ControllersFeedbackController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\StripePaymentController;
+use App\Http\Resources\FeedbackResource;
+use App\Http\Controllers\API\FeedbackController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+// use App\Http\Controllers\API\FeedbackController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -46,11 +55,11 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanc
 Route::get('/me', [AuthController::class, 'index'])->middleware('auth:sanctum');
 Route::get('/post/list', [PostController::class, 'index'])->middleware('auth:sanctum');
 
-Route::get('fields/list', [FildController::class,'index'])->name('field.list');
-Route::post('field/create', [FildController::class,'store'])->name('field.create');
-Route::get('field/show/{id}', [FildController::class,'show'])->name('field.show');
-Route::put('field/update/{id}', [FildController::class,'update'])->name('field.update');
-Route::delete('field/delete/{id}', [FildController::class,'destroy'])->name('field.delete');
+Route::get('fields/list', [FildController::class, 'index'])->name('field.list');
+Route::post('field/create', [FildController::class, 'store'])->name('field.create');
+Route::get('field/show/{id}', [FildController::class, 'show'])->name('field.show');
+Route::put('field/update/{id}', [FildController::class, 'update'])->name('field.update');
+Route::delete('field/delete/{id}', [FildController::class, 'destroy'])->name('field.delete');
 
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -72,12 +81,13 @@ Route::put('/booking/reject/{id}', [BookingController::class, 'rejectBooking']);
 Route::put('/booking/cancel/{id}', [BookingController::class, 'cancelBooking']);
 
 //feedback
-Route::apiResource('feedback', FeedbackController::class);
+Route::apiResource('feedback', FeedbackResource::class);
+
 
 // Categories API Routes
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/category/list', [CategoryController::class, 'index']);
-    
+
     Route::post('/category/create', [CategoryController::class, 'store']);
     Route::put('/category/update/{id}', [CategoryController::class, 'update']);
     Route::delete('/category/delete/{id}', [CategoryController::class, 'destroy']);
@@ -95,18 +105,18 @@ Route::get('/sizes', [SizeController::class, 'index']);
 Route::get('/colors', [ColorController::class, 'index']);
 
 
-Route::get('/discount/list',[DiscountProductController::class,'index'])->name('discount.list');
-Route::post('/discount/create',[DiscountProductController::class,'store'])->name('discount.create');
-Route::get('/discount/show/{id}',[DiscountProductController::class,'show'])->name('discount.show');
-Route::put('/discount/update/{id}',[DiscountProductController::class,'update'])->name('discount.update');
-Route::delete('/discount/delete/{id}',[DiscountProductController::class,'destroy'])->name('discount.destroy');
+Route::get('/discount/list', [DiscountProductController::class, 'index'])->name('discount.list');
+Route::post('/discount/create', [DiscountProductController::class, 'store'])->name('discount.create');
+Route::get('/discount/show/{id}', [DiscountProductController::class, 'show'])->name('discount.show');
+Route::put('/discount/update/{id}', [DiscountProductController::class, 'update'])->name('discount.update');
+Route::delete('/discount/delete/{id}', [DiscountProductController::class, 'destroy'])->name('discount.destroy');
 
-Route::get('/slideshow/list', [SlideShowController::class,'index'])->name('slideshow.list');
+Route::get('/slideshow/list', [SlideShowController::class, 'index'])->name('slideshow.list');
 
 //History
 
-Route::get('/histories/list',[HistoryController::class,'index'])->name('history.list');
-Route::post('/histories/create',[HistoryController::class,'store'])->name('history.store');
+Route::get('/histories/list', [HistoryController::class, 'index'])->name('history.list');
+Route::post('/histories/create', [HistoryController::class, 'store'])->name('history.store');
 Route::get('/customer/bookings/{id}', [BookingController::class, 'getBookingsByUserId']);
 Route::get('/customer/orders/{id}', [OrderProductController::class, 'getOrdersByUserId']);
 
@@ -125,3 +135,14 @@ Route::delete('/notifications/{id}', [NotificationController::class, 'destroy'])
 Route::post('/stripe/payment', [StripePaymentController::class, 'makePayment']);
 Route::put('/update/payment/booking/{id}', [BookingController::class, 'updateStatusPaymentBooking']);
 Route::put('/update/payment/order/{id}', [OrderController::class, 'updateStatusPaymentOrder']);
+
+
+// Route::apiResource('feedback', FeedbackController::class);
+
+
+Route::get('feedback', [FeedbackController::class, 'index']); // List data
+Route::post('feedback/create', [FeedbackController::class, 'store']); // Create data
+Route::get('feedback/{feedback}', [FeedbackController::class, 'show']); // Show data
+Route::put('feedback/{feedback}', [FeedbackController::class, 'update']); // Update data
+Route::delete('feedback/{feedback}', [FeedbackController::class, 'destroy']); // Delete data
+
