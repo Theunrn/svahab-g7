@@ -49,7 +49,7 @@
             </p>
             <p class="card-text">{{ product.description }}</p>
             <div class="group mt-2">
-              <router-link :to="'/product/detail/' + product.id" class="button"> Buy Now</router-link>
+              <router-link :to="{path:'/product/detail/' + product.id, query:{customer:customerId} }" class="button"> Buy Now</router-link>
             </div>
           </div>
         </div>
@@ -68,6 +68,7 @@ const categoryId = ref(route.params.id); // Note: 'id' should match the param na
 const all_products = ref([]);
 const category = ref({});
 const sortBy = ref('price');
+const customerId = ref(route.query.user)
 
 const fetchCategory = async () => {
   try {

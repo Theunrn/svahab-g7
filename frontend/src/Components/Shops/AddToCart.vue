@@ -45,7 +45,7 @@
                 <i class="bx bx-trash text-2xl"></i>
                 <span class="ml-2">Delete</span>
               </a>
-              <router-link :to="'/product/detail/' + item.product.id" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-3 rounded-md inline-flex items-center">
+              <router-link :to="{path: '/product/detail/' + item.product.id, query:{customer:item.user_id}}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-3 rounded-md inline-flex items-center">
                 <i class="bx bx-cart-add text-2xl"></i>
                 <span class="ml-2">Checkout</span>
               </router-link>
