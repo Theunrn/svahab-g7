@@ -115,14 +115,48 @@
 						<hr>
 					</li>
 					<!-- Links -->
-					<li><a class="dropdown-item mt-2" href="../views/profiles/edit_profile.view.php">Edit Profile</a></li>
+					<li><button class="dropdown-item mt-2" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">Edit Profile</button></li>
 					<li><button class="dropdown-item bg-danger-soft-hover" @click="userLogout" >Sign Out</button></li>
 				</ul>
 			</div>
       </template>
     </div>
-      
+
   </header>
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title text-2xl text-bold" id="exampleModalLabel">Update your profile</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="mb-3">
+                  <img v-if="profile !== null" width="150" height="150" :src="getImageUrl(profile)" :alt="profile">
+                  <img v-else width="150" height="150" src="../assets/image/profile.png" :alt="profile">
+              </div>
+              <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Upload New profile *</label>
+                <input type="file" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+              </div>
+              <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Name *</label>
+                <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" v-model="name">
+              </div>
+              <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Email *</label>
+                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" v-model="email">
+              </div>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </form>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+
 </template>
 
 <script setup lang="ts">
@@ -137,6 +171,9 @@ const authStore = useAuthStore()
 const notifications = ref([])
 const showDropdown = ref(false)
 const showText = ref(false)
+const name = ref('');
+const email = ref('');
+const profile = ref('');
 
 const fetchNotifications = async () => {
   try {
@@ -173,19 +210,27 @@ const fetchCartItemsCount = async () => {
     })
     if (response.data.success) {
       itemCount.value = response.data.data.reduce((total, item) => total + item.quantity, 0)
-      // console.log(itemCount.value);
     } else {
       console.error('Failed to fetch cart items count')
     }
   } catch (error) {
     console.error('Error fetching cart items count:', error)
   }
+
+
 }
 
 onMounted(() => {
   fetchNotifications()
   fetchCartItemsCount()
+  name.value = authStore.user.name
+  email.value = authStore.user.email
+  profile.value = authStore.user.profile
+
 })
+const getImageUrl = (imagePath) => {
+    const image = imagePath ? `http://127.0.0.1:8000/public/images/${imagePath}` : '/default-image.jpg';
+};
 </script>
 
 <style scoped>

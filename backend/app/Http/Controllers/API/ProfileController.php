@@ -55,25 +55,24 @@ class ProfileController extends Controller
     public function update(Request $request, string $id)
     {
         $user = Auth::user();
-        // $validated = $request->validate([
-        //     'name'=>'required',
-        //     'email' => 'required|email|unique:users,email,'.$user->id.',id',
-        // ]);
+        $validated = $request->validate([
+            'name'=>'required',
+            'email' => 'required|email|unique:users,email,'.$user->id.',id',
+        ]);
 
-        // if($request->password != null){
-        //     $request->validate([
-        //         'password' => 'required|confirmed'
-        //     ]);
-        //     $validated['password'] = bcrypt($request->password);
-        // }
+        if($request->password != null){
+            $request->validate([
+                'password' => 'required|confirmed'
+            ]);
+            $validated['password'] = bcrypt($request->password);
+        }
 
-        // if($request->hasFile('profile')){
-        //     if($name = $this->saveImage($request->profile)){
-        //         $validated['profile'] = $name;
-        //     }
-        // }
-        dd($user);
-        // $user->update($validated);
+        if($request->hasFile('profile')){
+            if($name = $this->saveImage($request->profile)){
+                $validated['profile'] = $name;
+            }
+        }
+        $user->update($validated);
         return response()->json(['success' => true, 'message' =>'Profile updated successfully']);
 
     }

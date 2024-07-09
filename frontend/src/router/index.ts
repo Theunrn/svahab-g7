@@ -84,6 +84,11 @@ const router = createRouter({
       component: () => import('../views/Admin/Auth/RegisterVIew.vue')
     },
     {
+      path: '/profile/edit',
+      name: 'profile/edit',
+      component: () => import('../views/Admin/Auth/EditProfile.vue')
+    },
+    {
       path: '/payment/:id',
       name: 'payment',
       component: () => import('../views/Web/Payment/PaymentView.vue')
