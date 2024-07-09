@@ -134,7 +134,9 @@ const addToCart = (product) => {
     console.error('Error adding to cart:', error);
   });
 }
-
+const toggleFavorite = (product) => {
+  product.isFavorite = !product.isFavorite;
+};
 </script>
 
 <style scoped>
