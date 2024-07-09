@@ -42,11 +42,18 @@
         >CONTACT</a
       >
     </nav>
+    <!-- Cart favorite -->
+    <button class="relative inline-flex">
+      <div  class="absolute top-0 right-0 transform translate-x-2/4 -translate-y-1/2 z-10 flex items-center justify-center h-5 w-5 bg-red-600 rounded-full text-white text-xs font-bold">
+        1
+      </div>
+      <router-link to="" class="flex items-center justify-center rounded-lg bg-primary-500 text-white dark:text-gray-200">
+        <i class='fa fa-heart-o text-2xl ml-4 text-white'></i> <!-- Larger cart icon -->
+      </router-link>
+    </button>
     <!-- Cart Button -->
-    <button class="relative inline-flex w-fit mx-4">
-      <div
-        class="absolute top-0 right-0 transform translate-x-2/4 -translate-y-1/2 z-10 flex items-center justify-center h-5 w-5 bg-red-600 rounded-full text-white text-xs font-bold"
-      >
+    <button class="relative inline-flex w-fit mx-2">
+      <div  class="absolute top-0 right-0 transform translate-x-2/4 -translate-y-1/2 z-10 flex items-center justify-center h-5 w-5 bg-red-600 rounded-full text-white text-xs font-bold">
         {{ itemCount }}
       </div>
       <router-link
@@ -58,12 +65,9 @@
       </router-link>
     </button>
     <!-- Notification Button -->
-    <button class="relative inline-flex w-fit" @click="clearNotifications">
-      <div
-        class="absolute top-0 right-0 transform translate-x-2/4 -translate-y-1/2 z-10 flex items-center justify-center h-5 w-5 bg-red-600 rounded-full text-white text-xs font-bold"
-        v-if="notifications.length > 0"
-      >
-        {{ getNewCount(notifications) }}
+    <button class="relative inline-flex w-fit mx-2" @click="clearNotifications">
+      <div class="absolute top-0 right-0 transform translate-x-2/4 -translate-y-1/2 z-10 flex items-center justify-center h-5 w-5 bg-red-600 rounded-full text-white text-xs font-bold"
+        v-if="notifications.length > 0">{{ getNewCount(notifications) }}
       </div>
       <router-link
         :to="{ path: '/notification/' + authStore.user.id }"
@@ -74,15 +78,12 @@
       </router-link>
     </button>
     <!-- History Button -->
-    <button class="relative inline-flex items-center m-4">
-      <router-link
-        :to="{ path: '/history/' + authStore.user.id }"
-        class="flex items-center justify-center rounded-lg bg-primary-500 text-white dark:text-gray-200"
-      >
-        <span
-          class="absolute top-0 left-3/2 transform -translate-x-1/2 -translate-y-full text-lg font-semibold"
-        ></span>
-        <i class="bx bx-history text-3xl"></i>
+    <button class="relative inline-flex items-center m-2 ">
+      <router-link :to="{ path: '/history/' + authStore.user.id }" class="flex items-center justify-center rounded-lg bg-primary-500 text-white dark:text-gray-200">
+        <span v-if="showText" class="absolute top-0 left-3/2 transform -translate-x-1/2 -translate-y-full text-lg font-semibold">History</span>
+        <i class="bx bx-history text-3xl"
+           @mouseover="showText = true"
+           @mouseleave="showText = false"></i>
       </router-link>
     </button>
    <!-- Authentication Button -->
