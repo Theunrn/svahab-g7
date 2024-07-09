@@ -16,6 +16,7 @@ class FeedbackController extends Controller
         $feedbacks = Feedback::with(['users_id', 'field_id', 'feedback_text'])->get();
         return view('setting.feedback.index', compact('feedbacks'));
     }
+    
 
     /**
      * Show the form for creating a new resource.

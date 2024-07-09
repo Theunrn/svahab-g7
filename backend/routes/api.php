@@ -2,6 +2,7 @@
 
 // use App\Http\Controllers\FeedbackController;
 
+
 use App\Http\Controllers\Admin\FeedbackController as AdminFeedbackController;
 use App\Http\Controllers\Admin\FieldController;
 use App\Http\Controllers\Admin\ProductController;
@@ -140,9 +141,14 @@ Route::put('/update/payment/order/{id}', [OrderController::class, 'updateStatusP
 // Route::apiResource('feedback', FeedbackController::class);
 
 
-Route::get('feedback', [FeedbackController::class, 'index']); // List data
-Route::post('feedback/create', [FeedbackController::class, 'store']); // Create data
-Route::get('feedback/{feedback}', [FeedbackController::class, 'show']); // Show data
-Route::put('feedback/{feedback}', [FeedbackController::class, 'update']); // Update data
-Route::delete('feedback/{feedback}', [FeedbackController::class, 'destroy']); // Delete data
+
+Route::middleware('auth:sanctum')->group(function () {
+
+    Route::get('/feedbacks', [FeedbackController::class, 'list']);
+    // Route::get('feedback/list', [FeedbackController::class, 'index']);
+    Route::post('feedback/create', [FeedbackController::class, 'store']);
+    Route::get('feedback/show/{id}', [FeedbackController::class, 'show']);
+    Route::put('feedback/update/{id}', [FeedbackController::class, 'update']);
+    Route::delete('feedback/delete/{id}', [FeedbackController::class, 'destroy']);
+});
 

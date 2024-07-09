@@ -3,52 +3,70 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\FeedbackResource;
 use App\Models\Feedback;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class FeedbackController extends Controller
 {
-    public function index()
+    public function list()
     {
-        $feedback = Feedback::all();
-        return response()->json(['success' => true,  'data' => $feedback], 200);
+        $feedbacks = Feedback::with(['user', 'field'])->get();
+        // return FeedbackResource::collection($feedbacks);
+        return response()->json(['success' => true, 'message' => 'Feedback created successfully', 'data' => $feedbacks], 201);
     }
 
     public function store(Request $request)
     {
-        $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'field_id' => 'required|exists:fields,id',
-            'feedback_text' => 'required|string',
+        $feedback = Feedback::create([
+            'user_id' => Auth::id(),
+            'field_id' => $request->input('field_id'),
+            'feedback_text' => $request->input('feedback_text'),
         ]);
 
-        $feedback = Feedback::create($request->all());
-
-        return response()->json(['success' => true, 'message' => 'Feedback created successfully', 'data' => $feedback], 200);
+        return response()->json(['success' => true, 'message' => 'Feedback created successfully', 'data' => $feedback], 201);
     }
 
-    public function show(Feedback $feedback)
+    public function show($id)
     {
-        return $feedback;
+        $feedback = Feedback::with(['user', 'field'])->find($id);
+        if (!$feedback) {
+            return response()->json(['success' => false, 'message' => 'Feedback not found'], 404);
+        }
+        return response()->json(['success' => true, 'data' => $feedback]);
     }
 
-    public function update(Request $request, Feedback $feedback)
+    public function update(Request $request, $id)
     {
-        $request->validate([
-            'user_id' => 'exists:users,id',
-            'field_id' => 'exists:fields,id',
-            'feedback_text' => 'string',
+        // Find the feedback entry by ID
+        $feedback = Feedback::find($id);
+
+        // Check if feedback entry exists
+        if (!$feedback) {
+            return response()->json(['success' => false, 'message' => 'Feedback not found'], 404);
+        }
+
+        // Update the feedback entry with provided data or retain existing data if not provided
+        $feedback->update([
+            'field_id' => $request->input('field_id', $feedback->field_id),
+            'feedback_text' => $request->input('feedback_text', $feedback->feedback_text),
         ]);
 
-        $feedback->update($request->all());
-
-        return response()->json(['success' => true, 'message' => 'Feedback updated successfully'], 200);
+        // Return success response with updated feedback data
+        return response()->json(['success' => true, 'message' => 'Feedback updated successfully', 'data' => $feedback]);
     }
 
-    public function destroy(Feedback $feedback)
+
+    public function destroy($id)
     {
+        $feedback = Feedback::find($id);
+        if (!$feedback) {
+            return response()->json(['success' => false, 'message' => 'Feedback not found'], 404);
+        }
+
         $feedback->delete();
 
-        return response()->json(['message' => 'Feedback deleted'], 200);
+        return response()->json(['success' => true, 'message' => 'Feedback deleted successfully']);
     }
 }
