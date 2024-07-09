@@ -57,7 +57,7 @@ class User extends Authenticatable
             'email_verified_at' => now(),
             'remember_token'    => Str::random(20),
         ]);
-        
+
         $user->assignRole('owner');
         // Create the token for API access
         $token = $user->createToken('auth_token')->plainTextToken;
@@ -68,5 +68,18 @@ class User extends Authenticatable
     {
         return $this->hasOne(Customer::class);
     }
-    
+
+    public function fields()
+    {
+        return $this->hasMany(Field::class, 'owner_id');
+    }
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'owner_id');
+    }
+
+    public function isAdmin()
+    {
+        return $this->hasRole('admin');
+    }
 }
