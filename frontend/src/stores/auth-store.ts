@@ -13,6 +13,10 @@ export const useAuthStore = defineStore('auth', () => {
 
   function logout() {
     isAuthenticated.value = false;
+    const storedValue = localStorage.getItem('isAuthenticated');
+    if (storedValue) {
+      isAuthenticated.value = JSON.parse(storedValue);
+    }
   }
   return {
     user,

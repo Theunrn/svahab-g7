@@ -9,16 +9,15 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-
     public function up(): void
     {
-        Schema::create('orders', function (Blueprint $table) {
+        Schema::create('notifications', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id');
-            $table->enum('order_status', ['confirmed', 'cancelled', 'pending'])->default('pending');
-            $table->enum('payment_status', ['paid', 'unpaid'])->default('unpaid')->nullable();
-            $table->date('order_date')->nullable();
-            $table->decimal('total_amount', 8, 2);
+            $table->string('notification_type');
+            $table->string('notification_text');
+            $table->json('notification_data');
+            $table->boolean('read');
             $table->timestamps();
         });
     }
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('orders');
+        Schema::dropIfExists('notifications');
     }
 };

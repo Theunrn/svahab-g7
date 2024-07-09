@@ -195,6 +195,7 @@ export default {
       try {
         const { data } = await axios.get(`http://127.0.0.1:8000/api/owner/show/${this.ownerId}`)
         this.qr = data.data.qr;
+        console.log(data.data);
       } catch (error) {
         console.error('Error fetching product owner data:', error)
       }
