@@ -20,6 +20,7 @@ use App\Http\Controllers\API\SlideShowController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\API\AddToCardController;
 use App\Http\Controllers\API\DeliveryController;
+use App\Http\Controllers\API\ProfileController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\StripePaymentController;
 use Illuminate\Http\Request;
@@ -46,6 +47,8 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::put('/customers/{id}/role', [AuthController::class, 'updateRole']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
+//Profile
+Route::put('profile/update', [ProfileController::class,'update'])->middleware('auth:sanctum');
 
 Route::get('/me', [AuthController::class, 'index'])->middleware('auth:sanctum');
 Route::get('/owner/show/{id}', [AuthController::class, 'show']);

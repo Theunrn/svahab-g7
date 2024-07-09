@@ -127,5 +127,7 @@ Route::get('/admin/orders/{id}/accept', [OrderController::class, 'confirm'])->na
 
 //payment
 Route::get('/payment/list', [PaymentController::class, 'index'])->name('admin.payment.list');
-Route::get('/payment', [PaymentController::class, 'showPaymentForm'])->name('payment.form');
-Route::post('/payment', [PaymentController::class, 'processPayment'])->name('payment.process');
+Route::get('/payment/form', [PaymentController::class, 'showPaymentForm'])->name('payment.form');
+Route::get('/payment/month', [PaymentController::class, 'showPaymentFormMonth'])->name('payment.month');
+Route::post('/payment/intent', [PaymentController::class, 'createPaymentIntent'])->name('payment.intent');
+Route::post('/stripe/payment', [PaymentController::class, 'makePayment'])->name('payment.process');
