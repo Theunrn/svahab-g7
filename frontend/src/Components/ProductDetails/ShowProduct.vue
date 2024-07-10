@@ -1,7 +1,7 @@
 <template>
   <div class="container" style="margin-top: 120px;">
     <div class="d-flex justify-content-between align-items-center mb-4">
-      <router-link to="/shop" class="btn btn-outline-primary ml-5">Back</router-link>
+      <router-link to="/shop" class="btn btn-outline-primary">Back</router-link>
       <h2 class="text-center font-bold fs-2 mb-0 text-info">{{ category.name }}</h2>
       <div class="d-flex align-items-center mr-5">
         <span class="me-2 fw-bold">SORT BY:</span>
@@ -24,7 +24,7 @@
                 </span>
               </div>
               <div class="cart-icon">
-                <div class="shop-icon">
+                <div class="shop-icon" @click="addToCart(product)">
                   <i class="fa fa-shopping-cart"></i>
                 </div>
                 <div class="favorite-icon">
@@ -49,7 +49,7 @@
             </p>
             <p class="card-text">{{ product.description }}</p>
             <div class="group mt-2">
-              <router-link :to="'/product/detail/' + product.id" class="button"> Buy Now</router-link>
+              <router-link :to="{path:'/product/detail/' + product.id, query:{customer:customerId} }" class="button"> Buy Now</router-link>
             </div>
           </div>
         </div>
@@ -68,6 +68,7 @@ const categoryId = ref(route.params.id); // Note: 'id' should match the param na
 const all_products = ref([]);
 const category = ref({});
 const sortBy = ref('price');
+const customerId = ref(route.query.user)
 
 const fetchCategory = async () => {
   try {
@@ -115,6 +116,26 @@ const calculateDiscountedPrice = (product) => {
   }
   return null;
 };
+
+
+const addToCart = (product) => {
+  axios.post('http://127.0.0.1:8000/api/cart/create', {
+    product_id: product.id,
+    quantity: 1,
+  }, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('access_token')}`
+    }
+  })
+  .then(response => {
+    console.log('Product added to cart:', product);
+    alert(`${product.name} add to card successfully.`);
+  })
+  .catch(error => {
+    console.error('Error adding to cart:', error);
+  });
+}
+
 </script>
 
 <style scoped>
@@ -122,14 +143,13 @@ const calculateDiscountedPrice = (product) => {
 .container-card {
   display: flex;
   flex-wrap: wrap;
+  gap: 10px;
   justify-content: flex-start;
   align-items: flex-start;
-  margin-left: 10px;
 }
 
 .card-wrapper {
-  width: 23%;
-  margin: 10px;
+  width: 27%;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   border-radius: 15px;
   overflow: hidden;

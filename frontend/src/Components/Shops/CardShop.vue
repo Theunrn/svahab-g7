@@ -12,8 +12,10 @@
                 </span>
               </div>
               <div class="cart-icon">
-                <div class="shop-icon" @click="addToCart(product)">
-                  <i class="fa fa-shopping-cart"></i>
+                <div class="relative inline-block text-left">
+                  <div class="shop-icon" @click="addToCart(product)">
+                    <i class="fa fa-shopping-cart"></i>
+                  </div>
                 </div>
                 <div class="favorite-icon" @click="toggleFavorite(product)">
                   <i :class="['fa', product.isFavorite ? 'fa-heart' : 'fa-heart-o']"></i>
@@ -36,13 +38,13 @@
             <p class="card-text mt-2 mb-2">{{ product.description }}</p>
             <div class="group mt-3">
               <router-link
-                :to="'/category/show/' + product.category_id"
+                :to="{path: '/category/show/' + product.category_id, query:{user:user.id}}"
                 :state="{ products: products }"
                 class="button me-2 inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                 See More
               </router-link>
               <router-link
-                :to="'/product/detail/' + product.id"
+                :to=" {path: '/product/detail/' + product.id, query:{customer:user.id}}"
                 class="button inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-orange-500 rounded-lg hover:bg-orange-600 focus:ring-4 focus:outline-none focus:ring-orange-300 dark:bg-orange-400 dark:hover:bg-orange-500 dark:focus:ring-orange-600"
                 style="margin-left: auto">
                 Buy Now
@@ -59,10 +61,13 @@
 import axios from 'axios'
 
 export default {
+  props:{
+    user:Object,
+  },
   data() {
     return {
       products: [],
-      uniqueProductsByCategory: []
+      uniqueProductsByCategory: [],
     }
   },
   created() {
@@ -73,7 +78,6 @@ export default {
       try {
         const response = await axios.get('http://127.0.0.1:8000/api/product/list')
 
-        // Assuming your response structure is { all_products: [...], products_with_discounts: [...] }
         const allProducts = response.data.all_products
         const products = allProducts.map((product) => ({
           ...product,
@@ -83,11 +87,9 @@ export default {
         }))
 
         this.products = products
-        console.log(products)
         this.filterUniqueProductsByCategory()
       } catch (error) {
         console.error('Error fetching products:', error)
-        // Optionally handle errors here (e.g., show a message to the user)
       }
     },
 
@@ -103,29 +105,47 @@ export default {
       })
 
       this.uniqueProductsByCategory = uniqueProducts
-      console.log(uniqueProducts)
     },
+
     getImageUrl(imagePath) {
-      return `http://127.0.0.1:8000/storage/${imagePath}` // Adjust URL if needed
+      return `http://127.0.0.1:8000/storage/${imagePath}`
     },
-    addToCart(product) {
-      // Implement add to cart functionality
-      console.log('Adding to cart:', product)
-    },
+    
     toggleFavorite(product) {
       product.isFavorite = !product.isFavorite
     },
+
     calculateDiscountedPrice(product) {
       if (product.discounts.length > 0) {
         const discount = product.discounts[0]
         const discountedPrice = product.price - (product.price * (discount.discount / 100))
-        return parseFloat(discountedPrice.toFixed(2)).toString() // Adjust to match your backend response format
+        return parseFloat(discountedPrice.toFixed(2)).toString()
       }
       return null
-    }
+    },
+
+  
+    addToCart(product) {
+      axios.post('http://127.0.0.1:8000/api/cart/create', {
+        product_id: product.id,
+        quantity: 1,
+      }, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        }
+      })
+      .then(response => {
+        console.log('Product added to cart:', product);
+        alert(`${product.name} added to cart successfully.`);
+      })
+      .catch(error => {
+        console.error('Error adding to cart:', error);
+      });
+    },
   }
 }
 </script>
+
 
 <style scoped>
 
@@ -134,7 +154,6 @@ export default {
   flex-wrap: wrap;
   justify-content: flex-start;
   align-items: flex-start;
-  margin-left: 10px;
 }
 
 .card-wrapper {

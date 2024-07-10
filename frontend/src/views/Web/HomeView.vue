@@ -1,6 +1,7 @@
 <template>
   <WebLayout></WebLayout>
- <CardCom :user="authStore.user"></CardCom>
+
+ <CardCom :customer="authStore.user"></CardCom>
  <MatchTeam></MatchTeam>
 
  <MatchSchedule></MatchSchedule>
@@ -18,6 +19,7 @@ import WeatherCom from '../../Components/Weathers/WeatherCom.vue'
 import MatchTeam from '../../Components/Bodies/MatchTeam.vue'
 import MatchSchedule from '../../Components/Bodies/MatchSchedule.vue'
 const authStore = useAuthStore();
+
 </script>
 
 <style scoped>

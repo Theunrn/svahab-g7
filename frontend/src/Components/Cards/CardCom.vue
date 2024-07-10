@@ -1,16 +1,25 @@
 <template>
   <div>
-
-    <div class="card-me flex flex-wrap justify-content-start align-items-start ml-18">
+    <div class="card-me flex flex-wrap justify-content-start align-items-start ml-10">
       <!-- Loop to generate 6 cards -->
-      <div class="card-wrapper rounded-md shadow-lg relative w-1/3 sm:w-full mx-2 my-2" v-for="field in filteredFields" :key="field.id">
-        <div class="container bg-overlay" 
+      <div
+        class="card-wrapper rounded-md shadow-lg relative w-1/3 sm:w-full mx-2 my-2"
+        v-for="field in fields"
+        :key="field"
+      >
+        <div
+          class="container bg-overlay"
           :style="{
-            background: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(${getImageUrl(field.image)})`,
-          }">
+            background: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(${getImageUrl(
+              field.image
+            )})`
+          }"
+        >
           <div class="row text-center flex flex-col items-center justify-center h-full">
             <div class="btn-group">
-              <router-link :to="{ path: '/field/detail/' + field.id, query: { user: user.id } }">
+              <router-link
+                :to="{ path: '/field/detail/' + field.id, query: { customer: customer.id } }"
+              >
                 <button type="button" class="btn btn-warning btn-details py-1 me-2 text-secondary">
                   <font-awesome-icon :icon="['fas', 'info-circle']" class="me-1" /> Book Now
                 </button>
@@ -22,28 +31,80 @@
           <div class="text-start">
             <h3 class="text-1xl font-bold text-gray-900 mb-2">{{ field.name }}</h3>
             <p class="mt-3 flex items-center gap-2">
-              <span class="dollar bg-blue text-white p-1 rounded-md">
-                ${{ field.price }}.00
-              </span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27z" fill="#FCD34D" />
+              <span class="dollar bg-blue text-white p-1 rounded-md"> ${{ field.price }}.00 </span>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27z"
+                  fill="#FCD34D"
+                />
               </svg>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27z" fill="#FCD34D" />
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27z"
+                  fill="#FCD34D"
+                />
               </svg>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27z" fill="#FCD34D" />
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27z"
+                  fill="#FCD34D"
+                />
               </svg>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27z" fill="#FCD34D" />
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27z"
+                  fill="#FCD34D"
+                />
               </svg>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27z" fill="#FCD34D" />
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27z"
+                  fill="#FCD34D"
+                />
               </svg>
             </p>
             <p class="mt-2 flex items-center gap-2">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="#4B5563" />
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"
+                  fill="#4B5563"
+                />
               </svg>
               2.4 km {{ field.location }}
             </p>
@@ -58,38 +119,51 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed, watch } from 'vue';
-import axiosInstance from '@/plugins/axios';
+<script>
+import { ref, onMounted, computed,watch } from 'vue'
+import axiosInstance from '@/plugins/axios'
 
-const props = defineProps({
-  fields: Array,
-  user: Object
-});
+export default {
+  name: 'FootballFields',
+  props: {
+    customer: Object
+  },
 
-const searchQuery = ref('');
+  setup() {
+    const fields = ref([])
+    const searchQuery = ref('')
+    const fetchFields = async () => {
+      try {
+        const response = await axiosInstance.get('/fields/list')
+        fields.value = response.data.data
+      } catch (error) {
+        console.error('Error fetching fields:', error)
+      }
+    }
+    const filteredFields = computed(() => {
+      if (!searchQuery.value.trim()) {
+        return fields.value
+      } else {
+        const query = searchQuery.value.toLowerCase()
+        return fields.value.filter((field) => field.name.toLowerCase().includes(query))
+      }
+    })
+    watch(searchQuery, () => {
+      filteredFields.value = filteredFields()
 
-// Use computed property to filter fields based on searchQuery
-const filteredFields = computed(() => {
-  if (!searchQuery.value.trim()) {
-    return props.fields;
-  } else {
-    const query = searchQuery.value.toLowerCase();
-    return props.fields.filter(field =>
-      field.name.toLowerCase().includes(query)
-    );
+    })
+    onMounted(() => {
+      fetchFields()
+    })
+    const getImageUrl = (imagePath) => {
+      return imagePath ? `http://127.0.0.1:8000/storage/${imagePath}` : '/default-image.jpg'
+    }
+    return {
+      fields,
+      getImageUrl
+    }
   }
-});
-
-const getImageUrl = (imagePath) => {
-  return imagePath ? `http://127.0.0.1:8000/storage/${imagePath}` : '/default-image.jpg';
-};
-
-// Watch for changes in searchQuery to update filteredFields
-watch(searchQuery, () => {
-  filteredFields.value = filteredFields();
-});
-
+}
 </script>
 
 <style scoped>
@@ -105,7 +179,6 @@ watch(searchQuery, () => {
   height: 40%;
   transition: transform 0.3s ease;
   position: relative;
-
 }
 
 .card-wrapper:hover {

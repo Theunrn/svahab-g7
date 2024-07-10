@@ -39,6 +39,7 @@ class ProductController extends Controller
 
             $product = new Product();
             $product->name = $validatedData['name'];
+            $product->owner_id = Auth::id();
             $product->description = $validatedData['description'];
             $product->price = $validatedData['price'];
             $product->image = 'images/' . $imageName;
@@ -62,10 +63,11 @@ class ProductController extends Controller
             return response()->json(['error' => 'User not authenticated'], 401);
         }
     }
+
     public function show($id)
     {
         try {
-            $product = Product::with(['category', 'colors', 'sizes'])->findOrFail($id);
+            $product = Product::with(['category', 'colors', 'sizes', 'discounts'])->findOrFail($id);
 
             return response()->json([
                 'success' => true,

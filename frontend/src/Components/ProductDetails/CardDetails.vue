@@ -27,9 +27,9 @@
         </div>
 
         <p class="bg-white text-gray-700 border-2 border-green-300 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-40" >
-          <span>Total: </span> ${{ total }}
+          <span >Total: </span> ${{ total }}.00
         </p>
-        <div class="rating mb-2">
+        <div class="rating mb-2"> 
           <span class="star text-warning">&#9733;</span>
           <span class="star text-warning">&#9733;</span>
           <span class="star text-warning">&#9733;</span>
@@ -40,34 +40,29 @@
         <div class="color-options mb-3">
           <h5 class="mb-2">Color:</h5>
           <div class="d-flex flex-wrap">
-            <div
-              v-for="color in product.colors"
-              :key="color.id"
-              :style="{ backgroundColor: color.hex_code }"
-              :class="[
-                'color-circle',
-                'mr-2',
-                'cursor-pointer',
-                `bg-${color.name.toLowerCase()}`,
-                { selected: selectedColor === color.id }
-              ]"
-              @click="toggleColorSelection(color.id)"
-            ></div>
+            <div v-for="color in product.colors" :key="color.id" :style="{ backgroundColor: color.hex_code }" :class="[ 'color-circle', 'mr-2', 'cursor-pointer', `bg-${color.name.toLowerCase()}`, { selected: selectedColor === color.id } ]"  @click="toggleColorSelection(color.id)" ></div>
           </div>
         </div>
-        <div class="size-options mb-3">
-          <h5 class="mb-2">Size:</h5>
-          <select class="form-select w-auto" v-model="selectedSize">
-            <option v-for="size in product.sizes" :key="size.id" :value="size.id">{{ size.name }}</option>
-          </select>
+        <div class="size-options mb-3 flex gap-3">
+          <div class="size">
+            <h5 class="mb-2">Size:</h5>
+            <select class="form-select w-auto pe-5" v-model="selectedSize">
+              <option class="text-start" v-for="size in product.sizes" :key="size.id" :value="size.id">{{ size.name }}</option>
+            </select>
+          </div>
+          <div class="way">
+            <h5 class="mb-2">The way:</h5>
+            <select class="form-select w-auto" >
+              <option value="pickup" >Pickup</option>
+              <option value="delivery" >Delivery (+2$)</option>
+            </select>
+          </div>
         </div>
         <div class="quantity mb-4">
           <h5 class="mb-2">Quantity:</h5>
           <div class="input-group w-auto">
             <div class="quantity-input">
-              <button @click="decrementQuantity" class="decrement btn btn-outline-secondary">
-                -
-              </button>
+              <button @click="decrementQuantity" class="decrement btn btn-outline-secondary">  -  </button>
               <input class="input-group min-max" type="text" v-model="quantity" />
               <button @click="incrementQuantity" class="increment btn btn-outline-secondary">
                 +
@@ -76,20 +71,10 @@
           </div>
         </div>
         <!-- <a @click="createOrder" class="btn btn-warning btn-block mb-4"> Order Now</a> -->
-        <router-link @click="createOrder" to="/payment" class="btn btn-warning btn-block ml-4 mb-4"> Pay Now</router-link>
+        <router-link @click="submitOrder" :to="{path:'/payment/'+ userId, query:{order:order.id}}" class="btn btn-yellow-500 btn-block ml-4 mb-4 text-white" style="background-color: orange"> Pay Now</router-link>
         <div class="delivery-info mb-4">
           <p class="mb-1"><strong>Home Delivery:</strong> Available within 48 hours</p>
           <p class="mb-0"><strong>Click & Collect:</strong> Pickup in store within 4 hours</p>
-        </div>
-        <div class="product-description">
-          <p>
-            Our product designers, themselves football players, designed the Sunny 300 mini ball for
-            kids starting to dribble, shoot, or juggle with their hands or feet.
-          </p>
-          <p class="mb-0">
-            Looking for a ball to learn the basics of football? This mini plastic football is
-            perfect. Plus, it's ideal for playing barefoot.
-          </p>
         </div>
       </div>
     </div>
@@ -99,23 +84,26 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
 import axiosInstance from '@/plugins/axios';
-import { useRoute } from 'vue-router';
-
+import { useRoute,useRouter  } from 'vue-router';
+import { useOrderedChildren } from 'element-plus';
 const route = useRoute();
+const router = useRouter();
 const productId = computed(() => route.params);
 const product = ref({});
 const colors = ref([]); // Reactive reference for colors
 const selectedColor = ref(null); // Reactive reference for selected color
 const sizes = ref([]); // Reactive reference for sizes
 const selectedSize = ref(null); // Reactive reference for selected size
-const quantity = ref(1); // Reactive reference for quantity
+const quantity = ref(1);
+const order = ref({});
+const userId = computed(() => route.query.customer);
+console.log(userId);
 
 const fetchProductDetails = async () => {
   try {
     const response = await axiosInstance.get(`/product/show/${productId.value.id}`);
     product.value = response.data.data;
     product.discounts = product.value.discounts || []; // Initialize discounts
-    console.log(product.value);
     
   } catch (error) {
     console.error('Error fetching product details:', error);
@@ -177,18 +165,20 @@ const calculateDiscountedPrice = (originalPrice, discountPercentage) => {
   return originalPrice - discount;
 };
 
-const createOrder = async () => {
-  const orderProduct = {
-    product_id: productId.value.id,
-    color_id: selectedColor.value,
-    size_id: selectedSize.value,
-    qty: quantity.value,
-  };
+const submitOrder = async () => {
 
   try {
-    const response = await axiosInstance.post('/orders/create', orderProduct);
-    console.log('Order product:', orderProduct); // Logging orderProduct
-    console.log('Order created successfully:', response.data);
+    const response = await axiosInstance.post('/orders/create', {
+      product_id: productId.value.id,
+      color_id: selectedColor.value,
+      size_id: selectedSize.value,
+      qty: quantity.value,
+      total_amount: total.value
+    });
+
+    order.value = response.data.order;
+    const orderId = order.value.id;
+    localStorage.setItem("orderId", orderId)
   } catch (error) {
     console.error('Error creating order:', error);
   }

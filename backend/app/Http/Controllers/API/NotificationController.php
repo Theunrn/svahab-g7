@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\Notification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class NotificationController extends Controller
 {
@@ -13,10 +14,17 @@ class NotificationController extends Controller
      */
     public function getNotificationsByUserId($userId)
     {
-        $notifications = Notification::where('user_id', $userId)->get();
-        $notifications = Notification::latest()->get();
+        // Ensure only the authenticated user can fetch their notifications
+        $user = Auth::user();
+        if (!$user || $user->id != $userId) {
+            return response()->json(['success' => false, 'message' => 'Unauthorized access'], 403);
+        }
+
+        $notifications = Notification::where('user_id', $userId)->latest()->get();
+        
         return response()->json(['success' => true, 'data' => $notifications]);
     }
+
 
     public function updateNotification($id)
     {

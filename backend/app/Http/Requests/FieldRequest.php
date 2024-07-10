@@ -20,7 +20,7 @@ class FieldRequest extends DefaultRequest
             'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg,jfif,webp|max:2048',
             'price' => 'required|numeric|min:0',
             'field_type' => 'required|string|max:255',
-            'owner_id' => 'required|integer',
+            // 'owner_id' => 'required|integer',
             'availablity' => 'required|boolean',
         ];
     }

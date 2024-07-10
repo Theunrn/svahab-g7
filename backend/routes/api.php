@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\FieldController;
+use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\API\BookingController;
 use App\Http\Controllers\API\OrderProductController;
@@ -11,11 +12,15 @@ use App\Http\Controllers\API\ColorController;
 use App\Http\Controllers\API\DiscountProductController;
 use App\Http\Controllers\API\HistoryController;
 use App\Http\Controllers\API\NotificationController;
+use App\Http\Controllers\API\PaymentController as APIPaymentController;
 use App\Http\Controllers\API\PostController;
 use App\Http\Controllers\API\ProductController as APIProductController;
 use App\Http\Controllers\API\SizeController;
 use App\Http\Controllers\API\SlideShowController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\API\AddToCardController;
+use App\Http\Controllers\API\DeliveryController;
+use App\Http\Controllers\API\ProfileController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\StripePaymentController;
 use Illuminate\Http\Request;
@@ -42,8 +47,11 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::put('/customers/{id}/role', [AuthController::class, 'updateRole']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
+//Profile
+Route::put('profile/update', [ProfileController::class,'update'])->middleware('auth:sanctum');
 
 Route::get('/me', [AuthController::class, 'index'])->middleware('auth:sanctum');
+Route::get('/owner/show/{id}', [AuthController::class, 'show']);
 Route::get('/post/list', [PostController::class, 'index'])->middleware('auth:sanctum');
 
 Route::get('fields/list', [FildController::class,'index'])->name('field.list');
@@ -56,12 +64,12 @@ Route::delete('field/delete/{id}', [FildController::class,'destroy'])->name('fie
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('orders/list', [OrderProductController::class, 'index']);
     Route::post('orders/create', [OrderProductController::class, 'store']);
-    Route::get('orders/show/{id}', [OrderProductController::class, 'show']);
+    
     Route::delete('orders/cancel/{id}', [OrderProductController::class, 'cancel']);
     Route::post('/orders/{id}/confirm', [OrderProductController::class, 'confirm']);
     Route::put('orders/reactivate/{id}', [OrderProductController::class, 'reactivate']);
 });
-
+Route::get('orders/show/{id}', [OrderProductController::class, 'show']);
 
 //Booking
 Route::get('/booking/list', [BookingController::class, 'index']);
@@ -105,9 +113,11 @@ Route::get('/slideshow/list', [SlideShowController::class,'index'])->name('slide
 
 //History
 
-Route::get('/histories/list',[HistoryController::class,'index'])->name('history.list');
-Route::post('/histories/create',[HistoryController::class,'store'])->name('history.store');
+// Route::get('/histories/list',[HistoryController::class,'index'])->name('history.list');
+// Route::post('/histories/create',[HistoryController::class,'store'])->name('history.store');
+// Route::delete('/history/delete/{id}',[HistoryController::class,'destroy'])->name('history.destroy');
 Route::get('/customer/bookings/{id}', [BookingController::class, 'getBookingsByUserId']);
+Route::delete('/customer/bookings/delete/{id}', [BookingController::class, 'destroy'])->name('booking.destroy');
 Route::get('/customer/orders/{id}', [OrderProductController::class, 'getOrdersByUserId']);
 
 //Notifications
@@ -117,5 +127,22 @@ Route::delete('/notifications/delete/{id}', [NotificationController::class, 'des
 
 //Payment
 Route::post('/stripe/payment', [StripePaymentController::class, 'makePayment']);
+Route::post('/payment/create', [APIPaymentController::class, 'createPayment']);
+Route::get('/payment/list', [APIPaymentController::class, 'index']);
 Route::put('/update/payment/booking/{id}', [BookingController::class, 'updateStatusPaymentBooking']);
-Route::put('/update/payment/order/{id}', [OrderController::class, 'updateStatusPaymentOrder']);
+Route::put('/update/payment/order/{id}', [OrderProductController::class, 'updateStatusPaymentOrder']);
+Route::delete('/customer/orders/delete/{id}', [OrderProductController::class,'deleteOrder']);
+
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('cart/list', [AddToCardController::class, 'index']);
+    Route::post('cart/create', [AddToCardController::class, 'store']);
+    Route::get('cart/show/{id}', [AddToCardController::class, 'show']);
+    Route::put('cart/update/{id}', [AddToCardController::class, 'update']);
+    Route::delete('cart/delete/{id}', [AddToCardController::class, 'destroy']);
+});
+
+
+
+
+

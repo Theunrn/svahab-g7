@@ -20,9 +20,12 @@ class OrderProductController extends Controller
         // Get authenticated user (customer)
         $user = Auth::user();
 
-        // Retrieve orders for the authenticated user
         $orders = Order::where('user_id', $user->id)->with('products')->get();
 
+        $orders->each(function ($order) {
+            $order->total_amount = $order->total_amount; // This line is redundant if total_amount is already an attribute
+        });
+        $orders = OrderProductResource::collection($orders);
         return response()->json(['success' => true, 'data' => $orders], 200);
     }
 
@@ -34,34 +37,34 @@ class OrderProductController extends Controller
             'qty' => 'required|integer|min:1',
             'color_id' => 'nullable|exists:colors,id',
             'size_id' => 'nullable|exists:sizes,id',
+            'total_amount' => 'nullable',
         ]);
 
         $order = Order::createOrder($validatedData);
 
         return response()->json(['message' => 'Order created successfully', 'order' => $order], 201);
     }
-
+   
     public function show($id)
     {
         // Get authenticated user (customer)
-        $user = Auth::user();
+        // $user = Auth::user();
 
         // Find the order with products for the authenticated user
-        $order = Order::where('user_id', $user->id)->with('products')->findOrFail($id);
+        $order = Order::with('products')->findOrFail($id);
 
         return response()->json(['success' => true, 'data' => $order], 200);
     }
 
 
     public function cancel($id)
-    {
-        {
+    { {
             $user = Auth::user();
             $order = Order::where('user_id', $user->id)->findOrFail($id);
-    
+
             $order->status = 'cancelled';
             $order->save();
-    
+
             // Create a notification for order cancellation
             Notification::create([
                 'user_id' => $user->id,
@@ -73,7 +76,7 @@ class OrderProductController extends Controller
                 ]),
                 'read' => false,
             ]);
-    
+
             return response()->json(['message' => 'Order cancelled successfully'], 200);
         }
     }
@@ -121,5 +124,18 @@ class OrderProductController extends Controller
             return response()->json(['error' => 'No orders found for this user'], 404);
         }
         return response()->json($orders, 200);
+    }
+
+    public function deleteOrder($id)
+    {
+        $order = Order::findOrFail($id);
+        $order->delete();
+        return response()->json(['message' => 'Order deleted successfully'], 200);
+    }
+    public function updateStatusPaymentOrder($id){
+        $order = Order::findOrFail($id);
+        $order->payment_status = 'paid';
+        $order->save();
+        return response()->json(['message' => 'Payment status updated successfully'], 200);
     }
 }

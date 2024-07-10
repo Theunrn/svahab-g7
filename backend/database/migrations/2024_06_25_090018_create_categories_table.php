@@ -9,11 +9,13 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
+    
     public function up(): void
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
             $table->string('name');  
+            $table->foreignId('owner_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

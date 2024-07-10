@@ -70,7 +70,8 @@ const router = createRouter({
     {
       path: '/product/detail/:id',
       name: 'Card',
-      component: () => import('../views/Web/Products/CardView.vue')
+      component: () => import('../views/Web/Products/CardView.vue'),
+      props:true,
     },
     {
       path: '/category/show/:id',

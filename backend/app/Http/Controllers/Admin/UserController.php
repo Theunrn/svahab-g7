@@ -1,11 +1,18 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+
+
 use App\Http\Controllers\Controller;
+use App\Http\Requests\RegisterRequest;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Providers\RouteServiceProvider;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Str;
 
 
 
@@ -54,23 +61,22 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(RegisterRequest $request)
     {
-
         $request->validate([
-            'name'=>'required',
-            'email' => 'required|email|unique:users',
-            'password'=>'required|confirmed'
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed',
+            'phone_number' => 'required|string|max:20',
+            'qr' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg|max:20480',
         ]);
-        $user = User::create([
-            'name'=>$request->name,
-            'email'=>$request->email,
-            'password'=> bcrypt($request->password),
-            'phone_number'=> $request->phone_number,
-        ]);
-        $user->assignRole($request->roles);
-        return redirect()->route('admin.users.index')->with('success', 'User created !!!');
+
+        $user = User::store($request);
+
+        // Redirect with success message
+        return redirect()->route('admin.users.index')->with('success', 'User created successfully.');
     }
+
 
     /**
      * Display the specified resource.
@@ -123,6 +129,24 @@ class UserController extends Controller
         return redirect()->route('admin.users.index')->withSuccess('User updated !!!');
     }
 
+    public function createAccount()
+    {
+
+        return view('auth.register');
+    }
+
+    public function register(RegisterRequest $request)
+    {
+        $user = User::store($request);
+        Auth::login($user);
+        return redirect(RouteServiceProvider::ADMIN_HOME);
+
+        return view('auth.register');
+    }
+    public function loginform()
+    {
+        return redirect('/');
+    }
     /**
      * Remove the specified resource from storage.
      *

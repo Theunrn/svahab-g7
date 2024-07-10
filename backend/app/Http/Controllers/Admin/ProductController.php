@@ -8,40 +8,34 @@ use App\Models\Color;
 use App\Models\Product;
 use App\Models\Size;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
 
 
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request)
     {
-        $categories = Category::all(); // Fetch all categories for the dropdown
+        $user = Auth::user();
 
-        $productsQuery = Product::query();
-
-        // Check if category filter is applied
-        if ($request->has('category') && $request->category != '') {
-            $category_id = $request->category;
-
-            // If category ID is provided and not empty, filter by category
-            if (!empty($category_id)) {
-                $productsQuery->where('category_id', $category_id);
-            }
+        // Fetch categories based on user role
+        if ($user->isAdmin()) {
+            // Admin can see all products and all categories
+            $products = Product::with(['category', 'colors', 'sizes', 'discounts'])->get();
+            $categories = Category::all();
+        } else {
+            // Owner can see only their own products and categories
+            $products = $user->products()->with(['category', 'colors', 'sizes', 'discounts'])->get();
+            $categories = Category::where('owner_id', $user->id)->get();
         }
-
-        $products = $productsQuery->get();
 
         return view('setting.products.index', compact('products', 'categories'));
     }
 
-
     public function create()
     {
-        $categories = Category::all();
+        $categories = Category::where('owner_id', Auth::id())->get();
         $colors = Color::all();
         $sizes = Size::all();
         return view('setting.products.new', compact('categories', 'colors', 'sizes'));
@@ -76,13 +70,15 @@ class ProductController extends Controller
         $product->price = $validatedData['price'];
         $product->image = 'images/' . $imageName; // assuming storage symlink is set up
         $product->category_id = $validatedData['category_id'];
-        
+
+        // Assign owner_id from authenticated user
+        $product->owner_id = Auth::id(); // or however you retrieve the owner_id
+
         $product->save();
 
         // Attach colors and sizes
         $product->colors()->attach($validatedData['colors'] ?? []);
         $product->sizes()->attach($validatedData['sizes'] ?? []);
-        // dd($product->colors()->attach($validatedData['colors'] ?? []));
 
         // Redirect to a success page or back to the form with a success message
         return redirect()->route('admin.products.index')->with('success', 'Product created successfully.');
@@ -93,7 +89,7 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        $categories = Category::all();
+        $categories = Category::where('owner_id', Auth::id())->get();
         $colors = Color::all();
         $sizes = Size::all();
         return view('setting.products.edit', compact('product', 'categories', 'colors', 'sizes'));
@@ -129,7 +125,7 @@ class ProductController extends Controller
         $product->description = $validatedData['description'];
         $product->price = $validatedData['price'];
         $product->category_id = $validatedData['category_id'];
-       
+
         $product->save();
 
         // Sync colors and sizes

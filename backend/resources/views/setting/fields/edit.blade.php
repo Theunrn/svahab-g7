@@ -49,11 +49,6 @@
                 </div>
 
                 <div class="flex flex-col space-y-2">
-                    <label for="owner_id" class="text-gray-700 select-none font-medium">Owner ID</label>
-                    <input type="number" id="owner_id" name="owner_id" value="{{ old('owner_id', $field->owner_id) }}" class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-200">
-                </div>
-
-                <div class="flex flex-col space-y-2">
                     <label class="text-gray-700 select-none font-medium">Availability</label>
                     <div class="flex items-center">
                         <div class="mr-4">

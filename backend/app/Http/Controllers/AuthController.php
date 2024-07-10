@@ -45,17 +45,23 @@ class AuthController extends Controller
     {
         if (Auth::check()) {
             $user = $request->user();
-            // $token = $request->bearerToken();
+            $token = $request->bearerToken();
             return response()->json([
                 'message' => 'Login success',
                 'data' => $user,
-                // 'access_token'  => $token,
-                // 'token_type'    => 'Bearer'
+                'access_token'  => $token,
+                'token_type'    => 'Bearer'
             ]);
         } else {
             return  response()->json(['error' => 'User not found'], 404);
         }
     }
+    public function show($id){
+        $user = User::find($id);
+        return response()->json(['success' => true, 'data' =>$user]);
+
+    }
+   
     public function register(RegisterRequest $request)
     {
         $token = User::store($request);
@@ -75,8 +81,11 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
 
-        $request->user()->currentAccessToken()->delete();
-        
+
+        $user = $request->user();
+
+        // Revoke the user's current token
+        $user->tokens()->delete();
         return response()->json(['message' => 'Successfully logged out']);
     }
 }

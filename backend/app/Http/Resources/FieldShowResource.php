@@ -22,6 +22,7 @@ class FieldShowResource extends JsonResource
             'price' => $this->price,
             'field_type' => $this->field_type,
             'owner_name' => optional($this->owner)->name,
+            'owner_id' => optional($this->owner)->id,
             'availablity' => $this->availablity
         ];
     }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -19,13 +20,11 @@ class ProductResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'description' => $this->description,
-            'price' => $this->price,
-            'image' => $this->image,
-            'colors' => $this->colors,
-            'sizes' => $this->sizes,
-            'discounted_price' => $this->discountedPrice, // Adjust this according to your model property
-            'category' => new CategoryResource($this->whenLoaded('category')),
+            'qty' => $this->pivot->qty,
+            'price' => number_format($this->price, 2),
+            'total' => number_format($this->pivot->qty * $this->price, 2),
+            'color' => $this->pivot->color_id ? $this->colors->firstWhere('id', $this->pivot->color_id)->name ?? null : null,
+            'size' => $this->pivot->size_id ? $this->sizes->firstWhere('id', $this->pivot->size_id)->name ?? null : null,
         ];
     }
 
