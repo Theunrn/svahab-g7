@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\FeedbackController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ProductController;
 use Illuminate\Support\Facades\Route;
@@ -85,7 +86,10 @@ Route::namespace('App\Http\Controllers\Admin')->name('admin.')->prefix('admin')
         Route::resource('products', 'ProductController');
         Route::resource('categories', 'CategoryController');
         Route::resource('payments', 'PaymentController');
-        Route::resource('feedbacks', 'FeedbackController');
+        // Route::resource('feedbacks', 'FeedbackController');
+
+        Route::resource('admin/feedbacks', FeedbackController::class);
+
         Route::resource('orders', 'OrderController');
         Route::resource('discounts', 'DiscountController');
 
@@ -101,16 +105,5 @@ Route::get('/admin/bookings/{id}/reject', [BookingController::class, 'reject'])-
 Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
 
-// Route::resource('dashboards', DashboardController::class);
-
-
-
-// Route::prefix('admin')->middleware(['auth'])->group(function () {
-//     // Other admin routes...
-
-//     Route::resource('dashboards', DashboardController::class);
-// });
-
 
 Route::get('/admin/categories', [CategoryController::class, 'index'])->name('admin.categories.index');
-

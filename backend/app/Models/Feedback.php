@@ -43,16 +43,5 @@ class Feedback extends Model
         return self::where('field_id', $fieldId)->firstOrFail();
     }
 
-    // public static function addToCart($fieldId, $feedback)
-    // {
-    //     $field = Field::findOrFail($fieldId);
 
-    //     $field = self::where('field_id', $fieldId)
-    //         ->where('field_id', $fieldId)
-    //         ->first();
-
-    //     return $field;
-    // }
-
-    
 }
