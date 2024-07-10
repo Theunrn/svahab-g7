@@ -48,23 +48,23 @@ Route::put('/customers/{id}/role', [AuthController::class, 'updateRole']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
 //Profile
-Route::put('profile/update', [ProfileController::class,'update'])->middleware('auth:sanctum');
+Route::put('profile/update', [ProfileController::class, 'update'])->middleware('auth:sanctum');
 
 Route::get('/me', [AuthController::class, 'index'])->middleware('auth:sanctum');
 Route::get('/owner/show/{id}', [AuthController::class, 'show']);
 Route::get('/post/list', [PostController::class, 'index'])->middleware('auth:sanctum');
 
-Route::get('fields/list', [FildController::class,'index'])->name('field.list');
-Route::post('field/create', [FildController::class,'store'])->name('field.create');
-Route::get('field/show/{id}', [FildController::class,'show'])->name('field.show');
-Route::put('field/update/{id}', [FildController::class,'update'])->name('field.update');
-Route::delete('field/delete/{id}', [FildController::class,'destroy'])->name('field.delete');
+Route::get('fields/list', [FildController::class, 'index'])->name('field.list');
+Route::post('field/create', [FildController::class, 'store'])->name('field.create');
+Route::get('field/show/{id}', [FildController::class, 'show'])->name('field.show');
+Route::put('field/update/{id}', [FildController::class, 'update'])->name('field.update');
+Route::delete('field/delete/{id}', [FildController::class, 'destroy'])->name('field.delete');
 
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('orders/list', [OrderProductController::class, 'index']);
     Route::post('orders/create', [OrderProductController::class, 'store']);
-    
+
     Route::delete('orders/cancel/{id}', [OrderProductController::class, 'cancel']);
     Route::post('/orders/{id}/confirm', [OrderProductController::class, 'confirm']);
     Route::put('orders/reactivate/{id}', [OrderProductController::class, 'reactivate']);
@@ -85,7 +85,7 @@ Route::apiResource('feedback', FeedbackController::class);
 // Categories API Routes
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/category/list', [CategoryController::class, 'index']);
-    
+
     Route::post('/category/create', [CategoryController::class, 'store']);
     Route::put('/category/update/{id}', [CategoryController::class, 'update']);
     Route::delete('/category/delete/{id}', [CategoryController::class, 'destroy']);
@@ -103,13 +103,13 @@ Route::get('/sizes', [SizeController::class, 'index']);
 Route::get('/colors', [ColorController::class, 'index']);
 
 
-Route::get('/discount/list',[DiscountProductController::class,'index'])->name('discount.list');
-Route::post('/discount/create',[DiscountProductController::class,'store'])->name('discount.create');
-Route::get('/discount/show/{id}',[DiscountProductController::class,'show'])->name('discount.show');
-Route::put('/discount/update/{id}',[DiscountProductController::class,'update'])->name('discount.update');
-Route::delete('/discount/delete/{id}',[DiscountProductController::class,'destroy'])->name('discount.destroy');
+Route::get('/discount/list', [DiscountProductController::class, 'index'])->name('discount.list');
+Route::post('/discount/create', [DiscountProductController::class, 'store'])->name('discount.create');
+Route::get('/discount/show/{id}', [DiscountProductController::class, 'show'])->name('discount.show');
+Route::put('/discount/update/{id}', [DiscountProductController::class, 'update'])->name('discount.update');
+Route::delete('/discount/delete/{id}', [DiscountProductController::class, 'destroy'])->name('discount.destroy');
 
-Route::get('/slideshow/list', [SlideShowController::class,'index'])->name('slideshow.list');
+Route::get('/slideshow/list', [SlideShowController::class, 'index'])->name('slideshow.list');
 
 //History
 
@@ -121,9 +121,12 @@ Route::delete('/customer/bookings/delete/{id}', [BookingController::class, 'dest
 Route::get('/customer/orders/{id}', [OrderProductController::class, 'getOrdersByUserId']);
 
 //Notifications
-Route::get('/notifications/list/{id}', [NotificationController::class, 'getNotificationsByUserId']);
-Route::put('/notification/update/{id}', [NotificationController::class, 'updateNotification']);
-Route::delete('/notifications/delete/{id}', [NotificationController::class, 'destroy']);
+Route::middleware('auth:sanctum')->group(function () {
+    // Your notification routes here
+    Route::get('/notifications/list/{id}', [NotificationController::class, 'getNotificationsByUserId']);
+    Route::put('/notification/update/{id}', [NotificationController::class, 'updateNotification']);
+    Route::delete('/notifications/delete/{id}', [NotificationController::class, 'destroy']);
+});
 
 //Payment
 Route::post('/stripe/payment', [StripePaymentController::class, 'makePayment']);
@@ -131,7 +134,7 @@ Route::post('/payment/create', [APIPaymentController::class, 'createPayment']);
 Route::get('/payment/list', [APIPaymentController::class, 'index']);
 Route::put('/update/payment/booking/{id}', [BookingController::class, 'updateStatusPaymentBooking']);
 Route::put('/update/payment/order/{id}', [OrderProductController::class, 'updateStatusPaymentOrder']);
-Route::delete('/customer/orders/delete/{id}', [OrderProductController::class,'deleteOrder']);
+Route::delete('/customer/orders/delete/{id}', [OrderProductController::class, 'deleteOrder']);
 
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -141,8 +144,3 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('cart/update/{id}', [AddToCardController::class, 'update']);
     Route::delete('cart/delete/{id}', [AddToCardController::class, 'destroy']);
 });
-
-
-
-
-
