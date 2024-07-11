@@ -121,6 +121,11 @@ const router = createRouter({
       name: 'Orders',
       component: NotificationCom,
       props: { tab: 'orders' }
+    },
+    {
+      path: '/schedule',
+      name: 'schedule',
+      component: () => import('../views/Web/Schedule/ScheduleView.vue')
     }
   ]
 })
