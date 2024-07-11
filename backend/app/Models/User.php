@@ -21,6 +21,7 @@ class User extends Authenticatable
         'email',
         'password',
         'phone_number',
+        'profile',
         'qr', // Ensure 'qr' field is in fillable array
     ];
 

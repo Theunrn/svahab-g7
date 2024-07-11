@@ -21,6 +21,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\API\AddToCardController;
 use App\Http\Controllers\API\DeliveryController;
 use App\Http\Controllers\API\ProfileController;
+use App\Http\Controllers\Auth\ProfileController as AuthProfileController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\StripePaymentController;
 use Illuminate\Http\Request;
@@ -48,7 +49,9 @@ Route::put('/customers/{id}/role', [AuthController::class, 'updateRole']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
 //Profile
-Route::put('profile/update', [ProfileController::class,'update'])->middleware('auth:sanctum');
+Route::put('/profile/update', [ProfileController::class, 'update'])->middleware('auth:sanctum');
+// Route::middleware('auth:api')->put('/profile/update', [ProfileController::class, 'update']);
+// Route::get('profile/list', [ProfileController::class,'index'])->middleware('auth:sanctum');
 
 Route::get('/me', [AuthController::class, 'index'])->middleware('auth:sanctum');
 Route::get('/owner/show/{id}', [AuthController::class, 'show']);
