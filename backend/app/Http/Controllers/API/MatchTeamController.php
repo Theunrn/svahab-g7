@@ -3,18 +3,19 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Auth\Events\Validated;
+use App\Models\MatchTeam;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
-class ProfileController extends Controller
+class MatchTeamController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $matchTeams = MatchTeam::all();
+        $matchTeams = MatchTeam::latest()->get();
+        return response()->json(['sucess' => true, 'data' => $matchTeams]);
     }
 
     /**
@@ -22,7 +23,7 @@ class ProfileController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**
@@ -30,7 +31,8 @@ class ProfileController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        MatchTeam::store($request);
+        return response()->json(['success' => true, 'message' =>'created successfully']);
     }
 
     /**
@@ -54,27 +56,7 @@ class ProfileController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $user = Auth::user();
-        $validated = $request->validate([
-            'name'=>'required',
-            'email' => 'required|email|unique:users,email,'.$user->id.',id',
-        ]);
-
-        if($request->password != null){
-            $request->validate([
-                'password' => 'required|confirmed'
-            ]);
-            $validated['password'] = bcrypt($request->password);
-        }
-
-        if($request->hasFile('profile')){
-            if($name = $this->saveImage($request->profile)){
-                $validated['profile'] = $name;
-            }
-        }
-        $user->update($validated);
-        return response()->json(['success' => true, 'message' =>'Profile updated successfully']);
-
+        //
     }
 
     /**

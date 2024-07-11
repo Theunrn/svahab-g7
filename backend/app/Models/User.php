@@ -70,8 +70,7 @@ class User extends Authenticatable
         } else {
             $user->assignRole('owner');
         }
-
-
+        
         // Assign role or perform any other operations as needed
 
         return $user;

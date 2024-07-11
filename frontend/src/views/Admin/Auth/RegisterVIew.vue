@@ -61,7 +61,8 @@
 import axios from 'axios';
 import bcrypt from 'bcryptjs';
 import { useRouter } from 'vue-router';
-
+import { useAuthStore } from '@/stores/auth-store'
+const authStore = useAuthStore()
 export default {
   data() {
     return {
@@ -88,7 +89,6 @@ export default {
           password: hashedPassword,
           phone_number: this.phone_number,
         });
-
         const token = response.data.access_token;
         // Fetch user details using the token
         const userResponse = await axios.get('http://127.0.0.1:8000/api/user', {
@@ -108,13 +108,15 @@ export default {
         this.customers = response.data;
         // Display success message
         alert('Customer registered and role updated successfully');
+       
+        localStorage.setItem('access_token', token)
+        this.router.push('/')
 
-        // Redirect to home page
-        this.router.push({ path: '/' });
       } catch (error) {
         if (error.response) {
           console.error('API Error:', error.response.data);
         } else {
+          alert("Fial registering")
           console.error('Error:', error.message);
         }
       }

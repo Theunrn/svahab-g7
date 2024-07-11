@@ -1,7 +1,7 @@
 <template>
   <header
     style="padding-left: 60px; padding-right: 60px"
-    class="flex justify-between py-2 items-center shadow-md navbar-light fixed top-0 left-0 right-0 bg-green-600 z-50"
+    class="flex justify-between py-3 items-center shadow-md navbar-light fixed top-0 left-0 right-0 bg-green-600 z-50"
   >
     <!-- Logo -->
     <div class="flex items-center space-x-2">
@@ -42,11 +42,18 @@
         >CONTACT</a
       >
     </nav>
+    <!-- Cart favorite -->
+    <!-- <button class="relative inline-flex">
+      <div  class="absolute top-0 right-0 transform translate-x-2/4 -translate-y-1/2 z-10 flex items-center justify-center h-5 w-5 bg-red-600 rounded-full text-white text-xs font-bold">
+        1
+      </div>
+      <router-link to="" class="flex items-center justify-center rounded-lg bg-primary-500 text-white dark:text-gray-200">
+        <i class='fa fa-heart-o text-2xl ml-4 text-white'></i>
+      </router-link>
+    </button> -->
     <!-- Cart Button -->
-    <button class="relative inline-flex w-fit mx-4">
-      <div
-        class="absolute top-0 right-0 transform translate-x-2/4 -translate-y-1/2 z-10 flex items-center justify-center h-5 w-5 bg-red-600 rounded-full text-white text-xs font-bold"
-      >
+    <button class="relative inline-flex w-fit mx-3">
+      <div  class="absolute top-0 right-0 transform translate-x-2/4 -translate-y-1/2 z-10 flex items-center justify-center h-5 w-5 bg-red-600 rounded-full text-white text-xs font-bold">
         {{ itemCount }}
       </div>
       <router-link
@@ -58,12 +65,9 @@
       </router-link>
     </button>
     <!-- Notification Button -->
-    <button class="relative inline-flex w-fit" @click="clearNotifications">
-      <div
-        class="absolute top-0 right-0 transform translate-x-2/4 -translate-y-1/2 z-10 flex items-center justify-center h-5 w-5 bg-red-600 rounded-full text-white text-xs font-bold"
-        v-if="notifications.length > 0"
-      >
-        {{ getNewCount(notifications) }}
+    <button class="relative inline-flex w-fit mx-3" @click="clearNotifications">
+      <div class="absolute top-0 right-0 transform translate-x-2/4 -translate-y-1/2 z-10 flex items-center justify-center h-5 w-5 bg-red-600 rounded-full text-white text-xs font-bold"
+        v-if="notifications.length > 0">{{ getNewCount(notifications) }}
       </div>
       <router-link
         :to="{ path: '/notification/' + authStore.user.id }"
@@ -74,24 +78,20 @@
       </router-link>
     </button>
     <!-- History Button -->
-    <button class="relative inline-flex items-center m-4">
-      <router-link
-        :to="{ path: '/history/' + authStore.user.id }"
-        class="flex items-center justify-center rounded-lg bg-primary-500 text-white dark:text-gray-200"
-      >
-        <span
-          class="absolute top-0 left-3/2 transform -translate-x-1/2 -translate-y-full text-lg font-semibold"
-        ></span>
-        <i class="bx bx-history text-3xl"></i>
+    <button class="relative inline-flex items-center mx-3 ">
+      <router-link :to="{ path: '/history/' + authStore.user.id }" class="flex items-center justify-center rounded-lg bg-primary-500 text-white dark:text-gray-200">
+        <span v-if="showText" class="absolute top-0 left-3/2 transform -translate-x-1/2 -translate-y-full text-lg font-semibold">History</span>
+        <i class="bx bx-history text-3xl"
+         ></i>
       </router-link>
     </button>
    <!-- Authentication Button -->
    <div class="auth flex gap-2">
       <!-- Conditionally render Register, Login or Logout button -->
-      <template v-if="!authStore.isAuthenticated">
-        <a href="/register"><button class="hover:bg-red-400 text-dark bg-white px-4 py-1 border-1 border-red-700 hover:border-red-500 rounded">Register</button></a>
+      <div v-if="!authStore.isAuthenticated" class="flex gap-2 py-2">
         <a href="/login"><button class="hover:bg-red-400 text-dark bg-white px-4 py-1 border-1 border-red-700 hover:border-red-500 rounded">Login</button></a>
-      </template>
+        <a href="/register"><button class="hover:bg-red-400 text-dark bg-white px-4 py-1 border-1 border-red-700 hover:border-red-500 rounded">Register</button></a>
+      </div>
       <template v-else>
 			<div class="dropdown ms-1 ms-lg-0 " v-if="authStore.isAuthenticated">
 				<a class="avatar avatar-sm p-0" href="#" id="profileDropdown" role="button" data-bs-auto-close="outside" data-bs-display="static" data-bs-toggle="dropdown" aria-expanded="false">
@@ -115,14 +115,48 @@
 						<hr>
 					</li>
 					<!-- Links -->
-					<li><a class="dropdown-item mt-2" href="../views/profiles/edit_profile.view.php">Edit Profile</a></li>
+					<li><button class="dropdown-item mt-2" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">Edit Profile</button></li>
 					<li><button class="dropdown-item bg-danger-soft-hover" @click="userLogout" >Sign Out</button></li>
 				</ul>
 			</div>
       </template>
     </div>
-      
+
   </header>
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title text-2xl text-bold" id="exampleModalLabel">Update your profile</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="mb-3">
+                  <img v-if="profile !== null" width="150" height="150" :src="getImageUrl(profile)" :alt="profile">
+                  <img v-else width="150" height="150" src="../assets/image/profile.png" :alt="profile">
+              </div>
+              <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Upload New profile *</label>
+                <input type="file" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+              </div>
+              <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Name *</label>
+                <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" v-model="name">
+              </div>
+              <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Email *</label>
+                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" v-model="email">
+              </div>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </form>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+
 </template>
 
 <script setup lang="ts">
@@ -137,6 +171,9 @@ const authStore = useAuthStore()
 const notifications = ref([])
 const showDropdown = ref(false)
 const showText = ref(false)
+const name = ref('');
+const email = ref('');
+const profile = ref('');
 
 const fetchNotifications = async () => {
   try {
@@ -173,19 +210,27 @@ const fetchCartItemsCount = async () => {
     })
     if (response.data.success) {
       itemCount.value = response.data.data.reduce((total, item) => total + item.quantity, 0)
-      // console.log(itemCount.value);
     } else {
       console.error('Failed to fetch cart items count')
     }
   } catch (error) {
     console.error('Error fetching cart items count:', error)
   }
+
+
 }
 
 onMounted(() => {
   fetchNotifications()
   fetchCartItemsCount()
+  name.value = authStore.user.name
+  email.value = authStore.user.email
+  profile.value = authStore.user.profile
+
 })
+const getImageUrl = (imagePath) => {
+    const image = imagePath ? `http://127.0.0.1:8000/public/images/${imagePath}` : '/default-image.jpg';
+};
 </script>
 
 <style scoped>
