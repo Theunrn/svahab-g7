@@ -41,6 +41,7 @@ const router = createRouter({
       name: 'fields',
       component: () => import('../views/Web/FieldsView.vue')
     },
+    
     {
       path: '/shop',
       name: 'shop',
@@ -55,6 +56,16 @@ const router = createRouter({
       path: '/field/detail/:id',
       name: 'Detail',
       component: () => import('../views/Web/Field/FieldDetailView.vue')
+    },
+    {
+      path: '/schedule',
+      name: 'schedule',
+      component: () => import('../views/Web/Field/ScheduleView.vue')
+    },
+    {
+      path: '/lineUp',
+      name: 'lineUp',
+      component: () => import('../views/Web/Field/LineUpView.vue')
     },
     {
       path: '/field/book',
