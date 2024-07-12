@@ -1,33 +1,20 @@
 <template>
-  <WebHeaderMenu/>
+  <!-- <WebHeaderMenu/> -->
   <div class="header-text mt-5">
     <div class="header-detail">
-      <div class="form-select absolute p-2 mt-17 bg-green bg-opacity-90 z-20 rounded-lg w-full md:w-5/5 lg:w-9/10 ml-16">
-        <div class="flex items-center justify-center space-x-2">
-          <div class="relative flex gap-10 w-[334px]">
-            <input type="text" placeholder="Search Field" class="p-2 rounded border w-80 h-13" />
-          </div>
-
-          <div class="relative flex gap-10 w-[334px]">
-            <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
-              <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
-              </svg>
-            </div>
-            <VueFlatpickr @change="bookingDate" v-model="booking_date" :config="flatpickrConfig" class="px-4 py-3 text-center bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date" />
-          </div>
-
-          <form class="w-[334px] flex gap-2">
-            <div class="flex gap-2">
-              <label for="start_time" class="text-sm text-white" style="margin-top: 20px;">Start</label>
-              <input @change="start" v-model="start_time" type="time" id="start_time" class="px-4 py-3 rounded-none rounded-s-lg bg-gray-50 border text-gray-900 leading-none focus:ring-blue-500 focus:border-blue-500 block flex-1 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" min="09:00" max="18:00" required>
-            </div>
-            <div class="flex gap-2">
-              <label for="end_time" class="text-sm text-white" style="margin-top: 20px;">End</label>
-              <input @change="end" v-model="end_time" type="time" id="end_time" class="px-4 py-3 rounded-none rounded-s-lg bg-gray-50 border text-gray-900 leading-none focus:ring-blue-500 focus:border-blue-500 block flex-1 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" min="09:00" max="18:00" required>
-            </div>
-          </form>
-        </div>
+      <div class="select absolute mt-17 bg-green bg-opacity-900 z-20 rounded-lg w-full md:w-5/5 lg:w-9/10 ml-16 flex justify-center items-center">
+        <router-link href="#" class="menu-item">
+          <i class="bx bx-home text-2xl"></i>
+          <span>Home</span>
+        </router-link>
+        <router-link to="/schedule" href="#" class="menu-item">
+          <i class="bx bx-calendar text-2xl"></i>
+          <span>Schedule</span>
+        </router-link>
+        <router-link to="/lineUp" href="#" class="menu-item">
+          <i class="bx bx-line-chart text-2xl"></i>
+          <span>Line Up</span>
+        </router-link>
       </div>
     </div>
 
@@ -229,6 +216,7 @@ const submitBooking = async () => {
   } catch (error) {
     console.error('Error creating booking:', error);
   }
+  
 };
 
 const fetchFields = async () => {
@@ -342,15 +330,47 @@ h1 {
   margin-top: 10px;
 }
 
-.form-group input,
-.form-group select {
+.form-group input {
   width: calc(100% - 20px);
   padding: 5px;
   border: 1px solid #ccc;
   border-radius: 5px;
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
 }
+.select {
+  display: flex;
+  justify-content: space-around; /* Centers items horizontally */
+  align-items: center; /* Centers items vertically */
+  border-radius: 5px;
+  padding: 0.5rem 1rem;
+  box-shadow: 0 1px 3px rgba(245, 242, 242, 0.1);
+}
 
+.menu-item {
+  align-items: center;
+  text-align: center;
+  padding: 0.5rem;
+  color: white;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+  margin-right: 0.75rem;
+}
+
+.menu-item:hover {
+  background-color: rgba(255, 255, 255, 0.1); 
+}
+
+.menu-item i {
+  margin-right: 0.5rem; 
+}
+
+.bg-green {
+  background-color: #38a169; /* Tailwind green color */
+}
+
+.bg-opacity-90 {
+  background-color: rgba(56, 161, 105, 0.9); /* Adjusted opacity */
+}
 
 
 
