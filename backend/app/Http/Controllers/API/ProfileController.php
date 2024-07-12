@@ -14,7 +14,8 @@ class ProfileController extends Controller
      */
     public function index()
     {
-        //
+        // Get authenticated user (customer)
+        
     }
 
     /**
@@ -46,20 +47,19 @@ class ProfileController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
+    public function update(Request $request)
+    {   dd(Auth::user(), 'update', $request);
         $user = Auth::user();
         $validated = $request->validate([
             'name'=>'required',
             'email' => 'required|email|unique:users,email,'.$user->id.',id',
         ]);
-
         if($request->password != null){
             $request->validate([
                 'password' => 'required|confirmed'
@@ -72,10 +72,16 @@ class ProfileController extends Controller
                 $validated['profile'] = $name;
             }
         }
-        $user->update($validated);
+        $user->seff::update($validated);
         return response()->json(['success' => true, 'message' =>'Profile updated successfully']);
-
     }
+    protected function saveImage($image)
+    {
+        $filename = time() . '.' . $image->getClientOriginalExtension();
+        $image->move(public_path('profiles'), $filename);
+        return $filename;
+    }
+    
 
     /**
      * Remove the specified resource from storage.
