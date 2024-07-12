@@ -1,7 +1,7 @@
 <template>
   <WebHeaderMenu />
   <div class="header-text mt-5">
-    <div class="header-detail ">
+    <div class="header-detail">
       <div
         class="select absolute mt-17 bg-green bg-opacity-900 z-20 rounded-lg w-full md:w-5/5 lg:w-9/10 ml-16 flex justify-center items-center"
       >
@@ -187,7 +187,107 @@
       </div>
     </div>
 
-    <!-- Add Map and Card  -->
+    <div class="container mx-auto mt-10 p-4 bg-white shadow-md rounded">
+      <h2 class="text-2xl text-black font-bold mb-4">Commented</h2>
+      <div class="mb-4">
+        <div class="container mx-auto mt-10 p-4">
+          <div class="group-form d-flex" v-for="feedback in Feedbacklist" :key="feedback.id">
+            <div class="flex items-center mb-4">
+              <div class="flex-grow flex items-center">
+                <!-- Profile icon -->
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-6 w-6 text-gray-400 mr-2"
+                  viewBox="0 0 20 20"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <circle cx="10" cy="10" r="9" />
+                  <path d="M16 16s-1.5-2-4-2-4 2-4 2" />
+                  <path d="M9 10s2-3.5 4-3.5 4 3.5 4 3.5" />
+                  <circle cx="10" cy="12" r="3" />
+                </svg>
+                <!-- Static content for profile -->
+                <span class="text-gray-600"></span>
+              </div>
+            </div>
+            <div class="flex items-center mb-4 ml-4 d-inline">
+              <span class="text-black">{{ feedback.user.name }} - {{ feedback.created_at }}</span>
+              <div class="flex-grow">
+                <label for="name" class="block text-gray-700 w-100">{{
+                  feedback.feedback_text
+                }}</label>
+              </div>
+              <div class="flex justify-end">
+                <button
+                  @click="showEditModal(feedback)"
+                  class="px-2 py-1 bg-blue-500 text-white font-semibold rounded-md shadow hover:bg-blue-600 mr-2"
+                >
+                  Edit
+                </button>
+
+                <button
+                  @click="deleteItem(feedback.id)"
+                  class="px-2 py-1 bg-red-500 text-white font-semibold rounded-md shadow hover:bg-red-600"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <h2 class="text-black">Add comment here</h2>
+      <textarea
+        id="comment"
+        name="comment"
+        rows="4"
+        v-model="feedback_text"
+        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-xl text-black"
+        required
+      ></textarea>
+    </div>
+    <div class="flex justify-end">
+      <button
+        @click="SubmitFeedback"
+        class="px-4 py-2 bg-indigo-500 text-white font-semibold rounded-md shadow hover:bg-indigo-600"
+      >
+        Submit
+      </button>
+    </div>
+    <!-- Edit Feedback Modal -->
+    <div
+      v-if="editFeedbackModalVisible"
+      class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75"
+    >
+      <div class="bg-white p-6 rounded-lg w-96">
+        <h3 class="text-lg font-semibold mb-4 text-black">Edit Feedback</h3>
+        <textarea
+          v-model="editedFeedbackText"
+          class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black"
+          rows="4"
+        ></textarea>
+        <div class="mt-4 flex justify-end">
+          <button
+            @click="updateFeedback()"
+            class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-md shadow hover:bg-blue-600"
+          >
+            Update
+          </button>
+          <button
+            @click="closeEditModal()"
+            class="px-4 py-2 bg-gray-300 text-gray-800 font-semibold rounded-md shadow ml-2 hover:bg-gray-400"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
   <!-- map Modal -->
   <div
@@ -273,7 +373,6 @@
     </div>
   </div>
   <CurrentUser @address-updated="handleAddressUpdate" />
-  
 </template>
 
 <script setup lang="ts">
@@ -285,6 +384,8 @@ import VueFlatpickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
 import { useRoute, useRouter } from 'vue-router'
 import axiosInstance from '@/plugins/axios'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import type { Action } from 'element-plus'
 
 const route = useRoute()
 const router = useRouter()
@@ -305,7 +406,9 @@ const duration = ref(0)
 const isBook = ref(false)
 const fields = ref([])
 const location = ref('')
-
+const feedback_text = ref('')
+const Feedbacklist = ref([])
+const isclear = ref(false)
 const receivedAddress = ref<string>('')
 
 // Event handler for address-updated event
@@ -388,10 +491,88 @@ const fetchFields = async () => {
     console.error('Error fetching fields:', error)
   }
 }
+const SubmitFeedback = async () => {
+  try {
+    const response = await axiosInstance.post('/feedback/create', {
+      user_id: userId.value,
+      field_id: fieldId.value,
+      feedback_text: feedback_text.value
+    })
+    alert('Create successfull')
+    isclear.value = true
+    clearFeedbackData()
+  } catch (error) {
+    alert('create fail')
+    console.error('Error creating booking:', error)
+  }
+}
+const fetchFeedbackList = async () => {
+  try {
+    const response = await axiosInstance.get('/feedbacks', {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('access_token')}`
+      }
+    })
+    Feedbacklist.value = response.data.data
+    console.log(Feedbacklist.value)
+  } catch (error) {
+    console.error('Error fetching feedbacks:', error)
+  }
+}
+const deleteItem = async (itemId) => {
+  try {
+    await axiosInstance.delete(`/feedback/delete/${itemId}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('access_token')}`
+      }
+    })
+    Feedbacklist.value = Feedbacklist.value.filter((item) => item.id !== itemId)
+  } catch (error) {
+    console.error('Error deleting item:', error)
+  }
+}
+const editFeedbackModalVisible = ref(false)
+const editedFeedbackText = ref('')
+let feedbackToEdit = ref(null)
 
+const showEditModal = (feedback) => {
+  feedbackToEdit = feedback
+  editedFeedbackText.value = feedback.feedback_text
+  editFeedbackModalVisible.value = true
+}
+
+const closeEditModal = () => {
+  editFeedbackModalVisible.value = false
+}
+
+const updateFeedback = async () => {
+  try {
+    const response = await axiosInstance.put(`/feedback/update/${feedbackToEdit.id}`, {
+      feedback_text: editedFeedbackText.value
+    })
+    const updatedFeedbackIndex = Feedbacklist.value.findIndex(
+      (item) => item.id === feedbackToEdit.id
+    )
+    if (updatedFeedbackIndex !== -1) {
+      Feedbacklist.value[updatedFeedbackIndex].feedback_text = editedFeedbackText.value
+    }
+    closeEditModal()
+    alert('Feedback updated successfully!')
+  } catch (error) {
+    alert('Failed to update feedback.')
+    console.error('Error updating feedback:', error)
+  }
+}
+const clearFeedbackData = () => {
+  feedback_text.value = ''
+}
 onMounted(() => {
   fetchField()
   fetchFields()
+  fetchFeedbackList()
+  if (isclear.value) {
+    clearFeedbackData()
+  }
 })
 
 const getImageUrl = (imagePath) => {
@@ -496,46 +677,44 @@ h1 {
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 .header-text {
-    color: #000;
-  }
-  .header-detail {
-    height: 100px;
-    background-color: rgb(144, 124, 91);
-  }
-  .select {
-    display: flex;
-    justify-content: space-around; /* Centers items horizontally */
-    align-items: center; /* Centers items vertically */
-    border-radius: 5px;
-    padding: 0.5rem 1rem;
-    box-shadow: 0 1px 3px rgba(245, 242, 242, 0.1);
-  }
-  
-  .menu-item {
-    align-items: center;
-    text-align: center;
-    padding: 0.5rem;
-    color: white;
-    text-decoration: none;
-    transition: background-color 0.3s ease;
-    margin-right: 0.75rem;
-  }
-  
-  .menu-item:hover {
-    background-color: rgba(255, 255, 255, 0.1); 
-  }
-  
-  .menu-item i {
-    margin-right: 0.5rem; 
-  }
-  
-  .bg-green {
-    background-color: #38a169; /* Tailwind green color */
-  }
-  
-  .bg-opacity-90 {
-    background-color: rgba(56, 161, 105, 0.9); /* Adjusted opacity */
-  }
-  
-  
+  color: #000;
+}
+.header-detail {
+  height: 100px;
+  background-color: rgb(144, 124, 91);
+}
+.select {
+  display: flex;
+  justify-content: space-around; /* Centers items horizontally */
+  align-items: center; /* Centers items vertically */
+  border-radius: 5px;
+  padding: 0.5rem 1rem;
+  box-shadow: 0 1px 3px rgba(245, 242, 242, 0.1);
+}
+
+.menu-item {
+  align-items: center;
+  text-align: center;
+  padding: 0.5rem;
+  color: white;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+  margin-right: 0.75rem;
+}
+
+.menu-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.menu-item i {
+  margin-right: 0.5rem;
+}
+
+.bg-green {
+  background-color: #38a169; /* Tailwind green color */
+}
+
+.bg-opacity-90 {
+  background-color: rgba(56, 161, 105, 0.9); /* Adjusted opacity */
+}
 </style>
