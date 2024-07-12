@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\DiscountController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\BookingController;
+use App\Http\Controllers\Admin\ChatCotroller;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\SettingController;
@@ -89,6 +90,7 @@ Route::namespace('App\Http\Controllers\Admin')->name('admin.')->prefix('admin')
         Route::resource('feedbacks', 'FeedbackController');
         Route::resource('orders', 'OrderController');
         Route::resource('discounts', 'DiscountController');
+        Route::resource('chats', 'ChatCotroller');
 
         Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
         Route::put('/profile-update', [ProfileController::class, 'update'])->name('profile.update');
@@ -108,6 +110,12 @@ Route::post('/register/store', [UserController::class, 'register'])->name('regis
 Route::get('/admin/loginform', [UserController::class, 'loginform'])->name('admin.loginform');
 
 // Route::resource('dashboards', DashboardController::class);
+
+    // Chat routes
+Route::middleware(['auth'])->group(function () {
+    Route::get('/chats/list', [ChatCotroller::class, 'index'])->name('chats.index');
+    Route::post('/chats/create', [ChatCotroller::class, 'store'])->name('chats.store');
+});
 
 
 

@@ -42,19 +42,10 @@
         >CONTACT</a
       >
     </nav>
-    <!-- Cart favorite -->
-    <!-- <button class="relative inline-flex">
-      <div  class="absolute top-0 right-0 transform translate-x-2/4 -translate-y-1/2 z-10 flex items-center justify-center h-5 w-5 bg-red-600 rounded-full text-white text-xs font-bold">
-        1
-      </div>
-      <router-link to="" class="flex items-center justify-center rounded-lg bg-primary-500 text-white dark:text-gray-200">
-        <i class='fa fa-heart-o text-2xl ml-4 text-white'></i>
-      </router-link>
-    </button> -->
     <!-- Cart Button -->
-    <button class="relative inline-flex w-fit mx-3">
+    <button class="relative inline-flex w-fit mx-4">
       <div  class="absolute top-0 right-0 transform translate-x-2/4 -translate-y-1/2 z-10 flex items-center justify-center h-5 w-5 bg-red-600 rounded-full text-white text-xs font-bold">
-        {{ itemCount }}
+        1 
       </div>
       <router-link
         to="/addtocart"

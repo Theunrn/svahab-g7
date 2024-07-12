@@ -1,4 +1,5 @@
 <template>
+
   <WebHeaderMenu />
     <div class="relative h-screen w-screen mb-5">
       <!-- Full-screen background image -->
@@ -63,6 +64,7 @@
     <img width="18%" height="18%" src="../../assets/image/logo1.png" alt="">
   </div>
   <FootballFields :fields="filteredFields" :user="user" />
+  <GoogleMap/>
 </template>
 
 <script setup lang="ts">
@@ -144,7 +146,6 @@ const provinces = ref([
   { name: 'Oddar Meanchey', value: 'oddar_meanchey', icon: '📍' },
   { name: 'Tboung Khmum', value: 'tboung_khmum', icon: '📍' },
 ]);
-
 
 </script>
 

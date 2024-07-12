@@ -121,20 +121,23 @@ Route::delete('/customer/bookings/delete/{id}', [BookingController::class, 'dest
 Route::get('/customer/orders/{id}', [OrderProductController::class, 'getOrdersByUserId']);
 
 //Notifications
-Route::middleware('auth:sanctum')->group(function () {
-    // Your notification routes here
-    Route::get('/notifications/list/{id}', [NotificationController::class, 'getNotificationsByUserId']);
-    Route::put('/notification/update/{id}', [NotificationController::class, 'updateNotification']);
-    Route::delete('/notifications/delete/{id}', [NotificationController::class, 'destroy']);
-});
+Route::get('/notifications/list/{id}', [NotificationController::class, 'getNotificationsByUserId']);
+Route::put('/notification/update/{id}', [NotificationController::class, 'updateNotification']);
+Route::delete('/notifications/delete/{id}', [NotificationController::class, 'destroy']);
+
+// Notification routes
+// Route::get('/notifications', [NotificationController::class, 'index']);
+// Route::post('/notifications', [NotificationController::class, 'store']);
+// Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead']);
+// Route::delete('/notifications/{id}', [NotificationController::class, 'destroy']);
 
 //Payment
 Route::post('/stripe/payment', [StripePaymentController::class, 'makePayment']);
 Route::post('/payment/create', [APIPaymentController::class, 'createPayment']);
 Route::get('/payment/list', [APIPaymentController::class, 'index']);
 Route::put('/update/payment/booking/{id}', [BookingController::class, 'updateStatusPaymentBooking']);
-Route::put('/update/payment/order/{id}', [OrderProductController::class, 'updateStatusPaymentOrder']);
-Route::delete('/customer/orders/delete/{id}', [OrderProductController::class, 'deleteOrder']);
+Route::put('/update/payment/order/{id}', [OrderController::class, 'updateStatusPaymentOrder']);
+Route::delete('/customer/orders/delete/{id}', [OrderProductController::class,'deleteOrder']);
 
 
 Route::middleware('auth:sanctum')->group(function () {
