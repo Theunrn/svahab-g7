@@ -2,15 +2,15 @@
   <div class="header-text mt-5">
     <div class="header-detail">
       <div class="select absolute mt-17 bg-green bg-opacity-900 z-20 rounded-lg w-full md:w-5/5 lg:w-9/10 ml-16 flex justify-center items-center">
-        <router-link href="#" class="menu-item">
+        <router-link :to="{path: '/field/detail/' + fieldId, query:{customer:userId}}"  class="menu-item">
           <i class="bx bx-home text-2xl"></i>
-          <span>Home</span>
+          <span>Fields</span>
         </router-link>
-        <router-link to="/scheduleField" href="#" class="menu-item">
+        <router-link :to="{path: '/scheduleField', query:{field:fieldId, user:userId}}" href="#" class="menu-item">
           <i class="bx bx-calendar text-2xl"></i>
           <span>Schedule</span>
         </router-link>
-        <router-link to="/lineUp" href="#" class="menu-item">
+        <router-link :to="{path: '/lineUp', query:{field:fieldId, user:userId}}" href="#" class="menu-item bg-white text-dark border-t-4 border-orange-500">
           <i class="bx bx-line-chart text-2xl"></i>
           <span>Line Up</span>
         </router-link>
@@ -32,7 +32,10 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-
+import { useRoute } from 'vue-router'
+const route = useRoute()
+const userId = computed(() => route.query.user)
+const fieldId = computed(() => route.query.field)
 const selectedOption = ref('');
 
 const lineups = {

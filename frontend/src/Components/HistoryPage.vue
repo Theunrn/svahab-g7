@@ -2,7 +2,7 @@
   <div class="container flex text-black">
     <!-- Sidebar -->
     <aside class="w-64 fixed top-0 left-0 h-full bg-black text-white p-4">
-      <h2 class="text-2xl font-semibold mb-4">History</h2>
+      <a href="/"><h2 class="text-2xl font-semibold mb-4">History</h2></a>
       <nav>
         <div class="mb-4">
           <a href="#" class="flex items-center space-x-2 hover:text-gray-300 " @click="setFilter('booking')">

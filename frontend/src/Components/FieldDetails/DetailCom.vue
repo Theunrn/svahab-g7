@@ -5,15 +5,15 @@
       <div
         class="select absolute mt-17 bg-green bg-opacity-900 z-20 rounded-lg w-full md:w-5/5 lg:w-9/10 ml-16 flex justify-center items-center"
       >
-        <router-link to="/field/detail" href="#" class="menu-item">
+        <router-link :to="{path: '/field/detail/' + fieldId, query:{customer:userId}}"  class="menu-item bg-white text-dark border-t-4 border-orange-500">
           <i class="bx bx-home text-2xl"></i>
-          <span>Home</span>
+          <span>Fields</span>
         </router-link>
-        <router-link to="/schedule" class="menu-item">
+        <router-link :to="{path: '/scheduleField', query:{field:fieldId, user:userId}}" class="menu-item">
           <i class="bx bx-calendar text-2xl"></i>
           <span>Schedule</span>
         </router-link>
-        <router-link to="/lineUp" class="menu-item">
+        <router-link :to="{path: '/lineUp', query:{field:fieldId, user:userId}}" class="menu-item">
           <i class="bx bx-line-chart text-2xl"></i>
           <span>Line Up</span>
         </router-link>
