@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Storage;
 class Product extends Model
 {
     use HasFactory;
-    protected $fillable = ['image','name', 'description','owner_id', 'price', 'color', 'size', 'category_id'];
+    protected $fillable = ['image', 'name', 'description', 'owner_id', 'price', 'color', 'size', 'category_id'];
 
     public function category()
     {
@@ -42,6 +42,23 @@ class Product extends Model
             ->withTimestamps();
     }
 
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
+
+    // Payment.php model
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function addToCards()
     {
         return $this->hasMany(AddToCard::class);
@@ -54,7 +71,7 @@ class Product extends Model
 
         foreach ($this->discounts as $discount) {
             $discountAmount = $originalPrice * ($discount->discount / 100);
-            $discountedPrice -= $discountAmount; 
+            $discountedPrice -= $discountAmount;
             break;
         }
 
@@ -84,7 +101,5 @@ class Product extends Model
 
         $product = self::updateOrCreate(['id' => $id], $data);
         return $product;
-
     }
-    
 }

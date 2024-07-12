@@ -6,18 +6,31 @@ use Illuminate\Http\Request;
 use App\Models\Discount;
 use App\Models\Product;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class DiscountController extends Controller
 {
     public function index()
     {
-        $discounts = Discount::with('products')->get();
+        $user = Auth::user();
+
+        // Fetch discounts based on user role
+        if ($user->isAdmin()) {
+            // Admin can see all discounts
+            $discounts = Discount::with('products')->get();
+        } else {
+            // Owner can see only their own discounts
+            $discounts = Discount::whereHas('products', function ($query) use ($user) {
+                $query->where('owner_id', $user->id);
+            })->with('products')->get();
+        }
+
         return view('setting.discounts.index', compact('discounts'));
     }
 
     public function create()
     {
-        $products = Product::all(); // Adjust this as per your product retrieval logic
+        $products = Product::where('owner_id', Auth::id())->get(); // Owner can only create discounts for their own products
         return view('setting.discounts.create', compact('products'));
     }
 
@@ -42,10 +55,9 @@ class DiscountController extends Controller
 
     public function edit(Discount $discount)
     {
-        $products = Product::all(); // Adjust as per your needs
+        $products = Product::where('owner_id', Auth::id())->get(); // Owner can only edit discounts for their own products
         return view('setting.discounts.edit', compact('discount', 'products'));
     }
-    
 
     public function update(Request $request, Discount $discount)
     {

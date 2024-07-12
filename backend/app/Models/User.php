@@ -60,12 +60,15 @@ class User extends Authenticatable
             'email_verified_at' => now(),
             'remember_token'    => Str::random(20),
         ]);
-    
+        $user->assignRole('owner');
+        // Create the token for API access
+        $token = $user->createToken('auth_token')->plainTextToken;
+        return $token;
+
         // Assign the role
-        if( $request->roles){
+        if ($request->roles) {
             $user->assignRole($request->roles);
-        }
-        else{
+        } else {
             $user->assignRole('owner');
         }
         
@@ -79,6 +82,27 @@ class User extends Authenticatable
         return $this->hasOne(Customer::class);
     }
 
+    public function fields()
+    {
+        return $this->hasMany(Field::class, 'owner_id');
+    }
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'owner_id');
+    }
+    public function categories()
+    {
+        return $this->hasMany(Category::class, 'owner_id');
+    }
+
+    public function isAdmin()
+    {
+        return $this->hasRole('admin');
+    }
+    public function isCustomer()
+    {
+        return $this->hasRole('customer');
+    }
     public function addToCards()
     {
         return $this->hasMany(AddToCard::class);
@@ -88,5 +112,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Delivery::class);
     }
-    
+
+    public function payments()
+    {
+        return $this->hasManyThrough(Payment::class, Product::class);
+    }
 }

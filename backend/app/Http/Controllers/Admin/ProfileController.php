@@ -38,10 +38,13 @@ class ProfileController extends Controller
     public function update(Request $request)
     {
         $user = auth()->user();
+
         $validated = $request->validate([
             'name'=>'required',
             'email' => 'required|email|unique:users,email,'.$user->id.',id',
         ]);
+
+
 
         if($request->password != null){
             $request->validate([
@@ -55,6 +58,7 @@ class ProfileController extends Controller
                 $validated['profile'] = $name;
             }
         }
+
         $user->update($validated);
 
         return redirect()->route('admin.users.index')->withSuccess('User updated !!!');

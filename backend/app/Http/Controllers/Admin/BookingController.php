@@ -7,6 +7,7 @@ use App\Http\Resources\BookingResource;
 use App\Models\Booking;
 use App\Models\Notification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BookingController extends Controller
 {
@@ -20,7 +21,17 @@ class BookingController extends Controller
 
     public function index()
     {
-        $bookings = Booking::latest()->get();
+        $user = Auth::user();
+
+        if ($user->isAdmin()) {
+            // Admin: get all bookings
+            $bookings = Booking::latest()->get();
+        } else {
+            // Owner: get bookings for their fields
+            $fields = $user->fields()->pluck('id');
+            $bookings = Booking::whereIn('field_id', $fields)->latest()->get();
+        }
+
         $bookings = BookingResource::collection($bookings);
         return view('setting.booking.index', compact('bookings'));
     }
