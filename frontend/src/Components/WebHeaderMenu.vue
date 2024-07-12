@@ -1,7 +1,7 @@
 <template>
   <header
     style="padding-left: 60px; padding-right: 60px"
-    class="flex justify-between py-2 items-center shadow-md navbar-light fixed top-0 left-0 right-0 bg-green-600 z-50"
+    class="flex justify-between py-3 items-center shadow-md navbar-light fixed top-0 left-0 right-0 bg-green-600 z-50"
   >
     <!-- Logo -->
     <div class="flex items-center space-x-2">
@@ -43,16 +43,16 @@
       >
     </nav>
     <!-- Cart favorite -->
-    <button class="relative inline-flex">
+    <!-- <button class="relative inline-flex">
       <div  class="absolute top-0 right-0 transform translate-x-2/4 -translate-y-1/2 z-10 flex items-center justify-center h-5 w-5 bg-red-600 rounded-full text-white text-xs font-bold">
         1
       </div>
       <router-link to="" class="flex items-center justify-center rounded-lg bg-primary-500 text-white dark:text-gray-200">
-        <i class='fa fa-heart-o text-2xl ml-4 text-white'></i> <!-- Larger cart icon -->
+        <i class='fa fa-heart-o text-2xl ml-4 text-white'></i>
       </router-link>
-    </button>
+    </button> -->
     <!-- Cart Button -->
-    <button class="relative inline-flex w-fit mx-2">
+    <button class="relative inline-flex w-fit mx-3">
       <div  class="absolute top-0 right-0 transform translate-x-2/4 -translate-y-1/2 z-10 flex items-center justify-center h-5 w-5 bg-red-600 rounded-full text-white text-xs font-bold">
         {{ itemCount }}
       </div>
@@ -65,7 +65,7 @@
       </router-link>
     </button>
     <!-- Notification Button -->
-    <button class="relative inline-flex w-fit mx-2" @click="clearNotifications">
+    <button class="relative inline-flex w-fit mx-3" @click="clearNotifications">
       <div class="absolute top-0 right-0 transform translate-x-2/4 -translate-y-1/2 z-10 flex items-center justify-center h-5 w-5 bg-red-600 rounded-full text-white text-xs font-bold"
         v-if="notifications.length > 0">{{ getNewCount(notifications) }}
       </div>
@@ -78,21 +78,20 @@
       </router-link>
     </button>
     <!-- History Button -->
-    <button class="relative inline-flex items-center m-2 ">
+    <button class="relative inline-flex items-center mx-3 ">
       <router-link :to="{ path: '/history/' + authStore.user.id }" class="flex items-center justify-center rounded-lg bg-primary-500 text-white dark:text-gray-200">
         <span v-if="showText" class="absolute top-0 left-3/2 transform -translate-x-1/2 -translate-y-full text-lg font-semibold">History</span>
         <i class="bx bx-history text-3xl"
-           @mouseover="showText = true"
-           @mouseleave="showText = false"></i>
+         ></i>
       </router-link>
     </button>
    <!-- Authentication Button -->
    <div class="auth flex gap-2">
       <!-- Conditionally render Register, Login or Logout button -->
-      <template v-if="!authStore.isAuthenticated">
-        <a href="/register"><button class="hover:bg-red-400 text-dark bg-white px-4 py-1 border-1 border-red-700 hover:border-red-500 rounded">Register</button></a>
+      <div v-if="!authStore.isAuthenticated" class="flex gap-2 py-2">
         <a href="/login"><button class="hover:bg-red-400 text-dark bg-white px-4 py-1 border-1 border-red-700 hover:border-red-500 rounded">Login</button></a>
-      </template>
+        <a href="/register"><button class="hover:bg-red-400 text-dark bg-white px-4 py-1 border-1 border-red-700 hover:border-red-500 rounded">Register</button></a>
+      </div>
       <template v-else>
 			<div class="dropdown ms-1 ms-lg-0 " v-if="authStore.isAuthenticated">
 				<a class="avatar avatar-sm p-0" href="#" id="profileDropdown" role="button" data-bs-auto-close="outside" data-bs-display="static" data-bs-toggle="dropdown" aria-expanded="false">

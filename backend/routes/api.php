@@ -20,6 +20,8 @@ use App\Http\Controllers\API\SlideShowController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\API\AddToCardController;
 use App\Http\Controllers\API\DeliveryController;
+use App\Http\Controllers\API\EventController;
+use App\Http\Controllers\API\MatchTeamController;
 use App\Http\Controllers\API\ProfileController;
 use App\Http\Controllers\Auth\ProfileController as AuthProfileController;
 use App\Http\Controllers\OrderController;
@@ -145,7 +147,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('cart/delete/{id}', [AddToCardController::class, 'destroy']);
 });
 
+//team post and match 
+Route::post('/post/match', [MatchTeamController::class,'store']);
+Route::get('/match/list', [MatchTeamController::class,'index']);
 
-
-
-
+//event
+Route::post('/event/create', [EventController::class,'store']);
+Route::get('/event/list/{id}', [EventController::class,'index']);
+Route::get('/event/show/{id}', [EventController::class,'show']);
