@@ -106,7 +106,7 @@
                   fill="#4B5563"
                 />
               </svg>
-              2.4 km {{ field.location }}
+              {{ field.location }}
             </p>
           </div>
           <div class="text-right">

@@ -72,35 +72,32 @@
         <!-- w-96 sets a fixed width for the left div -->
         <div class="card-me">
           <div class="card-wrapper relative w-full mx-2 my-2 border-1 border-gray-400 rounded-md">
-            <div
-              class="container bg-overlay"
-              :style="{
-                background: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(${getImageUrl(
-                  field.image
-                )})`
-              }"
-            >
+            <div class="container bg-overlay">
               <div class="flex">
-                <div
-                  class="row text-center flex justify-start h-full"
-                  style="margin-top: -78px; margin-left: -86px"
-                >
-                  <button class="bg-yellow-400 w-30 p-2 text-dark text-bold rounded-l">
-                    ${{ field.price }}.00/Hour
-                  </button>
-                </div>
                 <div class="row text-center flex flex-col items-center justify-center h-full">
-                  <button type="button" class="btn btn-primary btn-details py-2 me-2">
-                    Show on map
+                  <button
+                    type="button"
+                    data-bs-toggle="modal"
+                    data-bs-target="#mapModal"
+                    class="btn flex gap-1 btn-primary btn-details py-2 me-2"
+                  >
+                    <i class="bx bxs-map tex-3xl mt-1"></i>
+                    <p>Show on map</p>
                   </button>
                 </div>
               </div>
             </div>
-            <div class="text text-start bg-white p-4 flex flex-col">
-              <h5 class="text-2xl font-bold text-white py-2 mb-2 bg-green-500">Available</h5>
+            <div class="w-100">
+              <button
+                class="bg-yellow-400 w-full p-2 text-dark text-bold rounded-l"
+                style="font-weight: bold"
+              >
+                ${{ field.price }}.00/Hour
+              </button>
             </div>
           </div>
         </div>
+
         <div class="user-detail">
           <h2 class="text-center">BOOKING FORM</h2>
           <hr />
@@ -118,10 +115,10 @@
               <label for="end">End time *</label>
               <input type="time" id="end" @change="end" v-model="end_time" />
             </div>
-            <div class="form-group">
+            <!-- <div class="form-group">
               <label for="duration">Your duration (hour) *</label>
               <input type="text" id="duration" v-model="duration" disabled />
-            </div>
+            </div> -->
             <div class="form-group">
               <label for="number-of-guests">Total Price ($) *</label>
               <input disabled type="number" id="number-of-guests" v-model="total_price" />
@@ -167,19 +164,6 @@
                   >Take Photo</label
                 >
               </div>
-              <div class="flex items-center">
-                <input
-                  id="laravel-checkbox"
-                  type="checkbox"
-                  value=""
-                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                />
-                <label
-                  for="laravel-checkbox"
-                  class="w-full py-2 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >Team Duncing</label
-                >
-              </div>
             </div>
             <button
               type="submit"
@@ -202,18 +186,18 @@
             <div class="card-display-container gap-3 flex flex-col">
               <div
                 class="card-display border border-gray-400 rounded-lg shadow-lg flex overflow-hidden"
-                v-for="index in 3"
-                :key="index"
+                v-for="field in fields"
+                :key="field"
               >
                 <div class="relative w-1/3 p-2">
                   <img
-                    src="../../assets/image/contact-imag.jpg"
+                    :src="getImageUrl(field.image)"
                     alt=""
-                    class="w-full h-66 object-cover rounded-md"
+                    class="w-full h-55 object-cover rounded-md"
                     style="border-radius: 10px"
                   />
                   <span
-                    class="absolute top-5 right-5 bg-white rounded-full p-1 shadow-md cursor-pointer"
+                    class="absolute top-5 right-5 bg-gray-200 rounded-full p-1 shadow-md cursor-pointer"
                   >
                     <img src="../../assets/image/heart.png" alt="Heart icon" class="w-8 h-8 p-1" />
                   </span>
@@ -221,18 +205,18 @@
                 <div class="flex flex-col justify-between p-4 w-2/3">
                   <div class="mb-2">
                     <h3 class="text-xl font-bold text-gray-900 mb-2">
-                      <strong class="text-orange font-bold"
-                        >7 Seasons Apartments BudapestOpens in new window</strong
-                      >
+                      <strong class="text-orange font-bold">{{ field.name }}</strong>
                     </h3>
-                    <p class="text-gray-700">
-                      Metro access Featuring a 24-hour reception, the 7Seasons Apartments offers you
-                      from Deak Ferenc tér, which is a major public transport...
-                    </p>
+                    <a href="#" class="flex gap-2">
+                      <i class="bx bx-map text-3xl text-red-400"></i>
+                      <p class="text-gray-700">{{ field.location }}</p>
+                    </a>
                   </div>
                   <div class="text-gray-700">
                     <p class="mt-2 cursor-pointer">
-                      <span class="price bg-blue-500 text-white p-2 rounded-md mr-2">$10.00</span>
+                      <span class="price bg-blue-500 text-white p-2 rounded-md mr-2"
+                        >${{ field.price }}.00</span
+                      >
                     </p>
                     <div class="rating mt-3">
                       <span class="star">&#9733;</span>
@@ -253,10 +237,96 @@
 
     <!-- Add Map and Card  -->
   </div>
+  <!-- map Modal -->
+  <div
+    class="modal fade"
+    id="mapModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-body">
+          <div
+            class="absolute right-5 bg-gray-200 rounded-full p-2 shadow-md cursor-pointer"
+            style="top: -17px; right: -17px"
+          >
+            <button
+              type="button"
+              class="btn-close text-bold text-2xl bg-gray-200"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="flex gap-3" >
+            <!-- Set height to 50% of the viewport height -->
+            <!-- Cards Container -->
+            <div class="flex flex-col w-1/2 ">
+              <h1 class="mb-2 text-3xl text-red-400" >List Fields</h1>
+              <div
+                class="card-display border border-gray-400 rounded-lg shadow-md flex overflow-hidden mb-1"
+                v-for="field in fields"
+                :key="field.id"
+                style="width: 100%"
+              >
+                <div class="relative w-full p-2">
+                  <img
+                    :src="getImageUrl(field.image)"
+                    alt=""
+                    class="w-full h-40 object-cover rounded-md"
+                    style="border-radius: 10px"
+                  />
+                  <span
+                    class="absolute top-5 right-5 bg-gray-200 rounded-full p-1 shadow-md cursor-pointer"
+                  >
+                    <img src="../../assets/image/heart.png" alt="Heart icon" class="w-8 h-8 p-1" />
+                  </span>
+                </div>
+                <div class="flex flex-col fap-2 p-4 w-full">
+                  <div class="mb-2">
+                    <h3 class="text-xl font-bold text-gray-900 mb-2 flex gap-2">
+                      <strong class="text-orange font-bold">{{ field.name }}</strong>
+                      <div class="star">
+                        <i class='bx bxs-star text-yellow-400'></i>
+                        <i class='bx bxs-star text-yellow-400'></i>
+                        <i class='bx bxs-star text-yellow-400'></i>
+                        <i class='bx bx-star text-yellow-400 ' ></i>
+                      </div>
+                    </h3>
+                    <a href="#" class="flex gap-2">
+                      <i class="bx bx-map text-3xl text-red-400"></i>
+                      <p class="text-gray-700">{{ field.location }}</p>
+                    </a>
+                  </div>
+                  <div class="text-gray-700 flex">
+                    <p class="mt-2 cursor-pointer">
+                      <span class="price bg-blue-500 text-white p-2 rounded-md mr-2"
+                        >${{ field.price }}.00</span
+                      >
+                    </p>
+                    <span class="viewer mt-1">2,965 reviews</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Map Container -->
+            <div class="map w-1/2 pt-5 pr-1">
+              <!-- Ensure this div takes 50% width -->
+              <MapCom :address="receivedAddress" :location="location" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <CurrentUser @address-updated="handleAddressUpdate" />
 </template>
 
 <script setup lang="ts">
 import WebHeaderMenu from '@/Components/WebHeaderMenu.vue'
+import MapCom from '@/Components/Maps/MapCom.vue'
+import CurrentUser from '@/Components/Maps/CurrentUser.vue'
 import { ref, computed, watch, onMounted } from 'vue'
 import VueFlatpickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
@@ -280,6 +350,16 @@ const end = () => end_time.value
 const bookingDate = () => booking_date.value
 const duration = ref(0)
 const isBook = ref(false)
+const fields = ref([])
+const location = ref('')
+
+const receivedAddress = ref<string>('')
+
+// Event handler for address-updated event
+const handleAddressUpdate = (address: string) => {
+  receivedAddress.value = address
+}
+
 const calculateTotalPrice = () => {
   const startTimeParts = start_time.value.split(':').map(Number)
   const endTimeParts = end_time.value.split(':').map(Number)
@@ -310,16 +390,16 @@ const submitBooking = async () => {
     bookings.value.push(response.data)
     booking.value = response.data.data
 
-    //create event 
+    //create event
     try {
-      const startDateTime = `${bookingDate()} ${start()}:00`;
-      const endDateTime = `${bookingDate()} ${end()}:00`;
+      const startDateTime = `${bookingDate()} ${start()}:00`
+      const endDateTime = `${bookingDate()} ${end()}:00`
       const response = await axiosInstance.post('/event/create', {
         field_id: fieldId.value,
         title: `Booking for ${field.value.name}`,
         start: startDateTime, // Convert date to ISO string format
-        end: endDateTime, // Assuming end time should be the same as start time
-      });
+        end: endDateTime // Assuming end time should be the same as start time
+      })
 
       console.log('Event created:', response.data)
     } catch (error) {
@@ -337,21 +417,28 @@ const submitBooking = async () => {
   }
 }
 
-
-
-const fetchFields = async () => {
+const fetchField = async () => {
   try {
     const response = await axiosInstance.get(`/field/show/${fieldId.value}`)
     field.value = response.data.data
     price.value = field.value.price
+    location.value = field.value.location
+  } catch (error) {
+    console.error('Error fetching fields:', error)
+  }
+}
+const fetchFields = async () => {
+  try {
+    const response = await axiosInstance.get('/fields/list')
+    fields.value = response.data.data
   } catch (error) {
     console.error('Error fetching fields:', error)
   }
 }
 
 onMounted(() => {
+  fetchField()
   fetchFields()
-
 })
 
 const getImageUrl = (imagePath) => {
@@ -401,8 +488,8 @@ h5 {
   justify-content: center;
 }
 .bg-overlay {
-  /* background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
-    url('../../assets/image/field.png'); */
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+    url('../../assets/image/map.png');
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center;
