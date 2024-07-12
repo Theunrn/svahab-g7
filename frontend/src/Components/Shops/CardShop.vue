@@ -2,12 +2,19 @@
   <div class="title">
     <h4>Let shopping with our products here!</h4>
     <div class="container-card card-me">
-      <div class="card-wrapper" v-for="(product, index) in uniqueProductsByCategory" :key="product.id">
+      <div
+        class="card-wrapper"
+        v-for="(product, index) in uniqueProductsByCategory"
+        :key="product.id"
+      >
         <div class="card h-104 shadow-sm position-relative">
           <div class="image-container">
             <div class="flex justify-between absolute w-full mt-1">
               <div class="discount-banner">
-                <span v-if="product.discounts.length > 0" class="discount-text bg-orange-500 px-4 py-2 rounded-md text-white text-2xl">
+                <span
+                  v-if="product.discounts.length > 0"
+                  class="discount-text bg-orange-500 px-4 py-2 rounded-md text-white text-2xl"
+                >
                   {{ product.discounts[0].discount }}% OFF
                 </span>
               </div>
@@ -21,30 +28,32 @@
               </div>
             </div>
             <router-link :to="'/product/detail/' + product.id">
-              <img :src="getImageUrl(product.image)" class="card-img-top" alt="Product Image">
+              <img :src="getImageUrl(product.image)" class="card-img-top" alt="Product Image" />
             </router-link>
           </div>
           <div class="text-start p-4">
             <h5 class="card-title">{{ product.name }}</h5>
             <p class="card-text text-danger fw-bold" v-if="product.discounted_price !== null">
-              <span class="text-danger fw-bold" style="text-decoration: line-through;">${{ product.price }}</span>
+              <span class="text-danger fw-bold" style="text-decoration: line-through"
+                >${{ product.price }}</span
+              >
               <span class="text-success ms-2">${{ product.discounted_price }}</span>
             </p>
-            <p class="card-text text-danger fw-bold" v-else>
-              ${{ product.price }}
-            </p>
+            <p class="card-text text-danger fw-bold" v-else>${{ product.price }}</p>
             <p class="card-text mt-2 mb-2">{{ product.description }}</p>
             <div class="group mt-3">
               <router-link
                 :to="'/category/show/' + product.category_id"
                 :state="{ products: products }"
-                class="button me-2 inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                class="button me-2 inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              >
                 See More
               </router-link>
               <router-link
                 :to="'/product/detail/' + product.id"
                 class="button inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-orange-500 rounded-lg hover:bg-orange-600 focus:ring-4 focus:outline-none focus:ring-orange-300 dark:bg-orange-400 dark:hover:bg-orange-500 dark:focus:ring-orange-600"
-                style="margin-left: auto">
+                style="margin-left: auto"
+              >
                 Buy Now
               </router-link>
             </div>
@@ -118,7 +127,7 @@ export default {
     calculateDiscountedPrice(product) {
       if (product.discounts.length > 0) {
         const discount = product.discounts[0]
-        const discountedPrice = product.price - (product.price * (discount.discount / 100))
+        const discountedPrice = product.price - product.price * (discount.discount / 100)
         return parseFloat(discountedPrice.toFixed(2)).toString() // Adjust to match your backend response format
       }
       return null
@@ -128,7 +137,6 @@ export default {
 </script>
 
 <style scoped>
-
 .container-card {
   display: flex;
   flex-wrap: wrap;
@@ -140,7 +148,9 @@ export default {
 .card-wrapper {
   width: 23%;
   margin: 10px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
   border-radius: 15px;
   overflow: hidden;
   cursor: pointer;
@@ -165,8 +175,6 @@ export default {
   object-fit: cover;
 }
 
-
-
 .button {
   display: inline-block;
   padding: 8px 16px;
@@ -180,7 +188,9 @@ export default {
 }
 
 .card {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
   border-radius: 15px;
   overflow: hidden;
   cursor: pointer;
@@ -190,7 +200,6 @@ export default {
   transform: translateY(-5px);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
-
 
 .card-body {
   background-color: #f8f9fa;
