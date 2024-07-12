@@ -1,7 +1,7 @@
 <template>
   <div class="container mx-auto my-4 p-4 bg-white shadow-md rounded-lg">
     
-    <h1 class="text-3xl font-bold text-center mb-6">Football Field Schedule</h1>
+    <h1 class="text-3xl font-bold text-center mb-6">Check your available time</h1>
     <FullCalendar :options="calendarOptions" />
   </div>
 </template>
@@ -50,7 +50,7 @@ const fetchEvents = async () => {
   try {
     const response = await axiosInstance.get('/event/list/2');
     events.value = response.data.data;
-    console.log('Fetched Events:', events.value); // Log fetched events for debugging
+    
   } catch (error) {
     console.error('Error fetching events:', error);
   }
