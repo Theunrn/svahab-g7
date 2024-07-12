@@ -58,8 +58,8 @@ const router = createRouter({
       component: () => import('../views/Web/Field/FieldDetailView.vue')
     },
     {
-      path: '/schedule',
-      name: 'schedule',
+      path: '/scheduleField',
+      name: 'scheduleField',
       component: () => import('../views/Web/Field/ScheduleView.vue')
     },
     {

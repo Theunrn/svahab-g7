@@ -6,7 +6,7 @@
           <i class="bx bx-home text-2xl"></i>
           <span>Home</span>
         </router-link>
-        <router-link to="/schedule" href="#" class="menu-item">
+        <router-link to="/scheduleField" href="#" class="menu-item">
           <i class="bx bx-calendar text-2xl"></i>
           <span>Schedule</span>
         </router-link>
