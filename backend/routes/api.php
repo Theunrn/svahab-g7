@@ -1,15 +1,19 @@
 <?php
 
+// use App\Http\Controllers\FeedbackController;
+
+
 use App\Http\Controllers\Admin\FieldController;
 use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\API\BookingController;
 use App\Http\Controllers\API\OrderProductController;
-use App\Http\Controllers\Api\FeedbackController;
+// use App\Http\Controllers\Api\FeedbackController;
 use App\Http\Controllers\Api\FildController;
 use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\ColorController;
 use App\Http\Controllers\API\DiscountProductController;
+use App\Http\Controllers\API\FeedbackController;
 use App\Http\Controllers\API\HistoryController;
 use App\Http\Controllers\API\NotificationController;
 use App\Http\Controllers\API\PaymentController as APIPaymentController;
@@ -26,8 +30,11 @@ use App\Http\Controllers\API\ProfileController;
 use App\Http\Controllers\Auth\ProfileController as AuthProfileController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\StripePaymentController;
+use App\Http\Resources\FeedbackResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+// use App\Http\Controllers\API\FeedbackController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -85,7 +92,8 @@ Route::put('/booking/reject/{id}', [BookingController::class, 'rejectBooking']);
 Route::put('/booking/cancel/{id}', [BookingController::class, 'cancelBooking']);
 
 //feedback
-Route::apiResource('feedback', FeedbackController::class);
+Route::apiResource('feedback', FeedbackResource::class);
+
 
 // Categories API Routes
 Route::middleware('auth:sanctum')->group(function () {
@@ -116,6 +124,10 @@ Route::delete('/discount/delete/{id}', [DiscountProductController::class, 'destr
 
 Route::get('/slideshow/list', [SlideShowController::class, 'index'])->name('slideshow.list');
 
+//History
+
+Route::get('/histories/list', [HistoryController::class, 'index'])->name('history.list');
+Route::post('/histories/create', [HistoryController::class, 'store'])->name('history.store');
 Route::get('/customer/bookings/{id}', [BookingController::class, 'getBookingsByUserId']);
 Route::delete('/customer/bookings/delete/{id}', [BookingController::class, 'destroy'])->name('booking.destroy');
 Route::get('/customer/orders/{id}', [OrderProductController::class, 'getOrdersByUserId']);
@@ -156,3 +168,18 @@ Route::get('/match/list', [MatchTeamController::class,'index']);
 Route::post('/event/create', [EventController::class,'store']);
 Route::get('/event/list/{id}', [EventController::class,'index']);
 Route::get('/event/show/{id}', [EventController::class,'show']);
+
+
+// Route::apiResource('feedback', FeedbackController::class);
+
+
+
+Route::middleware('auth:sanctum')->group(function () {
+
+    Route::get('/feedbacks', [FeedbackController::class, 'index']);
+    Route::post('feedback/create', [FeedbackController::class, 'store']);
+    Route::get('feedback/show/{id}', [FeedbackController::class, 'show']);
+    Route::put('feedback/update/{id}', [FeedbackController::class, 'update']);
+    Route::delete('feedback/delete/{id}', [FeedbackController::class, 'destroy']);
+});
+

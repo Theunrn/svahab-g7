@@ -1,23 +1,24 @@
 <template>
-  <!-- <WebHeaderMenu/> -->
+  <WebHeaderMenu />
   <div class="header-text mt-5">
-    <div class="header-detail">
-      <div class="select absolute mt-17 bg-green bg-opacity-900 z-20 rounded-lg w-full md:w-5/5 lg:w-9/10 ml-16 flex justify-center items-center">
-        <router-link href="#" class="menu-item">
+    <div class="header-detail ">
+      <div
+        class="select absolute mt-17 bg-green bg-opacity-900 z-20 rounded-lg w-full md:w-5/5 lg:w-9/10 ml-16 flex justify-center items-center"
+      >
+        <router-link to="/field/detail" href="#" class="menu-item">
           <i class="bx bx-home text-2xl"></i>
           <span>Home</span>
         </router-link>
-        <router-link to="/scheduleField" href="#" class="menu-item">
+        <router-link to="/schedule" class="menu-item">
           <i class="bx bx-calendar text-2xl"></i>
           <span>Schedule</span>
         </router-link>
-        <router-link to="/lineUp" href="#" class="menu-item">
+        <router-link to="/lineUp" class="menu-item">
           <i class="bx bx-line-chart text-2xl"></i>
           <span>Line Up</span>
         </router-link>
       </div>
     </div>
-
     <div class="mt-5 flex gap-5 ml-13 container">
       <div class="map-left w-80">
         <!-- w-96 sets a fixed width for the left div -->
@@ -210,11 +211,11 @@
               aria-label="Close"
             ></button>
           </div>
-          <div class="flex gap-3" >
+          <div class="flex gap-3">
             <!-- Set height to 50% of the viewport height -->
             <!-- Cards Container -->
-            <div class="flex flex-col w-1/2 ">
-              <h1 class="mb-2 text-3xl text-red-400" >List Fields</h1>
+            <div class="flex flex-col w-1/2">
+              <h1 class="mb-2 text-3xl text-red-400">List Fields</h1>
               <div
                 class="card-display border border-gray-400 rounded-lg shadow-md flex overflow-hidden mb-1"
                 v-for="field in fields"
@@ -239,10 +240,10 @@
                     <h3 class="text-xl font-bold text-gray-900 mb-2 flex gap-2">
                       <strong class="text-orange font-bold">{{ field.name }}</strong>
                       <div class="star">
-                        <i class='bx bxs-star text-yellow-400'></i>
-                        <i class='bx bxs-star text-yellow-400'></i>
-                        <i class='bx bxs-star text-yellow-400'></i>
-                        <i class='bx bx-star text-yellow-400 ' ></i>
+                        <i class="bx bxs-star text-yellow-400"></i>
+                        <i class="bx bxs-star text-yellow-400"></i>
+                        <i class="bx bxs-star text-yellow-400"></i>
+                        <i class="bx bx-star text-yellow-400"></i>
                       </div>
                     </h3>
                     <a href="#" class="flex gap-2">
@@ -272,6 +273,7 @@
     </div>
   </div>
   <CurrentUser @address-updated="handleAddressUpdate" />
+  
 </template>
 
 <script setup lang="ts">
@@ -485,48 +487,55 @@ h1 {
   margin-top: 10px;
 }
 
-.form-group input {
+.form-group input,
+.form-group select {
   width: calc(100% - 20px);
   padding: 5px;
   border: 1px solid #ccc;
   border-radius: 5px;
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
 }
-.select {
-  display: flex;
-  justify-content: space-around; /* Centers items horizontally */
-  align-items: center; /* Centers items vertically */
-  border-radius: 5px;
-  padding: 0.5rem 1rem;
-  box-shadow: 0 1px 3px rgba(245, 242, 242, 0.1);
-}
-
-.menu-item {
-  align-items: center;
-  text-align: center;
-  padding: 0.5rem;
-  color: white;
-  text-decoration: none;
-  transition: background-color 0.3s ease;
-  margin-right: 0.75rem;
-}
-
-.menu-item:hover {
-  background-color: rgba(255, 255, 255, 0.1); 
-}
-
-.menu-item i {
-  margin-right: 0.5rem; 
-}
-
-.bg-green {
-  background-color: #38a169; /* Tailwind green color */
-}
-
-.bg-opacity-90 {
-  background-color: rgba(56, 161, 105, 0.9); /* Adjusted opacity */
-}
-
-
-
+.header-text {
+    color: #000;
+  }
+  .header-detail {
+    height: 100px;
+    background-color: rgb(144, 124, 91);
+  }
+  .select {
+    display: flex;
+    justify-content: space-around; /* Centers items horizontally */
+    align-items: center; /* Centers items vertically */
+    border-radius: 5px;
+    padding: 0.5rem 1rem;
+    box-shadow: 0 1px 3px rgba(245, 242, 242, 0.1);
+  }
+  
+  .menu-item {
+    align-items: center;
+    text-align: center;
+    padding: 0.5rem;
+    color: white;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    margin-right: 0.75rem;
+  }
+  
+  .menu-item:hover {
+    background-color: rgba(255, 255, 255, 0.1); 
+  }
+  
+  .menu-item i {
+    margin-right: 0.5rem; 
+  }
+  
+  .bg-green {
+    background-color: #38a169; /* Tailwind green color */
+  }
+  
+  .bg-opacity-90 {
+    background-color: rgba(56, 161, 105, 0.9); /* Adjusted opacity */
+  }
+  
+  
 </style>

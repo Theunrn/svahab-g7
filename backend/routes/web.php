@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\FeedbackController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ProductController;
 use Illuminate\Support\Facades\Route;
@@ -87,7 +88,10 @@ Route::namespace('App\Http\Controllers\Admin')->name('admin.')->prefix('admin')
         Route::resource('products', 'ProductController');
         Route::resource('categories', 'CategoryController');
         Route::resource('payments', 'PaymentController');
-        Route::resource('feedbacks', 'FeedbackController');
+        // Route::resource('feedbacks', 'FeedbackController');
+
+        Route::resource('admin/feedbacks', FeedbackController::class);
+
         Route::resource('orders', 'OrderController');
         Route::resource('discounts', 'DiscountController');
         Route::resource('chats', 'ChatCotroller');

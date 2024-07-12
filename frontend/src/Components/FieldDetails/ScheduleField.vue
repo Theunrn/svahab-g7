@@ -18,12 +18,12 @@
         </div>
       </div>
     </div>
+    <ScheduleCom/>
   </template>
   
   <script setup lang="ts">
-  
+    import ScheduleCom from "../../Components/Schedule/ScheduleCom.vue"
   </script>
-  
   
   <style scoped>
   /* Additional styling if needed */

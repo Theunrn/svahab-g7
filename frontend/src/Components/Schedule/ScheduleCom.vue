@@ -1,5 +1,6 @@
 <template>
   <div class="container mx-auto my-4 p-4 bg-white shadow-md rounded-lg">
+    
     <h1 class="text-3xl font-bold text-center mb-6">Football Field Schedule</h1>
     <FullCalendar :options="calendarOptions" />
   </div>

@@ -4,7 +4,6 @@
             {{ __('Orders') }}
         </h2>
     </x-slot>
-
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-4 lg:px-4 text-sm font-medium">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg text-sm font-medium">
@@ -30,18 +29,16 @@
                     <table class="w-full border-collapse">
                         <thead>
                             <tr class="bg-gray-200">
-                                <th class="px-2 py-2 text-left">#</th>
-                                <th class="px-2 py-2 text-left">Customer Name</th>
-                                <th class="px-2 py-2 text-left">Product</th>
-                                <th class="px-2 py-2 text-left">Quantity</th>
-                                {{-- <th class="px-2 py-2 text-left">Price</th> --}}
-                                <th class="px-2 py-2 text-left">Total</th>
-                                <th class="px-2 py-2 text-left">Status</th>
-                                <th class="px-2 py-2 text-left">Payment</th>
-                                {{-- <th class="px-2 py-2 text-left">Color</th>
-                                <th class="px-2 py-2 text-left">Size</th> --}}
-                                <th class="px-2 py-2 text-left">Date</th>
-                                <th class="px-2 py-2 text-left">Action</th>
+                                <th class="px-4 py-2 text-left">ID</th>
+                                <th class="px-4 py-2 text-left">Product Name</th>
+                                <th class="px-4 py-2 text-left">Quantity</th>
+                                <th class="px-4 py-2 text-left">Price</th>
+                                <th class="px-4 py-2 text-left">Total</th>
+                                <th class="px-4 py-2 text-left">Order</th>
+                                <th class="px-4 py-2 text-left">Payment</th>
+                                <th class="px-4 py-2 text-left">Color</th>
+                                <th class="px-4 py-2 text-left">Size</th>
+                                <th class="px-4 py-2 text-left">Date</th>
                             </tr>
                         </thead>
                         <tbody class="p-2">
