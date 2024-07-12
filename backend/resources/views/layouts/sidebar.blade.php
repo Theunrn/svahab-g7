@@ -25,10 +25,10 @@
         </a>
 
         @canany('User access','User add','User edit','User delete')
-        <a class="flex items-center mt-4 py-2 px-6 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 {{ Route::currentRouteNamed('admin.chats.index') ? 'active' : '' }}"
-            href="{{ route('admin.chats.index')}}">
+        <a class="flex items-center mt-4 py-2 px-6 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 {{ Route::currentRouteNamed('chatify') ? 'active' : '' }}"
+            href="{{ route('chatify')}}">
             <i class='bx bx-user text-2xl'></i>
-            <span class="mx-3">Chats</span>
+            <span class="mx-3">Chattings</span>
         </a>
         @endcanany
 
