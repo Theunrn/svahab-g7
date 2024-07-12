@@ -10,11 +10,10 @@ use Illuminate\Support\Facades\Auth;
 
 class FeedbackController extends Controller
 {
-    public function list()
+    public function index()
     {
         $feedbacks = Feedback::with(['user', 'field'])->get();
-        // return FeedbackResource::collection($feedbacks);
-        return response()->json(['success' => true, 'message' => 'Feedback created successfully', 'data' => $feedbacks], 201);
+        return response()->json(['success' => true, 'data' => $feedbacks], 201);
     }
 
     public function store(Request $request)

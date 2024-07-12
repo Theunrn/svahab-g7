@@ -3,7 +3,6 @@
 // use App\Http\Controllers\FeedbackController;
 
 
-use App\Http\Controllers\Admin\FeedbackController as AdminFeedbackController;
 use App\Http\Controllers\Admin\FieldController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\API\BookingController;
@@ -13,6 +12,7 @@ use App\Http\Controllers\Api\FildController;
 use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\ColorController;
 use App\Http\Controllers\API\DiscountProductController;
+use App\Http\Controllers\API\FeedbackController;
 use App\Http\Controllers\API\HistoryController;
 use App\Http\Controllers\API\NotificationController;
 use App\Http\Controllers\API\PostController;
@@ -21,11 +21,9 @@ use App\Http\Controllers\API\SizeController;
 use App\Http\Controllers\API\SlideShowController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\FeedbackController as ControllersFeedbackController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\StripePaymentController;
 use App\Http\Resources\FeedbackResource;
-use App\Http\Controllers\API\FeedbackController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 // use App\Http\Controllers\API\FeedbackController;
@@ -144,8 +142,7 @@ Route::put('/update/payment/order/{id}', [OrderController::class, 'updateStatusP
 
 Route::middleware('auth:sanctum')->group(function () {
 
-    Route::get('/feedbacks', [FeedbackController::class, 'list']);
-    // Route::get('feedback/list', [FeedbackController::class, 'index']);
+    Route::get('/feedbacks', [FeedbackController::class, 'index']);
     Route::post('feedback/create', [FeedbackController::class, 'store']);
     Route::get('feedback/show/{id}', [FeedbackController::class, 'show']);
     Route::put('feedback/update/{id}', [FeedbackController::class, 'update']);
