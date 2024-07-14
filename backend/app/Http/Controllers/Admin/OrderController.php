@@ -6,7 +6,6 @@ use App\Models\Order;
 use App\Http\Resources\OrderProductResource;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Notification;
 
 class OrderController extends Controller
 {
@@ -16,10 +15,18 @@ class OrderController extends Controller
         $status = $request->input('status');
         $ordersQuery = Order::query();
 
+<<<<<<< HEAD
+=======
+        if ($status === 'cancelled') {
+            $ordersQuery->where('order_status', 'cancelled');
+        }
+
+>>>>>>> 9214fc5f8789ec0c2cb9ef34d754ec70dad63bd5
         if ($date) {
             $ordersQuery->whereDate('created_at', $date);
         }
 
+<<<<<<< HEAD
         $orders = $ordersQuery->with(['user', 'products' => function ($query) {
             $query->withPivot('qty', 'color_id', 'size_id');
         }, 'products.colors', 'products.sizes'])->get();
@@ -71,4 +78,16 @@ class OrderController extends Controller
         $notification->read = false;
         $notification->save();
     }
+=======
+        // Retrieve orders with products, including colors and sizes
+        $orders = $ordersQuery->with(['products' => function ($query) {
+            $query->withPivot('qty', 'color_id', 'size_id');
+        }, 'products.colors', 'products.sizes'])->get();
+
+        // Transform orders using resource for consistent JSON response
+        $orders = OrderProductResource::collection($orders);
+
+        return view('setting.orders.index', compact('orders'));
+    }
+>>>>>>> 9214fc5f8789ec0c2cb9ef34d754ec70dad63bd5
 }
