@@ -15,10 +15,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\SlideshowController; // Add this line
-<<<<<<< HEAD
 use App\Http\Controllers\Admin\UserController;
-=======
->>>>>>> 9214fc5f8789ec0c2cb9ef34d754ec70dad63bd5
 use Faker\Core\File;
 use GuzzleHttp\Psr7\Response;
 
@@ -111,7 +108,6 @@ Route::get('/admin/bookings/{id}/reject', [BookingController::class, 'reject'])-
 Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
 
-<<<<<<< HEAD
 //User
 Route::get('/users/create', [UserController::class, 'createAccount'])->name('users.create');
 Route::post('/register/store', [UserController::class, 'register'])->name('register.store');
@@ -169,6 +165,3 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 
 
 
-=======
-    
->>>>>>> 9214fc5f8789ec0c2cb9ef34d754ec70dad63bd5

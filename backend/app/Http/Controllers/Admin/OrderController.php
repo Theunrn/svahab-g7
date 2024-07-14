@@ -1,41 +1,37 @@
 <?php
-
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Order;
-use App\Http\Resources\OrderProductResource;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Notification;
 
 class OrderController extends Controller
 {
     public function index(Request $request)
     {
         $date = $request->input('date');
-        $status = $request->input('status');
         $ordersQuery = Order::query();
 
-<<<<<<< HEAD
-=======
-        if ($status === 'cancelled') {
-            $ordersQuery->where('order_status', 'cancelled');
-        }
-
->>>>>>> 9214fc5f8789ec0c2cb9ef34d754ec70dad63bd5
         if ($date) {
             $ordersQuery->whereDate('created_at', $date);
         }
 
-<<<<<<< HEAD
-        $orders = $ordersQuery->with(['user', 'products' => function ($query) {
-            $query->withPivot('qty', 'color_id', 'size_id');
-        }, 'products.colors', 'products.sizes'])->get();
-
-        if ($orders->isNotEmpty()) {
-            $orders = OrderProductResource::collection($orders);
-        }
+        $orders = $ordersQuery->with(['user', 'products.colors', 'products.sizes'])->get();
 
         return view('setting.orders.index', compact('orders'));
+    }
+    
+
+    public function show($id)
+    {
+        $order = Order::with(['user', 'products.colors', 'products.sizes'])->find($id);
+
+        if (!$order) {
+            return redirect()->route('admin.orders.index')->with('error', 'Order not found');
+        }
+
+        return view('setting.orders.show', compact('order'));
     }
 
     public function cancel($id)
@@ -48,9 +44,10 @@ class OrderController extends Controller
 
         $order->order_status = 'cancelled';
         $order->save();
+
         $this->createNotification($order->user_id, 'order_cancelled', 'Your order has been cancelled.', $order->id);
 
-        return redirect()->route('admin.orders.index')->with('success', 'Booking cancelled successfully');
+        return redirect()->route('admin.orders.index')->with('success', 'Order cancelled successfully');
     }
 
     public function confirm($id)
@@ -63,9 +60,10 @@ class OrderController extends Controller
 
         $order->order_status = 'confirmed';
         $order->save();
+
         $this->createNotification($order->user_id, 'order_confirmed', 'Your order has been confirmed.', $order->id);
 
-        return redirect()->route('admin.orders.index')->with('success', 'Booking confirmed successfully');
+        return redirect()->route('admin.orders.index')->with('success', 'Order confirmed successfully');
     }
 
     private function createNotification($userId, $type, $text, $orderId)
@@ -78,16 +76,4 @@ class OrderController extends Controller
         $notification->read = false;
         $notification->save();
     }
-=======
-        // Retrieve orders with products, including colors and sizes
-        $orders = $ordersQuery->with(['products' => function ($query) {
-            $query->withPivot('qty', 'color_id', 'size_id');
-        }, 'products.colors', 'products.sizes'])->get();
-
-        // Transform orders using resource for consistent JSON response
-        $orders = OrderProductResource::collection($orders);
-
-        return view('setting.orders.index', compact('orders'));
-    }
->>>>>>> 9214fc5f8789ec0c2cb9ef34d754ec70dad63bd5
 }

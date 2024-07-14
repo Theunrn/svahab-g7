@@ -15,26 +15,24 @@ class Order extends Model
         'user_id',
     ];
 
+    
     public function customer()
     {
         return $this->belongsTo(Customer::class, 'user_id');
     }
-  
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
+    
     public function products()
     {
+        // return $this->belongsToMany(Product::class)->withPivot('qty', 'color_id', 'size_id');
         return $this->belongsToMany(Product::class, 'product_orders')
             ->withPivot('qty', 'color_id', 'size_id');
     }
 
-<<<<<<< HEAD
-    public function delivery()
-    {
-        return $this->hasOne(Delivery::class);
-    }
-
-=======
->>>>>>> 9214fc5f8789ec0c2cb9ef34d754ec70dad63bd5
     public static function createOrder($validatedData)
     {
         $user = Auth::user();
