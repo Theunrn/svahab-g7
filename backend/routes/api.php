@@ -147,6 +147,11 @@ Route::middleware('auth:sanctum')->group(function () {
 //team post and match 
 Route::post('/post/match', [MatchTeamController::class,'store']);
 Route::get('/match/list', [MatchTeamController::class,'index']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/posts', [PostController::class, 'store']);
+    Route::get('/post/list', [PostController::class, 'index']);
+});
+Route::get('/latest-post-team', [PostController::class, 'getLatestPostTeam']);
 
 //event
 Route::post('/event/create', [EventController::class,'store']);
