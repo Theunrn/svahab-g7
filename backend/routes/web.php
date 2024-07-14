@@ -143,3 +143,25 @@ Route::get('/payment/form', [PaymentController::class, 'showPaymentForm'])->name
 Route::get('/payment/month', [PaymentController::class, 'showPaymentFormMonth'])->name('payment.month');
 Route::post('/payment/intent', [PaymentController::class, 'createPaymentIntent'])->name('payment.intent');
 Route::post('/stripe/payment', [PaymentController::class, 'makePayment'])->name('payment.process');
+
+
+Route::get('/admin/orders', function () {
+    return "Route reached";
+});
+
+Route::get('/admin/orders', [OrderController::class, 'index']);
+
+Route::get('/admin/orders', [OrderController::class, 'index'])->name('admin.orders.index');
+Route::get('/admin/orders/confirm/{id}', [OrderController::class, 'confirm'])->name('admin.orders.confirm');
+Route::get('/admin/orders/cancel/{id}', [OrderController::class, 'cancel'])->name('admin.orders.cancel');
+
+
+
+Route::middleware(['auth'])->prefix('admin')->group(function () {
+    Route::get('orders', [OrderController::class, 'index'])->name('admin.orders.index');
+    Route::get('orders/confirm/{id}', [OrderController::class, 'confirm'])->name('admin.orders.confirm');
+    Route::get('orders/cancel/{id}', [OrderController::class, 'cancel'])->name('admin.orders.cancel');
+});
+
+
+
