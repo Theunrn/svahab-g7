@@ -7,7 +7,7 @@
   <div class="container mx-auto mt-8 p-4">
     <div class="flex">
       <!-- Transactions Table -->
-      <div class="w-3/4">
+      <div class="w-full">
         <div class="flex gap-5">
           <h2 class="text-2xl font-bold mb-4">Transactions</h2>
           <a href="{{ route('payment.month') }}" 
@@ -53,59 +53,6 @@
         </table>
       </div>
 
-      <!-- Filters -->
-      <div class="w-1/4 ml-4 bg-white p-4 rounded-lg shadow">
-        <div class="mb-4">
-          <label class="block text-gray-700 font-semibold mb-2">Time period</label>
-          <div class="space-y-2">
-            <label class="flex items-center">
-              <input type="radio" name="time-period" value="all-time" class="form-radio text-blue-500">
-              <span class="ml-2 text-gray-700">All time</span>
-            </label>
-            <label class="flex items-center">
-              <input type="radio" name="time-period" value="today" class="form-radio text-blue-500">
-              <span class="ml-2 text-gray-700">Today</span>
-            </label>
-            <label class="flex items-center">
-              <input type="radio" name="time-period" value="this-week" class="form-radio text-blue-500">
-              <span class="ml-2 text-gray-700">This week</span>
-            </label>
-            <label class="flex items-center">
-              <input type="radio" name="time-period" value="this-month" class="form-radio text-blue-500">
-              <span class="ml-2 text-gray-700">This month</span>
-            </label>
-            <label class="flex items-center">
-              <input type="radio" name="time-period" value="custom" class="form-radio text-blue-500">
-              <span class="ml-2 text-gray-700">Custom</span>
-            </label>
-          </div>
-        </div>
-        <div class="mb-4">
-          <label class="block text-gray-700 font-semibold mb-2">Status</label>
-          <div class="space-y-2">
-            <label class="flex items-center">
-              <input type="checkbox" name="status" value="paid" class="form-checkbox text-blue-500">
-              <span class="ml-2 text-gray-700">Paid</span>
-            </label>
-            <label class="flex items-center">
-              <input type="checkbox" name="status" value="pending" class="form-checkbox text-blue-500">
-              <span class="ml-2 text-gray-700">Pending</span>
-            </label>
-            <label class="flex items-center">
-              <input type="checkbox" name="status" value="failed" class="form-checkbox text-blue-500">
-              <span class="ml-2 text-gray-700">Failed</span>
-            </label>
-            <label class="flex items-center">
-              <input type="checkbox" name="status" value="expired" class="form-checkbox text-blue-500">
-              <span class="ml-2 text-gray-700">Expired</span>
-            </label>
-            <label class="flex items-center">
-              <input type="checkbox" name="status" value="refunded" class="form-checkbox text-blue-500">
-              <span class="ml-2 text-gray-700">Refunded</span>
-            </label>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 
