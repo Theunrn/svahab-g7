@@ -5,15 +5,24 @@
       <div
         class="select absolute mt-17 bg-green bg-opacity-900 z-20 rounded-lg w-full md:w-5/5 lg:w-9/10 ml-16 flex justify-center items-center"
       >
-        <router-link :to="{path: '/field/detail/' + fieldId, query:{customer:userId}}"  class="menu-item bg-white text-dark border-t-4 border-orange-500">
+        <router-link
+          :to="{ path: '/field/detail/' + fieldId, query: { customer: userId } }"
+          class="menu-item bg-white text-dark border-t-4 border-orange-500"
+        >
           <i class="bx bx-home text-2xl"></i>
           <span>Fields</span>
         </router-link>
-        <router-link :to="{path: '/scheduleField', query:{field:fieldId, user:userId}}" class="menu-item">
+        <router-link
+          :to="{ path: '/scheduleField', query: { field: fieldId, user: userId } }"
+          class="menu-item"
+        >
           <i class="bx bx-calendar text-2xl"></i>
           <span>Schedule</span>
         </router-link>
-        <router-link :to="{path: '/lineUp', query:{field:fieldId, user:userId}}" class="menu-item">
+        <router-link
+          :to="{ path: '/lineUp', query: { field: fieldId, user: userId } }"
+          class="menu-item"
+        >
           <i class="bx bx-line-chart text-2xl"></i>
           <span>Line Up</span>
         </router-link>
@@ -127,7 +136,7 @@
         </div>
       </div>
 
-      <div class="map-right w-244 ">
+      <div class="map-right w-244">
         <!-- w-96 sets a fixed width for the right div -->
         <div class="w-full w-214">
           <!-- <h2 class="text-2xl font-bold">7Seasons Apartments offers</h2> -->
@@ -136,10 +145,22 @@
         <div class="gap-2 overflow-y-auto h-50">
           <div class="card-text mt-4">
             <div class="card-display-container gap-3 flex flex-col">
-              <router-link :to="{ path: '/field/detail/' + field.id, query: { customer: userId } }" class="card-display border border-gray-400 rounded-lg shadow-lg flex overflow-hidden" v-for="field in fields" :key="field" >
+              <router-link
+                :to="{ path: '/field/detail/' + field.id, query: { customer: userId } }"
+                class="card-display border border-gray-400 rounded-lg shadow-lg flex overflow-hidden"
+                v-for="field in fields"
+                :key="field"
+              >
                 <div class="relative w-1/3 p-2">
-                  <img :src="getImageUrl(field.image)" alt="" class="w-full h-55 object-cover rounded-md" style="border-radius: 10px" />
-                  <span class="absolute top-5 right-5 bg-gray-200 rounded-full p-1 shadow-md cursor-pointer" >
+                  <img
+                    :src="getImageUrl(field.image)"
+                    alt=""
+                    class="w-full h-55 object-cover rounded-md"
+                    style="border-radius: 10px"
+                  />
+                  <span
+                    class="absolute top-5 right-5 bg-gray-200 rounded-full p-1 shadow-md cursor-pointer"
+                  >
                     <img src="../../assets/image/heart.png" alt="Heart icon" class="w-8 h-8 p-1" />
                   </span>
                 </div>
@@ -156,7 +177,8 @@
                   <div class="text-gray-700">
                     <p class="mt-2 cursor-pointer">
                       <span class="price bg-blue-500 text-white p-2 rounded-md mr-2"
-                        >${{ field.price }}.00</span >
+                        >${{ field.price }}.00</span
+                      >
                     </p>
                     <div class="rating mt-3">
                       <span class="star">&#9733;</span>
@@ -177,31 +199,53 @@
 
     <div class="contaner">
       <div class="head"><h1>Post a Comment feedback</h1></div>
-      <div><span id="comment">{{ Feedbacklist.length }}</span> Comment</div>
+      <div>
+        <span id="comment">{{ Feedbacklist.length }}</span> Comment
+      </div>
       <div class="text"><p>We are happy to hear from your feedback</p></div>
       <div class="comment">
         <div v-for="feedback in Feedbacklist" :key="feedback.id" class="comment-item">
           <img src="../../assets/ShopImage/cat.jpg" alt="Commenter's avatar" />
           <div class="comment-content">
-            <h3>{{ feedback.user.name }} - {{ dayjs(feedback.created_at).fromNow() }}</h3>
+            <h3><strong>{{ feedback.user.toUpperCase() }} </strong> <span class="text-sm"> - {{ feedback.created_at }}</span></h3>
             <p>{{ feedback.feedback_text }}</p>
           </div>
           <div class="relative flex">
-            <button
-              @click="toggleDropdown(feedback)"
-              class="text-gray-400 hover:text-gray-700"
-            >
-              <i class="bx bx-dots-vertical-rounded"></i>
+            <button @click="toggleDropdown(feedback)" class="text-gray-400 hover:text-gray-700">
+              <svg
+                class="w-5 h-5"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                viewBox="0 0 4 15"
+              >
+                <path
+                  d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"
+                />
+              </svg>
             </button>
-            <div
+            <ul
               v-if="feedback.showDropdown"
               class="absolute right-0 mt-4 w-30 bg-white border rounded-lg shadow-xl flex flex-col"
             >
-              <button class="flex-1 text-danger" @click="deleteItem(feedback.id)">Delete</button>
-              <button class="flex-1" @click="showEditModal(feedback)">Edit</button>
-            </div>
+              <!-- <button class="flex-1 text-danger" @click="deleteItem(feedback.id)">Delete</button> -->
+              <!-- <button class="flex-1" @click="showEditModal(feedback)">Edit</button> -->
+              <li>
+                <a
+                  @click="deleteItem(feedback.id)"
+                  class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                  >Delete</a
+                >
+              </li>
+              <li>
+                <a
+                  @click="showEditModal(feedback)"
+                  class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                  >Edit</a
+                >
+              </li>
+            </ul>
           </div>
-          
         </div>
       </div>
       <div class="commentbox">
@@ -210,18 +254,26 @@
           <h2>Comment as:</h2>
           <!-- <input type="text" v-model="currentUser" class="user" /> -->
           <div class="commentinput">
-            <input type="text" placeholder="Enter comment" v-model="feedback_text" class="usercomment" />
+            <input
+              type="text"
+              placeholder="Enter comment"
+              v-model="feedback_text"
+              class="usercomment"
+            />
             <div class="buttons">
-              <button @click="SubmitFeedback" :disabled="!feedback_text" id="publish">Submit</button>
+              <button @click="SubmitFeedback" :disabled="!feedback_text" id="publish">
+                Submit
+              </button>
             </div>
           </div>
         </div>
       </div>
-  
+
       <!-- Edit Feedback Modal -->
       <div
         v-if="editFeedbackModalVisible"
-        class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75">
+        class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75"
+      >
         <div class="bg-white p-6 rounded-lg w-96">
           <h3 class="text-lg font-semibold mb-4 text-black">Edit Feedback</h3>
           <textarea
@@ -247,72 +299,90 @@
       </div>
     </div>
     <div
-    class="modal fade"
-    id="mapModal"
-    tabindex="-1"
-    aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
+      class="modal fade"
+      id="mapModal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
       <div class="modal-dialog modal-xl">
-          <div class="modal-content">
-            <div class="modal-body">
-              <div
-                class="absolute right-5 bg-gray-200 rounded-full p-2 shadow-md cursor-pointer"
-                style="top: -17px; right: -17px"
-              >
-                <button
-                  type="button"
-                  class="btn-close text-bold text-2xl bg-gray-200"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                ></button>
+        <div class="modal-content">
+          <div class="modal-body">
+            <div
+              class="absolute right-5 bg-gray-200 rounded-full p-2 shadow-md cursor-pointer"
+              style="top: -17px; right: -17px"
+            >
+              <button
+                type="button"
+                class="btn-close text-bold text-2xl bg-gray-200"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="flex gap-3">
+              <!-- Set height to 50% of the viewport height -->
+              <!-- Cards Container -->
+              <div class="flex flex-col w-1/2">
+                <h1 class="mb-2 text-3xl text-red-400">List Fields</h1>
+                <router-link
+                  :to="{ path: '/field/detail/' + field.id, query: { customer: userId } }"
+                  class="card-display border border-gray-400 rounded-lg shadow-md flex overflow-hidden mb-1"
+                  v-for="field in fields"
+                  :key="field.id"
+                  style="width: 100%"
+                >
+                  <div class="relative w-full p-2">
+                    <img
+                      :src="getImageUrl(field.image)"
+                      alt=""
+                      class="w-full h-40 object-cover rounded-md"
+                      style="border-radius: 10px"
+                    />
+                    <span
+                      class="absolute top-5 right-5 bg-gray-200 rounded-full p-1 shadow-md cursor-pointer"
+                    >
+                      <img
+                        src="../../assets/image/heart.png"
+                        alt="Heart icon"
+                        class="w-8 h-8 p-1"
+                      />
+                    </span>
+                  </div>
+                  <div class="flex flex-col fap-2 p-4 w-full">
+                    <div class="mb-2">
+                      <h3 class="text-xl font-bold text-gray-900 mb-2 flex gap-2">
+                        <strong class="text-orange font-bold">{{ field.name }}</strong>
+                        <div class="star">
+                          <i class="bx bxs-star text-yellow-400"></i>
+                          <i class="bx bxs-star text-yellow-400"></i>
+                          <i class="bx bxs-star text-yellow-400"></i>
+                          <i class="bx bx-star text-yellow-400"></i>
+                        </div>
+                      </h3>
+                      <a href="#" class="flex gap-2">
+                        <i class="bx bx-map text-3xl text-red-400"></i>
+                        <p class="text-gray-700">{{ field.location }}</p>
+                      </a>
+                    </div>
+                    <div class="text-gray-700 flex">
+                      <p class="mt-2 cursor-pointer">
+                        <span class="price bg-blue-500 text-white p-2 rounded-md mr-2"
+                          >${{ field.price }}.00</span
+                        >
+                      </p>
+                      <span class="viewer mt-1">2,965 reviews</span>
+                    </div>
+                  </div>
+                </router-link>
               </div>
-              <div class="flex gap-3">
-                <!-- Set height to 50% of the viewport height -->
-                <!-- Cards Container -->
-                <div class="flex flex-col w-1/2">
-                  <h1 class="mb-2 text-3xl text-red-400">List Fields</h1>
-                  <router-link :to="{ path: '/field/detail/' + field.id, query: { customer: userId } }" class="card-display border border-gray-400 rounded-lg shadow-md flex overflow-hidden mb-1" v-for="field in fields" :key="field.id" style="width: 100%" >
-                <div class="relative w-full p-2">
-                  <img :src="getImageUrl(field.image)" alt="" class="w-full h-40 object-cover rounded-md" style="border-radius: 10px" />
-                  <span class="absolute top-5 right-5 bg-gray-200 rounded-full p-1 shadow-md cursor-pointer" >
-                    <img src="../../assets/image/heart.png" alt="Heart icon" class="w-8 h-8 p-1" />
-                  </span>
-                </div>
-                <div class="flex flex-col fap-2 p-4 w-full">
-                  <div class="mb-2">
-                    <h3 class="text-xl font-bold text-gray-900 mb-2 flex gap-2">
-                      <strong class="text-orange font-bold">{{ field.name }}</strong>
-                      <div class="star">
-                        <i class="bx bxs-star text-yellow-400"></i>
-                        <i class="bx bxs-star text-yellow-400"></i>
-                        <i class="bx bxs-star text-yellow-400"></i>
-                        <i class="bx bx-star text-yellow-400"></i>
-                      </div>
-                    </h3>
-                    <a href="#" class="flex gap-2">
-                      <i class="bx bx-map text-3xl text-red-400"></i>
-                      <p class="text-gray-700">{{ field.location }}</p>
-                    </a>
-                  </div>
-                  <div class="text-gray-700 flex">
-                    <p class="mt-2 cursor-pointer">
-                      <span class="price bg-blue-500 text-white p-2 rounded-md mr-2"
-                        >${{ field.price }}.00</span
-                      >
-                    </p>
-                    <span class="viewer mt-1">2,965 reviews</span>
-                  </div>
-                </div>
-              </router-link>
-                </div>
-                <!-- Map Container -->
-                <div class="map w-1/2 pt-5 pr-1">
-                  <!-- Ensure this div takes 50% width -->
-                  <MapCom :address="receivedAddress" :location="location" />
-                </div>
+              <!-- Map Container -->
+              <div class="map w-1/2 pt-5 pr-1">
+                <!-- Ensure this div takes 50% width -->
+                <MapCom :address="receivedAddress" :location="location" />
               </div>
             </div>
           </div>
+        </div>
       </div>
     </div>
   </div>
@@ -463,7 +533,7 @@ const SubmitFeedback = async () => {
 
 const fetchFeedbackList = async () => {
   try {
-    const response = await axiosInstance.get('/feedbacks', {
+    const response = await axiosInstance.get(`/feedbacks/${fieldId.value}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('access_token')}`
       }
@@ -812,7 +882,7 @@ h1 {
   text-decoration: none;
   color: blue;
 }
-.action{
+.action {
   margin-top: 20px;
   display: flex;
 }

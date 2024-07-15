@@ -18,10 +18,11 @@ class FeedbackResource extends JsonResource
         return [
             'id' => $this->id,  
             'user_id' => $this->user_id,
-          'field_id' => $this->field_id,
+            'field_id' => $this->field_id,
             'feedback_text' => $this->feedback_text,
-            'user' => optional($this->users)->name,
+            'user' => optional($this->user)->name,
             'field' => optional($this->field)->name,
+            'created_at'=> $this->created_at->format('d-m-Y h:i A'),
         ];
     }
 

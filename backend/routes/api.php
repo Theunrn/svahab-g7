@@ -172,7 +172,7 @@ Route::get('/event/show/{id}', [EventController::class,'show']);
 
 Route::middleware('auth:sanctum')->group(function () {
 
-    Route::get('/feedbacks', [FeedbackController::class, 'index']);
+    Route::get('/feedbacks/{id}', [FeedbackController::class, 'index']);
     Route::post('feedback/create', [FeedbackController::class, 'store']);
     Route::get('feedback/show/{id}', [FeedbackController::class, 'show']);
     Route::put('feedback/update/{id}', [FeedbackController::class, 'update']);
