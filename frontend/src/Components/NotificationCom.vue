@@ -133,13 +133,12 @@
                         </div>
                       </div>
                     </div>
-
                     <!-- Actions Section (Mark as Read and Delete Buttons) -->
                     <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                       <!-- Mark as Read Button -->
                       <button
                         type="button"
-                        class="ml-3 inline-flex w-full justify-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:w-auto"
+                        class="ml-3 inline-flex w-full justify-center rounded-md bg-yellow-500 px-3 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-yellow-600 sm:w-auto"
                         @click="markNotificationAsRead(selectedNotification)"
                       >
                         Mark as Read
@@ -182,7 +181,6 @@ export default {
     const selectedNotifications = ref([])
     const showPopup = ref(false)
     const selectedNotification = ref(null)
-
     const fetchNotifications = async () => {
       try {
         const response = await axiosInstance.get(`/notifications/list/${userId.value}`)
@@ -194,6 +192,7 @@ export default {
         orderNotifications.value = notifications.value.filter((notification) =>
           notification.notification_type.toLowerCase().includes('order')
         )
+        console.log(bookingNotifications.value)
       } catch (error) {
         console.error('Error fetching notifications:', error)
       }

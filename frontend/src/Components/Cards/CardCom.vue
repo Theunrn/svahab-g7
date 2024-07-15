@@ -120,12 +120,13 @@
 </template>
 
 <script>
-import { ref, onMounted, computed,watch } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import axiosInstance from '@/plugins/axios'
 
 export default {
   name: 'FootballFields',
   props: {
+    allFields: Array,
     customer: Object
   },
 
@@ -142,15 +143,14 @@ export default {
     }
     const filteredFields = computed(() => {
       if (!searchQuery.value.trim()) {
-        return fields.value
+        return props.allFields
       } else {
         const query = searchQuery.value.toLowerCase()
-        return fields.value.filter((field) => field.name.toLowerCase().includes(query))
+        return props.fields.filter((field) => field.name.toLowerCase().includes(query))
       }
     })
     watch(searchQuery, () => {
       filteredFields.value = filteredFields()
-
     })
     onMounted(() => {
       fetchFields()

@@ -28,7 +28,7 @@
             <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">field_type
             </th>
             {{-- <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">owner</th> --}}
-            <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Availability</th>
+            <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Province</th>
             <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Actions</th>
           </tr>
         </thead>
@@ -43,15 +43,8 @@
             </td>
             <td class="px-4 py-4 whitespace-nowrap">${{ $field->price }}.00</td>
             <td class="px-4 py-4 whitespace-nowrap">{{ $field->field_type }}</td>
-
-            {{-- <td class="px-4 py-4 whitespace-nowrap">{{ $field->owner_id}}</td> --}}
-            <td class="py-2 px-3 border-b border-gray-300">
-              <span class="inline-block px-3 py-1 text-white text-xs font-semibold mr-2 rounded-full
-                      {{ $field->availablity === 1 ? 'bg-green-500 text-gray-700' : '' }}
-                      {{ $field->availablity === 0 ? 'bg-red-500 text-white-300' : '' }}">
-                      {{ $field->availablity ? 'Yes' : 'No' }}
-              </span>
-          </td>
+            <td class="px-4 py-4 whitespace-nowrap">{{ $field->province}}</td>
+            
             <td class="px-4 py-4 whitespace-nowrap">
               <a href="{{ route('admin.fields.edit', $field->id) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded inline-block">
               <i class='bx bx-edit text-sm'></i>

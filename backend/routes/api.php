@@ -4,6 +4,7 @@
 
 
 use App\Http\Controllers\Admin\FieldController;
+use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\API\BookingController;
@@ -137,18 +138,13 @@ Route::get('/notifications/list/{id}', [NotificationController::class, 'getNotif
 Route::put('/notification/update/{id}', [NotificationController::class, 'updateNotification']);
 Route::delete('/notifications/delete/{id}', [NotificationController::class, 'destroy']);
 
-// Notification routes
-// Route::get('/notifications', [NotificationController::class, 'index']);
-// Route::post('/notifications', [NotificationController::class, 'store']);
-// Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead']);
-// Route::delete('/notifications/{id}', [NotificationController::class, 'destroy']);
 
 //Payment
 Route::post('/stripe/payment', [StripePaymentController::class, 'makePayment']);
 Route::post('/payment/create', [APIPaymentController::class, 'createPayment']);
 Route::get('/payment/list', [APIPaymentController::class, 'index']);
 Route::put('/update/payment/booking/{id}', [BookingController::class, 'updateStatusPaymentBooking']);
-Route::put('/update/payment/order/{id}', [OrderController::class, 'updateStatusPaymentOrder']);
+Route::put('/update/payment/order/{id}', [OrderProductController::class, 'updateStatusPaymentOrder']);
 Route::delete('/customer/orders/delete/{id}', [OrderProductController::class,'deleteOrder']);
 
 

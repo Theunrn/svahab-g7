@@ -49,21 +49,55 @@
                 </div>
 
                 <div class="flex flex-col space-y-2">
-                    <label class="text-gray-700 select-none font-medium">Availability</label>
-                    <div class="flex items-center">
-                        <div class="mr-4">
-                            <input type="radio" id="availablity_yes" name="availablity" value="1" {{ old('availablity', $field->availablity) == 1 ? 'checked' : '' }} class="form-radio h-4 w-4 text-indigo-600">
-                            <label for="availablity_yes" class="ml-2 text-sm font-medium text-gray-700">Yes</label>
-                        </div>
-                        <div>
-                            <input type="radio" id="availablity_no" name="availablity" value="0" {{ old('availablity', $field->availablity) == 0 ? 'checked' : '' }} class="form-radio h-4 w-4 text-indigo-600">
-                            <label for="availablity_no" class="ml-2 text-sm font-medium text-gray-700">No</label>
-                        </div>
-                    </div>
+                    <label class="text-gray-700 select-none font-medium">Select province</label>
+                    <select name="province" id="province"
+                        class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-200">
+                        <option value=""></option>
+                    </select>
                 </div>
                 <button type="submit" class="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                     Update
                 </button>
         </form>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const provinces = [
+                'Banteay Meanchey',
+                'Battambang',
+                'Kampong Cham',
+                'Kampong Chhnang',
+                'Kampong Speu',
+                'Kampong Thom',
+                'Kampot',
+                'Kandal',
+                'Koh Kong',
+                'Kratie',
+                'Mondulkiri',
+                'Phnom Penh',
+                'Preah Vihear',
+                'Prey Veng',
+                'Pursat',
+                'Ratanakiri',
+                'Siem Reap',
+                'Preah Sihanouk',
+                'Stung Treng',
+                'Svay Rieng',
+                'Takeo',
+                'Oddar Meanchey',
+                'Kep',
+                'Pailin',
+                'Tbong Khmum'
+            ];
+
+            const provinceSelect = document.getElementById('province');
+            
+            provinces.forEach(province => {
+                const option = document.createElement('option');
+                option.value = province;
+                option.textContent = province;
+                provinceSelect.appendChild(option);
+            });
+        });
+    </script>
 </x-app-layout>

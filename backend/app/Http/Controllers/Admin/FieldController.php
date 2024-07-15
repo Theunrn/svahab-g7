@@ -68,7 +68,7 @@ class FieldController extends Controller
             'price' => 'required|numeric|min:0',
             'field_type' => 'required|string|max:255',
             'owner_id' => 'nullable',
-            'availablity' => 'required|boolean',
+            'province' => 'required|string',
         ]);
 
         if ($request->hasFile('image')) {
@@ -83,7 +83,7 @@ class FieldController extends Controller
         $field->location = $validatedData['location'];
         $field->price = $validatedData['price'];
         $field->field_type = $validatedData['field_type'];
-        $field->availablity = $validatedData['availablity'];
+        $field->availablity = $validatedData['province'];
        
         $field->save();
 

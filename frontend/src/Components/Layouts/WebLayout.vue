@@ -63,7 +63,7 @@
   <div class="div flex justify-content-center mt-3 relative z-10">
     <img width="18%" height="18%" src="../../assets/image/logo1.png" alt="">
   </div>
-  <FootballFields :fields="filteredFields" :user="user" />
+  <FootballFields :allFields="filteredFields"/>
   <GoogleMap/>
 </template>
 
@@ -76,7 +76,7 @@ import FootballFields from '../../Components/Cards/CardCom.vue'; // Assuming thi
 import axiosInstance from '@/plugins/axios';
 
 const searchQuery = ref('');
-const user = { id: 'your_user_id' }; // Replace with actual user object or ID
+// const user = { id: 'your_user_id' }; // Replace with actual user object or ID
 
 const fields = ref([]);
 const filteredFields = ref([]);
