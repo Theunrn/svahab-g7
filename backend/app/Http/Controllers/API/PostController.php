@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\PostResource;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,9 +14,9 @@ class PostController extends Controller
     {
         // Retrieve all posts
         $posts = Post::all();
-
+        $posts = PostResource::collection($posts);
         // Return posts as a JSON response
-        return response()->json($posts);
+        return response()->json(['success' => true, 'data' => $posts]);
     }
 
     public function store(Request $request)
@@ -23,10 +24,9 @@ class PostController extends Controller
         // Validate incoming request data
         $request->validate([
             'name' => 'required|string|max:255',
-            'start_match' => 'required|date',
-            'end_match' => 'required|date',
-            'start_time' => 'required|date_format:H:i', // Ensure start_time is in H:i format (24-hour)
-            'end_time' => 'required|date_format:H:i',   // Ensure end_time is in H:i format (24-hour)
+            'date_match' => 'required',
+            'start_time' => 'required|date_format:H:i', 
+            'end_time' => 'required|date_format:H:i',  
             'location' => 'required|string|max:255',
             'logo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
@@ -35,29 +35,24 @@ class PostController extends Controller
         if ($request->hasFile('logo')) {
             try {
                 $file = $request->file('logo');
-                $filename = time(). '.'. $file->extension(); // Generate unique filename based on current timestamp and extension
+                $filename = time(). '.'. $file->extension(); 
                
-
-                // Store the uploaded file in public/images directory
                 $file->storeAs('public/images', $filename);
 
-                // Create a new Post instance
                 $post = new Post();
-                $post->user_id = Auth::id(); // Assign logged-in user's ID
+                $post->user_id = Auth::id(); 
                 $post->name = $request->name;
-                $post->start_match = $request->start_match;
-                $post->end_match = $request->end_match;
+                $post->date_match = $request->date_match;
                 $post->start_time = $request->start_time;
                 $post->end_time = $request->end_time;
                 $post->location = $request->location;
-                $post->logo = 'images/' . $filename; // Save relative path to the logo
-                $post->post_date = now(); // Alternatively, you can use $post['post_date'] = now();
+                $post->logo = 'images/' . $filename; 
+                $post->post_date = now(); 
 
-                // Save the post
                 $post->save();
 
                 // Return a JSON response indicating success
-                return response()->json(['message' => 'Post created successfully', 'post' => $post], 201);
+                return response()->json(['message' => 'Post created successfully'], 201);
             } catch (\Exception $e) {
                 // Handle any errors that occur during file upload or saving
                 return response()->json(['error' => 'Failed to upload logo: ' . $e->getMessage()], 500);

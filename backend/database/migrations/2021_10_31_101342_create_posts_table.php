@@ -19,8 +19,7 @@ class CreatePostsTable extends Migration
             $table->string('logo');
             $table->string('name');
             $table->date('post_date')->nullable();
-            $table->date('start_match')->nullable();  // Change to date
-            $table->date('end_match')->nullable();    // Change to date
+            $table->date('date_match')->nullable();  // Change to date
             $table->time('start_time')->nullable();   // Time for start of match
             $table->time('end_time')->nullable(); 
             $table->string('location');
