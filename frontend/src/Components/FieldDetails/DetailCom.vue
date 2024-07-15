@@ -139,156 +139,126 @@
       </div>
     </div>
 
-    <div class="contaner">
-      <div class="head"><h1>Post a Comment feedback</h1></div>
-      <div><span id="comment">{{ Feedbacklist.length }}</span> Comment</div>
-      <div class="text"><p>We are happy to hear from your feedback</p></div>
-      <div class="comment">
-        <div v-for="feedback in Feedbacklist" :key="feedback.id" class="comment-item">
-          <img src="../../assets/ShopImage/cat.jpg" alt="Commenter's avatar" />
-          <div class="comment-content">
-            <h3>{{ feedback.user.name }}-{{ feedback.created_at }}</h3>
-            <p>{{ feedback.feedback_text }}</p>
-          </div>
-          <div class="relative flex">
-            <button
-              @click="toggleDropdown(feedback)"
-              class="text-gray-400 hover:text-gray-700"
-            >
-              <i class="bx bx-dots-vertical-rounded"></i>
-            </button>
-            <div
-              v-if="feedback.showDropdown"
-              class="absolute right-0 mt-4 w-30 bg-white border rounded-lg shadow-xl flex flex-col"
-            >
-              <button class="flex-1 text-danger" @click="deleteItem(feedback.id)">Delete</button>
-              <button class="flex-1" @click="showEditModal(feedback)">Edit</button>
+    <div class="container mx-auto mt-10 p-4 bg-white shadow-md rounded">
+      <h2 class="text-2xl text-black font-bold mb-4">Commented</h2>
+      <div class="mb-4">
+        <div class="container mx-auto mt-10 p-4">
+          <div class="group-form d-flex" v-for="feedback in Feedbacklist" :key="feedback.id">
+            <div class="flex items-center mb-4">
+              <div class="flex-grow flex items-center">
+                <!-- Profile icon -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400 mr-2" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" >
+                  <circle cx="10" cy="10" r="9" />
+                  <path d="M16 16s-1.5-2-4-2-4 2-4 2" />
+                  <path d="M9 10s2-3.5 4-3.5 4 3.5 4 3.5" />
+                  <circle cx="10" cy="12" r="3" />
+                </svg>
+                <!-- Static content for profile -->
+                <span class="text-gray-600"></span>
+              </div>
             </div>
-          </div>
-          
-        </div>
-      </div>
-      <div class="commentbox">
-        <img src="../../assets/ShopImage/cat.jpg" alt="User avatar" />
-        <div class="content">
-          <h2>Comment as:</h2>
-          <!-- <input type="text" v-model="currentUser" class="user" /> -->
-          <div class="commentinput">
-            <input type="text" placeholder="Enter comment" v-model="feedback_text" class="usercomment" />
-            <div class="buttons">
-              <button @click="SubmitFeedback" :disabled="!feedback_text" id="publish">Submit</button>
+            <div class="flex items-center mb-4 ml-4 d-inline">
+              <span class="text-black">{{ feedback.user.name }} - {{ feedback.created_at }}</span>
+              <div class="flex-grow">
+                <label for="name" class="block text-gray-700 w-100">{{
+                  feedback.feedback_text
+                }}</label>
+              </div>
+              <div class="flex justify-end">
+                <button @click="showEditModal(feedback)" class="px-2 py-1 bg-blue-500 text-white font-semibold rounded-md shadow hover:bg-blue-600 mr-2" >
+                  Edit
+                </button>
+
+                <button @click="deleteItem(feedback.id)" class="px-2 py-1 bg-red-500 text-white font-semibold rounded-md shadow hover:bg-red-600" >
+                  Delete
+                </button>
+              </div>
             </div>
-          </div>
-        </div>
-      </div>
-  
-      <!-- Edit Feedback Modal -->
-      <div
-        v-if="editFeedbackModalVisible"
-        class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75">
-        <div class="bg-white p-6 rounded-lg w-96">
-          <h3 class="text-lg font-semibold mb-4 text-black">Edit Feedback</h3>
-          <textarea
-            v-model="editedFeedbackText"
-            class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black"
-            rows="4"
-          ></textarea>
-          <div class="mt-4 flex justify-end">
-            <button
-              @click="updateFeedback()"
-              class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-md shadow hover:bg-blue-600"
-            >
-              Update
-            </button>
-            <button
-              @click="closeEditModal()"
-              class="px-4 py-2 bg-gray-300 text-gray-800 font-semibold rounded-md shadow ml-2 hover:bg-gray-400"
-            >
-              Cancel
-            </button>
           </div>
         </div>
       </div>
     </div>
+    <div>
+      <h2 class="text-black">Add comment here</h2>
+      <textarea id="comment" name="comment" rows="4" v-model="feedback_text" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-xl text-black"  required ></textarea>
+    </div>
+    <div class="flex justify-end">
+      <button @click="SubmitFeedback" class="px-4 py-2 bg-indigo-500 text-white font-semibold rounded-md shadow hover:bg-indigo-600" >
+        Submit
+      </button>
+    </div>
+    <!-- Edit Feedback Modal -->
     <div
-    class="modal fade"
-    id="mapModal"
-    tabindex="-1"
-    aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-      <div class="modal-dialog modal-xl">
-          <div class="modal-content">
-            <div class="modal-body">
-              <div
-                class="absolute right-5 bg-gray-200 rounded-full p-2 shadow-md cursor-pointer"
-                style="top: -17px; right: -17px"
-              >
-                <button
-                  type="button"
-                  class="btn-close text-bold text-2xl bg-gray-200"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                ></button>
-              </div>
-              <div class="flex gap-3">
-                <!-- Set height to 50% of the viewport height -->
-                <!-- Cards Container -->
-                <div class="flex flex-col w-1/2">
-                  <h1 class="mb-2 text-3xl text-red-400">List Fields</h1>
-                  <div
-                    class="card-display border border-gray-400 rounded-lg shadow-md flex overflow-hidden mb-1"
-                    v-for="field in fields"
-                    :key="field.id"
-                    style="width: 100%"
-                  >
-                    <div class="relative w-full p-2">
-                      <img
-                        :src="getImageUrl(field.image)"
-                        alt=""
-                        class="w-full h-40 object-cover rounded-md"
-                        style="border-radius: 10px"
-                      />
-                      <span
-                        class="absolute top-5 right-5 bg-gray-200 rounded-full p-1 shadow-md cursor-pointer"
-                      >
-                        <img src="../../assets/image/heart.png" alt="Heart icon" class="w-8 h-8 p-1" />
-                      </span>
-                    </div>
-                    <div class="flex flex-col fap-2 p-4 w-full">
-                      <div class="mb-2">
-                        <h3 class="text-xl font-bold text-gray-900 mb-2 flex gap-2">
-                          <strong class="text-orange font-bold">{{ field.name }}</strong>
-                          <div class="star">
-                            <i class="bx bxs-star text-yellow-400"></i>
-                            <i class="bx bxs-star text-yellow-400"></i>
-                            <i class="bx bxs-star text-yellow-400"></i>
-                            <i class="bx bx-star text-yellow-400"></i>
-                          </div>
-                        </h3>
-                        <a href="#" class="flex gap-2">
-                          <i class="bx bx-map text-3xl text-red-400"></i>
-                          <p class="text-gray-700">{{ field.location }}</p>
-                        </a>
-                      </div>
-                      <div class="text-gray-700 flex">
-                        <p class="mt-2 cursor-pointer">
-                          <span class="price bg-blue-500 text-white p-2 rounded-md mr-2"
-                            >${{ field.price }}.00</span
-                          >
-                        </p>
-                        <span class="viewer mt-1">2,965 reviews</span>
-                      </div>
-                    </div>
-                  </div>
+      v-if="editFeedbackModalVisible"
+      class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75" >
+      <div class="bg-white p-6 rounded-lg w-96">
+        <h3 class="text-lg font-semibold mb-4 text-black">Edit Feedback</h3>
+        <textarea v-model="editedFeedbackText" class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black" rows="4" ></textarea>
+        <div class="mt-4 flex justify-end">
+          <button @click="updateFeedback()" class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-md shadow hover:bg-blue-600" >
+            Update
+          </button>
+          <button @click="closeEditModal()" class="px-4 py-2 bg-gray-300 text-gray-800 font-semibold rounded-md shadow ml-2 hover:bg-gray-400" >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- map Modal -->
+  <div class="modal fade" id="mapModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-body">
+          <div class="absolute right-5 bg-gray-200 rounded-full p-2 shadow-md cursor-pointer" style="top: -17px; right: -17px" >
+            <button type="button" class="btn-close text-bold text-2xl bg-gray-200" data-bs-dismiss="modal" aria-label="Close" ></button>
+          </div>
+          <div class="flex gap-4 ">
+            <!-- Set height to 50% of the viewport height -->
+            <!-- Cards Container -->
+            <div class="flex flex-col w-1/2 overflow-y-auto overflow-y-scroll">
+              <h1 class="mb-2 text-3xl text-red-400">List Fields</h1>
+              <div class="card-display border border-gray-400 rounded-lg shadow-md flex overflow-hidden mb-1" v-for="field in fields" :key="field.id" style="width: 100%" >
+                <div class="relative w-full p-2">
+                  <img :src="getImageUrl(field.image)" alt="" class="w-full h-40 object-cover rounded-md" style="border-radius: 10px" />
+                  <span class="absolute top-5 right-5 bg-gray-200 rounded-full p-1 shadow-md cursor-pointer" >
+                    <img src="../../assets/image/heart.png" alt="Heart icon" class="w-8 h-8 p-1" />
+                  </span>
                 </div>
-                <!-- Map Container -->
-                <div class="map w-1/2 pt-5 pr-1">
-                  <!-- Ensure this div takes 50% width -->
-                  <MapCom :address="receivedAddress" :location="location" />
+                <div class="flex flex-col fap-2 p-4 w-full">
+                  <div class="mb-2">
+                    <h3 class="text-xl font-bold text-gray-900 mb-2 flex gap-2">
+                      <strong class="text-orange font-bold">{{ field.name }}</strong>
+                      <div class="star">
+                        <i class="bx bxs-star text-yellow-400"></i>
+                        <i class="bx bxs-star text-yellow-400"></i>
+                        <i class="bx bxs-star text-yellow-400"></i>
+                        <i class="bx bx-star text-yellow-400"></i>
+                      </div>
+                    </h3>
+                    <a href="#" class="flex gap-2">
+                      <i class="bx bx-map text-3xl text-red-400"></i>
+                      <p class="text-gray-700">{{ field.location }}</p>
+                    </a>
+                  </div>
+                  <div class="text-gray-700 flex">
+                    <p class="mt-2 cursor-pointer">
+                      <span class="price bg-blue-500 text-white p-2 rounded-md mr-2"
+                        >${{ field.price }}.00</span
+                      >
+                    </p>
+                    <span class="viewer mt-1">2,965 reviews</span>
+                  </div>
                 </div>
               </div>
             </div>
+            <!-- Map Container -->
+            <div class="map w-1/2 pt-5 pr-1">
+              <!-- Ensure this div takes 50% width -->
+              <MapCom :address="receivedAddress" :location="location" />
+            </div>
           </div>
+        </div>
       </div>
     </div>
   </div>
@@ -298,9 +268,15 @@
 
 <script setup lang="ts">
 import WebHeaderMenu from '@/Components/WebHeaderMenu.vue'
-import { ref, computed, onMounted, watch } from 'vue'
+import MapCom from '@/Components/Maps/MapCom.vue'
+import CurrentUser from '@/Components/Maps/CurrentUser.vue'
+import { ref, computed, watch, onMounted } from 'vue'
+import VueFlatpickr from 'vue-flatpickr-component'
+import 'flatpickr/dist/flatpickr.css'
 import { useRoute, useRouter } from 'vue-router'
 import axiosInstance from '@/plugins/axios'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import type { Action } from 'element-plus'
 
 const route = useRoute()
 const router = useRouter()
@@ -314,6 +290,11 @@ const bookings = ref<any[]>([])
 const field = ref({})
 const price = ref(0)
 const booking = ref({})
+const start = () => start_time.value
+const end = () => end_time.value
+const bookingDate = () => booking_date.value
+const duration = ref(0)
+const isBook = ref(false)
 const fields = ref([])
 const location = ref('')
 const feedback_text = ref('')
@@ -347,6 +328,7 @@ const calculateTotalPrice = () => {
   const pricePerMinute = price.value / 60
 
   total_price.value = (durationInMinutes * pricePerMinute).toFixed(2)
+  duration.value = durationInMinutes / 60
 }
 
 const submitBooking = async () => {
@@ -354,9 +336,9 @@ const submitBooking = async () => {
     const response = await axiosInstance.post('/booking/create', {
       user_id: userId.value,
       field_id: fieldId.value,
-      start_time: start_time.value,
-      end_time: end_time.value,
-      booking_date: booking_date.value,
+      start_time: start(),
+      end_time: end(),
+      booking_date: bookingDate(),
       total_price: total_price.value,
       status: 'pending',
       payment_status: 'unpaid'
@@ -365,21 +347,22 @@ const submitBooking = async () => {
     bookings.value.push(response.data)
     booking.value = response.data.data
 
+    //create event
     try {
-      const startDateTime = `${booking_date.value} ${start_time.value}:00`
-      const endDateTime = `${booking_date.value} ${end_time.value}:00`
+      const startDateTime = `${bookingDate()} ${start()}:00`
+      const endDateTime = `${bookingDate()} ${end()}:00`
       const response = await axiosInstance.post('/event/create', {
         field_id: fieldId.value,
         title: `Booking for ${field.value.name}`,
-        start: startDateTime,
-        end: endDateTime
+        start: startDateTime, // Convert date to ISO string format
+        end: endDateTime // Assuming end time should be the same as start time
       })
 
       console.log('Event created:', response.data)
     } catch (error) {
       console.error('Error creating event:', error)
     }
-
+    // Navigate to the payment route with the booking ID
     alert('Thank you for your booking! We will send you a notification soon')
     router.push({
       path: `/payment/${userId.value}`,
@@ -401,7 +384,6 @@ const fetchField = async () => {
     console.error('Error fetching fields:', error)
   }
 }
-
 const fetchFields = async () => {
   try {
     const response = await axiosInstance.get('/fields/list')
@@ -410,7 +392,6 @@ const fetchFields = async () => {
     console.error('Error fetching fields:', error)
   }
 }
-
 const SubmitFeedback = async () => {
   try {
     const response = await axiosInstance.post('/feedback/create', {
@@ -420,14 +401,12 @@ const SubmitFeedback = async () => {
     })
     alert('Create successfull')
     isclear.value = true
-    fetchFeedbackList()
     clearFeedbackData()
   } catch (error) {
-    alert('Create fail')
+    alert('create fail')
     console.error('Error creating booking:', error)
   }
 }
-
 const fetchFeedbackList = async () => {
   try {
     const response = await axiosInstance.get('/feedbacks', {
@@ -436,12 +415,10 @@ const fetchFeedbackList = async () => {
       }
     })
     Feedbacklist.value = response.data.data
+    console.log(Feedbacklist.value)
   } catch (error) {
     console.error('Error fetching feedbacks:', error)
   }
-}
-const toggleDropdown = (feedback) => {
-  feedback.showDropdown = !feedback.showDropdown
 }
 const deleteItem = async (itemId) => {
   try {
@@ -455,13 +432,12 @@ const deleteItem = async (itemId) => {
     console.error('Error deleting item:', error)
   }
 }
-
 const editFeedbackModalVisible = ref(false)
 const editedFeedbackText = ref('')
 let feedbackToEdit = ref(null)
 
 const showEditModal = (feedback) => {
-  feedbackToEdit.value = feedback
+  feedbackToEdit = feedback
   editedFeedbackText.value = feedback.feedback_text
   editFeedbackModalVisible.value = true
 }
@@ -472,11 +448,11 @@ const closeEditModal = () => {
 
 const updateFeedback = async () => {
   try {
-    const response = await axiosInstance.put(`/feedback/update/${feedbackToEdit.value.id}`, {
+    const response = await axiosInstance.put(`/feedback/update/${feedbackToEdit.id}`, {
       feedback_text: editedFeedbackText.value
     })
     const updatedFeedbackIndex = Feedbacklist.value.findIndex(
-      (item) => item.id === feedbackToEdit.value.id
+      (item) => item.id === feedbackToEdit.id
     )
     if (updatedFeedbackIndex !== -1) {
       Feedbacklist.value[updatedFeedbackIndex].feedback_text = editedFeedbackText.value
@@ -488,11 +464,9 @@ const updateFeedback = async () => {
     console.error('Error updating feedback:', error)
   }
 }
-
 const clearFeedbackData = () => {
   feedback_text.value = ''
 }
-
 onMounted(() => {
   fetchField()
   fetchFields()
@@ -508,6 +482,7 @@ const getImageUrl = (imagePath) => {
 
 watch([start_time, end_time], calculateTotalPrice)
 </script>
+
 
 <style scoped>
 /* Additional styling if needed */
@@ -642,142 +617,5 @@ h1 {
 
 .bg-opacity-90 {
   background-color: rgba(56, 161, 105, 0.9); /* Adjusted opacity */
-}
-
-/*feedback*/
-.contaner {
-  width: 95%;
-  color: #000;
-  margin: 0 auto;
-  padding: 20px;
-  border-radius: 8px;
-}
-
-.head {
-  text-transform: uppercase;
-  margin-bottom: 20px;
-}
-
-.text {
-  margin: 10px 0;
-  font-family: sans-serif;
-  font-size: 0.9em;
-}
-
-.comment {
-  margin-bottom: 20px;
-}
-
-.comment-item {
-  display: flex;
-  align-items: flex-start;
-  padding: 10px;
-  margin-bottom: 10px;
-}
-
-.comment-item img {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  margin-right: 20px;
-  object-fit: cover;
-  object-position: center;
-}
-
-.comment-content {
-  width: 100%;
-}
-
-.comment-content h3 {
-  font-size: 16px;
-  margin: 0;
-  margin-bottom: 5px;
-}
-
-.comment-content p {
-  margin: 0;
-  color: #555;
-}
-
-.commentbox {
-  display: flex;
-  align-items: flex-start;
-  padding: 10px;
-}
-
-.commentbox img {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  margin-right: 20px;
-  object-fit: cover;
-  object-position: center;
-}
-
-.content {
-  width: 100%;
-}
-
-.user {
-  width: 100%;
-  padding: 10px;
-  margin: 5px 0;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  outline: none;
-  color: #808080;
-}
-
-.commentinput {
-  display: flex;
-  flex-direction: column;
-}
-
-.usercomment {
-  width: 100%;
-  padding: 10px;
-  border: none;
-  border-bottom: 2px solid blue;
-  outline: none;
-}
-
-.buttons {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: #808080;
-  margin-top: 10px;
-}
-
-.buttons button {
-  padding: 8px 16px;
-  border: none;
-  background-color: #007bff;
-  color: #fff;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.buttons button:disabled {
-  background-color: #ccc;
-}
-
-.notify {
-  display: flex;
-  align-items: center;
-  margin-left: 10px;
-}
-
-.notifyinput {
-  margin-right: 5px;
-}
-
-.policy a {
-  text-decoration: none;
-  color: blue;
-}
-.action{
-  margin-top: 20px;
-  display: flex;
 }
 </style>
