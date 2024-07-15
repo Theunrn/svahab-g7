@@ -1,23 +1,29 @@
 <template>
-  <div class="container flex pt-3 font-sans flex items-center justify-center">
-    <div class="picture-match w-300 mt-5 flex flex-col justify-center items-center">
-      <div class="header text-center">
-        <h1 class="text-5xl font-bold text-orange-500">We are finding</h1>
-        <h2 class="text-3xl font-bold text-gray-700">match team for playing</h2>
+  <div
+    class="container flex pt-3 font-sans flex items-center justify-center"
+    style="min-height: 100vh"
+  >
+    <div class="picture-match w-300 mt-5 flex flex-col justify-center items-center mr-20">
+      <div class="header">
+        <h1 class="text-3xl font-bold text-orange-500">We are finding</h1>
+        <h2 class="text-2xl font-bold text-gray-700">match team for playing</h2>
       </div>
       <div class="text-center flex justify-center">
-        <img src="../../assets/contact-piture/download-ball.png" alt="" class="w-80 h-80" />
+        <img src="../../assets/contact-piture/download-ball.png" alt="" class="w-60 h-60" />
+      </div>
+      <div class="start ml-20">
+        <h1 class="text-3xl font-bold text-orange-500">You can post</h1>
+        <h2 class="text-2xl font-bold text-gray-700">to find your team for playing here!</h2>
+        <button
+          class="font-bold py-1 px-2 mt-2 rounded-lg w-30 hover:bg-orange-700 bg-orange-500 text-white hover:text-white"
+          data-bs-toggle="modal"
+          data-bs-target="#startModal"
+        >
+          Post Here
+        </button>
       </div>
     </div>
-    <div class="start">
-      <button
-        class="font-bold py-2 px-4 mt-2 rounded-lg w-40 border-2 border-gray-400 hover:bg-blue-700 hover:text-white"
-        data-bs-toggle="modal"
-        data-bs-target="#startModal"
-      >
-        Start
-      </button>
-    </div>
+
     <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-inner">
         <div
@@ -46,7 +52,7 @@
                 <div class="team-info flex justify-between items-center relative z-10">
                   <div class="relative z-40">
                     <img
-                      :src="team.logo ? team.logo : ''"
+                      :src="getImageUrl(team.logo)"
                       alt="Team Logo"
                       class="w-30 h-30 object-cover rounded-full border-4 border-orange-500 overflow-hidden shadow-md hover:shadow-lg animate-sink"
                     />
@@ -341,9 +347,9 @@ const clearForm = () => {
   team_logo.value = null
 }
 
-const teamLogoUrl = computed(() => {
-  return team_logo.value ? URL.createObjectURL(team_logo.value) : ''
-})
+const teamLogoUrl = (logoPath: string) => {
+  return logoPath ? `/storage/${logoPath}` : '' // Adjust according to your storage path
+}
 
 const fetchAllTeams = async () => {
   try {
@@ -353,6 +359,9 @@ const fetchAllTeams = async () => {
   } catch (error) {
     console.error('Error fetching all teams:', error.response ? error.response.data : error)
   }
+}
+const getImageUrl = (imagePath) => {
+  return (imagePath = `http://127.0.0.1:8000/storage/${imagePath}`)
 }
 
 onMounted(() => {
