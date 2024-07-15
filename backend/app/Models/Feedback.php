@@ -22,7 +22,7 @@ class Feedback extends Model
     // Define relationship with Field
     public function field()
     {
-        return $this->belongsTo(Field::class);
+        return $this->belongsTo(Field::class, 'field_id');
     }
 
     // Get list of feedbacks with related fields

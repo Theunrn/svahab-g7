@@ -120,7 +120,6 @@
   <div class="div flex justify-content-center mt-3 relative z-10">
     <img width="18%" height="18%" src="../../assets/image/logo1.png" alt="" />
   </div>
-  {{ matchFields }}
   <FootballFields :newFields="matchFields" />
   <GoogleMap />
 </template>
