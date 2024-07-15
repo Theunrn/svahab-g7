@@ -13,9 +13,7 @@
         <a href="#" @click.prevent="selectedDay = 'thisYear'" :class="selectedDay === 'thisYear' ? 'text-blue-700 bg-gray-100' : 'text-gray-900 bg-white'" class="px-4 py-2 text-sm font-medium border border-gray-200 rounded-l-lg hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700">
             This Year
         </a>
-
     </div>
-
     <div class="group-card flex justify-center gap-2">
 
         <!--  data of today -->

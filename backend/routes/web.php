@@ -162,6 +162,8 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('orders/confirm/{id}', [OrderController::class, 'confirm'])->name('admin.orders.confirm');
     Route::get('orders/cancel/{id}', [OrderController::class, 'cancel'])->name('admin.orders.cancel');
 });
+Route::post('/admin/users', [UserController::class, 'store'])->name('admin.users.store');
+
 
 
 
