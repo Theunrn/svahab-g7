@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\BookingController;
 use App\Models\Feedback;
 use App\Models\Field;
+use App\Models\Payment;
 use App\Models\User;
 
 class DashboardController extends Controller
@@ -18,7 +19,8 @@ class DashboardController extends Controller
         $totalUsers = User::count();
         $totalFiels = Field::count();
         $totalFeedbacks = Feedback::count();
+        $totalPayments = Payment::count();
 
-        return view('dashboard', compact('totalBookings', 'totalUsers' ,'totalFiels' ,'totalFeedbacks'));
+        return view('dashboard', compact('totalBookings', 'totalUsers' ,'totalFiels' ,'totalFeedbacks', 'totalPayments'));
     }
 }
