@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
@@ -11,6 +12,33 @@ class Product extends Model
 {
     use HasFactory;
     protected $fillable = ['image', 'name', 'description', 'owner_id', 'price', 'color', 'size', 'category_id'];
+
+    public function index(Request $request)
+    {
+        $date = $request->input('date');
+        $status = $request->input('status');
+        $ordersQuery = Order::query();
+
+        if ($date) {
+            $ordersQuery->whereDate('created_at', $date);
+        }
+
+        $orders = $ordersQuery->with(['user', 'products.colors', 'products.sizes'])->get();
+
+        return view('setting.orders.index', compact('orders'));
+    }
+
+    public function show($id)
+    {
+        $order = Order::with(['user', 'products.colors', 'products.sizes'])->find($id);
+
+        if (!$order) {
+            return redirect()->route('admin.orders.index')->with('error', 'Order not found');
+        }
+
+        return view('setting.orders.show', compact('order'));
+    }
+
 
     public function category()
     {

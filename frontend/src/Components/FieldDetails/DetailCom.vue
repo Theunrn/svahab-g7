@@ -3,8 +3,7 @@
   <div class="header-text mt-5">
     <div class="header-detail">
       <div
-        class="select absolute mt-17 bg-green bg-opacity-900 z-20 rounded-lg w-full md:w-5/5 lg:w-9/10 ml-16 flex justify-center items-center"
-      >
+        class="select absolute mt-17 bg-green bg-opacity-900 z-20 rounded-lg w-full md:w-5/5 lg:w-9/10 ml-16 flex justify-center items-center">
         <router-link :to="{path: '/field/detail/' + fieldId, query:{customer:userId}}"  class="menu-item bg-white text-dark border-t-4 border-orange-500">
           <i class="bx bx-home text-2xl"></i>
           <span>Fields</span>
@@ -27,12 +26,7 @@
             <div class="container bg-overlay">
               <div class="flex">
                 <div class="row text-center flex flex-col items-center justify-center h-full">
-                  <button
-                    type="button"
-                    data-bs-toggle="modal"
-                    data-bs-target="#mapModal"
-                    class="btn flex gap-1 btn-primary btn-details py-2 me-2"
-                  >
+                  <button type="button" data-bs-toggle="modal" data-bs-target="#mapModal" class="btn flex gap-1 btn-primary btn-details py-2 me-2" >
                     <i class="bx bxs-map tex-3xl mt-1"></i>
                     <p>Show on map</p>
                   </button>
@@ -78,49 +72,19 @@
             <div class="wrapper-card relative w-full mx-2 my-2 rounded-md">
               <h2>Your Option (optional)</h2>
               <div class="flex items-center">
-                <input
-                  id="vue-checkbox"
-                  type="checkbox"
-                  value=""
-                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                />
-                <label
-                  for="vue-checkbox"
-                  class="w-full py-2 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >Water</label
-                >
+                <input id="vue-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
+                <label for="vue-checkbox" class="w-full py-2 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300" >Water</label >
               </div>
               <div class="flex items-center">
-                <input
-                  id="react-checkbox"
-                  type="checkbox"
-                  value=""
-                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                />
-                <label
-                  for="react-checkbox"
-                  class="w-full py-2 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >Live</label
-                >
+                <input id="react-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
+                <label for="react-checkbox" class="w-full py-2 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300" >Live</label >
               </div>
               <div class="flex items-center">
-                <input
-                  id="angular-checkbox"
-                  type="checkbox"
-                  value=""
-                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                />
-                <label
-                  for="angular-checkbox"
-                  class="w-full py-2 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >Take Photo</label
-                >
+                <input id="angular-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
+                <label for="angular-checkbox" class="w-full py-2 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300" >Take Photo</label  >
               </div>
             </div>
-            <button
-              type="submit"
-              class="btn-book match-btn mr-2 bg-orange-500 w-40 text-white rounded-md px-3 py-1 mt-2 mb-2 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50 shadow-md hover:shadow-lg z-20"
-            >
+            <button type="submit" class="btn-book match-btn mr-2 bg-orange-500 w-40 text-white rounded-md px-3 py-1 mt-2 mb-2 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50 shadow-md hover:shadow-lg z-20" >
               Payment
             </button>
           </form>
@@ -136,21 +100,10 @@
         <div class="gap-2 overflow-y-auto h-50">
           <div class="card-text mt-4">
             <div class="card-display-container gap-3 flex flex-col">
-              <div
-                class="card-display border border-gray-400 rounded-lg shadow-lg flex overflow-hidden"
-                v-for="field in fields"
-                :key="field"
-              >
+              <div class="card-display border border-gray-400 rounded-lg shadow-lg flex overflow-hidden" v-for="field in fields" :key="field" >
                 <div class="relative w-1/3 p-2">
-                  <img
-                    :src="getImageUrl(field.image)"
-                    alt=""
-                    class="w-full h-55 object-cover rounded-md"
-                    style="border-radius: 10px"
-                  />
-                  <span
-                    class="absolute top-5 right-5 bg-gray-200 rounded-full p-1 shadow-md cursor-pointer"
-                  >
+                  <img :src="getImageUrl(field.image)" alt="" class="w-full h-55 object-cover rounded-md" style="border-radius: 10px" />
+                  <span class="absolute top-5 right-5 bg-gray-200 rounded-full p-1 shadow-md cursor-pointer" >
                     <img src="../../assets/image/heart.png" alt="Heart icon" class="w-8 h-8 p-1" />
                   </span>
                 </div>
@@ -167,8 +120,7 @@
                   <div class="text-gray-700">
                     <p class="mt-2 cursor-pointer">
                       <span class="price bg-blue-500 text-white p-2 rounded-md mr-2"
-                        >${{ field.price }}.00</span
-                      >
+                        >${{ field.price }}.00</span >
                     </p>
                     <div class="rating mt-3">
                       <span class="star">&#9733;</span>
@@ -340,7 +292,8 @@
       </div>
     </div>
   </div>
-  <CurrentUser @address-updated="handleAddressUpdate" />
+  <CurrentUser @location-updated="updateLocation" @address-updated="updateAddress" />
+  <!-- <CurrentUser @address-updated="handleAddressUpdate" /> -->
 </template>
 
 <script setup lang="ts">
@@ -369,8 +322,18 @@ const isclear = ref(false)
 const receivedAddress = ref<string>('')
 
 // Event handler for address-updated event
-const handleAddressUpdate = (address: string) => {
-  receivedAddress.value = address
+// const handleAddressUpdate = (address: string) => {
+//   receivedAddress.value = address
+// }
+
+// Event handler for location-updated event
+const updateLocation = (updatedLocation: string) => {
+  location.value = updatedLocation
+}
+
+// Event handler for address-updated event
+const updateAddress = (updatedAddress: string) => {
+  receivedAddress.value = updatedAddress
 }
 
 const calculateTotalPrice = () => {
