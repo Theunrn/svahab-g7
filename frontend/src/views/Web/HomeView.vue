@@ -1,5 +1,5 @@
 <template>
-  <WebLayout></WebLayout>
+  <WebLayout :customer="authStore.user"></WebLayout>
  <CardCom :customer="authStore.user"></CardCom>
  <MatchTeam></MatchTeam>
 

@@ -68,4 +68,14 @@ class PostController extends Controller
         $latestPostTeam->logo = asset('storage/' . $latestPostTeam->logo); // Assuming logo is stored in 'public/storage/images/'
         return response()->json($latestPostTeam);
     }
+    public function show($id){
+        $post = Post::find($id);
+        return response()->json(['success' => true, 'data' =>$post]);
+
+    }
+    public function destroy($id){
+        Post::find($id)->delete();
+        return response()->json(['message' => 'Post deleted successfully'], 200);
+
+    }
 }

@@ -3,21 +3,19 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\MatchTeamResource;
-use App\Models\MatchTeam;
+use App\Models\ScheduleMatch;
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Http\Request;
 
-class MatchTeamController extends Controller
+class ScheduleMatchController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $matchTeams = MatchTeam::all();
-        $matchTeams = MatchTeam::latest()->get();
-        $matchTeams = MatchTeamResource::collection($matchTeams);
-        return response()->json(['sucess' => true, 'data' => $matchTeams]);
+        $schedules = ScheduleMatch::all();
+        return response()->json(['succes'=>true, 'data'=>$schedules], 200);
     }
 
     /**
@@ -25,7 +23,6 @@ class MatchTeamController extends Controller
      */
     public function create()
     {
-        
     }
 
     /**
@@ -33,8 +30,19 @@ class MatchTeamController extends Controller
      */
     public function store(Request $request)
     {
-        MatchTeam::store($request);
-        return response()->json(['success' => true, 'message' =>'created successfully']);
+        $validatedData = $request->validate([
+            'team1_name' => 'required|string|max:255',
+            'team1_logo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'team2_name' => 'required|string|max:255',
+            'team2_logo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'date_match' => 'required|date',
+            'start_time' => 'required',
+            'end_time' => 'required',
+            'location' => 'required|string|max:255',
+        ]);
+
+        $scheduleMatch = ScheduleMatch::store($request);
+        return response()->json(['success'=>true, 'message'=>'Schedule created successfully', 'data'=>$scheduleMatch], 200);
     }
 
     /**
@@ -66,7 +74,6 @@ class MatchTeamController extends Controller
      */
     public function destroy(string $id)
     {
-        MatchTeam::find($id)->delete();
-        return response()->json(['success' => true, 'message' => 'deleted successfully']);
+        //
     }
 }

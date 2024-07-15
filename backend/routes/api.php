@@ -28,10 +28,14 @@ use App\Http\Controllers\API\DeliveryController;
 use App\Http\Controllers\API\EventController;
 use App\Http\Controllers\API\MatchTeamController;
 use App\Http\Controllers\API\ProfileController;
+use App\Http\Controllers\API\ScheduleMatchController as APIScheduleMatchController;
 use App\Http\Controllers\Auth\ProfileController as AuthProfileController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ScheduleMatchController;
 use App\Http\Controllers\StripePaymentController;
 use App\Http\Resources\FeedbackResource;
+use App\Models\Post;
+use App\Models\ScheduleMatch;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 // use App\Http\Controllers\API\FeedbackController;
@@ -159,6 +163,14 @@ Route::middleware('auth:sanctum')->group(function () {
 //team post and match 
 Route::post('/post/match', [MatchTeamController::class,'store']);
 Route::get('/match/list', [MatchTeamController::class,'index']);
+Route::get('/match/delete/{id}', [MatchTeamController::class,'destroy']);
+
+Route::post('/schedule/create', [APIScheduleMatchController::class,'store']);
+Route::get('/schedule/list', [APIScheduleMatchController::class,'index']);
+
+Route::delete('/post/delete/{id}', [PostController::class,'destroy']);
+Route::get('/post/show/{id}', [PostController::class, 'show']);
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/posts', [PostController::class, 'store']);
     Route::get('/post/list', [PostController::class, 'index']);
@@ -169,10 +181,6 @@ Route::get('/latest-post-team', [PostController::class, 'getLatestPostTeam']);
 Route::post('/event/create', [EventController::class,'store']);
 Route::get('/event/list/{id}', [EventController::class,'index']);
 Route::get('/event/show/{id}', [EventController::class,'show']);
-
-
-// Route::apiResource('feedback', FeedbackController::class);
-
 
 
 Route::middleware('auth:sanctum')->group(function () {
