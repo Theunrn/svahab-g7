@@ -20,33 +20,40 @@
     </div>
     <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-inner">
-        <div class="carousel-item active" data-bs-interval="10000">
-          <div class="find-match flex flex-col items-center justify-center w-200">
+        <div
+          v-for="(team, index) in allTeams"
+          :key="index"
+          class="carousel-item"
+          :class="{ active: index === 0 }"
+        >
+          <div v-if="team" class="find-match flex flex-col items-center justify-center w-200">
             <div class="match-items grid grid-cols-1 gap-10">
               <div
                 class="match-item text-center rounded-lg shadow-lg p-3 mb-3 w-150 hover:scale-105 transition-transform duration-300"
-                v-if="latestPostTeam"
               >
                 <div class="flex justify-center">
-                  <div class="bg-blue w-30 rounded-2xl relative mb-2">
+                  <div
+                    class="bg-blue w-30 rounded-2xl relative mb-2"
+                    v-if="team.start_time && team.end_time"
+                  >
                     <p
                       class="match-time text-center p-1 text-sm text-white font-bold text-orange-500 relative z-10"
                     >
-                    {{ formatTime(latestPostTeam.start_time) }} - {{ formatTime(latestPostTeam.end_time) }}
+                      {{ formatTime(team.start_time) }} - {{ formatTime(team.end_time) }}
                     </p>
                   </div>
                 </div>
                 <div class="team-info flex justify-between items-center relative z-10">
                   <div class="relative z-40">
                     <img
-                      :src="latestPostTeam && latestPostTeam.logo ? latestPostTeam.logo : ''"
+                      :src="team.logo ? team.logo : ''"
                       alt="Team Logo"
                       class="w-30 h-30 object-cover rounded-full border-4 border-orange-500 overflow-hidden shadow-md hover:shadow-lg animate-sink"
                     />
                   </div>
                   <div class="team-logo flex items-center gap-2 p-2">
                     <p class="team-name text-sm font-bold text-gray-700 font-size-5">
-                      {{ latestPostTeam.name }}
+                      {{ team.name }}
                     </p>
                   </div>
                   <div class="flex justify-center items-center">
@@ -65,11 +72,11 @@
                     Match Now
                   </button>
                 </div>
-                <div>
+                <div v-if="team.start_match && team.end_match">
                   <div class="match-date text-base text-white flex justify-center">
                     <div class="w-50 bg-blue rounded-b-2xl relative">
                       <p class="text-sm font-bold p-1 relative z-10">
-                        {{ latestPostTeam.start_match }} - {{ latestPostTeam.end_match }}
+                        {{ team.start_match }} - {{ team.end_match }}
                       </p>
                     </div>
                   </div>
@@ -78,14 +85,13 @@
                   <button
                     class="font-bold py-2 px-4 mt-2 rounded-lg w-40 border-2 border-gray-400 hover:bg-blue-700 hover:text-white"
                   >
-                    Location
+                    {{ team.location }}
                   </button>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <!-- Add more carousel items if needed -->
       </div>
       <button
         class="carousel-control-prev"
@@ -106,6 +112,7 @@
         <span class="visually-hidden">Next</span>
       </button>
     </div>
+
     <!-- Modal -->
     <div
       class="modal fade"
@@ -209,12 +216,7 @@
               </div>
               <div class="mb-3">
                 <label for="endMatchInput" class="form-label">End Match *</label>
-                <input
-                  type="date"
-                  class="form-control"
-                  v-model="end_match"
-                  id="endMatchInput"
-                />
+                <input type="date" class="form-control" v-model="end_match" id="endMatchInput" />
               </div>
               <div class="mb-3">
                 <label for="startTimeInput" class="form-label">Start Time *</label>
@@ -252,8 +254,7 @@ const end_match = ref('')
 const start_time = ref('')
 const end_time = ref('')
 const location = ref('')
-const latestPostTeam = ref(null)
-
+const allTeams = ref([])
 
 // Function to handle file upload
 const handleFileUpload = (event: Event) => {
@@ -322,7 +323,7 @@ const postTeam = async () => {
 
     console.log('Team posted:', response.data)
     clearForm()
-    await fetchLatestPostTeam() // Fetch the latest post team data
+    await fetchAllTeams() // Fetch the latest post team data
     window.location.reload()
   } catch (error) {
     alert('Error posting team')
@@ -344,25 +345,19 @@ const teamLogoUrl = computed(() => {
   return team_logo.value ? URL.createObjectURL(team_logo.value) : ''
 })
 
-const fetchLatestPostTeam = async () => {
+const fetchAllTeams = async () => {
   try {
-    const response = await axiosInstance.get('/latest-post-team') // Adjust the endpoint if needed
-    latestPostTeam.value = response.data
-    console.log('Latest post team data:', latestPostTeam.value)
+    const response = await axiosInstance.get('/post/list') // Adjust endpoint based on your API
+    allTeams.value = response.data
+    console.log('All teams:', allTeams.value)
   } catch (error) {
-    console.error(
-      'Error fetching latest post team data:',
-      error.response ? error.response.data : error
-    )
+    console.error('Error fetching all teams:', error.response ? error.response.data : error)
   }
 }
 
-
-
 onMounted(() => {
-  fetchLatestPostTeam()
+  fetchAllTeams()
 })
-
 
 const formatTime = (time: string) => {
   // Assuming time is in 24-hour format 'HH:mm'
