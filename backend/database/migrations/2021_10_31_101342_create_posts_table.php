@@ -15,14 +15,16 @@ class CreatePostsTable extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->text('description');
-            $table->unsignedBigInteger('user_id');
-            $table->boolean('publish')->default(0);
-
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('logo');
+            $table->string('name');
+            $table->date('post_date')->nullable();
+            $table->date('start_match')->nullable();  // Change to date
+            $table->date('end_match')->nullable();    // Change to date
+            $table->time('start_time')->nullable();   // Time for start of match
+            $table->time('end_time')->nullable(); 
+            $table->string('location');
             $table->timestamps();
-
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
         });
     }
