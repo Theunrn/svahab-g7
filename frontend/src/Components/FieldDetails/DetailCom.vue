@@ -34,16 +34,12 @@
               </div>
             </div>
             <div class="w-100">
-              <button
-                class="bg-yellow-400 w-full p-2 text-dark text-bold rounded-l"
-                style="font-weight: bold"
-              >
+              <button class="bg-yellow-400 w-full p-2 text-dark text-bold rounded-l" style="font-weight: bold">
                 ${{ field.price }}.00/Hour
               </button>
             </div>
           </div>
         </div>
-
         <div class="user-detail">
           <h2 class="text-center">BOOKING FORM</h2>
           <hr />
@@ -61,10 +57,6 @@
               <label for="end">End time *</label>
               <input type="time" id="end" @change="end" v-model="end_time" />
             </div>
-            <!-- <div class="form-group">
-              <label for="duration">Your duration (hour) *</label>
-              <input type="text" id="duration" v-model="duration" disabled />
-            </div> -->
             <div class="form-group">
               <label for="number-of-guests">Total Price ($) *</label>
               <input disabled type="number" id="number-of-guests" v-model="total_price" />
