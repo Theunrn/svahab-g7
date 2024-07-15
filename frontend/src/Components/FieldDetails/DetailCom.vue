@@ -97,10 +97,10 @@
           <!-- <h2 class="text-2xl font-bold">7Seasons Apartments offers</h2> -->
           <img :src="getImageUrl(field.image)" alt="" class="w-full h-74 object-cover" />
         </div>
-        <div class="gap-2 overflow-y-auto h-50">
+        <div  class="gap-2 overflow-y-auto h-50">
           <div class="card-text mt-4">
             <div class="card-display-container gap-3 flex flex-col">
-              <div class="card-display border border-gray-400 rounded-lg shadow-lg flex overflow-hidden" v-for="field in fields" :key="field" >
+              <router-link :to="{ path: '/field/detail/' + field.id, query: { customer: userId } }" class="card-display border border-gray-400 rounded-lg shadow-lg flex overflow-hidden" v-for="field in fields" :key="field" >
                 <div class="relative w-1/3 p-2">
                   <img :src="getImageUrl(field.image)" alt="" class="w-full h-55 object-cover rounded-md" style="border-radius: 10px" />
                   <span class="absolute top-5 right-5 bg-gray-200 rounded-full p-1 shadow-md cursor-pointer" >
@@ -132,7 +132,7 @@
                     <span class="viewer">2,965 reviews</span>
                   </div>
                 </div>
-              </div>
+              </router-link>
             </div>
           </div>
         </div>
@@ -218,7 +218,7 @@
             <!-- Cards Container -->
             <div class="flex flex-col w-1/2 overflow-y-auto overflow-y-scroll">
               <h1 class="mb-2 text-3xl text-red-400">List Fields</h1>
-              <div class="card-display border border-gray-400 rounded-lg shadow-md flex overflow-hidden mb-1" v-for="field in fields" :key="field.id" style="width: 100%" >
+              <router-link :to="{ path: '/field/detail/' + field.id, query: { customer: userId } }" class="card-display border border-gray-400 rounded-lg shadow-md flex overflow-hidden mb-1" v-for="field in fields" :key="field.id" style="width: 100%" >
                 <div class="relative w-full p-2">
                   <img :src="getImageUrl(field.image)" alt="" class="w-full h-40 object-cover rounded-md" style="border-radius: 10px" />
                   <span class="absolute top-5 right-5 bg-gray-200 rounded-full p-1 shadow-md cursor-pointer" >
@@ -250,7 +250,7 @@
                     <span class="viewer mt-1">2,965 reviews</span>
                   </div>
                 </div>
-              </div>
+              </router-link>
             </div>
             <!-- Map Container -->
             <div class="map w-1/2 pt-5 pr-1">
@@ -262,7 +262,7 @@
       </div>
     </div>
   </div>
-  <CurrentUser @location-updated="updateLocation" @address-updated="updateAddress" />
+  <CurrentUser hidden @location-updated="updateLocation" @address-updated="updateAddress" />
   <!-- <CurrentUser @address-updated="handleAddressUpdate" /> -->
 </template>
 
