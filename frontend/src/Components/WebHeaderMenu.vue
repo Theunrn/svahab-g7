@@ -1,18 +1,18 @@
 <template>
   <header
-    style="padding-left: 60px; padding-right: 60px"
+    style="padding-left: 50px; padding-right:50px;"
     class="flex justify-between py-3 items-center shadow-md navbar-light fixed top-0 left-0 right-0 bg-green-600 z-50"
   >
     <!-- Logo -->
-    <div class="flex items-center space-x-2">
-      <a href="/"><img width="33%" height="40%" src="../assets/image/logo.png" alt="Logo" /></a>
+    <div class="left">
+      <a href="/"><img width="200" height="200" src="../assets/image/logo.png" alt="Logo" /></a>
     </div>
     <!-- Menu Items -->
-    <nav class="flex justify-center space-x-4">
+    <nav class="flex center gap-5">
       <a
-        :href="'/'"
+        :href="'/'" style="margin-left: 100px;"
         :class="[
-          'font-bold-200 py-2 text-white custom-hover text-decoration-none me-3',
+          'font-bold-200 py-2 text-white custom-hover text-decoration-none',
           { active: route.path === '/' }
         ]"
         >HOME</a
@@ -20,7 +20,7 @@
       <a
         :href="'/about'"
         :class="[
-          'font-bold-200 py-2 text-white custom-hover text-decoration-none me-3',
+          'font-bold-200 py-2 text-white custom-hover text-decoration-none ',
           { active: route.path === '/about' }
         ]"
         >ABOUT</a
@@ -28,7 +28,7 @@
       <a
         :href="'/shop'"
         :class="[
-          'font-bold-200 py-2 text-white custom-hover text-decoration-none me-3',
+          'font-bold-200 py-2 text-white custom-hover text-decoration-none',
           { active: route.path === '/shop' }
         ]"
         >SHOP</a
@@ -36,13 +36,13 @@
       <a
         :href="'/contact'"
         :class="[
-          'font-bold-200 py-2 me-5 text-white custom-hover text-decoration-none me-5',
+          'font-bold-200 py-2 me-5 text-white custom-hover text-decoration-none ',
           { active: route.path === '/contact' }
         ]"
         >CONTACT</a
       >
     </nav>
-    <div class="right">
+    <div class=" right flex justify-center align-items-center">
       <!-- Cart Button -->
       <button class="relative inline-flex w-fit mx-3">
         <div
@@ -100,16 +100,9 @@
         <div v-if="!authStore.isAuthenticated" class="flex gap-2 py-2">
           <a href="/login"
             ><button
-              class="hover:bg-red-400 text-dark bg-white px-4 py-1 border-1 border-red-700 hover:border-red-500 rounded"
+              class="text-bold hover:bg-red-400 text-dark bg-white px-4 py-1 border-1 border-red-700 hover:border-red-500 rounded-md" style="border-radius: 50px; font-weight: bold;"
             >
-              Login
-            </button></a
-          >
-          <a href="/register"
-            ><button
-              class="hover:bg-red-400 text-dark bg-white px-4 py-1 border-1 border-red-700 hover:border-red-500 rounded"
-            >
-              Register
+              Sign in
             </button></a
           >
         </div>
@@ -125,8 +118,8 @@
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
-              <!-- <img class="avatar-img w-12 h-10 rounded-circle" src="../assets/image/liep.jpg" alt="avatar"> -->
-              <i class="bx bxs-user-circle text-4xl text-white mt-2"></i>
+              <img class="w-10 h-10 rounded-full ring-2 ring-gray-300 dark:ring-gray-400" src="../assets/image/liep.jpg" alt="avatar">
+              <!-- <i class="bx bxs-user-circle text-4xl text-white  "></i> -->
             </a>
             <ul
               class="px-3 dropdown-menu dropdown-animation dropdown-menu-end shadow pt-3"

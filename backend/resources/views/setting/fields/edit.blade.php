@@ -52,7 +52,7 @@
                     <label class="text-gray-700 select-none font-medium">Select province</label>
                     <select name="province" id="province"
                         class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-200">
-                        <option value=""></option>
+                        <option value="{{ old('province', $field->province) }}" selected>{{ old('province', $field->province) }}</option>
                     </select>
                 </div>
                 <button type="submit" class="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">

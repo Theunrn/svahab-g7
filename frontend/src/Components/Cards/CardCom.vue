@@ -126,8 +126,9 @@ import axiosInstance from '@/plugins/axios'
 export default {
   name: 'FootballFields',
   props: {
-    allFields: Array,
-    customer: Object
+    customer: Object,
+    newFields:Array
+
   },
 
   setup() {

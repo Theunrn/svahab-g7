@@ -83,7 +83,7 @@ class FieldController extends Controller
         $field->location = $validatedData['location'];
         $field->price = $validatedData['price'];
         $field->field_type = $validatedData['field_type'];
-        $field->availablity = $validatedData['province'];
+        $field->province = $validatedData['province'];
        
         $field->save();
 
