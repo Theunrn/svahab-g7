@@ -195,7 +195,7 @@
         <div v-for="feedback in Feedbacklist" :key="feedback.id" class="comment-item">
           <img src="../../assets/ShopImage/cat.jpg" alt="Commenter's avatar" />
           <div class="comment-content">
-            <h3>{{ feedback.user.name }}-{{ feedback.created_at }}</h3>
+            <h3>{{ feedback.user.name }} - {{ dayjs(feedback.created_at).fromNow() }}</h3>
             <p>{{ feedback.feedback_text }}</p>
           </div>
           <div class="relative flex">
@@ -348,6 +348,11 @@ import WebHeaderMenu from '@/Components/WebHeaderMenu.vue'
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import axiosInstance from '@/plugins/axios'
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+
+// Load the relativeTime plugin
+dayjs.extend(relativeTime)
 
 const route = useRoute()
 const router = useRouter()
@@ -477,9 +482,11 @@ const fetchFeedbackList = async () => {
     console.error('Error fetching feedbacks:', error)
   }
 }
+
 const toggleDropdown = (feedback) => {
   feedback.showDropdown = !feedback.showDropdown
 }
+
 const deleteItem = async (itemId) => {
   try {
     await axiosInstance.delete(`/feedback/delete/${itemId}`, {
@@ -545,6 +552,7 @@ const getImageUrl = (imagePath) => {
 
 watch([start_time, end_time], calculateTotalPrice)
 </script>
+
 
 <style scoped>
 /* Additional styling if needed */

@@ -15,7 +15,6 @@ class BookingResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-
         $startTime = new \DateTime($this->start_time);
         $endTime = new \DateTime($this->end_time);
         return [
@@ -29,8 +28,6 @@ class BookingResource extends JsonResource
             'payment_status' => $this->payment_status,
             'created_at' => $this->created_at->format('d-m-Y'),
             'updated_at' => $this->updated_at->format('d-m-Y'),
-            
         ];
     }
-    
 }
