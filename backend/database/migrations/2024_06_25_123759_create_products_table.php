@@ -10,24 +10,22 @@ return new class extends Migration
      * Run the migrations.
      */
     
-    public function up(): void
-    {
-        Schema::create('products', function (Blueprint $table) {
-            $table->id();
-            $table->string('image');
-            $table->string('name');
-            $table->text('description');
-            $table->decimal('price');
-            $table->foreignId('category_id')->nullable()->constrained()->onDelete('set null');
-            $table->timestamps();
-        });
-    }
-
-    /*
-     * Reverse the migrations.
-     */
-    public function down(): void
-    {
-        Schema::dropIfExists('products');
-    }
+     public function up(): void
+     {
+         Schema::create('products', function (Blueprint $table) {
+             $table->id();
+             $table->foreignId('owner_id')->constrained('users')->onDelete('cascade'); // Reference to the users table
+             $table->string('image');
+             $table->string('name');
+             $table->text('description');
+             $table->decimal('price', 8, 2); // Specify the precision and scale
+             $table->foreignId('category_id')->nullable()->constrained()->onDelete('set null');
+             $table->timestamps();
+         });
+     }
+ 
+     public function down(): void
+     {
+         Schema::dropIfExists('products');
+     }
 };

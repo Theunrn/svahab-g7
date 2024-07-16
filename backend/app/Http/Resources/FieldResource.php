@@ -22,7 +22,7 @@ class FieldResource extends JsonResource
             'price' => $this->price,
             'field_type' => $this->field_type,
             'owner' => $this->owner ? $this->owner->name : 'Unknown Owner',
-            'availablity' => $this->availablity
+            'province' => $this->province
         ];
     }
 }

@@ -14,7 +14,7 @@
             class="h-6 w-6"
           />
         </div>
-        <h1 class="text-darken mb-3 text-xl font-medium lg:px-14">Our Mission</h1>
+        <h1 class="text-darken mb-3 text-xl font-medium lg:px-14">Mission</h1>
         <p class="px-4 text-gray-500">
           To provide a seamless and efficient platform for football enthusiasts to discover, book,
           and manage football field reservations, ensuring easy access to quality sports facilities.
@@ -30,7 +30,7 @@
             class="h-6 w-6"
           />
         </div>
-        <h1 class="text-darken mb-3 text-xl font-medium lg:px-14">Our Vision</h1>
+        <h1 class="text-darken mb-3 text-xl font-medium lg:px-14">Vision</h1>
         <p class="px-4 text-gray-500">
           To be the leading platform in transforming the way football fields are booked and managed,
           empowering players with cutting-edge technology, and expanding access to quality sports

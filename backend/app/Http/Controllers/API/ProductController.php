@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
+
 class ProductController extends Controller
 {
    
@@ -39,6 +40,7 @@ class ProductController extends Controller
 
             $product = new Product();
             $product->name = $validatedData['name'];
+            $product->owner_id = Auth::id();
             $product->description = $validatedData['description'];
             $product->price = $validatedData['price'];
             $product->image = 'images/' . $imageName;

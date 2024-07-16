@@ -33,7 +33,7 @@
                     <p>No products found.</p>
                    
                 @else
-                    <table class="min-w-full​ divide-y divide-gray-200">
+                    <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
                                 <th class="py-4 px-6 bg-gray-100 font-bold text-sm text-gray-800 border-b border-gray-200">Image</th>
@@ -43,11 +43,12 @@
                                 <th class="py-4 px-1 bg-gray-100 font-bold text-sm text-gray-800 border-b border-gray-200">Price</th>
                                 <th class="py-4 px-1 bg-gray-100 font-bold text-sm text-gray-800 border-b border-gray-200">Colors</th>
                                 <th class="py-4 px-1 bg-gray-100 font-bold text-sm text-gray-800 border-b border-gray-200">Sizes</th>
-                                {{-- <th class="py-4 px-1 bg-gray-100 font-bold text-sm text-gray-800 border-b border-gray-200">Discounts</th> --}}
+                                <th class="py-4 px-1 bg-gray-100 font-bold text-sm text-gray-800 border-b border-gray-200">Discounts</th>
                                 <th class="py-4 px-1 bg-gray-100 font-bold text-sm text-gray-800 border-b border-gray-200">Action</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
+                            
                             @foreach ($products as $product)
                                 <tr class="hover:bg-gray-100">
                                     <td class="px-6 py-4 whitespace-nowrap">

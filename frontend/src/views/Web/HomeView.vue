@@ -1,9 +1,6 @@
 <template>
-  <WebLayout></WebLayout>
- <div class="div flex justify-content-center mt-3 relative z-10">
-    <img width="18%" height="18%" src="../../assets/image/logo1.png" alt="">
-  </div>
- <CardCom :user="authStore.user"></CardCom>
+  <WebLayout :customer="authStore.user"></WebLayout>
+ <CardCom :customer="authStore.user"></CardCom>
  <MatchTeam></MatchTeam>
 
  <MatchSchedule></MatchSchedule>

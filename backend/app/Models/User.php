@@ -4,69 +4,123 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Support\Str;
-use Spatie\Permission\Models\Role;
 
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var string[]
-     */
     protected $fillable = [
         'name',
         'email',
         'password',
         'phone_number',
-        'profile'
+        'profile',
+        'qr', // Ensure 'qr' field is in fillable array
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
     public static function store($request)
     {
+        // Initialize image path variable
+        $imagePath = null;
+
+        // Check if request has 'qr' file
+        if ($request->hasFile('qr')) {
+            // Validate 'qr' file
+            $request->validate([
+                'qr' => 'mimes:jpeg,png,jpg,gif,svg|max:20480',
+            ]);
+
+            // Store 'qr' file and get its path
+            $imagePath = $request->file('qr')->store('images', 'public');
+        }
+
+        // Create user with form data and image path
         $user = self::create([
             'name'              => $request->name,
             'email'             => $request->email,
             'password'          => bcrypt($request->password),
             'phone_number'      => $request->phone_number,
+            'qr'                => $imagePath ? Storage::url($imagePath) : null, // Store URL if image uploaded, otherwise null
             'email_verified_at' => now(),
             'remember_token'    => Str::random(20),
         ]);
+    
+        // Assign the role
+        if ($request->roles) {
+            $user->assignRole($request->roles);
+        } else {
+            $user->assignRole('owner');
+        }
         
-        $user->assignRole('owner');
-        // Create the token for API access
-        $token = $user->createToken('auth_token')->plainTextToken;
-        return $token;
+        // Assign role or perform any other operations as needed
+
+        return $user;
     }
 
     public function customer(): HasOne
     {
         return $this->hasOne(Customer::class);
+    }
+
+    public function fields()
+    {
+        return $this->hasMany(Field::class, 'owner_id');
+    }
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'owner_id');
+    }
+    public function categories()
+    {
+        return $this->hasMany(Category::class, 'owner_id');
+    }
+
+    public function isAdmin()
+    {
+        return $this->hasRole('admin');
+    }
+    public function isCustomer()
+    {
+        return $this->hasRole('customer');
+    }
+    public function addToCards()
+    {
+        return $this->hasMany(AddToCard::class);
+    }
+
+    public function deliveries()
+    {
+        return $this->hasMany(Delivery::class);
+    }
+
+    public function payments()
+    {
+        return $this->hasManyThrough(Payment::class, Product::class);
+    }
+    public function feedbacks()
+    {
+        return $this->hasMany(Feedback::class);
+    }
+    public function posts(): HasMany
+    {
+        return $this->hasMany(Post::class);
     }
     
 }

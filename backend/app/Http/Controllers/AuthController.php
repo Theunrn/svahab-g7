@@ -18,47 +18,53 @@ class AuthController extends Controller
             'email'     => 'required|string|max:255',
             'password'  => 'required|string'
         ]);
-
+    
         if ($validator->fails()) {
             return response()->json($validator->errors());
         }
-
+    
         $credentials = $request->only('email', 'password');
-
-        if (!Auth::attempt($credentials)) {
+        $user = User::where('email', $request->email)->first();
+        if (!$user) {
             return response()->json([
                 'message' => 'User not found'
             ], 401);
         }
-
-        $user   = User::where('email', $request->email)->firstOrFail();
-        $token  = $user->createToken('auth_token')->plainTextToken;
-
+    
+        $token = $user->createToken('auth_token')->plainTextToken;
+    
         return response()->json([
             'message'       => 'Login success',
             'access_token'  => $token,
             'token_type'    => 'Bearer'
         ]);
     }
-
+    
     public function index(Request $request)
     {
         if (Auth::check()) {
             $user = $request->user();
-            // $token = $request->bearerToken();
+            $token = $request->bearerToken();
             return response()->json([
                 'message' => 'Login success',
                 'data' => $user,
-                // 'access_token'  => $token,
-                // 'token_type'    => 'Bearer'
+                'access_token'  => $token,
+                'token_type'    => 'Bearer'
             ]);
         } else {
             return  response()->json(['error' => 'User not found'], 404);
         }
     }
+    public function show($id){
+        $user = User::find($id);
+        return response()->json(['success' => true, 'data' =>$user]);
+
+    }
+   
     public function register(RegisterRequest $request)
     {
-        $token = User::store($request);
+        $user = User::store($request);
+        $token  = $user->createToken('auth_token')->plainTextToken;
         return response()->json([
             'message'       => 'Register success',
             'access_token'  => $token,
@@ -75,8 +81,12 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
 
-        $request->user()->currentAccessToken()->delete();
-        
+
+        $user = $request->user();
+
+        // Revoke the user's current token
+        $user->tokens()->delete();
         return response()->json(['message' => 'Successfully logged out']);
     }
+    
 }

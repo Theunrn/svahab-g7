@@ -2,38 +2,46 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Feedback extends Model
 {
-    use HasFactory;
+
+    // Fillable attributes for mass assignment
     protected $fillable = [
-        'user_id',
-        'field_id',
-        'feedback_text',
+        'user_id', 'field_id', 'feedback_text'
     ];
 
-    public function users():BelongsTo
+    // Define relationship with User
+
+    public function user()
     {
-        return $this->belongsTo(User::class, 'user_id','id');
-    }
-    public function field()
-    {
-        return $this->belongsTo(Field::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
-    public static function store($request, $id = null){
-        $data = $request->only('user_id', 'field_id', 'feedback_text');
-        $data = self::updateOrCreate(['id' => $id], $data);
-        return $data;
-        
-    }
-    public static function destroy($id)
+    // Define relationship with Field
+    public function field()
     {
-        $data = self::find($id);
-        $data->delete();
-        return $data;
+        return $this->belongsTo(Field::class, 'field_id');
     }
+
+    // Get list of feedbacks with related fields
+    // public static function list()
+    // {
+    //     return self::with('field')->get();
+    // }
+
+    public static function list()
+    {
+        return self::with(['user', 'field'])->get();
+    }
+
+
+    // Get feedback by field ID
+    public static function getByField($fieldId)
+    {
+        return self::where('field_id', $fieldId)->firstOrFail();
+    }
+
+
 }

@@ -1,7 +1,7 @@
 <x-guest-layout>
-    <div class="font-sans min-h-screen antialiased bg-gray-900 pt-24 pb-5">
-        <div class="flex flex-col justify-center sm:w-96 sm:m-auto mx-5 mb-5 space-y-8">
-          <h1 class="font-bold text-center text-4xl text-yellow-500">Admin<span class="text-blue-500">Login</span></h1>
+    <div class="font-sans min-h-screen antialiased bg-gray-900 pt-10 pb-5">
+        <div class="flex flex-col justify-center sm:w-96 sm:m-auto mx-5 mb-3 space-y-3">
+          <h1 class="font-bold text-center text-4xl text-yellow-500">S<span class="text-blue-500">vahab</span></h1>
             <!-- Session Status -->
             <x-auth-session-status class="mb-4" :status="session('status')" />
             <!-- Validation Errors -->
@@ -18,13 +18,15 @@
               <div class="flex flex-col space-y-1">
                 <input type="password" name="password" id="password" class="border-2 rounded px-3 py-2 w-full focus:outline-none focus:border-blue-400 focus:shadow" placeholder="Password" required autocomplete="current-password"/>
               </div>
-
-
-
+              <p class="text-sm font-light text-gray-500 dark:text-gray-400">
+                <a href="#" class="font-medium text-blue-600 hover:underline dark:text-primary-500">Forget Password</a>
+             </p>
               <div class="flex flex-col-reverse sm:flex-row sm:justify-between items-center">
-
-                <button type="submit" class="bg-blue-500 text-white font-bold px-5 py-2 rounded focus:outline-none shadow hover:bg-blue-700 transition-colors m-auto">Log In</button>
+                <button type="submit" class=" w-full bg-blue-500 text-white font-bold px-5 py-2 rounded focus:outline-none shadow hover:bg-blue-700 transition-colors m-auto">Log In</button>
               </div>
+              <p class="text-sm font-light text-gray-500 dark:text-gray-400">
+                 Doesn't have account yet !  <a href="{{ route('payment.form') }}" class="font-medium text-blue-600 hover:underline dark:text-primary-500">Create account</a>
+              </p>
             </div>
           </form>
           <div class="flex justify-center text-gray-500 text-sm">

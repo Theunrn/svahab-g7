@@ -18,7 +18,7 @@ class Field extends Model
         'price',
         'field_type',
         'owner_id',
-        'availablity',
+        'province',
     ];
     public function feedbacks()
     {
@@ -33,7 +33,7 @@ class Field extends Model
     }
     public static function store($request, $id = null) {
 
-        $data = $request->only('name', 'location', 'price', 'field_type','owner_id', 'availablity');
+        $data = $request->only('name', 'location', 'price', 'field_type','owner_id', 'province');
         $imageName = time() . '.' . $request->image->extension();
         $request->image->storeAs('public/images', $imageName);
         $data['image'] = 'images/' . $imageName;

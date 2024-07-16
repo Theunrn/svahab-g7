@@ -22,6 +22,8 @@
     },
     "dependencies": {
         "@fortawesome/fontawesome-free": "^6.5.2",
-        "vue-multiselect": "^3.0.0"
+        "gapi-script": "^1.2.0",
+        "vue-multiselect": "^3.0.0",
+        "vuedraggable": "^2.24.3"
     }
 }

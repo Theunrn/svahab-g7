@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\FeedbackController;
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ProductController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\FieldController;
@@ -8,7 +10,12 @@ use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\DiscountController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\BookingController;
+use App\Http\Controllers\Admin\ChatCotroller;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\SlideshowController; // Add this line
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\SlideshowAdminController; // Add this line
 use App\Http\Controllers\MailController;
 use Faker\Core\File;
@@ -79,27 +86,87 @@ Route::namespace('App\Http\Controllers\Admin')->name('admin.')->prefix('admin')
         Route::resource('fields', 'FieldController');
         Route::resource('bookings', 'BookingController');
         Route::resource('settings', 'SettingController');
-        Route::resource('slideshow', 'SlideShowController'); // Update this line
+        Route::resource('slideshow', 'SlideShowController');
         Route::resource('products', 'ProductController');
         Route::resource('categories', 'CategoryController');
         Route::resource('payments', 'PaymentController');
-        Route::resource('feedbacks', 'FeedbackController');
+        // Route::resource('feedbacks', 'FeedbackController');
+
+        Route::resource('admin/feedbacks', FeedbackController::class);
+
         Route::resource('orders', 'OrderController');
         Route::resource('discounts', 'DiscountController');
+        Route::resource('chats', 'ChatCotroller');
 
         Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
         Route::put('/profile-update', [ProfileController::class, 'update'])->name('profile.update');
         Route::get('/mail', [MailSettingController::class, 'index'])->name('mail.index');
         Route::put('/mail-update/{mailsetting}', [MailSettingController::class, 'update'])->name('mail.update');
     });
-    //Booking
-    Route::get('/admin/bookings/{id}/cancel', [BookingController::class, 'cancel'])->name('admin.bookings.cancel');
-    Route::get('/admin/bookings/{id}/rebook', [BookingController::class, 'reStore'])->name('admin.bookings.rebook');
-    Route::get('/admin/bookings/{id}/accept', [BookingController::class, 'accept'])->name('admin.bookings.accept');
-    Route::get('/admin/bookings/{id}/reject', [BookingController::class, 'reject'])->name('admin.bookings.reject');
+Route::get('/admin/bookings/{id}/cancel', [BookingController::class, 'cancel'])->name('admin.bookings.cancel');
+Route::get('/admin/bookings/{id}/rebook', [BookingController::class, 'reStore'])->name('admin.bookings.rebook');
+Route::get('/admin/bookings/{id}/accept', [BookingController::class, 'accept'])->name('admin.bookings.accept');
+Route::get('/admin/bookings/{id}/reject', [BookingController::class, 'reject'])->name('admin.bookings.reject');
+Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
-    //Order
-    Route::get('/admin/orders/{id}/cancel', [OrderController::class, 'cancel'])->name('admin.orders.cancel');
-    Route::get('/admin/orders/{id}/accept', [OrderController::class, 'confirm'])->name('admin.orders.confirm');
 
-    Route::get('/send-email', [MailController::class, 'sendEmail']);
+//User
+Route::get('/users/create', [UserController::class, 'createAccount'])->name('users.create');
+Route::post('/register/store', [UserController::class, 'register'])->name('register.store');
+Route::get('/admin/loginform', [UserController::class, 'loginform'])->name('admin.loginform');
+
+// Route::resource('dashboards', DashboardController::class);
+
+// Chat routes
+Route::middleware(['auth'])->group(function () {
+    Route::get('/chats/list', [ChatCotroller::class, 'index'])->name('chats.index');
+    Route::post('/chats/create', [ChatCotroller::class, 'store'])->name('chats.store');
+});
+
+
+
+// Route::prefix('admin')->middleware(['auth'])->group(function () {
+//     // Other admin routes...
+
+//     Route::resource('dashboards', DashboardController::class);
+// });
+
+
+Route::get('/admin/categories', [CategoryController::class, 'index'])->name('admin.categories.index');
+
+
+//Order
+Route::get('/admin/orders/{id}/cancel', [OrderController::class, 'cancel'])->name('admin.orders.cancel');
+Route::get('/admin/orders/{id}/accept', [OrderController::class, 'confirm'])->name('admin.orders.confirm');
+
+//payment
+Route::get('/payment/list', [PaymentController::class, 'index'])->name('admin.payment.list');
+Route::get('/payment/form', [PaymentController::class, 'showPaymentForm'])->name('payment.form');
+Route::get('/payment/month', [PaymentController::class, 'showPaymentFormMonth'])->name('payment.month');
+Route::post('/payment/intent', [PaymentController::class, 'createPaymentIntent'])->name('payment.intent');
+Route::post('/stripe/payment', [PaymentController::class, 'makePayment'])->name('payment.process');
+
+
+Route::get('/admin/orders', function () {
+    return "Route reached";
+});
+
+Route::get('/admin/orders', [OrderController::class, 'index']);
+
+Route::get('/admin/orders', [OrderController::class, 'index'])->name('admin.orders.index');
+Route::get('/admin/orders/confirm/{id}', [OrderController::class, 'confirm'])->name('admin.orders.confirm');
+Route::get('/admin/orders/cancel/{id}', [OrderController::class, 'cancel'])->name('admin.orders.cancel');
+
+
+
+Route::middleware(['auth'])->prefix('admin')->group(function () {
+    Route::get('orders', [OrderController::class, 'index'])->name('admin.orders.index');
+    Route::get('orders/confirm/{id}', [OrderController::class, 'confirm'])->name('admin.orders.confirm');
+    Route::get('orders/cancel/{id}', [OrderController::class, 'cancel'])->name('admin.orders.cancel');
+});
+Route::post('/admin/users', [UserController::class, 'store'])->name('admin.users.store');
+
+
+
+
+// Route::get('/send-email', [MailController::class, 'sendEmail']);

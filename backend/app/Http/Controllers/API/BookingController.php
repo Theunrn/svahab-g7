@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BookingRequest;
 use App\Http\Resources\BookingResource;
+use App\Http\Resources\BookingShowResource;
 use App\Models\Booking;
 use App\Models\Notification;
 use Illuminate\Http\Request;
@@ -34,8 +35,8 @@ class BookingController extends Controller
      */
     public function store(BookingRequest $request)
     {
-        Booking::store($request);
-        return response()->json(['success' => true, 'message' => "Booking created succesfully"], 201);
+        $booking =  Booking::store($request);
+        return response()->json(['success' => true, 'message' => "Booking created succesfully", 'data'=> $booking], 201);
     }
 
     /**
@@ -44,7 +45,7 @@ class BookingController extends Controller
     public function show(string $id)
     {
         $booking = Booking::find($id);
-        $booking = new BookingResource($booking);
+        $booking = new BookingShowResource($booking);
         return response()->json(['success' => true, 'data' => $booking]);
     }
 
@@ -121,5 +122,26 @@ class BookingController extends Controller
             return response()->json(['error' => 'No bookings found for this user'], 404);
         }
         return response()->json($bookings, 200);
+    }
+    public function updateStatusPaymentBooking($id)
+    {
+        $booking = Booking::find($id);
+        if (!$booking) {
+            // Handle the case where the booking is not found
+            return response()->json(['error', 'Booking not found'], 404);
+        }
+
+        $booking->payment_status = 'paid';
+        $booking->save(); // Save the updated status to the database
+
+        return  response()->json(['success', 'Payment status updated successfully'], 200);
+    }
+
+    public function destroy($id)
+    {
+        $booking = Booking::findOrFail($id);
+        $booking->delete();
+
+        return response()->json(['message' => 'Booking deleted successfully']);
     }
 }

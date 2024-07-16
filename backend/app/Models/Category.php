@@ -8,7 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Category extends Model
 {
     use HasFactory;
-    protected $fillable = ['name'];
+    use HasFactory;
+
+    protected $fillable = [
+        'name',
+        'owner_id', // Add this field to fillable
+    ];
     public function products()
     {
         return $this->hasMany(Product::class);
@@ -17,6 +22,11 @@ class Category extends Model
     public function discounts()
     {
         return $this->hasManyThrough(Discount::class, Product::class);
+    }
+
+    public function owner()
+    {
+        return $this->belongsTo(User::class, 'owner_id');
     }
     
 }

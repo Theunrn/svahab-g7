@@ -11,7 +11,7 @@ class SlideShowController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
     {
         $slideshows = SlideShow::all();
         return view('setting.slideshow.index', compact('slideshows'));

@@ -23,6 +23,10 @@ class OrderProductController extends Controller
         // Retrieve orders for the authenticated user
         $orders = Order::where('user_id', $user->id)->with('products')->get();
 
+        $orders->each(function ($order) {
+            $order->total_amount = $order->total_amount; // This line is redundant if total_amount is already an attribute
+        });
+        $orders = OrderProductResource::collection($orders);
         return response()->json(['success' => true, 'data' => $orders], 200);
     }
 
@@ -34,34 +38,34 @@ class OrderProductController extends Controller
             'qty' => 'required|integer|min:1',
             'color_id' => 'nullable|exists:colors,id',
             'size_id' => 'nullable|exists:sizes,id',
+            'total_amount' => 'nullable',
         ]);
 
         $order = Order::createOrder($validatedData);
 
         return response()->json(['message' => 'Order created successfully', 'order' => $order], 201);
     }
-
+   
     public function show($id)
     {
         // Get authenticated user (customer)
-        $user = Auth::user();
+        // $user = Auth::user();
 
         // Find the order with products for the authenticated user
-        $order = Order::where('user_id', $user->id)->with('products')->findOrFail($id);
+        $order = Order::with('products')->findOrFail($id);
 
         return response()->json(['success' => true, 'data' => $order], 200);
     }
 
 
     public function cancel($id)
-    {
-        {
+    { {
             $user = Auth::user();
             $order = Order::where('user_id', $user->id)->findOrFail($id);
-    
+
             $order->status = 'cancelled';
             $order->save();
-    
+
             // Create a notification for order cancellation
             Notification::create([
                 'user_id' => $user->id,
@@ -73,33 +77,19 @@ class OrderProductController extends Controller
                 ]),
                 'read' => false,
             ]);
-    
+
             return response()->json(['message' => 'Order cancelled successfully'], 200);
         }
     }
     public function confirm(Request $request, $id)
     {
         $user = Auth::user();
-        $order = Order::findOrFail($id);
+        $order = Order::where('user_id', $user->id)->findOrFail($id);
 
-        // Confirm the order
-        $order->confirmOrder();
+        $response = $order->cancelOrder();
 
-        // Create a notification for order confirmation
-        Notification::create([
-            'user_id' => $order->user_id,
-            'notification_type' => 'order_confirmed',
-            'notification_text' => 'Your order has been confirmed.',
-            'notification_data' => json_encode([
-                'order_id' => $order->id,
-                'confirmed_at' => now(),
-            ]),
-            'read' => false,
-        ]);
-
-        return response()->json(['message' => 'Order confirmed successfully'], 200);
+        return response()->json($response, $response['message'] === 'Order cancelled successfully' ? 200 : 400);
     }
-
 
 
     public function reactivate($id)
@@ -112,7 +102,6 @@ class OrderProductController extends Controller
             return response()->json(['message' => 'Order is not cancelled, cannot reactivate'], 400);
         }
     }
-    // app/Http/Controllers/OrderController.php
     public function getOrdersByUserId($id)
     {
         $orders = Order::where('user_id', $id)->get();
@@ -121,5 +110,18 @@ class OrderProductController extends Controller
             return response()->json(['error' => 'No orders found for this user'], 404);
         }
         return response()->json($orders, 200);
+    }
+    public function updateStatusPaymentOrder($id)
+    {
+        $order = Order::find($id);
+        if (!$order) {
+            // Handle the case where the order is not found
+            return response()->json(['error', 'Order not found'], 404);
+        }
+
+        $order->payment_status = 'paid';
+        $order->save(); // Save the updated status to the database
+
+        return  response()->json(['success', 'Payment status updated successfully'], 200);
     }
 }

@@ -14,9 +14,12 @@ return new class extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id');
-            $table->integer('amount');
+            $table->integer('owner_id');
+            $table->decimal('amount', 5, 2);
             $table->date('payment_date');
-            $table->string('status');
+            $table->string('code');
+            $table->string('method');
+            $table->string('currency');
             $table->timestamps();
         });
     }

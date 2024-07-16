@@ -4,18 +4,50 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class Product extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'description', 'price', 'image', 'color', 'size', 'category_id'];
+    protected $fillable = ['image', 'name', 'description', 'owner_id', 'price', 'color', 'size', 'category_id'];
+
+    public function index(Request $request)
+    {
+        $date = $request->input('date');
+        $status = $request->input('status');
+        $ordersQuery = Order::query();
+
+        if ($date) {
+            $ordersQuery->whereDate('created_at', $date);
+        }
+
+        $orders = $ordersQuery->with(['user', 'products.colors', 'products.sizes'])->get();
+
+        return view('setting.orders.index', compact('orders'));
+    }
+
+    public function show($id)
+    {
+        $order = Order::with(['user', 'products.colors', 'products.sizes'])->find($id);
+
+        if (!$order) {
+            return redirect()->route('admin.orders.index')->with('error', 'Order not found');
+        }
+
+        return view('setting.orders.show', compact('order'));
+    }
+
 
     public function category()
     {
         return $this->belongsTo(Category::class);
     }
-
+    public function owner()
+    {
+        return $this->belongsTo(User::class, 'owner_id');
+    }
     public function colors()
     {
         return $this->belongsToMany(Color::class, 'product_colors', 'product_id', 'color_id');
@@ -38,6 +70,28 @@ class Product extends Model
             ->withTimestamps();
     }
 
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
+
+    // Payment.php model
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function addToCards()
+    {
+        return $this->hasMany(AddToCard::class);
+    }
+
     public function getDiscountedPriceAttribute()
     {
         $originalPrice = $this->price;
@@ -45,7 +99,7 @@ class Product extends Model
 
         foreach ($this->discounts as $discount) {
             $discountAmount = $originalPrice * ($discount->discount / 100);
-            $discountedPrice -= $discountAmount; 
+            $discountedPrice -= $discountAmount;
             break;
         }
 
@@ -71,10 +125,9 @@ class Product extends Model
         } else {
             $data['image'] = $request->input('image');
         }
+        $data['owner_id'] = Auth::id();
 
         $product = self::updateOrCreate(['id' => $id], $data);
         return $product;
-
     }
-    
 }

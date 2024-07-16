@@ -7,12 +7,13 @@ use App\Http\Requests\FieldRequest;
 use App\Http\Resources\FieldResource;
 use App\Models\Field;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class FieldController extends Controller
 {
     public function index()
     {
-        $fields = Field::all();
+        $fields = auth()->user()->isAdmin() ? Field::all() : auth()->user()->fields;
         $fields = FieldResource::collection($fields);
         return view('setting.fields.index', compact('fields'));
     }
@@ -30,24 +31,35 @@ class FieldController extends Controller
     $imageName = time() . '.' . $request->image->extension();
     $request->image->storeAs('public/images', $imageName);
     $validated['image'] = 'images/' . $imageName; 
+    $validated['owner_id'] = Auth::id();
     Field::create($validated);
     return redirect()->route('admin.fields.index')->with('success', 'Field created successfully.');
 }
 
     public function show($id)
     {
-        //
+        $validated = $request->validated();
+        
+        if ($request->hasFile('image')) {
+            $imageName = time() . '.' . $request->image->extension();
+            $request->image->storeAs('public/images', $imageName);
+            $validated['image'] = 'images/' . $imageName;
+        }
+        
+        Field::create($validated);
+        
+        return redirect()->route('admin.fields.index')->with('success', 'Field created successfully.');
     }
 
     public function edit($id)
     {
-        $field = Field::find($id);
+        $field = Field::findOrFail($id);
         return view('setting.fields.edit', compact('field'));
     }
 
-    public function update(Request $request, Field $field)
+    public function update(FieldRequest $request, Field $field)
     {
-        
+        $validated = $request->validated();
         // Validate incoming request
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
@@ -55,31 +67,28 @@ class FieldController extends Controller
             'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg,jfif,webp|max:2048',
             'price' => 'required|numeric|min:0',
             'field_type' => 'required|string|max:255',
-            'owner_id' => 'required|integer',
-            'availablity' => 'required|boolean',
+            'owner_id' => 'nullable',
+            'province' => 'required|string',
         ]);
 
-        // Handle file upload (image) if provided
         if ($request->hasFile('image')) {
             $imageName = time() . '.' . $request->image->extension();
             $request->image->storeAs('public/images', $imageName);
-            $field->image = 'images/' . $imageName; // assuming storage symlink is set up
+            $validated['image'] = 'images/' . $imageName;
         }
 
+        $field->update($validated);
         // Update field details
         $field->name = $validatedData['name'];
         $field->location = $validatedData['location'];
         $field->price = $validatedData['price'];
         $field->field_type = $validatedData['field_type'];
-        $field->owner_id = $validatedData['owner_id'];
-        $field->availablity = $validatedData['availablity'];
+        $field->province = $validatedData['province'];
        
         $field->save();
 
-        // Redirect back with success message
         return redirect()->route('admin.fields.index')->with('success', 'Field updated successfully.');
     }
-
 
     public function destroy($id)
     {
