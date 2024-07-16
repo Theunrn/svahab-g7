@@ -23,9 +23,9 @@
                             </tr>
                         </thead>
                         <tbody id="categories-table-body">
-                            @foreach ($categories as $category)
+                            @foreach ($categories as $index => $category)
                             <tr class="hover:bg-grey-lighter">
-                                <td class="py-4 px-6 border-b border-grey-light">{{ $category->id }}</td>
+                                <td class="py-4 px-6 border-b border-grey-light">{{ $index+1 }}</td>
                                 <td class="py-4 px-6 border-b border-grey-light">{{ $category->name }}</td>
                                 <td class="py-4 px-6 border-b border-grey-light text-right">
                                     <a href="{{ route('admin.categories.edit', $category->id) }}" class="text-grey-lighter font-bold py-1 px-3 rounded text-xs bg-green hover:bg-green-dark text-blue-400">Edit</a>

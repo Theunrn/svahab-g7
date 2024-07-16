@@ -102,4 +102,26 @@ class OrderProductController extends Controller
             return response()->json(['message' => 'Order is not cancelled, cannot reactivate'], 400);
         }
     }
+    public function getOrdersByUserId($id)
+    {
+        $orders = Order::where('user_id', $id)->get();
+        $orders = OrderProductResource::collection($orders);
+        if ($orders->isEmpty()) {
+            return response()->json(['error' => 'No orders found for this user'], 404);
+        }
+        return response()->json($orders, 200);
+    }
+    public function updateStatusPaymentOrder($id)
+    {
+        $order = Order::find($id);
+        if (!$order) {
+            // Handle the case where the order is not found
+            return response()->json(['error', 'Order not found'], 404);
+        }
+
+        $order->payment_status = 'paid';
+        $order->save(); // Save the updated status to the database
+
+        return  response()->json(['success', 'Payment status updated successfully'], 200);
+    }
 }
