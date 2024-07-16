@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('team_post_id');
             $table->string('team_name');
-            $table->string('team_logo');
+            $table->string('team_logo')->nullable();
             $table->timestamps();
         });
     }

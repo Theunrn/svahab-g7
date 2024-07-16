@@ -3,6 +3,10 @@ import 'bootstrap/dist/js/bootstrap.js' // Import Bootstrap JS
 // import 'boxicons/css/boxicons.min.css';
 import "./assets/tailwind.css";
 import './assets/main.css'
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+
+dayjs.extend(relativeTime);
 
 const app = createApp(App)
 import { createApp } from 'vue'

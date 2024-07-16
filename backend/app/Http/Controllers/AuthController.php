@@ -18,29 +18,28 @@ class AuthController extends Controller
             'email'     => 'required|string|max:255',
             'password'  => 'required|string'
         ]);
-
+    
         if ($validator->fails()) {
             return response()->json($validator->errors());
         }
-
+    
         $credentials = $request->only('email', 'password');
-
-        if (!Auth::attempt($credentials)) {
+        $user = User::where('email', $request->email)->first();
+        if (!$user) {
             return response()->json([
                 'message' => 'User not found'
             ], 401);
         }
-
-        $user   = User::where('email', $request->email)->firstOrFail();
-        $token  = $user->createToken('auth_token')->plainTextToken;
-
+    
+        $token = $user->createToken('auth_token')->plainTextToken;
+    
         return response()->json([
             'message'       => 'Login success',
             'access_token'  => $token,
             'token_type'    => 'Bearer'
         ]);
     }
-
+    
     public function index(Request $request)
     {
         if (Auth::check()) {

@@ -4,6 +4,7 @@
 
 
 use App\Http\Controllers\Admin\FieldController;
+use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\API\BookingController;
@@ -27,10 +28,14 @@ use App\Http\Controllers\API\DeliveryController;
 use App\Http\Controllers\API\EventController;
 use App\Http\Controllers\API\MatchTeamController;
 use App\Http\Controllers\API\ProfileController;
+use App\Http\Controllers\API\ScheduleMatchController as APIScheduleMatchController;
 use App\Http\Controllers\Auth\ProfileController as AuthProfileController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ScheduleMatchController;
 use App\Http\Controllers\StripePaymentController;
 use App\Http\Resources\FeedbackResource;
+use App\Models\Post;
+use App\Models\ScheduleMatch;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 // use App\Http\Controllers\API\FeedbackController;
@@ -136,19 +141,15 @@ Route::get('/customer/orders/{id}', [OrderProductController::class, 'getOrdersBy
 Route::get('/notifications/list/{id}', [NotificationController::class, 'getNotificationsByUserId']);
 Route::put('/notification/update/{id}', [NotificationController::class, 'updateNotification']);
 Route::delete('/notifications/delete/{id}', [NotificationController::class, 'destroy']);
+Route::post('/notifications/store', [NotificationController::class, 'store']);
 
-// Notification routes
-// Route::get('/notifications', [NotificationController::class, 'index']);
-// Route::post('/notifications', [NotificationController::class, 'store']);
-// Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead']);
-// Route::delete('/notifications/{id}', [NotificationController::class, 'destroy']);
 
 //Payment
 Route::post('/stripe/payment', [StripePaymentController::class, 'makePayment']);
 Route::post('/payment/create', [APIPaymentController::class, 'createPayment']);
 Route::get('/payment/list', [APIPaymentController::class, 'index']);
 Route::put('/update/payment/booking/{id}', [BookingController::class, 'updateStatusPaymentBooking']);
-Route::put('/update/payment/order/{id}', [OrderController::class, 'updateStatusPaymentOrder']);
+Route::put('/update/payment/order/{id}', [OrderProductController::class, 'updateStatusPaymentOrder']);
 Route::delete('/customer/orders/delete/{id}', [OrderProductController::class,'deleteOrder']);
 
 
@@ -163,6 +164,19 @@ Route::middleware('auth:sanctum')->group(function () {
 //team post and match 
 Route::post('/post/match', [MatchTeamController::class,'store']);
 Route::get('/match/list', [MatchTeamController::class,'index']);
+Route::get('/match/delete/{id}', [MatchTeamController::class,'destroy']);
+
+Route::post('/schedule/create', [APIScheduleMatchController::class,'store']);
+Route::get('/schedule/list', [APIScheduleMatchController::class,'index']);
+
+Route::delete('/post/delete/{id}', [PostController::class,'destroy']);
+Route::get('/post/show/{id}', [PostController::class, 'show']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/posts', [PostController::class, 'store']);
+    Route::get('/post/list', [PostController::class, 'index']);
+});
+Route::get('/latest-post-team', [PostController::class, 'getLatestPostTeam']);
 
 //event
 Route::post('/event/create', [EventController::class,'store']);
@@ -170,16 +184,13 @@ Route::get('/event/list/{id}', [EventController::class,'index']);
 Route::get('/event/show/{id}', [EventController::class,'show']);
 
 
-// Route::apiResource('feedback', FeedbackController::class);
-
-
-
 Route::middleware('auth:sanctum')->group(function () {
 
-    Route::get('/feedbacks', [FeedbackController::class, 'index']);
+    Route::get('/feedbacks/{id}', [FeedbackController::class, 'index']);
     Route::post('feedback/create', [FeedbackController::class, 'store']);
     Route::get('feedback/show/{id}', [FeedbackController::class, 'show']);
     Route::put('feedback/update/{id}', [FeedbackController::class, 'update']);
     Route::delete('feedback/delete/{id}', [FeedbackController::class, 'destroy']);
 });
+
 

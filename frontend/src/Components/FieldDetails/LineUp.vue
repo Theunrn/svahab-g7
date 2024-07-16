@@ -2,58 +2,87 @@
   <div class="header-text mt-5">
     <div class="header-detail">
       <div class="select absolute mt-17 bg-green bg-opacity-900 z-20 rounded-lg w-full md:w-5/5 lg:w-9/10 ml-16 flex justify-center items-center">
-        <router-link href="#" class="menu-item">
+        <router-link :to="{path: '/field/detail/' + fieldId, query:{customer:userId}}"  class="menu-item">
           <i class="bx bx-home text-2xl"></i>
-          <span>Home</span>
+          <span>Fields</span>
         </router-link>
-        <router-link to="/scheduleField" href="#" class="menu-item">
+        <router-link :to="{path: '/scheduleField', query:{field:fieldId, user:userId}}" href="#" class="menu-item">
           <i class="bx bx-calendar text-2xl"></i>
           <span>Schedule</span>
         </router-link>
-        <router-link to="/lineUp" href="#" class="menu-item">
+        <router-link :to="{path: '/lineUp', query:{field:fieldId, user:userId}}" href="#" class="menu-item bg-white text-dark border-t-4 border-orange-500">
           <i class="bx bx-line-chart text-2xl"></i>
           <span>Line Up</span>
         </router-link>
+        <!-- Select Option Form -->
+        <select v-model="selectedOption" class="select-option ml-4 p-2 rounded-lg">
+          <option disabled value="">Please select one</option>
+          <option value="option1">Option 11 player</option>
+          <option value="option2">Option 7 player</option>
+        </select>
       </div>
       <div class="image-container">
         <img src="../../assets/image/background.jpg" alt="Background Image">
-        <!-- Team Red Circles -->
-        <div class="circle team-a" style="top: 60%; left: 8.4%;"></div>
-
-        <div class="circle team-a" style="top: 30%; left: 22%;"></div>
-        <div class="circle team-a" style="top: 45%; left: 18%;"></div>
-        <div class="circle team-a" style="top: 76%; left: 18%;"></div>
-        <div class="circle team-a" style="top: 92%; left: 22%;"></div>
-
-        <div class="circle team-a" style="top: 30%; left: 32%;"></div>
-        <div class="circle team-a" style="top: 60%; left: 32%;"></div>
-        <div class="circle team-a" style="top: 92%; left: 32%;"></div>
-
-        <div class="circle team-a" style="top: 30%; left: 43%;"></div>
-        <div class="circle team-a" style="top: 60%; left: 43%;"></div>
-        <div class="circle team-a" style="top: 92%; left: 43%;"></div>
-        <!-- Team Blue Circles -->
-        <div class="circle team-b" style="top: 30%; left: 58%;"></div>
-        <div class="circle team-b" style="top: 60%; left: 58%;"></div>
-        <div class="circle team-b" style="top: 92%; left: 58%;"></div>
-
-        <div class="circle team-b" style="top: 30%; left: 68%;"></div>
-        <div class="circle team-b" style="top: 60%; left: 68%;"></div>
-        <div class="circle team-b" style="top: 92%; left: 68%;"></div>
-
-        <div class="circle team-b" style="top: 30%; left: 78%;"></div>
-        <div class="circle team-b" style="top: 45%; left: 83%;"></div>
-        <div class="circle team-b" style="top: 76%; left: 83%;"></div>
-        <div class="circle team-b" style="top: 92%; left: 78%;"></div>
-        
-        <div class="circle team-b" style="top: 60%; left: 93%;"></div>
+        <!-- Team Circles -->
+        <div v-for="(position, index) in selectedLineup" :key="index" :class="`circle ${position.team}`" :style="{ top: position.top, left: position.left }"></div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref, computed } from 'vue';
+import { useRoute } from 'vue-router'
+const route = useRoute()
+const userId = computed(() => route.query.user)
+const fieldId = computed(() => route.query.field)
+const selectedOption = ref('');
 
+const lineups = {
+  option1: [
+    { team: 'team-a', top: '60%', left: '8.4%' },
+    { team: 'team-a', top: '30%', left: '22%' },
+    { team: 'team-a', top: '45%', left: '18%' },
+    { team: 'team-a', top: '76%', left: '18%' },
+    { team: 'team-a', top: '92%', left: '22%' },
+    { team: 'team-a', top: '30%', left: '32%' },
+    { team: 'team-a', top: '60%', left: '32%' },
+    { team: 'team-a', top: '92%', left: '32%' },
+    { team: 'team-a', top: '30%', left: '43%' },
+    { team: 'team-a', top: '60%', left: '43%' },
+    { team: 'team-a', top: '92%', left: '43%' },
+    { team: 'team-b', top: '30%', left: '58%' },
+    { team: 'team-b', top: '60%', left: '58%' },
+    { team: 'team-b', top: '92%', left: '58%' },
+    { team: 'team-b', top: '30%', left: '68%' },
+    { team: 'team-b', top: '60%', left: '68%' },
+    { team: 'team-b', top: '92%', left: '68%' },
+    { team: 'team-b', top: '30%', left: '78%' },
+    { team: 'team-b', top: '45%', left: '83%' },
+    { team: 'team-b', top: '76%', left: '83%' },
+    { team: 'team-b', top: '92%', left: '78%' },
+    { team: 'team-b', top: '60%', left: '93%' },
+  ],
+  option2: [
+    { team: 'team-a', top: '60%', left: '8.4%' },
+    { team: 'team-a', top: '30%', left: '40%' },
+    { team: 'team-a', top: '45%', left: '22%' },
+    { team: 'team-a', top: '60%', left: '32%' },
+    { team: 'team-a', top: '60%', left: '47%' },
+    { team: 'team-a', top: '76%', left: '22%' },
+    { team: 'team-a', top: '92%', left: '40%' },
+    { team: 'team-b', top: '30%', left: '63%' },
+    { team: 'team-b', top: '45%', left: '80%' },
+    { team: 'team-b', top: '60%', left: '70%' },
+    { team: 'team-b', top: '60%', left: '55%' },
+    { team: 'team-b', top: '76%', left: '80%' },
+    { team: 'team-b', top: '92%', left: '63%' },
+    { team: 'team-b', top: '60%', left: '93%' },
+  ],
+  
+};
+
+const selectedLineup = computed(() => lineups[selectedOption.value] || []);
 </script>
 
 <style scoped>
@@ -130,5 +159,11 @@
 
 .team-b{
   background-color: rgba(45, 45, 211, 0.938); /* Blue color with opacity */
+}
+
+/* Style for the select option */
+.select-option {
+  background-color: white;
+  color: black;
 }
 </style>

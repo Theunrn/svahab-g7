@@ -2,7 +2,7 @@
   <div class="container flex text-black">
     <!-- Sidebar -->
     <aside class="w-64 fixed top-0 left-0 h-full bg-black text-white p-4">
-      <h2 class="text-2xl font-semibold mb-4">History</h2>
+      <a href="/"><h2 class="text-2xl font-semibold mb-4">History</h2></a>
       <nav>
         <div class="mb-4">
           <a href="#" class="flex items-center space-x-2 hover:text-gray-300 " @click="setFilter('booking')">
@@ -111,18 +111,18 @@
           >
             <input type="checkbox" />
             <p class="text-gray-500">{{ order.created_at }}</p>
-            <div class="order flex items-center space-x-4 mb-2 p-2 hover:bg-gray-100 rounded-lg" v-for="product in order.products" :key="product">
+            <div class="order flex items-center space-x-4 mb-2 p-2 hover:bg-gray-100 rounded-lg"  >
               <div class="flex-1">
-                <p class="text-base font-medium">{{ product.name }}</p>
+                <p class="text-base font-medium">{{ order.products[0].name }}</p>
               </div>
               <div class="flex-1">
-                <p class="text-base font-medium">{{ product.qty }}</p>
+                <p class="text-base font-medium">{{ order.products[0].qty }}</p>
               </div>
               <div class="flex-1">
-                <p class="text-base font-medium">{{ product.price }}</p>
+                <p class="text-base font-medium">{{ order.products[0].price }}</p>
               </div>
               <div class="flex-1">
-                <p class="text-base font-medium">{{ product.total }}</p>
+                <p class="text-base font-medium">{{ order.products[0].total }}</p>
               </div>
             </div>
             <div class="flex-1">

@@ -27,7 +27,7 @@
         </div>
 
         <p class="bg-white text-gray-700 border-2 border-green-300 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-40" >
-          <span >Total: </span> ${{ total }}.00
+          <span >Total: </span> ${{ total }}
         </p>
         <div class="rating mb-2"> 
           <span class="star text-warning">&#9733;</span>
@@ -97,7 +97,7 @@ const selectedSize = ref(null); // Reactive reference for selected size
 const quantity = ref(1);
 const order = ref({});
 const userId = computed(() => route.query.customer);
-console.log(userId);
+const discountPrice = ref(0)
 
 const fetchProductDetails = async () => {
   try {
@@ -129,11 +129,17 @@ const fetchColors = async () => {
 };
 
 const total = computed(() => {
-  if (product.value.price && quantity.value) {
-    return product.value.price * quantity.value;
+  if (discountPrice.value) {
+    return (discountPrice.value * quantity.value).toFixed(2);
   }
-  return 0;
+  return (product.value.price * quantity.value).toFixed(2);
 });
+// const total = computed(() => {
+//   if (product.value.price && quantity.value) {
+//     return product.value.price * quantity.value;
+//   }
+//   return 0;
+// });
 
 onMounted(() => {
   fetchProductDetails();
@@ -162,6 +168,7 @@ const toggleColorSelection = (colorId) => {
 
 const calculateDiscountedPrice = (originalPrice, discountPercentage) => {
   const discount = (originalPrice * discountPercentage) / 100;
+  discountPrice.value = originalPrice - discount
   return originalPrice - discount;
 };
 
