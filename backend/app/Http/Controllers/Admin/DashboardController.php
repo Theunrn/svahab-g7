@@ -21,6 +21,9 @@ class DashboardController extends Controller
         $totalFeedbacks = Feedback::count();
         $totalPayments = Payment::count();
 
-        return view('dashboard', compact('totalBookings', 'totalUsers' ,'totalFiels' ,'totalFeedbacks', 'totalPayments'));
+        $payments = Payment::with('customer')->get();
+        $totalAmount = $payments->sum('amount');
+
+        return view('dashboard', compact('totalBookings', 'totalUsers', 'totalFiels', 'totalFeedbacks', 'totalPayments', 'payments', 'totalAmount'));
     }
 }
