@@ -116,17 +116,16 @@
                       </div>
                     </div>
 
-                    <!-- Actions Section (Mark as Read and Delete Buttons) -->
+                    <!-- Actions Section (See Details and Delete Buttons) -->
                     <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-                      <!-- Mark as Read Button -->
+                      <!-- See Details Button -->
                       <button
                         type="button"
                         class="ml-3 inline-flex w-full justify-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:w-auto"
-                        @click="markNotificationAsRead(selectedNotification)"
+                        @click="navigateToDetails(selectedNotification)"
                       >
-                        Mark as Read
+                        See Details
                       </button>
-
                       <!-- Delete Button -->
                       <button
                         type="button"
@@ -148,7 +147,7 @@
 </template>
 <script>
 import axiosInstance from '@/plugins/axios'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { computed, ref, onMounted } from 'vue'
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
 import { ExclamationTriangleIcon } from '@heroicons/vue/24/outline'
@@ -156,6 +155,7 @@ import { ExclamationTriangleIcon } from '@heroicons/vue/24/outline'
 export default {
   setup() {
     const route = useRoute()
+    const router = useRouter()
     const userId = computed(() => route.params.id)
     const notifications = ref([])
     const bookingNotifications = ref([])
@@ -204,9 +204,15 @@ export default {
       return notificationList.filter((notification) => !notification.read).length
     }
 
-    const showNotificationDetails = (notification) => {
-      selectedNotification.value = notification
-      showPopup.value = true
+    const showNotificationDetails = async (notification) => {
+      try {
+        await axiosInstance.put(`/notification/update/${notification.id}`)
+        fetchNotifications() // Re-fetch notifications after marking as read
+        selectedNotification.value = notification
+        showPopup.value = true
+      } catch (error) {
+        console.error('Error marking notification as read:', error)
+      }
     }
 
     const markNotificationAsRead = async (notification) => {
@@ -217,6 +223,15 @@ export default {
         showPopup.value = false // Close popup after marking as read
       } catch (error) {
         console.error('Error marking notification as read:', error)
+      }
+    }
+
+    const navigateToDetails = (notification) => {
+      showPopup.value = false // Close the popup
+      if (notification.notification_type.toLowerCase().includes('booking')) {
+        router.push({ name: 'Detail', params: { id: notification.booking_id } })
+      } else if (notification.notification_type.toLowerCase().includes('order')) {
+        router.push({ name: 'Products', params: { id: notification.order_id } })
       }
     }
 
@@ -276,6 +291,7 @@ export default {
       markNotificationAsRead,
       formatDate,
       filteredNotifications,
+      navigateToDetails
     }
   },
   components: {
