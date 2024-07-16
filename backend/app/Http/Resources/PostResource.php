@@ -23,6 +23,7 @@ class PostResource extends JsonResource
         'end_time' => $this->end_time,
         'post_date' => $this->post_date,
         'location' => $this->location,
+        'status' => $this->status,
         'created_at' => $this->created_at->format('Y-m-d H:i:s'),
         'updated_at' => $this->updated_at->format('Y-m-d H:i:s'),
        ];

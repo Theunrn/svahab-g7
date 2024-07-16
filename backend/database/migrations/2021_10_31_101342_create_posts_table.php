@@ -23,6 +23,7 @@ class CreatePostsTable extends Migration
             $table->time('start_time')->nullable();   // Time for start of match
             $table->time('end_time')->nullable(); 
             $table->string('location');
+            $table->boolean('status');
             $table->timestamps();
 
         });

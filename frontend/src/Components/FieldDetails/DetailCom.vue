@@ -224,24 +224,29 @@
                 />
               </svg>
             </button>
-            <ul
+            <ul 
               v-if="feedback.showDropdown"
               class="absolute right-0 mt-4 w-30 bg-white border rounded-lg shadow-xl flex flex-col"
             >
-              <!-- <button class="flex-1 text-danger" @click="deleteItem(feedback.id)">Delete</button> -->
-              <!-- <button class="flex-1" @click="showEditModal(feedback)">Edit</button> -->
-              <li>
+              
+              <li v-if="feedback.user_id == userId">
                 <a
                   @click="deleteItem(feedback.id)"
                   class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                   >Delete</a
                 >
               </li>
-              <li>
+              <li v-if="feedback.user_id == userId">
                 <a
                   @click="showEditModal(feedback)"
                   class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                   >Edit</a
+                >
+              </li>
+              <li v-else>
+                <span 
+                  class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                  ><i class='bx bxs-comment-error'></i></span
                 >
               </li>
             </ul>
