@@ -23,4 +23,5 @@ class DashboardController extends Controller
 
         return view('dashboard', compact('totalBookings', 'totalUsers' ,'totalFiels' ,'totalFeedbacks', 'totalPayments'));
     }
+    
 }

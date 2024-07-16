@@ -205,7 +205,7 @@
       <div class="text"><p>We are happy to hear from your feedback</p></div>
       <div class="comment">
         <div v-for="feedback in Feedbacklist" :key="feedback.id" class="comment-item">
-          <img src="../../assets/ShopImage/cat.jpg" alt="Commenter's avatar" />
+          <img src="../../assets/image/liep.jpg" alt="Commenter's avatar" />
           <div class="comment-content">
             <h3><strong>{{ feedback.user.toUpperCase() }} </strong> <span class="text-sm"> - {{ feedback.created_at }}</span></h3>
             <p>{{ feedback.feedback_text }}</p>
@@ -249,7 +249,7 @@
         </div>
       </div>
       <div class="commentbox">
-        <img src="../../assets/ShopImage/cat.jpg" alt="User avatar" />
+        <img src="../../assets/image/liep.jpg" alt="User avatar" />
         <div class="content">
           <h2>Comment as:</h2>
           <!-- <input type="text" v-model="currentUser" class="user" /> -->
