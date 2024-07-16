@@ -141,6 +141,7 @@ Route::get('/customer/orders/{id}', [OrderProductController::class, 'getOrdersBy
 Route::get('/notifications/list/{id}', [NotificationController::class, 'getNotificationsByUserId']);
 Route::put('/notification/update/{id}', [NotificationController::class, 'updateNotification']);
 Route::delete('/notifications/delete/{id}', [NotificationController::class, 'destroy']);
+Route::post('/notifications/store', [NotificationController::class, 'store']);
 
 
 //Payment
@@ -191,4 +192,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('feedback/update/{id}', [FeedbackController::class, 'update']);
     Route::delete('feedback/delete/{id}', [FeedbackController::class, 'destroy']);
 });
+
 
