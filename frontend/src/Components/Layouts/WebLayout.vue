@@ -12,9 +12,9 @@
         <p class="text-white mb-8 md:text-xl">Find the best fields near you and start your game!</p>
 
         <div class="relative w-full">
-          <input v-model="searchQuery" @input="searchFields" type="text" placeholder="Search Find Field..." class="w-full px-4 py-2 rounded-md text-black" />
-          <button @click="searchByProvince" type="button" class="absolute right-0 top-0 bg-green-500 text-white px-4 py-2 rounded-md">
-            Search by location
+          <input v-model="searchQuery" @input="searchFields" type="text" placeholder="Search Field By Location...." class="w-full px-4 py-2 rounded-md text-black" />
+          <button @click="searchByProvince" type="button" class="absolute right-0 top-0 bg-red-500 text-white px-4 py-2 rounded-md">
+            Search
           </button>
         </div>
 
@@ -115,8 +115,8 @@
         </div>
       </div>
     </div>
-    <div v-else class="text-center mt-10 text-green text-2xl">
-      <p>Field Not Found</p>
+    <div v-else class="text-center mt-10 text-green text-2xl flex justify-center">
+      <img width="300" height="300" src="../../assets/image/404.png" alt="">
     </div>
   </div>
 </template>
