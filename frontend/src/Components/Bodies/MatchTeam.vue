@@ -29,12 +29,14 @@
 
       <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
+
           <div
-            v-for="(team, index) in allTeams"
-            :key="index"
+            v-for="(team, index) in allTeams" 
+            :key="index" 
             class="carousel-item"
             :class="{ active: index === 0 }"
           >
+
             <div v-if="team" class="find-match flex flex-col items-center justify-center w-200">
               <div class="match-items grid grid-cols-1 gap-10">
                 <div
@@ -83,15 +85,6 @@
                       Match Now
                     </button>
                   </div>
-                  <div v-if="team.date_matchh">
-                    <div class="match-date text-base text-white flex justify-center">
-                      <div class="w-50 bg-blue rounded-b-2xl relative">
-                        <p class="text-sm font-bold p-1 relative z-10">
-                          {{ team.date_match }}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
                   <div class="location">
                     <button
                       class="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
@@ -101,6 +94,9 @@
                   </div>
                 </div>
               </div>
+            </div>
+            <div v-else class="find-match flex flex-col items-center justify-center w-200" >
+              <img width="400" height="400" src="../../assets/image/404.png" alt="">
             </div>
           </div>
         </div>
@@ -248,7 +244,8 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import axiosInstance from '@/plugins/axios'
-
+import { useRouter } from 'vue-router'
+const router = useRouter()
 const post_team_id = ref('')
 const post_id = ref('')
 const team_name = ref('')
@@ -260,7 +257,7 @@ const start_time = ref('')
 const end_time = ref('')
 const location = ref('')
 const allTeams = ref([])
-
+const status = ref(false)
 // Function to handle file upload
 const handleFileUpload = (event: Event) => {
   const target = event.target as HTMLInputElement
@@ -288,28 +285,8 @@ const createMatch = async () => {
       }
     })
 
-    // const dataForm = new FormData()
-    // dataForm.append('team1_name',  name.value)
-    // dataForm.append('team2_name',  team_name.value)
-    // dataForm.append('date_match', date_match.value)
-    // dataForm.append('start_time', start_time.value)
-    // dataForm.append('end_time',  end_time.value)
-    // dataForm.append('location', location.value)
-    // if (team_post_logo.value && team_logo.value) {
-    //   formData.append('team2_logo', team_post_logo.value)
-    //   formData.append('team1_logo', team_logo.value)
-    // }
-    // dataForm.forEach((value, key) => {
-    //   console.log(`${key}:`, value)
-    // })
-    // const data = await axiosInstance.post('/schedule/create', dataForm, {
-    //   headers: {
-    //     'Content-Type': 'multipart/form-data' // Ensure correct content type for file uploads
-    //   }
-    // })
-    // console.log(data.data)
 
-    // await axiosInstance.delete(`/post/delete/${post_team_id.value}`,)
+    await axiosInstance.put(`/post/update/${post_id.value}`,)
 
     alert('Match created successfully')
     window.location.reload()
@@ -338,16 +315,16 @@ const postTeam = async () => {
     if (team_logo.value) {
       formData.append('logo', team_logo.value)
     }
-
+    formData.forEach((value, key) => {
+      console.log(`${key}:`, value)
+    })
     const response = await axiosInstance.post('/posts', formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
     })
-
-    console.log('Team posted:', response.data.data)
+    alert ("Post created successfully")
     clearForm()
-    await fetchAllTeams() // Fetch the latest post team data
     window.location.reload()
   } catch (error) {
     alert('Error posting team')

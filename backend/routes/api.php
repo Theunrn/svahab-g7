@@ -69,7 +69,6 @@ Route::put('/profile/update', [ProfileController::class, 'update'])->middleware(
 
 Route::get('/me', [AuthController::class, 'index'])->middleware('auth:sanctum');
 Route::get('/owner/show/{id}', [AuthController::class, 'show']);
-Route::get('/post/list', [PostController::class, 'index'])->middleware('auth:sanctum');
 
 Route::get('fields/list', [FildController::class, 'index'])->name('field.list');
 Route::post('field/create', [FildController::class, 'store'])->name('field.create');
@@ -120,17 +119,17 @@ Route::delete('/product/delete/{id}', [APIProductController::class, 'destroy'])-
 Route::get('/sizes', [SizeController::class, 'index']);
 Route::get('/colors', [ColorController::class, 'index']);
 
-
+//Discount
 Route::get('/discount/list', [DiscountProductController::class, 'index'])->name('discount.list');
 Route::post('/discount/create', [DiscountProductController::class, 'store'])->name('discount.create');
 Route::get('/discount/show/{id}', [DiscountProductController::class, 'show'])->name('discount.show');
 Route::put('/discount/update/{id}', [DiscountProductController::class, 'update'])->name('discount.update');
 Route::delete('/discount/delete/{id}', [DiscountProductController::class, 'destroy'])->name('discount.destroy');
 
+//Slide show
 Route::get('/slideshow/list', [SlideShowController::class, 'index'])->name('slideshow.list');
 
 //History
-
 Route::get('/histories/list', [HistoryController::class, 'index'])->name('history.list');
 Route::post('/histories/create', [HistoryController::class, 'store'])->name('history.store');
 Route::get('/customer/bookings/{id}', [BookingController::class, 'getBookingsByUserId']);
@@ -152,7 +151,7 @@ Route::put('/update/payment/booking/{id}', [BookingController::class, 'updateSta
 Route::put('/update/payment/order/{id}', [OrderProductController::class, 'updateStatusPaymentOrder']);
 Route::delete('/customer/orders/delete/{id}', [OrderProductController::class,'deleteOrder']);
 
-
+//Chart
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('cart/list', [AddToCardController::class, 'index']);
     Route::post('cart/create', [AddToCardController::class, 'store']);
@@ -161,7 +160,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('cart/delete/{id}', [AddToCardController::class, 'destroy']);
 });
 
-//team post and match 
+//Team post and match 
 Route::post('/post/match', [MatchTeamController::class,'store']);
 Route::get('/match/list', [MatchTeamController::class,'index']);
 Route::get('/match/delete/{id}', [MatchTeamController::class,'destroy']);
@@ -178,12 +177,12 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 Route::get('/latest-post-team', [PostController::class, 'getLatestPostTeam']);
 
-//event
+//Events
 Route::post('/event/create', [EventController::class,'store']);
 Route::get('/event/list/{id}', [EventController::class,'index']);
 Route::get('/event/show/{id}', [EventController::class,'show']);
 
-
+//Feedbacks
 Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/feedbacks/{id}', [FeedbackController::class, 'index']);
@@ -192,5 +191,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('feedback/update/{id}', [FeedbackController::class, 'update']);
     Route::delete('feedback/delete/{id}', [FeedbackController::class, 'destroy']);
 });
+
+//Posts
+Route::get('/post/list', [PostController::class, 'index'])->middleware('auth:sanctum');
+Route::put('/post/update/{id}', [PostController::class, 'updatePostStatus']);
+
 
 

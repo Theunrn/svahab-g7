@@ -201,7 +201,8 @@ export default {
       }
     },
     async getImageUrl() {
-      this.image = `http://127.0.0.1:8000${this.qr}`
+      this.image = `http://127.0.0.1:8000/storage/${this.qr}`
+      console.log(this.image)
     }
   }
 }

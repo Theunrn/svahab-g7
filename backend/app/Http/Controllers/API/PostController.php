@@ -13,7 +13,7 @@ class PostController extends Controller
     public function index()
     {
         // Retrieve all posts
-        $posts = Post::all();
+        $posts = Post::where('status', false)->get();
         $posts = PostResource::collection($posts);
         // Return posts as a JSON response
         return response()->json(['success' => true, 'data' => $posts]);
@@ -46,6 +46,7 @@ class PostController extends Controller
                 $post->start_time = $request->start_time;
                 $post->end_time = $request->end_time;
                 $post->location = $request->location;
+                $post->status = false;
                 $post->logo = 'images/' . $filename; 
                 $post->post_date = now(); 
 
@@ -77,5 +78,11 @@ class PostController extends Controller
         Post::find($id)->delete();
         return response()->json(['message' => 'Post deleted successfully'], 200);
 
+    }
+    public function updatePostStatus( $id){
+        $post = Post::find($id);
+        $post->status = true;
+        $post->save();
+        return response()->json(['message' => 'Post status updated successfully'], 200);
     }
 }

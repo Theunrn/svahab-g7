@@ -2,7 +2,7 @@
   <div id="matches" class="bg-gray-400">
     <h2>Football Match Schedule</h2>
     <div class="matches-grid">
-      <div class="match" v-for="(team, index) in teams" :key="index">
+      <div class="match" v-for="(team, index) in displayedMatches" :key="index">
         <div class="match-header text-center">
           <div>{{ team.date_match }} - {{ team.start_time }} to {{ team.end_time }}</div>
         </div>
@@ -22,7 +22,6 @@
           </div>
         </div>
         <div class="status">
-          <!-- <div class="match-status">{{ team.status }}</div> -->
           <div class="match-time">{{ team.location }}</div>
         </div>
       </div>
@@ -36,35 +35,13 @@
 <script>
 import { ref, computed, onMounted } from 'vue'
 import axiosInstance from '@/plugins/axios'
-const teams = ref([])
-console.log(teams.value)
+
 export default {
-  data() {
-    return {
-      
-      matchesToShow: 4,
-      showingMore: false
-    }
-  },
-  computed: {
-    displayedMatches() {
-      return this.matches.slice(0, this.matchesToShow)
-    },
-    buttonText() {
-      return this.showingMore ? 'Show less' : 'More matches →'
-    }
-  },
-  methods: {
-    toggleMatches() {
-      if (this.showingMore) {
-        this.matchesToShow = 4
-      } else {
-        this.matchesToShow = this.matches.length
-      }
-      this.showingMore = !this.showingMore
-    }
-  },
   setup() {
+    const teams = ref([])
+    const matchesToShow = ref(4)
+    const showingMore = ref(false)
+
     const fetchMatches = async () => {
       try {
         const { data } = await axiosInstance.get('/match/list')
@@ -73,13 +50,33 @@ export default {
         console.error('Error fetching matches:', error)
       }
     }
+
+    const getImageUrl = (imagePath) => {
+      return `http://127.0.0.1:8000/storage/${imagePath}`
+    }
+
+    const toggleMatches = () => {
+      if (showingMore.value) {
+        matchesToShow.value = 4
+      } else {
+        matchesToShow.value = teams.value.length
+      }
+      showingMore.value = !showingMore.value
+    }
+
+    const displayedMatches = computed(() => {
+      return teams.value.slice(0, matchesToShow.value)
+    })
+
+    const buttonText = computed(() => {
+      return showingMore.value ? 'Show less' : 'More matches →'
+    })
+
     onMounted(() => {
       fetchMatches()
     })
-    const getImageUrl = (imagePath) => {
-      return (imagePath = `http://127.0.0.1:8000/storage/${imagePath}`)
-    }
-    return { teams, getImageUrl}
+
+    return { teams, getImageUrl, toggleMatches, displayedMatches, buttonText }
   }
 }
 </script>
