@@ -30,7 +30,6 @@ class AdminSeeder extends Seeder
             'email' => 'user@gmail.com',
             'password' => bcrypt('password'),
             'phone_number' => '0984214123',
-            'qr' => 'qr.jpg',
         ]);
 
 
