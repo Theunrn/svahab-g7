@@ -50,7 +50,7 @@ class CategoryController extends Controller
         $request->validate([
             'name' => 'required|string|max:255|unique:categories',
         ]);
-        dd($request);
+        // dd($request);
         Category::create([
             'name' => $request->name,
             'owner_id' => Auth::id(), // Set the owner ID to the logged-in user

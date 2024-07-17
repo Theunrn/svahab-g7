@@ -1,5 +1,5 @@
 <div class="bg-white p-4 rounded-lg shadow-md mt-8" style="width: 550px; height: 350px;">
-  <h2 class=" font-bold mb-4 text-2xl">This Week: $300</h2>
+  <h2 class=" font-bold mb-4 text-2xl">This Week: ${{ number_format($totalWeekAmount, 2) }}</h2>
   <div>
     <canvas id="bookingChart"></canvas>
   </div>
@@ -13,7 +13,7 @@
           labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
           datasets: [{
             label: 'Revenue',
-            data: [10, 19, 15, 25, 17, 10, 20],
+            data: {!! json_encode(array_values($weeklyPayment)) !!}, // Dynamically generate data values
             backgroundColor: [
               'rgba(75, 192, 192, 1)', // Color for bars
               'rgba(255, 159, 64, 1)',
@@ -37,3 +37,5 @@
     });
   </script>
 </div>
+
+

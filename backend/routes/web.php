@@ -29,7 +29,6 @@ use GuzzleHttp\Psr7\Response;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
 Route::get('/', function () {
     return view('auth.login');
 });
@@ -106,28 +105,19 @@ Route::get('/admin/bookings/{id}/rebook', [BookingController::class, 'reStore'])
 Route::get('/admin/bookings/{id}/accept', [BookingController::class, 'accept'])->name('admin.bookings.accept');
 Route::get('/admin/bookings/{id}/reject', [BookingController::class, 'reject'])->name('admin.bookings.reject');
 Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
-
-
+// Route::get('/admin/dashboard', [DashboardController::class, 'weeklyRevenue'])->name('admin.dashboard');
+// Route::get('/admin/dashboard', [BookingController::class, 'weeklyRevenue'])->name('/admin.dashboard');
 //User
 Route::get('/users/create', [UserController::class, 'createAccount'])->name('users.create');
 Route::post('/register/store', [UserController::class, 'register'])->name('register.store');
 Route::get('/admin/loginform', [UserController::class, 'loginform'])->name('admin.loginform');
 
-// Route::resource('dashboards', DashboardController::class);
 
     // Chat routes
 Route::middleware(['auth'])->group(function () {
     Route::get('/chats/list', [ChatCotroller::class, 'index'])->name('chats.index');
     Route::post('/chats/create', [ChatCotroller::class, 'store'])->name('chats.store');
 });
-
-
-
-// Route::prefix('admin')->middleware(['auth'])->group(function () {
-//     // Other admin routes...
-
-//     Route::resource('dashboards', DashboardController::class);
-// });
 
 
 Route::get('/admin/categories', [CategoryController::class, 'index'])->name('admin.categories.index');

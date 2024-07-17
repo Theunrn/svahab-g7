@@ -55,7 +55,6 @@
 
     </div>
   </div>
-
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       // Calculate total amount from payments
