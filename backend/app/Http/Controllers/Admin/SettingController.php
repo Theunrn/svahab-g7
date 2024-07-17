@@ -1,6 +1,9 @@
 <?php
 
+
 namespace App\Http\Controllers\Admin;
+
+use Illuminate\Support\Facades\Validator;
 
 use App\Http\Controllers\Controller;
 use App\Models\Setting;
@@ -13,42 +16,75 @@ class SettingController extends Controller
      */
     public function index()
     {
-        $setting = Setting::all();
-        return view('setting.setting.mail', compact('setting'));
+        $settings = Setting::all();
+        return view('setting.settings.index', compact('settings'));
+    }
+
+    public function show()
+    {
+        $user = auth()->user();
+        return view('setting.settings.index', compact('user'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new setting.
+     *
+     * @return \Illuminate\View\View
      */
-
-    public function edit($id)
+    public function create()
     {
-        $setting = Setting::find($id);
-        return view('setting.setting.edit', compact('setting'));
+        return view('settings.create');
     }
 
-    public function update(Request $request, $id)
+    /**
+     * Store a newly created setting in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function store(Request $request)
     {
-        $request->validate([
-            'key' => 'required|string|max:255',
-            'value' => 'required|string|max:255',
-            'email_address' => 'required|email',
-            'responsible' => 'required|string|max:255',
-            'email_notifications' => 'required|boolean',
-            'phone_number' => 'nullable|string|max:20',
-            'address' => 'nullable|string|max:255',
-            'timezone' => 'nullable|string|max:255',
-            'language' => 'nullable|string|max:10',
-            'currency' => 'nullable|string|max:10',
-            'date_format' => 'nullable|string|max:10',
-            'time_format' => 'nullable|string|max:10',
-            'maintenance_mode' => 'nullable|boolean',
-            'additional_data' => 'nullable|json',
-        ]);
+        // Validation can be added here if needed
 
-        $setting = Setting::find($id);
-        $setting->update($request->all());
+        $setting = new Setting();
+        $setting->key = $request->input('key');
+        $setting->value = $request->input('value');
+        $setting->email_address = $request->input('email_address');
+        $setting->responsible = $request->input('responsible');
+        $setting->email_notifications = $request->input('email_notifications', 0); // Assuming default is disabled
 
-        return redirect()->route('setting.setting.index')->with('success', 'Settings updated successfully');
+        $setting->save();
+
+        return redirect()->route('settings.index')
+            ->with('success', 'Setting created successfully.');
+    }
+
+
+    /**
+     * Show the form for editing the specified setting.
+     *
+     * @param  int  $id
+     * @return \Illuminate\View\View
+     */
+    public function edit($id)
+    {
+        $setting = Setting::findOrFail($id); // Assuming Setting is your model
+
+        return view('settings.edit', compact('setting'));
+    }
+
+    /**
+     * Remove the specified setting from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function destroy($id)
+    {
+        $setting = Setting::findOrFail($id); // Assuming Setting is your model
+        $setting->delete();
+
+        return redirect()->route('settings.index')
+            ->with('success', 'Setting deleted successfully.');
     }
 }
