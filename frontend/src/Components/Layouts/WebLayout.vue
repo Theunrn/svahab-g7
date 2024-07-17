@@ -12,18 +12,15 @@
         <p class="text-white mb-8 md:text-xl">Find the best fields near you and start your game!</p>
 
         <div class="relative w-full">
-          <input v-model="searchQuery" @input="searchFields" type="text" placeholder="Search Find Field..." class="w-full px-4 py-2 rounded-md text-black" />
-          <button @click="searchByProvince" type="button" class="absolute right-0 top-0 bg-green-500 text-white px-4 py-2 rounded-md">
-            Search by location
+          <input v-model="searchQuery"type="text" placeholder="Search by Name or Location....." class="w-full px-4 py-2 rounded-md text-black" />
+          <button @click="searchFields" type="button" class="absolute right-0 top-0 bg-green-500 text-white px-4 py-2 rounded-md flex justify-center items-center gap-3">
+            <svg class="w-4 h-4 text-white dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+            </svg>
+            Search field here
           </button>
         </div>
 
-        <!-- <div class="relative w-full mt-3">
-          <input v-model="searchNameQuery" @input="searchFields" type="text" placeholder="Search Find Field by Name..." class="w-full px-4 py-2 rounded-md text-black" />
-          <button @click="searchByName" type="button" class="absolute right-0 top-0 bg-blue-500 text-white px-4 py-2 rounded-md">
-            Search by Name
-          </button>
-        </div> -->
 
       </div>
     </div>
@@ -142,7 +139,6 @@ const props = defineProps({
 })
 
 const searchQuery = ref('')
-const searchNameQuery = ref('')
 const fields = ref([])
 const message = ref('')
 
@@ -177,11 +173,14 @@ const filterFields = () => {
   }
 }
 
-const searchByProvince = () => {
+const searchFields = () => {
   if (searchQuery.value) {
     const normalizedQuery = searchQuery.value.toLowerCase().trim()
     filteredFields.value = fields.value.filter((field) => {
-      return field.location.toLowerCase().includes(normalizedQuery)
+      return (
+        field.name.toLowerCase().includes(normalizedQuery) ||
+        field.location.toLowerCase().includes(normalizedQuery)
+      )
     })
 
     if (filteredFields.value.length === 0) {
@@ -193,28 +192,7 @@ const searchByProvince = () => {
     filterFields()
   }
 
-  searchQuery.value = ''
-
 }
-
-// const searchByName = () => {
-//   if (searchNameQuery.value) {
-//     const normalizedQuery = searchNameQuery.value.toLowerCase().trim()
-//     filteredFields.value = fields.value.filter((field) => {
-//       return field.name.toLowerCase().includes(normalizedQuery)
-//     })
-
-//     if (filteredFields.value.length === 0) {
-//       message.value = 'Field Not Found'
-//     } else {
-//       message.value = ''
-//     }
-//   } else {
-//     filterFields()
-//   }
-
-//   searchNameQuery.value = ''
-// }
 
 watch(selectedProvince, () => {
   filterFields()
