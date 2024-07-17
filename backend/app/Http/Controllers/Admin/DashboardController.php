@@ -30,7 +30,7 @@ class DashboardController extends Controller
             $totalAmount = Payment::whereDate('created_at', Carbon::parse('this week ' . $day)->format('Y-m-d'))
                 ->sum('amount');
 
-            $weeklyPayment[] = $totalAmount > 0 ? $totalAmount : 0.1; // Store total amount for each day
+            $weeklyPayment[] = $totalAmount > 0 ? $totalAmount : 0; // Store total amount for each day
         }
 
         $totalWeekAmount = array_sum($weeklyPayment); // Total sum for the week
@@ -44,20 +44,23 @@ class DashboardController extends Controller
 
         $totalWeekBookings = array_sum($weeklyDataField); // Total sum for the week
 
-        // Get product orders and calculate percentages
+        // Get top 5 product orders with orders and calculate percentages
         $productOrders = Product::withCount('orders')
+            ->having('orders_count', '>', 0)
             ->orderBy('orders_count', 'desc')
             ->take(5)
             ->get();
+
         $totalOrders = Order::count();
 
-        $productData = $productOrders->map(function($product) use ($totalOrders) {
+        $productData = $productOrders->map(function ($product) use ($totalOrders) {
             return [
                 'name' => $product->name,
-                'percentage' => ($product->orders_count / $totalOrders) * 100
+                'percentage' => ($product->orders_count / $totalOrders) * 100,
             ];
         });
 
-        return view('dashboard', compact('totalBookings', 'totalUsers', 'totalFiels', 'totalFeedbacks', 'totalPayments', 'weeklyPayment', 'weeklyDataField', 'totalWeekAmount', 'totalWeekBookings', 'productData'));
+        return view('dashboard', compact('totalBookings', 'totalUsers', 'totalFiels', 'totalFeedbacks', 'totalPayments', 'weeklyPayment', 'weeklyDataField', 'totalWeekAmount', 'totalWeekBookings', 'productData', 'totalOrders'));
     }
+
 }
