@@ -55,7 +55,7 @@
                     class="flex gap-5 p-6 border border-gray-200 rounded-lg shadow transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 hover:bg-blue-900 hover:text-white">
                     <i class='bx bx-money-withdraw text-3xl'></i>
                     <div class="content">
-                        <strong style="font-size: 25px">${{ number_format($totalAmount, 2) }}</strong>
+                        <strong style="font-size: 25px">${{ number_format($totalPayments, 2) }}</strong>
                         <p class="mb-3 font-normal text-black-500">Revenue</p>
                     </div>
                 </div>
