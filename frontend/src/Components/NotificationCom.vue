@@ -16,7 +16,9 @@
                 @click="setActiveTab('notification')"
               >
                 <i class="bx bx-archive-in text-xl me-2"></i> Primary
-                <span class="badge" v-if="getNewCount(notifications) > 0">{{ getNewCount(notifications) }}</span>
+                <span class="badge" v-if="getNewCount(notifications) > 0">{{
+                  getNewCount(notifications)
+                }}</span>
               </div>
               <div
                 class="tab text-white text-center me-2"
@@ -24,7 +26,9 @@
                 @click="setActiveTab('bookings')"
               >
                 <i class="bx bx-calendar-check text-xl"></i> Bookings
-                <span class="badge" v-if="getNewCount(bookingNotifications) > 0">{{ getNewCount(bookingNotifications) }}</span>
+                <span class="badge" v-if="getNewCount(bookingNotifications) > 0">{{
+                  getNewCount(bookingNotifications)
+                }}</span>
               </div>
               <div
                 class="tab text-white text-center me-2"
@@ -32,7 +36,9 @@
                 @click="setActiveTab('orders')"
               >
                 <i class="bx bx-cart-add text-xl"></i> Orders
-                <span class="badge" v-if="getNewCount(orderNotifications) > 0">{{ getNewCount(orderNotifications) }}</span>
+                <span class="badge" v-if="getNewCount(orderNotifications) > 0">{{
+                  getNewCount(orderNotifications)
+                }}</span>
               </div>
             </div>
           </div>
@@ -100,17 +106,32 @@
                   <DialogPanel
                     class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg"
                   >
+                    <div class="flex justify-end p-4">
+                      <button
+                        type="button"
+                        class="btn-close"
+                        @click="showPopup = false"
+                        aria-label="Close"
+                      ></button>
+                    </div>
                     <!-- Notification Details Content -->
                     <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                       <div class="sm:flex sm:items-start">
                         <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                          <DialogTitle as="h3" class="text-base font-semibold leading-6 text-gray-900">
+                          <DialogTitle
+                            as="h3"
+                            class="text-base font-semibold leading-6 text-gray-900"
+                          >
                             Notification Details
                           </DialogTitle>
                           <div class="mt-2">
                             <p class="text-sm text-gray-500">Sent from your owner account!</p>
-                            <p class="text-sm text-gray-500">Dear customer! {{ selectedNotification.notification_text }}</p>
-                            <p class="text-sm text-gray-500">Date time: {{ formatDate(selectedNotification.created_at) }}</p>
+                            <p class="text-sm text-gray-500">
+                              Dear customer! {{ selectedNotification.notification_text }}
+                            </p>
+                            <p class="text-sm text-gray-500">
+                              Date time: {{ formatDate(selectedNotification.created_at) }}
+                            </p>
                           </div>
                         </div>
                       </div>
@@ -120,13 +141,13 @@
                       <!-- See Details Button -->
                       <button
                         type="button"
-<<<<<<< HEAD
-                        class="ml-3 inline-flex w-full justify-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:w-auto"
+                        class="ml-3 inline-flex w-full text-white justify-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:w-auto"
                         @click="navigateToDetails(selectedNotification)"
-=======
-                        class="ml-3 inline-flex w-full justify-center rounded-md bg-yellow-500 px-3 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-yellow-600 sm:w-auto"
+                      >
+                        See Details
                       </button>
                       <!-- Delete Button -->
+                      <button
                         type="button"
                         class="ml-3 inline-flex w-full justify-center rounded-md bg-red-500 px-3 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-red-600 sm:w-auto"
                         @click="deleteNotification(selectedNotification)"
@@ -163,6 +184,12 @@ export default {
     const showPopup = ref(false)
     const selectedNotification = ref(null)
     const activeTab = ref('notification') // Initialize active tab
+    const fieldId = ref('')
+    const orderId = ref('')
+
+
+
+
     const fetchNotifications = async () => {
       try {
         const response = await axiosInstance.get(`/notifications/list/${userId.value}`)
@@ -174,13 +201,14 @@ export default {
         orderNotifications.value = notifications.value.filter((notification) =>
           notification.notification_type.toLowerCase().includes('order')
         )
-        console.log(bookingNotifications.value)
+        // console.log(bookingNotifications.value)
       } catch (error) {
         console.error('Error fetching notifications:', error)
       }
     }
 
     const updateNotification = async (id) => {
+      
       try {
         await axiosInstance.put(`/notification/update/${id}`)
         fetchNotifications() // Re-fetch notifications after updating
@@ -205,6 +233,8 @@ export default {
     }
 
     const showNotificationDetails = async (notification) => {
+      showNotification(notification.id)
+      
       try {
         await axiosInstance.put(`/notification/update/${notification.id}`)
         fetchNotifications() // Re-fetch notifications after marking as read
@@ -216,6 +246,8 @@ export default {
     }
 
     const markNotificationAsRead = async (notification) => {
+      notificationId.value = notification.id
+      console.log(notification.id)
       try {
         await axiosInstance.put(`/notification/update/${notification.id}`)
         fetchNotifications() // Re-fetch notifications after marking as read
@@ -225,14 +257,51 @@ export default {
         console.error('Error marking notification as read:', error)
       }
     }
+    const showNotification = async (id) => {
+      try {
+        const response = await axiosInstance.get(`/notification/show/${id}`)
+  
+          if (response.data.data.notification_type.toLowerCase().includes('booking')){
+            showBooking(response.data.data.notification_data)
+          }else if (response.data.data.notification_type.toLowerCase().includes('order')){
+            showOrder(response.data.data.notification_data)
+          }
+        
+      } catch (error) {
+        console.error('Error marking notification as read:', error)
+      }
+    }
+    const showBooking = async (id) => {
+      try {
+        const response = await axiosInstance.get(`/booking/show/${id}`)
+        fieldId.value = response.data.data.field_id
+        console.log(fieldId.value)
+      } catch (error) {
+        console.error('Error marking notification as read:', error)
+      }
+    }
+    const showOrder = async (id) => {
+      try {
+        const response = await axiosInstance.get(`/order/show/${id}`)
+        orderId.value = response.data.data.products[0].id;
+      } catch (error) {
+        console.error('Error marking notification as read:', error)
+      }
+    }
 
     const navigateToDetails = (notification) => {
-      showPopup.value = false // Close the popup
       if (notification.notification_type.toLowerCase().includes('booking')) {
-        router.push({ name: 'Detail', params: { id: notification.booking_id } })
+        router.push({
+          path: `/field/detail/${fieldId.value}`,
+          query: { customer: userId.value }
+        })
       } else if (notification.notification_type.toLowerCase().includes('order')) {
-        router.push({ name: 'Products', params: { id: notification.order_id } })
+        router.push({
+          path: `/product/detail/${orderId.value}`,
+          query: { customer: userId.value }
+        })
       }
+      showPopup.value = false // Close popup after navigating
     }
 
     // Format date function if needed
@@ -247,7 +316,6 @@ export default {
         timeZone: 'UTC'
       }
       return new Date(dateString).toLocaleString('en-US', options)
-      
     }
 
     // Fetch notifications and orders notifications on component mount

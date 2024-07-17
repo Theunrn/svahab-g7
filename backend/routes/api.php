@@ -86,7 +86,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/orders/{id}/confirm', [OrderProductController::class, 'confirm']);
     Route::put('orders/reactivate/{id}', [OrderProductController::class, 'reactivate']);
 });
-Route::get('orders/show/{id}', [OrderProductController::class, 'show']);
+Route::get('/order/show/{id}', [OrderProductController::class, 'show']);
 
 //Booking
 Route::get('/booking/list', [BookingController::class, 'index']);
@@ -139,9 +139,11 @@ Route::get('/customer/orders/{id}', [OrderProductController::class, 'getOrdersBy
 
 //Notifications
 Route::get('/notifications/list/{id}', [NotificationController::class, 'getNotificationsByUserId']);
+Route::get('/notification/show/{id}', [NotificationController::class, 'show']);
 Route::put('/notification/update/{id}', [NotificationController::class, 'updateNotification']);
 Route::delete('/notifications/delete/{id}', [NotificationController::class, 'destroy']);
 Route::post('/notifications/store', [NotificationController::class, 'store']);
+
 
 
 //Payment
