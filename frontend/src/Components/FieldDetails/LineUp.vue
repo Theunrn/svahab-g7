@@ -13,7 +13,6 @@
         </router-link>
         <router-link
           :to="{ path: '/scheduleField', query: { field: fieldId, user: userId } }"
-          href="#"
           class="menu-item"
         >
           <i class="bx bx-calendar text-2xl"></i>
@@ -21,34 +20,39 @@
         </router-link>
         <router-link
           :to="{ path: '/lineUp', query: { field: fieldId, user: userId } }"
-          href="#"
           class="menu-item bg-white text-dark border-t-4 border-orange-500"
         >
           <i class="bx bx-line-chart text-2xl"></i>
           <span>Line Up</span>
         </router-link>
-        
-        <select v-model="selectedOption" class="select-option ml-4 p-2 rounded-lg">
-          <option disabled value="">Please select one</option>
-          <option value="option1">Option 11 player</option>
-          <option value="option2">Option 7 player</option>
-        </select>
-        
+
         <div class="relative flex gap-5">
           <input
             type="text"
-            placeholder="Enter number of players"
+            placeholder="Enter x x x x...."
             class="px-4 py-2 rounded-md text-black"
-            v-model="formationInput"
-            @input="formatCardNumber"
+            v-model="formationInputTeamA"
+            @input="formatCardNumber('A')"
           />
-          <button @click="clearInput" class="absolute right-0 top-0 bg-red-500 text-white px-4 py-2 rounded-md">
-            Clear
+          <button @click="clearInput('A')" class="absolute right-0 top-0 bg-red-400 text-white px-3 py-2 rounded-md">
+            Team A
+          </button>
+        </div>
+        <div class="relative flex gap-5">
+          <input
+            type="text"
+            placeholder="Enter x x x x..."
+            class="px-4 py-2 rounded-md text-black"
+            v-model="formationInputTeamB"
+            @input="formatCardNumber('B')"
+          />
+          <button @click="clearInput('B')" class="absolute right-0 top-0 bg-red-400 text-white px-3 py-2 rounded-md">
+            Team B
           </button>
         </div>
       </div>
       <div class="image-container">
-        <img src="../../assets/image/background.jpg" alt="Background Image" />
+        <img src="../../assets/image/lineup.png" alt="Background Image" />
         <!-- Team A Circles -->
         <div
           v-for="(position, index) in formationTeamA"
@@ -76,13 +80,15 @@ const route = useRoute()
 const userId = computed(() => route.query.user as string)
 const fieldId = computed(() => route.query.field as string)
 
-const selectedOption = ref('')
-const formationInput = ref('')
+const formationInputTeamA = ref('')
+const formationInputTeamB = ref('')
 const formationTeamA = ref<{ top: string, left: string }[]>([])
 const formationTeamB = ref<{ top: string, left: string }[]>([])
 
-const updateFormation = () => {
-  const inputValues = formationInput.value.trim().split(' ').map(num => Number(num));
+const maxSum = 10
+
+const updateFormation = (team: 'A' | 'B') => {
+  const inputValues = (team === 'A' ? formationInputTeamA.value : formationInputTeamB.value).trim().split(' ').map(num => Number(num));
 
   // Validate input format
   if (inputValues.some(num => isNaN(num) || num <= 0)) {
@@ -91,42 +97,45 @@ const updateFormation = () => {
   }
 
   // Clear previous formations
-  formationTeamA.value = [];
-  formationTeamB.value = [];
+  if (team === 'A') {
+    formationTeamA.value = [];
+  } else {
+    formationTeamB.value = [];
+  }
 
   const totalColumns = inputValues.length;
   const totalHeight = 100;
-  const centerOffset = 50;
-  const columnGap = 10; // Adjust this value to reduce the gap between columns
+  const verticalCenter = 50; // Center of the field vertically
+  const teamACenter = 52.5; // Center of the field horizontally
+  const horizontalCenter = 49; // Center of the field horizontally
+  const columnGap = 8; // Adjust this value to reduce the gap between columns
 
   for (let col = 0; col < totalColumns; col++) {
     const numPlayers = inputValues[col];
     const verticalGap = totalHeight / (numPlayers + 1);
 
     for (let i = 0; i < numPlayers; i++) {
-      // Calculate the position relative to the center
-      const topPosition = `${centerOffset + (i - (numPlayers - 1) / 2) * verticalGap + 10}%`;
+      const topPosition = `${verticalCenter + (i - (numPlayers - 1) / 2) * verticalGap + 10}%`;
 
-      // Left side (Team A)
-      formationTeamA.value.push({
-        top: topPosition,
-        left: `${55 - (col + 1) * 8}%`, // Adjust left position based on column number
-      });
-
-      // Right side (Team B)
-      formationTeamB.value.push({
-        top: topPosition,
-        left: `${46 + (col + 1) * 8}%`, // Adjust left position based on column number
-      });
+      if (team === 'A') {
+        // Left side (Team A)
+        formationTeamA.value.push({
+          top: topPosition,
+          left: `${teamACenter - (totalColumns - col) * columnGap}%`, // Start from the left side
+        });
+      } else {
+        // Right side (Team B)
+        formationTeamB.value.push({
+          top: topPosition,
+          left: `${horizontalCenter + (totalColumns - col) * columnGap}%`, // Start from the right side
+        });
+      }
     }
   }
 }
 
-
-
-const maxSum = 11
-const formatCardNumber = () => {
-  let cleanedInput = formationInput.value.replace(/\D/g, '');
+const formatCardNumber = (team: 'A' | 'B') => {
+  let cleanedInput = (team === 'A' ? formationInputTeamA.value : formationInputTeamB.value).replace(/\D/g, '');
 
   let sum = 0;
   for (let digit of cleanedInput) {
@@ -140,17 +149,35 @@ const formatCardNumber = () => {
     let trimmedInput = cleanedInput.split(' ').join('');
     trimmedInput = trimmedInput.slice(0, -excess);
 
-    formationInput.value = trimmedInput.replace(/(\d{1})(?=\d)/g, '$1 ');
+    if (team === 'A') {
+      formationInputTeamA.value = trimmedInput.replace(/(\d{1})(?=\d)/g, '$1 ');
+    } else {
+      formationInputTeamB.value = trimmedInput.replace(/(\d{1})(?=\d)/g, '$1 ');
+    }
   } else {
-    formationInput.value = cleanedInput;
+    if (team === 'A') {
+      formationInputTeamA.value = cleanedInput;
+    } else {
+      formationInputTeamB.value = cleanedInput;
+    }
   }
 }
-const clearInput = ()=>{
-  formationInput.value = '';
+
+const clearInput = (team: 'A' | 'B') => {
+  if (team === 'A') {
+    formationInputTeamA.value = '';
+    formationTeamA.value = [];
+  } else {
+    formationInputTeamB.value = '';
+    formationTeamB.value = [];
+  }
 }
 
-// Watch for changes in formationInput and update formation accordingly
-watch(formationInput, updateFormation)
+// Watch for changes in formationInputTeamA and update formation for Team A
+watch(formationInputTeamA, () => updateFormation('A'))
+
+// Watch for changes in formationInputTeamB and update formation for Team B
+watch(formationInputTeamB, () => updateFormation('B'))
 </script>
 
 <style scoped>
@@ -221,15 +248,20 @@ watch(formationInput, updateFormation)
 }
 
 .team-a {
+  border: 2px solid rgb(224, 218, 218);
   background-color: rgba(221, 51, 51, 0.932);
 }
 
 .team-b {
-  background-color: rgba(45, 45, 211, 0.938);
+  border: 2px solid white;
+  background-color: rgba(10, 10, 235, 0.959);
 }
 
-.select-option {
-  background-color: white;
-  color: black;
+.relative {
+  position: relative;
+}
+
+.absolute {
+  position: absolute;
 }
 </style>
