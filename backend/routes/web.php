@@ -21,6 +21,7 @@ use App\Http\Controllers\Admin\UserController;
 use Faker\Core\File;
 use GuzzleHttp\Psr7\Response;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -118,7 +119,7 @@ Route::get('/admin/loginform', [UserController::class, 'loginform'])->name('admi
 
 // Route::resource('dashboards', DashboardController::class);
 
-    // Chat routes
+// Chat routes
 Route::middleware(['auth'])->group(function () {
     Route::get('/chats/list', [ChatCotroller::class, 'index'])->name('chats.index');
     Route::post('/chats/create', [ChatCotroller::class, 'store'])->name('chats.store');
@@ -170,18 +171,9 @@ Route::post('/admin/users', [UserController::class, 'store'])->name('admin.users
 
 
 Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
-Route::get('/settings/{id}', [SettingController::class, 'show'])->name('settings.show');
 Route::post('/settings', [SettingController::class, 'store'])->name('settings.store');
 Route::get('/settings/{id}/edit', [SettingController::class, 'edit'])->name('settings.edit');
 Route::delete('/settings/{id}', [SettingController::class, 'destroy'])->name('settings.destroy');
 
 
-
-
-
-
-
-
-
-
-
+Route::put('/profile/password', [SettingController::class, 'updatePassword'])->name('admin.profile.updatePassword');

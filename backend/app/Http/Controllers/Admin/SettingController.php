@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use App\Models\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class SettingController extends Controller
 {
@@ -16,15 +18,30 @@ class SettingController extends Controller
      */
     public function index()
     {
-        $settings = Setting::all();
-        return view('setting.settings.index', compact('settings'));
-    }
-
-    public function show()
-    {
         $user = auth()->user();
         return view('setting.settings.index', compact('user'));
     }
+    // =======================================
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'old_password' => 'required',
+            'new_password' => 'required|min:8|confirmed',
+        ]);
+
+        $user = Auth::user();
+
+        if (!Hash::check($request->old_password, $user->password)) {
+            return back()->withErrors(['old_password' => 'The provided password does not match your current password.']);
+        }
+
+        $user->update([
+            'password' => Hash::make($request->new_password),
+        ]);
+
+        return back()->with('status', 'Password updated successfully!');
+    }
+
 
     /**
      * Show the form for creating a new setting.
