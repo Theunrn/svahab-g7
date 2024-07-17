@@ -43,8 +43,7 @@
               </td>
               <td class="py-2 px-4">{{$payment->customer->name}}</td>
               <td class="py-2 px-4">${{$payment->amount}}</td>
-              <td class="py-2 px-4"><img src="https://img.icons8.com/color/48/000000/visa.png" alt="Visa"
-                  class="w-8 h-8"></td>
+              <td class="py-2 px-4">{{$payment->method}}</td>
               <td class="py-2 px-4">{{$payment->code}}</td>
               <td class="py-2 px-4">{{$payment->payment_date}}</td>
             </tr>

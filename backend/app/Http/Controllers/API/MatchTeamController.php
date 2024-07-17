@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\MatchTeamResource;
 use App\Models\MatchTeam;
 use Illuminate\Http\Request;
 
@@ -15,6 +16,7 @@ class MatchTeamController extends Controller
     {
         $matchTeams = MatchTeam::all();
         $matchTeams = MatchTeam::latest()->get();
+        $matchTeams = MatchTeamResource::collection($matchTeams);
         return response()->json(['sucess' => true, 'data' => $matchTeams]);
     }
 
@@ -64,6 +66,7 @@ class MatchTeamController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        MatchTeam::find($id)->delete();
+        return response()->json(['success' => true, 'message' => 'deleted successfully']);
     }
 }
