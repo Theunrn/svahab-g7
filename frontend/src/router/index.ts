@@ -115,7 +115,18 @@ const router = createRouter({
       name: 'Orders',
       component: NotificationCom,
       props: { tab: 'orders' }
-    }
+    },
+    {
+      path: '/scheduleField',
+      name: 'scheduleField',
+      component: () => import('../views/Web/Field/ScheduleView.vue')
+    },
+    {
+      path: '/lineUp',
+      name: 'lineUp',
+      component: () => import('../views/Web/Field/LineUpView.vue')
+    },
+
   ]
 })
 
