@@ -205,7 +205,7 @@
       <div class="text"><p>We are happy to hear from your feedback</p></div>
       <div class="comment">
         <div v-for="feedback in Feedbacklist" :key="feedback.id" class="comment-item">
-          <img src="../../assets/ShopImage/cat.jpg" alt="Commenter's avatar" />
+          <img src="../../assets/image/liep.jpg" alt="Commenter's avatar" />
           <div class="comment-content">
             <h3><strong>{{ feedback.user.toUpperCase() }} </strong> <span class="text-sm"> - {{ feedback.created_at }}</span></h3>
             <p>{{ feedback.feedback_text }}</p>
@@ -224,24 +224,29 @@
                 />
               </svg>
             </button>
-            <ul
+            <ul 
               v-if="feedback.showDropdown"
               class="absolute right-0 mt-4 w-30 bg-white border rounded-lg shadow-xl flex flex-col"
             >
-              <!-- <button class="flex-1 text-danger" @click="deleteItem(feedback.id)">Delete</button> -->
-              <!-- <button class="flex-1" @click="showEditModal(feedback)">Edit</button> -->
-              <li>
+              
+              <li v-if="feedback.user_id == userId">
                 <a
                   @click="deleteItem(feedback.id)"
                   class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                   >Delete</a
                 >
               </li>
-              <li>
+              <li v-if="feedback.user_id == userId">
                 <a
                   @click="showEditModal(feedback)"
                   class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                   >Edit</a
+                >
+              </li>
+              <li v-else>
+                <span 
+                  class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                  ><i class='bx bxs-comment-error'></i></span
                 >
               </li>
             </ul>
@@ -249,7 +254,7 @@
         </div>
       </div>
       <div class="commentbox">
-        <img src="../../assets/ShopImage/cat.jpg" alt="User avatar" />
+        <img src="../../assets/image/liep.jpg" alt="User avatar" />
         <div class="content">
           <h2>Comment as:</h2>
           <!-- <input type="text" v-model="currentUser" class="user" /> -->

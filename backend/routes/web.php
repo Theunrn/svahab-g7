@@ -16,6 +16,8 @@ use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\SlideshowController; // Add this line
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\SlideshowAdminController; // Add this line
+use App\Http\Controllers\MailController;
 use Faker\Core\File;
 use GuzzleHttp\Psr7\Response;
 
@@ -115,7 +117,7 @@ Route::get('/admin/loginform', [UserController::class, 'loginform'])->name('admi
 
 // Route::resource('dashboards', DashboardController::class);
 
-    // Chat routes
+// Chat routes
 Route::middleware(['auth'])->group(function () {
     Route::get('/chats/list', [ChatCotroller::class, 'index'])->name('chats.index');
     Route::post('/chats/create', [ChatCotroller::class, 'store'])->name('chats.store');
@@ -162,6 +164,9 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('orders/confirm/{id}', [OrderController::class, 'confirm'])->name('admin.orders.confirm');
     Route::get('orders/cancel/{id}', [OrderController::class, 'cancel'])->name('admin.orders.cancel');
 });
+Route::post('/admin/users', [UserController::class, 'store'])->name('admin.users.store');
 
 
 
+
+// Route::get('/send-email', [MailController::class, 'sendEmail']);

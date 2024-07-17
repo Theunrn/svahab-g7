@@ -21,7 +21,6 @@
           </button>
         </div>
 
-
       </div>
     </div>
     <div class="header-detail">
@@ -112,8 +111,8 @@
         </div>
       </div>
     </div>
-    <div v-else class="text-center mt-10 text-green text-2xl">
-      <p>Field Not Found</p>
+    <div v-else class="text-center mt-10 text-green text-2xl flex justify-center">
+      <img width="300" height="300" src="../../assets/image/404.png" alt="">
     </div>
   </div>
 </template>

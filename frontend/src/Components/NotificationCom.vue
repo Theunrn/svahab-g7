@@ -6,79 +6,69 @@
       </router-link>
 
       <div class="booking-list bg-white">
-        <!-- Delete button/icon -->
+        <!-- Tabs for Primary, Bookings, and Orders -->
         <div class="tabs bg-dark flex text-center justify-between">
           <div class="title">
             <div class="tabs bg-dark">
-              <router-link
-                :to="{ path: '/notification/' + userId }"
+              <div
                 class="tab text-white text-center"
-                :class="{ active: isActive('/notification') }"
-                ><i class="bx bx-archive-in text-xl me-2"></i> Primary
-                <span class="badge" v-if="getNewCount(notifications) > 0">{{
-                  getNewCount(notifications)
-                }}</span>
-              </router-link>
-              <router-link
-                :to="{ path: '/bookings/' + userId }"
+                :class="{ active: isActive('notification') }"
+                @click="setActiveTab('notification')"
+              >
+                <i class="bx bx-archive-in text-xl me-2"></i> Primary
+                <span class="badge" v-if="getNewCount(notifications) > 0">{{ getNewCount(notifications) }}</span>
+              </div>
+              <div
                 class="tab text-white text-center me-2"
-                :class="{ active: isActive('/bookings') }"
+                :class="{ active: isActive('bookings') }"
+                @click="setActiveTab('bookings')"
               >
                 <i class="bx bx-calendar-check text-xl"></i> Bookings
-                <span class="badge" v-if="getNewCount(bookingNotifications) > 0">{{
-                  getNewCount(bookingNotifications)
-                }}</span>
-              </router-link>
-              <router-link
-                :to="{ path: '/orders/' + userId }"
+                <span class="badge" v-if="getNewCount(bookingNotifications) > 0">{{ getNewCount(bookingNotifications) }}</span>
+              </div>
+              <div
                 class="tab text-white text-center me-2"
-                :class="{ active: isActive('/orders') }"
+                :class="{ active: isActive('orders') }"
+                @click="setActiveTab('orders')"
               >
                 <i class="bx bx-cart-add text-xl"></i> Orders
-                <span class="badge" v-if="getNewCount(orderNotifications) > 0">{{
-                  getNewCount(orderNotifications)
-                }}</span>
-              </router-link>
+                <span class="badge" v-if="getNewCount(orderNotifications) > 0">{{ getNewCount(orderNotifications) }}</span>
+              </div>
             </div>
           </div>
         </div>
 
         <!-- Notification List -->
         <div class="notification-list">
-          <template v-if="isActive('/notification')">
-            <div
-              class="notification-item"
-              v-for="notification in notifications"
-              :key="notification.id"
-              :class="{ unread: !notification.read, read: notification.read }"
-              @click="showNotificationDetails(notification)"
-            >
-              <div class="group">
-                <div class="notification-header">
-                  <input
-                    type="checkbox"
-                    v-model="selectedNotifications"
-                    :value="notification.id"
-                    class="checkbox me-3"
-                  />
-                  <div :class="['notification-type', notification.notification_type.toLowerCase()]">
-                    {{ notification.notification_type }}
-                    <span v-if="!notification.read" class="badge bg-warning text-dark">New</span>
-                  </div>
-                </div>
-                <div class="notification-content mt-2">
-                  <h3 :class="{ bold: !notification.read }">
-                    {{ notification.notification_text }}
-                  </h3>
+          <div
+            class="notification-item"
+            v-for="notification in filteredNotifications"
+            :key="notification.id"
+            :class="{ unread: !notification.read, read: notification.read }"
+            @click="showNotificationDetails(notification)"
+          >
+            <div class="group">
+              <div class="notification-header">
+                <input
+                  type="checkbox"
+                  v-model="selectedNotifications"
+                  :value="notification.id"
+                  class="checkbox me-3"
+                />
+                <div :class="['notification-type', notification.notification_type.toLowerCase()]">
+                  {{ notification.notification_type }}
+                  <span v-if="!notification.read" class="badge bg-warning text-dark">New</span>
                 </div>
               </div>
-              <div class="notification-date">
-                <i class="bx bx-time-five"></i>
-                <span>{{ formatDate(notification.created_at) }}</span>
+              <div class="notification-content mt-2">
+                <h3 :class="{ bold: !notification.read }">{{ notification.notification_text }}</h3>
               </div>
             </div>
-          </template>
-          <!-- Other templates for bookings and orders -->
+            <div class="notification-date">
+              <i class="bx bx-time-five"></i>
+              <span>{{ formatDate(notification.created_at) }}</span>
+            </div>
+          </div>
         </div>
 
         <!-- Popup Dialog for Notification Details -->
@@ -114,21 +104,13 @@
                     <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                       <div class="sm:flex sm:items-start">
                         <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                          <DialogTitle
-                            as="h3"
-                            class="text-base font-semibold leading-6 text-gray-900"
-                          >
+                          <DialogTitle as="h3" class="text-base font-semibold leading-6 text-gray-900">
                             Notification Details
                           </DialogTitle>
                           <div class="mt-2">
-                            <p class="text-sm text-gray-500">Sent from your owner account!
-                            </p>
-                            <p class="text-sm text-gray-500">Dear customer!
-                              {{ selectedNotification.notification_text }}
-                            </p>
-                            <p class="text-sm text-gray-500">
-                              Date time: {{ formatDate(selectedNotification.created_at) }}
-                            </p>
+                            <p class="text-sm text-gray-500">Sent from your owner account!</p>
+                            <p class="text-sm text-gray-500">Dear customer! {{ selectedNotification.notification_text }}</p>
+                            <p class="text-sm text-gray-500">Date time: {{ formatDate(selectedNotification.created_at) }}</p>
                           </div>
                         </div>
                       </div>
@@ -152,7 +134,6 @@
                       >
                         Delete
                       </button>
-
                     </div>
                   </DialogPanel>
                 </TransitionChild>
@@ -181,6 +162,7 @@ export default {
     const selectedNotifications = ref([])
     const showPopup = ref(false)
     const selectedNotification = ref(null)
+    const activeTab = ref('notification') // Initialize active tab
     const fetchNotifications = async () => {
       try {
         const response = await axiosInstance.get(`/notifications/list/${userId.value}`)
@@ -258,9 +240,23 @@ export default {
       fetchNotifications()
     })
 
-    const isActive = (tab) => {
-      return route.path.includes(tab)
+    const isActive = (tabName) => {
+      return activeTab.value === tabName
     }
+
+    const setActiveTab = (tabName) => {
+      activeTab.value = tabName
+    }
+    const filteredNotifications = computed(() => {
+      if (activeTab.value === 'notification') {
+        return notifications.value
+      } else if (activeTab.value === 'bookings') {
+        return bookingNotifications.value
+      } else if (activeTab.value === 'orders') {
+        return orderNotifications.value
+      }
+      return []
+    })
 
     return {
       userId,
@@ -270,13 +266,16 @@ export default {
       selectedNotifications,
       deleteNotification,
       isActive,
+      activeTab,
+      setActiveTab,
       updateNotification,
       getNewCount,
       showPopup,
       selectedNotification,
       showNotificationDetails,
       markNotificationAsRead,
-      formatDate
+      formatDate,
+      filteredNotifications,
     }
   },
   components: {
