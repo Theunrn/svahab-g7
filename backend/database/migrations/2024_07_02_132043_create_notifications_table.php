@@ -16,7 +16,7 @@ return new class extends Migration
             $table->integer('user_id');
             $table->string('notification_type');
             $table->string('notification_text');
-            $table->json('notification_data');
+            $table->integer('notification_data');
             $table->boolean('read');
             $table->timestamps();
         });

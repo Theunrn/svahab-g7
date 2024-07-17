@@ -233,14 +233,16 @@
                 <a
                   @click="deleteItem(feedback.id)"
                   class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                  >Delete</a
+                  >Delete <div class="pos-demo"></div>
+                  </a
                 >
               </li>
               <li v-if="feedback.user_id == userId">
                 <a
                   @click="showEditModal(feedback)"
                   class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                  >Edit</a
+                  >Edit <div class="pos-demo"></div>
+                  </a 
                 >
               </li>
               <li v-else>
@@ -265,10 +267,13 @@
               v-model="feedback_text"
               class="usercomment"
             />
+            <div class="pos-demo"></div>
             <div class="buttons">
+              
               <button @click="SubmitFeedback" :disabled="!feedback_text" id="publish">
-                Submit
+                Submit 
               </button>
+              
             </div>
           </div>
         </div>
@@ -407,6 +412,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import type { Action } from 'element-plus'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
+import Swal from 'sweetalert2'
 
 // Load the relativeTime plugin
 dayjs.extend(relativeTime)
@@ -488,16 +494,30 @@ const submitBooking = async () => {
       console.error('Error creating event:', error)
     }
 
-    alert('Thank you for your booking! We will send you a notification soon')
-    router.push({
-      path: `/payment/${userId.value}`,
-      query: { booking: booking.value.id }
+    Swal.fire({
+      position: 'center',
+      icon: 'success',
+      html: `<span style="font-size: 26px; font-weight: bold;">Thank you for your booking! We will send you a notification soon</span>`,
+      showConfirmButton: false,
+      timer: 1000
+    }).then(() => {
+      router.push({
+        path: `/payment/${userId.value}`,
+        query: { booking: booking.value.id }
+      })
     })
   } catch (error) {
-    alert('Your booking is failed. Please try again')
+    // Show error message
+    Swal.fire({
+      title: 'Error',
+      text: 'Your booking is failed. Please try again',
+      icon: 'error',
+      confirmButtonText: 'OK'
+    })
     console.error('Error creating booking:', error)
   }
 }
+
 
 const fetchField = async () => {
   try {
@@ -526,12 +546,12 @@ const SubmitFeedback = async () => {
       field_id: fieldId.value,
       feedback_text: feedback_text.value
     })
-    alert('Create successfull')
+    $(".pos-demo").notify("Create feedback successful", "success", { position: "top" });
     isclear.value = true
     fetchFeedbackList()
     clearFeedbackData()
   } catch (error) {
-    alert('Create fail')
+    $(".pos-demo").notify("Create feedback fail", "danger", { position: "top" });
     console.error('Error creating booking:', error)
   }
 }
@@ -561,8 +581,11 @@ const deleteItem = async (itemId) => {
       }
     })
     Feedbacklist.value = Feedbacklist.value.filter((item) => item.id !== itemId)
+    $(".pos-demo").notify("Feedback remove successful", "success", { position: "top" });
   } catch (error) {
     console.error('Error deleting item:', error)
+    $(".pos-demo").notify("Failed remove feedback", "danger", { position: "top" });
+
   }
 }
 
@@ -592,9 +615,10 @@ const updateFeedback = async () => {
       Feedbacklist.value[updatedFeedbackIndex].feedback_text = editedFeedbackText.value
     }
     closeEditModal()
-    alert('Feedback updated successfully!')
+    $(".pos-demo").notify("Feedback updated successfully!", "success", { position: "top" });
+
   } catch (error) {
-    alert('Failed to update feedback.')
+    $(".pos-demo").notify("Failed to update feedback.", "success", { position: "top" });
     console.error('Error updating feedback:', error)
   }
 }
@@ -630,6 +654,11 @@ watch([start_time, end_time], calculateTotalPrice)
   height: 100px;
   background-color: rgb(144, 124, 91);
 }
+
+.notifyjs-corner {
+  z-index: 10000 !important;
+}
+
 h2 {
   margin-top: 10px;
   margin-bottom: 10px;

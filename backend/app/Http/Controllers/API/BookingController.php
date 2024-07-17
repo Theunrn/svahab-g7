@@ -76,7 +76,7 @@ class BookingController extends Controller
         $notification->user_id = $booking->user_id; // Assuming Booking has a user_id field
         $notification->notification_type = 'booking_confirmed';
         $notification->notification_text = 'Your booking has been confirmed.';
-        $notification->notification_data = json_encode(['booking_id' => $booking->id]);
+        $notification->notification_data =  $booking->id;
         $notification->read = false;
         $notification->save();
 

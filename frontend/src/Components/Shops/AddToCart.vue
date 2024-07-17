@@ -23,7 +23,7 @@
               :src="getImageUrl(item.product.image)"
               class="card-img-top"
               alt="Product Image"
-              style="max-width: 80px"
+              style="max-width: 50px"
             />
           </td>
           <td>{{ item.product.name }}</td>
@@ -39,7 +39,7 @@
           <td>${{ item.total_amount }}</td>
           <td>
             <div class="px-4 py-4 flex gap-3 whitespace-nowrap">
-              <a class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-3 rounded-md inline-flex items-center" @click="deleteItem(item.id)">
+              <a class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-3 rounded-md inline-flex items-center" @click="confirmDeleteItem(item.id)">
                 <i class="bx bx-trash text-2xl"></i>
               </a>
               <router-link :to="{path: '/product/detail/' + item.product.id, query:{customer:item.user_id}}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-3 rounded-md inline-flex items-center">
@@ -56,6 +56,7 @@
 
 <script>
 import axios from 'axios'
+import Swal from 'sweetalert2'
 
 export default {
   data() {
@@ -95,6 +96,22 @@ export default {
       }
     },
 
+    async confirmDeleteItem(itemId) {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.deleteItem(itemId)
+        }
+      })
+    },
+
     async deleteItem(itemId) {
       try {
         await axios.delete(`http://127.0.0.1:8000/api/cart/delete/${itemId}`, {
@@ -103,6 +120,11 @@ export default {
           }
         })
         this.cartItems = this.cartItems.filter((item) => item.id !== itemId)
+        Swal.fire(
+          'Deleted!',
+          'Your item has been deleted.',
+          'success'
+        )
       } catch (error) {
         console.error('Error deleting item:', error)
       }
@@ -136,11 +158,9 @@ export default {
     getImageUrl(imagePath) {
       return `http://127.0.0.1:8000/storage/${imagePath}` // Adjust URL if needed
     },
-
   }
 }
 </script>
-
 
 <style scoped>
 .container {

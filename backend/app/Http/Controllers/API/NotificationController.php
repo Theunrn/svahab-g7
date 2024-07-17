@@ -25,6 +25,12 @@ class NotificationController extends Controller
         
         return response()->json(['success' => true, 'data' => $notifications]);
     }
+    public function show($id)
+    {
+        $notification = Notification::find($id);
+        
+        return response()->json(['success' => true, 'data' => $notification]);
+    }
 
     /**
      * Mark a notification as read.
