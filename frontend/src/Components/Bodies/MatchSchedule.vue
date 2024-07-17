@@ -1,29 +1,28 @@
 <template>
-  <div id="matches" class="bg-gray-800">
+  <div id="matches" class="bg-gray-400">
     <h2>Football Match Schedule</h2>
     <div class="matches-grid">
-      <div class="match" v-for="(match, index) in displayedMatches" :key="index">
+      <div class="match" v-for="(team, index) in displayedMatches" :key="index">
         <div class="match-header text-center">
-          <div>Group stage - Matchday 3 of 3</div>
+          <div>{{ team.date_match }} - {{ team.start_time }} to {{ team.end_time }}</div>
         </div>
         <div class="teams">
           <div class="team">
-            <img :src="match.team1.flag" alt="Team 1 Flag" />
-            <span>{{ match.team1.name }}</span>
-            <span>{{ match.team1.score }}</span>
+            <img :src="getImageUrl(team.team_post_logo)" alt="Team 1 Flag" />
+            <span>{{ team.team_post_name }}</span> | 
+            <span>0</span>
           </div>
           <div class="team">
-            <img :src="match.vsTeam" alt="" class="vsTeam" />
+            <img src="../../assets/image/vs1.png" alt="vsTeam" class="vsTeam" />
           </div>
           <div class="team">
-            <img :src="match.team2.flag" alt="Team 2 Flag" />
-            <span>{{ match.team2.name }}</span>
-            <span>{{ match.team2.score }}</span>
+            <img :src="getImageUrl(team.team_logo)" alt="Team 2 Flag" />
+            <span>{{ team.team_name }}</span> | 
+            <span>0</span>
           </div>
         </div>
         <div class="status">
-          <div class="match-status">{{ match.status }}</div>
-          <div class="match-time">{{ match.time }}</div>
+          <div class="match-time">{{ team.location }}</div>
         </div>
       </div>
     </div>
@@ -34,80 +33,52 @@
 </template>
 
 <script>
-import logoTeam1 from '../../assets/image/logo-team1.webp';
-import logoTeam2 from '../../assets/image/logo-team2.jpg';
-import Vsteam from '../../assets/image/vs.png';
+import { ref, computed, onMounted } from 'vue'
+import axiosInstance from '@/plugins/axios'
 
 export default {
-  data() {
-    return {
-      matches: [
-        {
-          team1: { name: 'Bolivia', flag: logoTeam1, score: 0 },
-          vsTeam: Vsteam,
-          team2: { name: 'Panama', flag: logoTeam2, score: 1 },
-          status: 'Live 50\'',
-          time: ''
-        },
-        {
-          team1: { name: 'USA', flag: logoTeam1, score: 0 },
-          vsTeam: Vsteam,
-          team2: { name: 'Uruguay', flag: logoTeam2, score: 0 },
-          status: 'Half-time',
-          time: ''
-        },
-        {
-          team1: { name: 'USA', flag: logoTeam1, score: 0 },
-          vsTeam: Vsteam,
-          team2: { name: 'Uruguay', flag: logoTeam2, score: 0 },
-          status: 'Tomorrow 8AM',
-          time: ''
-        },
-        {
-          team1: { name: 'Brazil', flag: logoTeam1, score: 0 },
-          vsTeam: Vsteam,
-          team2: { name: 'Colombia', flag: logoTeam2, score: 0 },
-          status: '',
-          time: 'Tomorrow 11:00 AM'
-        },
-        {
-          team1: { name: 'Brazil', flag: logoTeam1, score: 0 },
-          vsTeam: Vsteam,
-          team2: { name: 'Colombia', flag: logoTeam2, score: 0 },
-          status: '',
-          time: 'Tomorrow 11:00 AM'
-        },
-        {
-          team1: { name: 'Brazil', flag: logoTeam1, score: 0 },
-          vsTeam: Vsteam,
-          team2: { name: 'Colombia', flag: logoTeam2, score: 0 },
-          status: '',
-          time: 'Tomorrow 11:00 AM'
-        }
-      ],
-      matchesToShow: 4,
-      showingMore: false
-    };
-  },
-  computed: {
-    displayedMatches() {
-      return this.matches.slice(0, this.matchesToShow);
-    },
-    buttonText() {
-      return this.showingMore ? 'Show less' : 'More matches →';
-    }
-  },
-  methods: {
-    toggleMatches() {
-      if (this.showingMore) {
-        this.matchesToShow = 4;
-      } else {
-        this.matchesToShow = this.matches.length;
+  setup() {
+    const teams = ref([])
+    const matchesToShow = ref(4)
+    const showingMore = ref(false)
+
+    const fetchMatches = async () => {
+      try {
+        const { data } = await axiosInstance.get('/match/list')
+        teams.value = data.data
+      } catch (error) {
+        console.error('Error fetching matches:', error)
       }
-      this.showingMore = !this.showingMore;
     }
+
+    const getImageUrl = (imagePath) => {
+      return `http://127.0.0.1:8000/storage/${imagePath}`
+    }
+
+    const toggleMatches = () => {
+      if (showingMore.value) {
+        matchesToShow.value = 4
+      } else {
+        matchesToShow.value = teams.value.length
+      }
+      showingMore.value = !showingMore.value
+    }
+
+    const displayedMatches = computed(() => {
+      return teams.value.slice(0, matchesToShow.value)
+    })
+
+    const buttonText = computed(() => {
+      return showingMore.value ? 'Show less' : 'More matches →'
+    })
+
+    onMounted(() => {
+      fetchMatches()
+    })
+
+    return { teams, getImageUrl, toggleMatches, displayedMatches, buttonText }
   }
-};
+}
 </script>
 
 <style scoped>
@@ -128,11 +99,11 @@ h2 {
   gap: 20px;
 }
 .match {
-  background-color: #2B2B2B;
+  background-color: #5f5b5b;
   padding: 15px;
   border-radius: 8px;
   text-align: left;
-  border: 1px solid #444;
+  border: 1px solid #ece9e9;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -165,14 +136,14 @@ h2 {
   width: 50px;
   height: 50px;
   margin-right: 10px;
-  border: 1px solid #444;
+  border: 1px solid #e6dcdc;
   border-radius: 4px;
 }
 .status {
   text-align: center;
   margin-top: 10px;
   font-size: 14px;
-  color: #BBB;
+  color: #bbb;
 }
 .more-matches {
   text-align: center;

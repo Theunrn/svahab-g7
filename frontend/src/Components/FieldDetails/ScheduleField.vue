@@ -20,7 +20,7 @@
       </div>
     </div>
   </div>
-  <ScheduleCom />
+  <ScheduleCom :fieldId="fieldId"/>
 </template>
   
   <script setup lang="ts">

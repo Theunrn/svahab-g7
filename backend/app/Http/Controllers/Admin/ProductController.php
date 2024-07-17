@@ -27,7 +27,8 @@ class ProductController extends Controller
         } else {
             // Owner can see only their own products and categories
             $products = $user->products()->with(['category', 'colors', 'sizes', 'discounts'])->get();
-            $categories = Category::where('owner_id', $user->id)->get();
+            // $categories = Category::where('owner_id', $user->id)->get();
+            $categories = Category::all();
         }
 
         return view('setting.products.index', compact('products', 'categories'));
@@ -35,7 +36,8 @@ class ProductController extends Controller
 
     public function create()
     {
-        $categories = Category::where('owner_id', Auth::id())->get();
+        // $categories = Category::where('owner_id', Auth::id())->get();
+        $categories = Category::all();
         $colors = Color::all();
         $sizes = Size::all();
         return view('setting.products.new', compact('categories', 'colors', 'sizes'));
@@ -89,7 +91,8 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        $categories = Category::where('owner_id', Auth::id())->get();
+        // $categories = Category::where('owner_id', Auth::id())->get();
+        $categories = Category::all();
         $colors = Color::all();
         $sizes = Size::all();
         return view('setting.products.edit', compact('product', 'categories', 'colors', 'sizes'));
