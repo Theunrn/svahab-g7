@@ -45,14 +45,14 @@
             <p class="card-text mt-2 mb-2">{{ product.description }}</p>
             <div class="group mt-3">
               <router-link
-                :to="{path: '/category/show/' + product.category_id, query:{user:user.id}}"
+                :to="{ path: '/category/show/' + product.category_id, query: { user: user.id } }"
                 :state="{ products: products }"
                 class="button me-2 inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               >
                 See More
               </router-link>
               <router-link
-                :to=" {path: '/product/detail/' + product.id, query:{customer:user.id}}"
+                :to="{ path: '/product/detail/' + product.id, query: { customer: user.id } }"
                 class="button inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-orange-500 rounded-lg hover:bg-orange-600 focus:ring-4 focus:outline-none focus:ring-orange-300 dark:bg-orange-400 dark:hover:bg-orange-500 dark:focus:ring-orange-600"
                 style="margin-left: auto"
               >
@@ -68,15 +68,16 @@
 
 <script>
 import axios from 'axios'
+import Swal from 'sweetalert2'
 
 export default {
-  props:{
-    user:Object,
+  props: {
+    user: Object
   },
   data() {
     return {
       products: [],
-      uniqueProductsByCategory: [],
+      uniqueProductsByCategory: []
     }
   },
   created() {
@@ -119,7 +120,7 @@ export default {
     getImageUrl(imagePath) {
       return `http://127.0.0.1:8000/storage/${imagePath}`
     },
-    
+
     toggleFavorite(product) {
       product.isFavorite = !product.isFavorite
     },
@@ -127,30 +128,51 @@ export default {
     calculateDiscountedPrice(product) {
       if (product.discounts.length > 0) {
         const discount = product.discounts[0]
-        const discountedPrice = product.price - (product.price * (discount.discount / 100))
+        const discountedPrice = product.price - product.price * (discount.discount / 100)
         return parseFloat(discountedPrice.toFixed(2)).toString()
       }
       return null
     },
 
-  
     addToCart(product) {
-      axios.post('http://127.0.0.1:8000/api/cart/create', {
-        product_id: product.id,
-        quantity: 1,
-      }, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('access_token')}`
-        }
-      })
-      .then(response => {
-        console.log('Product added to cart:', product);
-        alert(`${product.name} added to cart successfully.`);
-      })
-      .catch(error => {
-        console.error('Error adding to cart:', error);
-      });
-    },
+      axios
+        .post(
+          'http://127.0.0.1:8000/api/cart/create',
+          {
+            product_id: product.id,
+            quantity: 1
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('access_token')}`
+            }
+          }
+        )
+        .then((response) => {
+          console.log('Product added to cart:', product)
+          // Display SweetAlert for success
+          Swal.fire({
+            position: 'center',
+            icon: 'success',
+            // title: `${product.name} added to cart successfully`,
+            // html: `<span style="font-size: 26px;">added to cart successfully</span>`,
+            html: `<span style="font-size: 26px; font-weight: bold;">${product.name} added to cart successfully</span>`,
+            showConfirmButton: false,
+            timer: 1000
+          })
+        })
+        .catch((error) => {
+          console.error('Error adding to cart:', error)
+          // Display SweetAlert for error
+          Swal.fire({
+            position: 'center',
+            icon: 'error',
+            title: 'Error adding to cart. Please try again.',
+            showConfirmButton: false,
+            timer: 1500
+          })
+        })
+    }
   }
 }
 </script>
@@ -167,9 +189,7 @@ export default {
 .card-wrapper {
   width: 23%;
   margin: 10px;
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   border-radius: 15px;
   overflow: hidden;
   cursor: pointer;
@@ -207,9 +227,7 @@ export default {
 }
 
 .card {
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   border-radius: 15px;
   overflow: hidden;
   cursor: pointer;

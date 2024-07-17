@@ -59,6 +59,7 @@
 </template>
 <script>
 import axios from 'axios'
+import Swal from 'sweetalert2'
 
 export default {
   data() {
@@ -118,13 +119,31 @@ export default {
           currency: 'USD',
           code: this.generateRandomCode(9),
           payment_date: this.paymentDate
-        })
-        this.isPaid = true
-        this.updatePaymentStatus()
-        alert('Payment successful')
+        });
+        
+        // Display SweetAlert for success
+        Swal.fire({
+          icon: 'success',
+          title: 'Success!',
+          text: 'You have confirmed payment successfully.',
+          confirmButtonText: 'OK'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.isPaid = true;
+            this.updatePaymentStatus();
+            // You can add further actions here if needed
+          }
+        });
+
       } catch (error) {
-        alert('Failed creating payment')
-        console.error('Error creating payment intent:', error)
+        // Display SweetAlert for error
+        Swal.fire({
+          icon: 'error',
+          title: 'Payment Failed',
+          text: 'Something is gone wrong. Please try again.',
+          confirmButtonText: 'OK'
+        });
+        console.error('Error creating payment intent:', error);
       }
     },
 
