@@ -83,7 +83,7 @@ const router = createRouter({
       component: () => import('../views/Admin/Auth/RegisterVIew.vue')
     },
     {
-      path: '/payment',
+      path: '/payment/:id',
       name: 'payment',
       component: () => import('../views/Web/Payment/PaymentView.vue')
     },
