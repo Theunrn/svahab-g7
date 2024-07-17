@@ -37,11 +37,10 @@ const router = createRouter({
       component: () => import('../views/Web/Profile/ProfileView.vue')
     },
     {
-      path: '/fields/detail/:id',
+      path: '/fields',
       name: 'fields',
       component: () => import('../views/Web/FieldsView.vue')
     },
-    
     {
       path: '/shop',
       name: 'shop',
@@ -58,16 +57,6 @@ const router = createRouter({
       component: () => import('../views/Web/Field/FieldDetailView.vue')
     },
     {
-      path: '/scheduleField',
-      name: 'scheduleField',
-      component: () => import('../views/Web/Field/ScheduleView.vue')
-    },
-    {
-      path: '/lineUp',
-      name: 'lineUp',
-      component: () => import('../views/Web/Field/LineUpView.vue')
-    },
-    {
       path: '/field/book',
       name: 'Book',
       component: () => import('../views/Web/Field/BookingView.vue')
@@ -81,8 +70,7 @@ const router = createRouter({
     {
       path: '/product/detail/:id',
       name: 'Card',
-      component: () => import('../views/Web/Products/CardView.vue'),
-      props:true,
+      component: () => import('../views/Web/Products/CardView.vue')
     },
     {
       path: '/category/show/:id',
@@ -95,12 +83,7 @@ const router = createRouter({
       component: () => import('../views/Admin/Auth/RegisterVIew.vue')
     },
     {
-      path: '/profile/edit',
-      name: 'profile/edit',
-      component: () => import('../views/Admin/Auth/EditProfile.vue')
-    },
-    {
-      path: '/payment/:id',
+      path: '/payment',
       name: 'payment',
       component: () => import('../views/Web/Payment/PaymentView.vue')
     },
@@ -132,22 +115,12 @@ const router = createRouter({
       name: 'Orders',
       component: NotificationCom,
       props: { tab: 'orders' }
-    },
-    {
-      path: '/schedule',
-      name: 'schedule',
-      component: () => import('../views/Web/Schedule/ScheduleView.vue')
-    },
-    {
-      path: '/map',
-      name: 'map',
-      component: () => import('../views/Web/Map/MapView.vue')
     }
   ]
 })
 
 router.beforeEach(async (to, from, next) => {
-  const publicPages = ['/', '/login', '/register']
+  const publicPages = ['/login']
   const authRequired = !publicPages.includes(to.path)
   const store = useAuthStore()
 

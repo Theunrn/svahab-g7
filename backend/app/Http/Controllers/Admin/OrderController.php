@@ -72,7 +72,7 @@ class OrderController extends Controller
         $notification->user_id = $userId;
         $notification->notification_type = $type;
         $notification->notification_text = $text;
-        $notification->notification_data = json_encode(['order_id' => $orderId]);
+        $notification->notification_data =$orderId;
         $notification->read = false;
         $notification->save();
     }

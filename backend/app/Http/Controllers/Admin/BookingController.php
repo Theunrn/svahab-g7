@@ -130,7 +130,7 @@ class BookingController extends Controller
         $notification->user_id = $userId;
         $notification->notification_type = $type;
         $notification->notification_text = $text;
-        $notification->notification_data = json_encode(['booking_id' => $bookingId]);
+        $notification->notification_data = $bookingId;
         $notification->read = false;
         $notification->save();
     }
