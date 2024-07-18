@@ -47,18 +47,19 @@ class DashboardController extends Controller
         // Get top 5 product orders with orders and calculate percentages
         $productOrders = Product::withCount('orders')
             ->having('orders_count', '>', 0)
-            ->orderBy('orders_count', 'desc')
+            ->orderByDesc('orders_count')
             ->take(5)
             ->get();
 
         $totalOrders = Order::count();
 
-        $productData = $productOrders->map(function ($product) use ($totalOrders) {
+        $productData = $totalOrders > 0 ? $productOrders->map(function ($product) use ($totalOrders) {
             return [
                 'name' => $product->name,
                 'percentage' => ($product->orders_count / $totalOrders) * 100,
             ];
-        });
+        }) : collect([]);
+
 
         return view('dashboard', compact('totalBookings', 'totalUsers', 'totalFiels', 'totalFeedbacks', 'totalPayments', 'weeklyPayment', 'weeklyDataField', 'totalWeekAmount', 'totalWeekBookings', 'productData', 'totalOrders'));
     }
