@@ -1,5 +1,25 @@
 <x-app-layout>
     <div class="py-12">
+        @if(session('success'))
+            <script>
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'center',
+                    iconColor: 'white',
+                    customClass: {
+                        popup: 'colored-toast',
+                    },
+                    showConfirmButton: false,
+                    timer: 1500,
+                    timerProgressBar: true,
+                });
+
+                Toast.fire({
+                    icon: 'success',
+                    title: '{{ session("success") }}',
+                });
+            </script>
+        @endif
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="flex items-center justify-between p-6 bg-white border-b border-gray-200">
@@ -8,7 +28,7 @@
                     </h2>
                 </div>
                 <div class="p-6 bg-white border-b border-gray-200">
-                    <form action="{{ route('admin.discounts.update', $discount->id) }}" method="POST">
+                    <form id="update-discount-form" action="{{ route('admin.discounts.update', $discount->id) }}" method="POST">
                         @csrf
                         @method('PUT')
 
@@ -47,4 +67,64 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // Add event listener to the form
+        document.getElementById('update-discount-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the form from submitting normally
+            
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                iconColor: 'white',
+                customClass: {
+                    popup: 'colored-toast',
+                },
+                showConfirmButton: false,
+                timer: 1000,
+                timerProgressBar: true,
+            });
+
+            Toast.fire({
+                icon: 'success',
+                title: 'Discount updated successfully!',
+            }).then(() => {
+                this.submit(); // Submit the form programmatically after the alert
+            });
+        });
+    </script>
 </x-app-layout>
+
+<style>
+.colored-toast.swal2-icon-success {
+    background-color: #a5dc86 !important;
+}
+
+.colored-toast.swal2-icon-error {
+    background-color: #f27474 !important;
+}
+
+.colored-toast.swal2-icon-warning {
+    background-color: #f8bb86 !important;
+}
+
+.colored-toast.swal2-icon-info {
+    background-color: #3fc3ee !important;
+}
+
+.colored-toast.swal2-icon-question {
+    background-color: #87adbd !important;
+}
+
+.colored-toast .swal2-title {
+    color: white;
+}
+
+.colored-toast .swal2-close {
+    color: white;
+}
+
+.colored-toast .swal2-html-container {
+    color: white;
+}
+</style>

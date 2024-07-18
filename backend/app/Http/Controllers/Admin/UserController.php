@@ -106,8 +106,9 @@ class UserController extends Controller
         // Assign roles
         $user->syncRoles($request->roles);
 
-        return redirect()->route('admin.users.index')->with('success', 'User created successfully.');
-    }
+        // return redirect()->route('admin.users.index')->with('success', 'User created successfully.');
+        return redirect()->route('admin.users.index')->with('success', 'New user created successfully');
+    }   
 
 
     /**
@@ -158,7 +159,8 @@ class UserController extends Controller
         $user->update($validated);
 
         $user->syncRoles($request->roles);
-        return redirect()->route('admin.users.index')->withSuccess('User updated !!!');
+        // return redirect()->route('admin.users.index')->withSuccess('User updated !!!');
+        return redirect()->route('admin.users.index')->with('success', 'New user created successfully');
     }
 
     public function createAccount()

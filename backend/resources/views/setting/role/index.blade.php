@@ -34,10 +34,10 @@
                           @endcan
 
                           @can('Role delete')
-                          <form action="{{ route('admin.roles.destroy', $role->id) }}" method="POST" class="inline">
+                          <button onclick="deleteRole('{{ $role->id }}')"  class="text-grey-lighter font-bold py-1 px-3 rounded text-xs bg-blue hover:bg-blue-dark text-red-400">Delete</button>
+                          <form id="delete-role-{{ $role->id }}" action="{{ route('admin.roles.destroy', $role->id) }}" method="POST" class="inline">
                               @csrf
                               @method('delete')
-                              <button class="text-grey-lighter font-bold py-1 px-3 rounded text-xs bg-blue hover:bg-blue-dark text-red-400">Delete</button>
                           </form>
                           @endcan
 
@@ -52,5 +52,28 @@
             </div>
         </main>
     </div>
-</div>
+    <script>
+      function deleteRole(roleId) {
+          Swal.fire({
+              title: '<span style="color: #d33; font-weight: bold;">Are you sure?</span>',
+              text: "You won't be able to revert this!",
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText: '<span style="font-weight: bold;">Yes, delete it!</span>',
+              cancelButtonText: '<span style="font-weight: bold;">Cancel</span>',
+              background: '#f7f7f7',
+              customClass: {
+                  popup: 'border-2 border-gray-300',
+                  confirmButton: 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded',
+                  cancelButton: 'bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded'
+              }
+          }).then((result) => {
+              if (result.isConfirmed) {
+                  document.getElementById('delete-role-' + roleId).submit();
+              }
+          });
+      }
+  </script>
 </x-app-layout>

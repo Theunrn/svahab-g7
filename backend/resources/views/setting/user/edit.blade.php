@@ -3,7 +3,7 @@
     <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-200">
       <div class="container mx-auto px-6 py-1 pb-16">
         <div class="bg-white shadow-md rounded my-6 p-5">
-          <form method="POST" action="{{ route('admin.users.update',$user->id)}}">
+          <form id="edit-user-form" method="POST" action="{{ route('admin.users.update',$user->id)}}">
             @csrf
             @method('put')
             <!-- Image Preview -->
@@ -57,5 +57,65 @@
   </main>
   </div>
   </div>
+  <script>
+    // Add event listener to the form
+    document.getElementById('edit-user-form').addEventListener('submit', function(event) {
+      event.preventDefault(); // Prevent the form from submitting normally
 
+      const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 1000,
+        timerProgressBar: true,
+        customClass: {
+          icon: 'colored-toast',
+          popup: 'colored-toast',
+          title: 'colored-toast',
+        },
+        iconColor: '#a5dc86', // Green background for success
+      });
+
+      Toast.fire({
+        icon: 'success',
+        title: 'User updated successfully!',
+      }).then(() => {
+        this.submit(); // Submit the form programmatically after the alert
+      });
+    });
+  </script>
+
+  <style>
+    .colored-toast.swal2-icon-success {
+      background-color: #a5dc86 !important;
+    }
+
+    .colored-toast.swal2-icon-error {
+      background-color: #f27474 !important;
+    }
+
+    .colored-toast.swal2-icon-warning {
+      background-color: #f8bb86 !important;
+    }
+
+    .colored-toast.swal2-icon-info {
+      background-color: #3fc3ee !important;
+    }
+
+    .colored-toast.swal2-icon-question {
+      background-color: #87adbd !important;
+    }
+
+    .colored-toast .swal2-title {
+      color: white;
+    }
+
+    .colored-toast .swal2-close {
+      color: white;
+    }
+
+    .colored-toast .swal2-html-container {
+      color: white;
+    }
+  </style>
 </x-app-layout>

@@ -16,7 +16,7 @@
         </div>
         @endif
 
-        <form action="{{ route('admin.fields.update', $field->id) }}" method="POST" enctype="multipart/form-data" class="mt-4 bg-white p-6 rounded-lg shadow-lg max-w-2xl mx-auto">
+        <form id="edit-field-form" action="{{ route('admin.fields.update', $field->id) }}" method="POST" enctype="multipart/form-data" class="mt-4 bg-white p-6 rounded-lg shadow-lg max-w-2xl mx-auto">
             @csrf
             @method('PUT')
             <div class="flex flex-col space-y-4">
@@ -99,5 +99,66 @@
                 provinceSelect.appendChild(option);
             });
         });
+
+        // Add event listener to the form
+        document.getElementById('edit-field-form').addEventListener('submit', function(event) {
+          event.preventDefault(); // Prevent the form from submitting normally
+    
+          const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 1000,
+            timerProgressBar: true,
+            customClass: {
+              icon: 'colored-toast',
+              popup: 'colored-toast',
+              title: 'colored-toast',
+            },
+            iconColor: '#a5dc86', // Green background for success
+          });
+    
+          Toast.fire({
+            icon: 'success',
+            title: 'Field updated successfully!',
+          }).then(() => {
+            this.submit(); // Submit the form programmatically after the alert
+          });
+        });
+      </script>
+    
+      <style>
+        .colored-toast.swal2-icon-success {
+          background-color: #58cf13 !important;
+        }
+    
+        .colored-toast.swal2-icon-error {
+          background-color: #f27474 !important;
+        }
+    
+        .colored-toast.swal2-icon-warning {
+          background-color: #f8bb86 !important;
+        }
+    
+        .colored-toast.swal2-icon-info {
+          background-color: #3fc3ee !important;
+        }
+    
+        .colored-toast.swal2-icon-question {
+          background-color: #87adbd !important;
+        }
+    
+        .colored-toast .swal2-title {
+          color: white;
+        }
+    
+        .colored-toast .swal2-close {
+          color: white;
+        }
+    
+        .colored-toast .swal2-html-container {
+          color: white;
+        }
+      </style>
     </script>
 </x-app-layout>
