@@ -18,18 +18,28 @@
         <h3 class="mb-2">{{ product.description }}</h3>
         <p class="mb-1"><strong>Call: </strong> 098753527</p>
         <div class="flex gap-3">
-          <p class="price text-danger font-weight-bold mb-2" :class="{ 'text-decoration-line-through': product.discounts && product.discounts.length > 0 }">
+          <p
+            class="price text-danger font-weight-bold mb-2"
+            :class="{
+              'text-decoration-line-through': product.discounts && product.discounts.length > 0
+            }"
+          >
             <strong>Price: </strong> ${{ product.price }}
           </p>
-          <p class="price text-success font-weight-bold mb-2" v-if="product.discounts && product.discounts.length > 0">
+          <p
+            class="price text-success font-weight-bold mb-2"
+            v-if="product.discounts && product.discounts.length > 0"
+          >
             ${{ calculateDiscountedPrice(product.price, product.discounts[0].discount) }}
           </p>
         </div>
 
-        <p class="bg-white text-gray-700 border-2 border-green-300 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-40" >
-          <span >Total: </span> ${{ total }}.00
+        <p
+          class="bg-white text-gray-700 border-2 border-green-300 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-40"
+        >
+          <span>Total: </span> ${{ total }}
         </p>
-        <div class="rating mb-2"> 
+        <div class="rating mb-2">
           <span class="star text-warning">&#9733;</span>
           <span class="star text-warning">&#9733;</span>
           <span class="star text-warning">&#9733;</span>
@@ -40,21 +50,40 @@
         <div class="color-options mb-3">
           <h5 class="mb-2">Color:</h5>
           <div class="d-flex flex-wrap">
-            <div v-for="color in product.colors" :key="color.id" :style="{ backgroundColor: color.hex_code }" :class="[ 'color-circle', 'mr-2', 'cursor-pointer', `bg-${color.name.toLowerCase()}`, { selected: selectedColor === color.id } ]"  @click="toggleColorSelection(color.id)" ></div>
+            <div
+              v-for="color in product.colors"
+              :key="color.id"
+              :style="{ backgroundColor: color.hex_code }"
+              :class="[
+                'color-circle',
+                'mr-2',
+                'cursor-pointer',
+                `bg-${color.name.toLowerCase()}`,
+                { selected: selectedColor === color.id }
+              ]"
+              @click="toggleColorSelection(color.id)"
+            ></div>
           </div>
         </div>
         <div class="size-options mb-3 flex gap-3">
           <div class="size">
             <h5 class="mb-2">Size:</h5>
             <select class="form-select w-auto pe-5" v-model="selectedSize">
-              <option class="text-start" v-for="size in product.sizes" :key="size.id" :value="size.id">{{ size.name }}</option>
+              <option
+                class="text-start"
+                v-for="size in product.sizes"
+                :key="size.id"
+                :value="size.id"
+              >
+                {{ size.name }}
+              </option>
             </select>
           </div>
           <div class="way">
             <h5 class="mb-2">The way:</h5>
-            <select class="form-select w-auto" >
-              <option value="pickup" >Pickup</option>
-              <option value="delivery" >Delivery (+2$)</option>
+            <select class="form-select w-auto">
+              <option value="pickup">Pickup</option>
+              <option value="delivery">Delivery (+2$)</option>
             </select>
           </div>
         </div>
@@ -62,7 +91,9 @@
           <h5 class="mb-2">Quantity:</h5>
           <div class="input-group w-auto">
             <div class="quantity-input">
-              <button @click="decrementQuantity" class="decrement btn btn-outline-secondary">  -  </button>
+              <button @click="decrementQuantity" class="decrement btn btn-outline-secondary">
+                -
+              </button>
               <input class="input-group min-max" type="text" v-model="quantity" />
               <button @click="incrementQuantity" class="increment btn btn-outline-secondary">
                 +
@@ -71,7 +102,17 @@
           </div>
         </div>
         <!-- <a @click="createOrder" class="btn btn-warning btn-block mb-4"> Order Now</a> -->
-        <router-link @click="submitOrder" :to="{path:'/payment/'+ userId, query:{order:order.id}}" class="btn btn-yellow-500 btn-block ml-4 mb-4 text-white" style="background-color: orange"> Pay Now</router-link>
+        <router-link
+          @click="submitOrder"
+          :to="{ path: '/payment/' + userId, query: { order: order.id } }"
+          class="btn btn-yellow-500 btn-block ml-4 mb-4 text-white"
+          style="background-color: orange"
+        >
+          Pay Now</router-link
+        >
+        <!-- <router-link @click="submitOrder" :to="{ path: '/payment/' + userId, query: { order: order.id } }" class="btn btn-yellow-500 btn-block ml-4 mb-4 text-white" style="background-color: orange">
+          Pay Now
+        </router-link> -->
         <div class="delivery-info mb-4">
           <p class="mb-1"><strong>Home Delivery:</strong> Available within 48 hours</p>
           <p class="mb-0"><strong>Click & Collect:</strong> Pickup in store within 4 hours</p>
@@ -82,91 +123,134 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
-import axiosInstance from '@/plugins/axios';
-import { useRoute,useRouter  } from 'vue-router';
-import { useOrderedChildren } from 'element-plus';
-const route = useRoute();
-const router = useRouter();
-const productId = computed(() => route.params);
-const product = ref({});
-const colors = ref([]); // Reactive reference for colors
-const selectedColor = ref(null); // Reactive reference for selected color
-const sizes = ref([]); // Reactive reference for sizes
-const selectedSize = ref(null); // Reactive reference for selected size
-const quantity = ref(1);
-const order = ref({});
-const userId = computed(() => route.query.customer);
-console.log(userId);
+import { ref, computed, onMounted } from 'vue'
+import axiosInstance from '@/plugins/axios'
+import { useRoute, useRouter } from 'vue-router'
+import { useOrderedChildren } from 'element-plus'
+import Swal from 'sweetalert2'
+
+const route = useRoute()
+const router = useRouter()
+const productId = computed(() => route.params)
+const product = ref({})
+const colors = ref([]) // Reactive reference for colors
+const selectedColor = ref(null) // Reactive reference for selected color
+const sizes = ref([]) // Reactive reference for sizes
+const selectedSize = ref(null) // Reactive reference for selected size
+const quantity = ref(1)
+const order = ref({})
+const userId = computed(() => route.query.customer)
+const discountPrice = ref(0)
 
 const fetchProductDetails = async () => {
   try {
-    const response = await axiosInstance.get(`/product/show/${productId.value.id}`);
-    product.value = response.data.data;
-    product.discounts = product.value.discounts || []; // Initialize discounts
-    
+    const response = await axiosInstance.get(`/product/show/${productId.value.id}`)
+    product.value = response.data.data
+    product.discounts = product.value.discounts || [] // Initialize discounts
   } catch (error) {
-    console.error('Error fetching product details:', error);
+    console.error('Error fetching product details:', error)
   }
-};
+}
 
 const fetchSizes = async () => {
   try {
-    const response = await axiosInstance.get('/sizes');
-    sizes.value = response.data.data;
+    const response = await axiosInstance.get('/sizes')
+    sizes.value = response.data.data
   } catch (error) {
-    console.error('Error fetching sizes:', error);
+    console.error('Error fetching sizes:', error)
   }
-};
+}
 
 const fetchColors = async () => {
   try {
-    const response = await axiosInstance.get('/colors');
-    colors.value = response.data.data;
+    const response = await axiosInstance.get('/colors')
+    colors.value = response.data.data
   } catch (error) {
-    console.error('Error fetching colors:', error);
+    console.error('Error fetching colors:', error)
   }
-};
+}
 
 const total = computed(() => {
-  if (product.value.price && quantity.value) {
-    return product.value.price * quantity.value;
+  if (discountPrice.value) {
+    return (discountPrice.value * quantity.value).toFixed(2)
   }
-  return 0;
-});
+  return (product.value.price * quantity.value).toFixed(2)
+})
+// const total = computed(() => {
+//   if (product.value.price && quantity.value) {
+//     return product.value.price * quantity.value;
+//   }
+//   return 0;
+// });
 
 onMounted(() => {
-  fetchProductDetails();
-  fetchColors();
-  fetchSizes();
-});
+  fetchProductDetails()
+  fetchColors()
+  fetchSizes()
+})
 
 const getImageUrl = (imagePath) => {
-  return imagePath ? `http://127.0.0.1:8000/storage/${imagePath}` : '/default-image.jpg';
-};
+  return imagePath ? `http://127.0.0.1:8000/storage/${imagePath}` : '/default-image.jpg'
+}
 
 const incrementQuantity = () => {
-  quantity.value++;
-};
+  quantity.value++
+}
 
 const decrementQuantity = () => {
   if (quantity.value > 1) {
-    quantity.value--;
+    quantity.value--
   }
-};
+}
 
 const toggleColorSelection = (colorId) => {
-  selectedColor.value = colorId;
-};
-
+  selectedColor.value = colorId
+}
 
 const calculateDiscountedPrice = (originalPrice, discountPercentage) => {
-  const discount = (originalPrice * discountPercentage) / 100;
-  return originalPrice - discount;
-};
+  const discount = (originalPrice * discountPercentage) / 100
+  discountPrice.value = originalPrice - discount
+  return originalPrice - discount
+}
+
+// const submitOrder = async () => {
+//   try {
+//     const response = await axiosInstance.post('/orders/create', {
+//       product_id: productId.value.id,
+//       color_id: selectedColor.value,
+//       size_id: selectedSize.value,
+//       qty: quantity.value,
+//       total_amount: total.value
+//     });
+
+//     // Assuming SweetAlert library is included in your project
+//     Swal.fire({
+//       icon: 'success',
+//       title: 'Success!',
+//       text: 'Your order has been successfully created.',
+//       confirmButtonText: 'OK'
+//     }).then((result) => {
+//       if (result.isConfirmed) {
+//         order.value = response.data.order;
+//         const orderId = order.value.id;
+//         localStorage.setItem("orderId", orderId);
+//         this.$router.push({ path: `/payment/${this.userId}`, query: { order: this.order.id } });
+//         // Redirect or perform any other action here
+//       }
+//     });
+
+//   } catch (error) {
+//     console.error('Error creating order:', error);
+//     Swal.fire({
+//       icon: 'error',
+//       title: 'Oops...',
+//       text: 'Something went wrong! Please try again.',
+//       confirmButtonText: 'OK'
+//     });
+//   }
+// };
 
 const submitOrder = async () => {
-
   try {
     const response = await axiosInstance.post('/orders/create', {
       product_id: productId.value.id,
@@ -174,16 +258,23 @@ const submitOrder = async () => {
       size_id: selectedSize.value,
       qty: quantity.value,
       total_amount: total.value
-    });
+    })
 
-    order.value = response.data.order;
-    const orderId = order.value.id;
-    localStorage.setItem("orderId", orderId)
+    order.value = response.data.order
+    const orderId = order.value.id
+    localStorage.setItem('orderId', orderId)
+    Swal.fire({
+      position: 'center',
+      icon: 'success',
+      // title: 'Your order has been created successfully',
+      html: `<span style="font-size: 26px; font-weight: bold;">Your order has been created successfully</span>`,
+      showConfirmButton: false,
+      timer: 1000
+    })
   } catch (error) {
-    console.error('Error creating order:', error);
+    console.error('Error creating order:', error)
   }
-};
-
+}
 </script>
 
 <style scoped>

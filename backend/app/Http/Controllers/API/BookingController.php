@@ -17,7 +17,7 @@ class BookingController extends Controller
      */
     public function index()
     {
-        $bookings = Booking::all();
+        $bookings = Booking::with('options')->get();
         $bookings = BookingResource::collection($bookings);
         return response()->json(['success' => true, 'data' => $bookings]);
     }
@@ -44,7 +44,7 @@ class BookingController extends Controller
      */
     public function show(string $id)
     {
-        $booking = Booking::find($id);
+        $booking = Booking::with('options')->findOrFail($id);
         $booking = new BookingShowResource($booking);
         return response()->json(['success' => true, 'data' => $booking]);
     }
@@ -76,7 +76,7 @@ class BookingController extends Controller
         $notification->user_id = $booking->user_id; // Assuming Booking has a user_id field
         $notification->notification_type = 'booking_confirmed';
         $notification->notification_text = 'Your booking has been confirmed.';
-        $notification->notification_data = json_encode(['booking_id' => $booking->id]);
+        $notification->notification_data =  $booking->id;
         $notification->read = false;
         $notification->save();
 

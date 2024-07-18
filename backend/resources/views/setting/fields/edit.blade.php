@@ -16,7 +16,7 @@
         </div>
         @endif
 
-        <form action="{{ route('admin.fields.update', $field->id) }}" method="POST" enctype="multipart/form-data" class="mt-4 bg-white p-6 rounded-lg shadow-lg max-w-2xl mx-auto">
+        <form id="edit-field-form" action="{{ route('admin.fields.update', $field->id) }}" method="POST" enctype="multipart/form-data" class="mt-4 bg-white p-6 rounded-lg shadow-lg max-w-2xl mx-auto">
             @csrf
             @method('PUT')
             <div class="flex flex-col space-y-4">
@@ -49,21 +49,116 @@
                 </div>
 
                 <div class="flex flex-col space-y-2">
-                    <label class="text-gray-700 select-none font-medium">Availability</label>
-                    <div class="flex items-center">
-                        <div class="mr-4">
-                            <input type="radio" id="availablity_yes" name="availablity" value="1" {{ old('availablity', $field->availablity) == 1 ? 'checked' : '' }} class="form-radio h-4 w-4 text-indigo-600">
-                            <label for="availablity_yes" class="ml-2 text-sm font-medium text-gray-700">Yes</label>
-                        </div>
-                        <div>
-                            <input type="radio" id="availablity_no" name="availablity" value="0" {{ old('availablity', $field->availablity) == 0 ? 'checked' : '' }} class="form-radio h-4 w-4 text-indigo-600">
-                            <label for="availablity_no" class="ml-2 text-sm font-medium text-gray-700">No</label>
-                        </div>
-                    </div>
+                    <label class="text-gray-700 select-none font-medium">Select province</label>
+                    <select name="province" id="province"
+                        class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-200">
+                        <option value="{{ old('province', $field->province) }}" selected>{{ old('province', $field->province) }}</option>
+                    </select>
                 </div>
                 <button type="submit" class="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                     Update
                 </button>
         </form>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const provinces = [
+                'Banteay Meanchey',
+                'Battambang',
+                'Kampong Cham',
+                'Kampong Chhnang',
+                'Kampong Speu',
+                'Kampong Thom',
+                'Kampot',
+                'Kandal',
+                'Koh Kong',
+                'Kratie',
+                'Mondulkiri',
+                'Phnom Penh',
+                'Preah Vihear',
+                'Prey Veng',
+                'Pursat',
+                'Ratanakiri',
+                'Siem Reap',
+                'Preah Sihanouk',
+                'Stung Treng',
+                'Svay Rieng',
+                'Takeo',
+                'Oddar Meanchey',
+                'Kep',
+                'Pailin',
+                'Tbong Khmum'
+            ];
+
+            const provinceSelect = document.getElementById('province');
+            
+            provinces.forEach(province => {
+                const option = document.createElement('option');
+                option.value = province;
+                option.textContent = province;
+                provinceSelect.appendChild(option);
+            });
+        });
+
+        // Add event listener to the form
+        document.getElementById('edit-field-form').addEventListener('submit', function(event) {
+          event.preventDefault(); // Prevent the form from submitting normally
+    
+          const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 1000,
+            timerProgressBar: true,
+            customClass: {
+              icon: 'colored-toast',
+              popup: 'colored-toast',
+              title: 'colored-toast',
+            },
+            iconColor: '#a5dc86', // Green background for success
+          });
+    
+          Toast.fire({
+            icon: 'success',
+            title: 'Field updated successfully!',
+          }).then(() => {
+            this.submit(); // Submit the form programmatically after the alert
+          });
+        });
+      </script>
+    
+      <style>
+        .colored-toast.swal2-icon-success {
+          background-color: #58cf13 !important;
+        }
+    
+        .colored-toast.swal2-icon-error {
+          background-color: #f27474 !important;
+        }
+    
+        .colored-toast.swal2-icon-warning {
+          background-color: #f8bb86 !important;
+        }
+    
+        .colored-toast.swal2-icon-info {
+          background-color: #3fc3ee !important;
+        }
+    
+        .colored-toast.swal2-icon-question {
+          background-color: #87adbd !important;
+        }
+    
+        .colored-toast .swal2-title {
+          color: white;
+        }
+    
+        .colored-toast .swal2-close {
+          color: white;
+        }
+    
+        .colored-toast .swal2-html-container {
+          color: white;
+        }
+      </style>
+    </script>
 </x-app-layout>

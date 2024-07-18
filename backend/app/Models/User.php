@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -21,6 +22,7 @@ class User extends Authenticatable
         'email',
         'password',
         'phone_number',
+        'profile',
         'qr', // Ensure 'qr' field is in fillable array
     ];
 
@@ -59,11 +61,7 @@ class User extends Authenticatable
             'email_verified_at' => now(),
             'remember_token'    => Str::random(20),
         ]);
-        $user->assignRole('owner');
-        // Create the token for API access
-        $token = $user->createToken('auth_token')->plainTextToken;
-        return $token;
-
+    
         // Assign the role
         if ($request->roles) {
             $user->assignRole($request->roles);
@@ -116,4 +114,13 @@ class User extends Authenticatable
     {
         return $this->hasManyThrough(Payment::class, Product::class);
     }
+    public function feedbacks()
+    {
+        return $this->hasMany(Feedback::class);
+    }
+    public function posts(): HasMany
+    {
+        return $this->hasMany(Post::class);
+    }
+    
 }

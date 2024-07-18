@@ -24,6 +24,14 @@
             <span class="mx-3">Dashboard</span>
         </a>
 
+        {{-- @canany('User access','User add','User edit','User delete') --}}
+        <a class="flex items-center mt-4 py-2 px-6 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 {{ Route::currentRouteNamed('chatify') ? 'active' : '' }}"
+            href="{{ route('chatify')}}">
+            <i class='bx bxs-message-rounded-dots text-2xl'></i>
+            <span class="mx-3">Chat</span>
+        </a>
+        {{-- @endcanany --}}
+
         @canany('User access','User add','User edit','User delete')
         <a class="flex items-center mt-4 py-2 px-6 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 {{ Route::currentRouteNamed('admin.users.index') ? 'active' : '' }}"
             href="{{ route('admin.users.index')}}">
@@ -131,3 +139,9 @@
 
     </nav>
 </div>
+<style>
+    .active{
+        background: rgb(230, 226, 226);
+        border-radius: 0 10px 10px 0;
+    }
+</style>

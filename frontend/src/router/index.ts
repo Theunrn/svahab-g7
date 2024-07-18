@@ -37,7 +37,7 @@ const router = createRouter({
       component: () => import('../views/Web/Profile/ProfileView.vue')
     },
     {
-      path: '/fields/detail/:id',
+      path: '/fields',
       name: 'fields',
       component: () => import('../views/Web/FieldsView.vue')
     },
@@ -70,8 +70,7 @@ const router = createRouter({
     {
       path: '/product/detail/:id',
       name: 'Card',
-      component: () => import('../views/Web/Products/CardView.vue'),
-      props:true,
+      component: () => import('../views/Web/Products/CardView.vue')
     },
     {
       path: '/category/show/:id',
@@ -82,11 +81,6 @@ const router = createRouter({
       path: '/register',
       name: 'register',
       component: () => import('../views/Admin/Auth/RegisterVIew.vue')
-    },
-    {
-      path: '/profile/edit',
-      name: 'profile/edit',
-      component: () => import('../views/Admin/Auth/EditProfile.vue')
     },
     {
       path: '/payment/:id',
@@ -123,10 +117,16 @@ const router = createRouter({
       props: { tab: 'orders' }
     },
     {
-      path: '/schedule',
-      name: 'schedule',
-      component: () => import('../views/Web/Schedule/ScheduleView.vue')
-    }
+      path: '/scheduleField',
+      name: 'scheduleField',
+      component: () => import('../views/Web/Field/ScheduleView.vue')
+    },
+    {
+      path: '/lineUp',
+      name: 'lineUp',
+      component: () => import('../views/Web/Field/LineUpView.vue')
+    },
+
   ]
 })
 

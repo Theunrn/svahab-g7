@@ -23,6 +23,9 @@ class BookingRequest extends DefaultRequest
             'total_price' => 'required', 
             'status' => 'required|string', 
             'payment_status' => 'required|string', 
+            'options' => 'array',
+            'options.*.id' => 'required|exists:options,id',
+            'options.*.qty' => 'nullable|integer|min:1',
 
         ];
     }

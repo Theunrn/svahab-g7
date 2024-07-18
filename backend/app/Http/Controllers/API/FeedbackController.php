@@ -1,61 +1,75 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\FeedbackRequest;
 use App\Http\Resources\FeedbackResource;
 use App\Models\Feedback;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class FeedbackController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index($id)
     {
-        $feedbacks = Feedback::all();
+        $feedbacks = Feedback::with(['user', 'field'])
+            ->where('field_id', $id) // Add this line to filter by field_id
+            ->get();
         $feedbacks = FeedbackResource::collection($feedbacks);
-        return ['success'=>true, 'data'=>$feedbacks];
+        return response()->json(['success' => true, 'data' => $feedbacks], 201);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(FeedbackRequest $request)
+
+    public function store(Request $request)
     {
-        Feedback::store($request);
-        return ["success" => true, "Message" =>"feedback created successfully"];
+        $feedback = Feedback::create([
+            'user_id' => Auth::id(),
+            'field_id' => $request->input('field_id'),
+            'feedback_text' => $request->input('feedback_text'),
+        ]);
 
+        return response()->json(['success' => true, 'message' => 'Feedback created successfully', 'data' => $feedback], 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show($id)
+    {
+        $feedback = Feedback::with(['user', 'field'])->find($id);
+        if (!$feedback) {
+            return response()->json(['success' => false, 'message' => 'Feedback not found'], 404);
+        }
+        return response()->json(['success' => true, 'data' => $feedback]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        // Find the feedback entry by ID
+        $feedback = Feedback::find($id);
+
+        // Check if feedback entry exists
+        if (!$feedback) {
+            return response()->json(['success' => false, 'message' => 'Feedback not found'], 404);
+        }
+
+        // Update the feedback entry with provided data or retain existing data if not provided
+        $feedback->update([
+            'field_id' => $request->input('field_id', $feedback->field_id),
+            'feedback_text' => $request->input('feedback_text', $feedback->feedback_text),
+        ]);
+
+        // Return success response with updated feedback data
+        return response()->json(['success' => true, 'message' => 'Feedback updated successfully', 'data' => $feedback]);
+    }
+
+
+    public function destroy($id)
     {
         $feedback = Feedback::find($id);
-        $feedback = new FeedbackResource($feedback);
-        return ['success'=>true, 'data'=>$feedback];
+        if (!$feedback) {
+            return response()->json(['success' => false, 'message' => 'Feedback not found'], 404);
+        }
 
-    }
+        $feedback->delete();
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(FeedbackRequest $request, string $id)
-    {
-        Feedback::store($request, $id);
-        return ["success" => true, "Message" =>"feedback update successfully"];
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        Feedback::destroy($id);
-        return ["success" => true, "Message" =>"feedback deleted successfully"];
+        return response()->json(['success' => true, 'message' => 'Feedback deleted successfully']);
     }
 }

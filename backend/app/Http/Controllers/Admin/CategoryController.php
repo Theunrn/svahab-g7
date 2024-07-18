@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,19 +18,19 @@ class CategoryController extends Controller
 
         $categoriesQuery = Category::query();
 
-        if (Auth::user()->isAdmin()) {
-            // If the user is an admin, show all categories
-        } else {
-            // If the user is an owner, show only categories they created
-            $categoriesQuery->where('owner_id', Auth::id());
-        }
+        // if (Auth::user()->isAdmin()) {
+        //     // If the user is an admin, show all categories
+        // } else {
+        //     // If the user is an owner, show only categories they created
+        //     $categoriesQuery->where('owner_id', Auth::id());
+        // }
 
         if ($search) {
             // Search for categories by name
             $categoriesQuery->where('name', 'like', '%' . $search . '%');
         }
 
-        $categories = $categoriesQuery->get();
+        $categories = $categoriesQuery->latest()->get();
 
         if ($request->ajax()) {
             return response()->json(['categories' => $categories]);
@@ -43,15 +44,16 @@ class CategoryController extends Controller
         return view('setting.categories.new');
     }
 
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
+    
         $request->validate([
             'name' => 'required|string|max:255|unique:categories',
         ]);
-
+        // dd($request);
         Category::create([
             'name' => $request->name,
-            'owner_id' => Auth::id(), // Set the owner ID to the logged-in user
+            // 'owner_id' => Auth::id(), // Set the owner ID to the logged-in user
         ]);
 
         return redirect()->route('admin.categories.index')->with('success', 'Category created successfully.');

@@ -15,27 +15,22 @@ class Order extends Model
         'user_id',
     ];
 
+    
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class, 'user_id');
+    }
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class);
     }
 
-
-    public function payment()
-    {
-        return $this->hasOne(Payment::class);
-    }
-  
-
+    
     public function products()
     {
+        // return $this->belongsToMany(Product::class)->withPivot('qty', 'color_id', 'size_id');
         return $this->belongsToMany(Product::class, 'product_orders')
             ->withPivot('qty', 'color_id', 'size_id');
-    }
-
-    public function delivery()
-    {
-        return $this->hasOne(Delivery::class);
     }
 
     public static function createOrder($validatedData)
@@ -82,13 +77,6 @@ class Order extends Model
             return true;
         }
         return false;
-    }
-    public function confirmOrder()
-    {
-        $this->order_status = 'confirmed';
-        $this->save();
-        
-        return $this;
     }
 }
 

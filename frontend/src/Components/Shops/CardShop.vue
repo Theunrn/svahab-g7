@@ -2,12 +2,19 @@
   <div class="title">
     <h4>Let shopping with our products here!</h4>
     <div class="container-card card-me">
-      <div class="card-wrapper" v-for="(product, index) in uniqueProductsByCategory" :key="product.id">
+      <div
+        class="card-wrapper"
+        v-for="(product, index) in uniqueProductsByCategory"
+        :key="product.id"
+      >
         <div class="card h-104 shadow-sm position-relative">
           <div class="image-container">
             <div class="flex justify-between absolute w-full mt-1">
               <div class="discount-banner">
-                <span v-if="product.discounts.length > 0" class="discount-text bg-orange-500 px-4 py-2 rounded-md text-white text-2xl">
+                <span
+                  v-if="product.discounts.length > 0"
+                  class="discount-text bg-orange-500 px-4 py-2 rounded-md text-white text-2xl"
+                >
                   {{ product.discounts[0].discount }}% OFF
                 </span>
               </div>
@@ -23,30 +30,32 @@
               </div>
             </div>
             <router-link :to="'/product/detail/' + product.id">
-              <img :src="getImageUrl(product.image)" class="card-img-top" alt="Product Image">
+              <img :src="getImageUrl(product.image)" class="card-img-top" alt="Product Image" />
             </router-link>
           </div>
           <div class="text-start p-4">
             <h5 class="card-title">{{ product.name }}</h5>
             <p class="card-text text-danger fw-bold" v-if="product.discounted_price !== null">
-              <span class="text-danger fw-bold" style="text-decoration: line-through;">${{ product.price }}</span>
+              <span class="text-danger fw-bold" style="text-decoration: line-through"
+                >${{ product.price }}</span
+              >
               <span class="text-success ms-2">${{ product.discounted_price }}</span>
             </p>
-            <p class="card-text text-danger fw-bold" v-else>
-              ${{ product.price }}
-            </p>
+            <p class="card-text text-danger fw-bold" v-else>${{ product.price }}</p>
             <p class="card-text mt-2 mb-2">{{ product.description }}</p>
             <div class="group mt-3">
               <router-link
-                :to="{path: '/category/show/' + product.category_id, query:{user:user.id}}"
+                :to="{ path: '/category/show/' + product.category_id, query: { user: user.id } }"
                 :state="{ products: products }"
-                class="button me-2 inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                class="button me-2 inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              >
                 See More
               </router-link>
               <router-link
-                :to=" {path: '/product/detail/' + product.id, query:{customer:user.id}}"
+                :to="{ path: '/product/detail/' + product.id, query: { customer: user.id } }"
                 class="button inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-orange-500 rounded-lg hover:bg-orange-600 focus:ring-4 focus:outline-none focus:ring-orange-300 dark:bg-orange-400 dark:hover:bg-orange-500 dark:focus:ring-orange-600"
-                style="margin-left: auto">
+                style="margin-left: auto"
+              >
                 Buy Now
               </router-link>
             </div>
@@ -59,15 +68,16 @@
 
 <script>
 import axios from 'axios'
+import Swal from 'sweetalert2'
 
 export default {
-  props:{
-    user:Object,
+  props: {
+    user: Object
   },
   data() {
     return {
       products: [],
-      uniqueProductsByCategory: [],
+      uniqueProductsByCategory: []
     }
   },
   created() {
@@ -110,7 +120,7 @@ export default {
     getImageUrl(imagePath) {
       return `http://127.0.0.1:8000/storage/${imagePath}`
     },
-    
+
     toggleFavorite(product) {
       product.isFavorite = !product.isFavorite
     },
@@ -118,37 +128,57 @@ export default {
     calculateDiscountedPrice(product) {
       if (product.discounts.length > 0) {
         const discount = product.discounts[0]
-        const discountedPrice = product.price - (product.price * (discount.discount / 100))
+        const discountedPrice = product.price - product.price * (discount.discount / 100)
         return parseFloat(discountedPrice.toFixed(2)).toString()
       }
       return null
     },
 
-  
     addToCart(product) {
-      axios.post('http://127.0.0.1:8000/api/cart/create', {
-        product_id: product.id,
-        quantity: 1,
-      }, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('access_token')}`
-        }
-      })
-      .then(response => {
-        console.log('Product added to cart:', product);
-        alert(`${product.name} added to cart successfully.`);
-      })
-      .catch(error => {
-        console.error('Error adding to cart:', error);
-      });
-    },
+      axios
+        .post(
+          'http://127.0.0.1:8000/api/cart/create',
+          {
+            product_id: product.id,
+            quantity: 1
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('access_token')}`
+            }
+          }
+        )
+        .then((response) => {
+          console.log('Product added to cart:', product)
+          // Display SweetAlert for success
+          Swal.fire({
+            position: 'center',
+            icon: 'success',
+            // title: `${product.name} added to cart successfully`,
+            // html: `<span style="font-size: 26px;">added to cart successfully</span>`,
+            html: `<span style="font-size: 26px; font-weight: bold;">${product.name} added to cart successfully</span>`,
+            showConfirmButton: false,
+            timer: 1000
+          })
+        })
+        .catch((error) => {
+          console.error('Error adding to cart:', error)
+          // Display SweetAlert for error
+          Swal.fire({
+            position: 'center',
+            icon: 'error',
+            title: 'Error adding to cart. Please try again.',
+            showConfirmButton: false,
+            timer: 1500
+          })
+        })
+    }
   }
 }
 </script>
 
 
 <style scoped>
-
 .container-card {
   display: flex;
   flex-wrap: wrap;
@@ -184,8 +214,6 @@ export default {
   object-fit: cover;
 }
 
-
-
 .button {
   display: inline-block;
   padding: 8px 16px;
@@ -209,7 +237,6 @@ export default {
   transform: translateY(-5px);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
-
 
 .card-body {
   background-color: #f8f9fa;

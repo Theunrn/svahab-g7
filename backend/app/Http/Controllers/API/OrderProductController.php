@@ -20,6 +20,7 @@ class OrderProductController extends Controller
         // Get authenticated user (customer)
         $user = Auth::user();
 
+        // Retrieve orders for the authenticated user
         $orders = Order::where('user_id', $user->id)->with('products')->get();
 
         $orders->each(function ($order) {
@@ -70,10 +71,7 @@ class OrderProductController extends Controller
                 'user_id' => $user->id,
                 'notification_type' => 'order_cancelled',
                 'notification_text' => 'Your order has been cancelled.',
-                'notification_data' => json_encode([
-                    'order_id' => $order->id,
-                    'cancelled_at' => now(),
-                ]),
+                'notification_data' => $order->id,
                 'read' => false,
             ]);
 
@@ -83,26 +81,12 @@ class OrderProductController extends Controller
     public function confirm(Request $request, $id)
     {
         $user = Auth::user();
-        $order = Order::findOrFail($id);
+        $order = Order::where('user_id', $user->id)->findOrFail($id);
 
-        // Confirm the order
-        $order->confirmOrder();
+        $response = $order->cancelOrder();
 
-        // Create a notification for order confirmation
-        Notification::create([
-            'user_id' => $order->user_id,
-            'notification_type' => 'order_confirmed',
-            'notification_text' => 'Your order has been confirmed.',
-            'notification_data' => json_encode([
-                'order_id' => $order->id,
-                'confirmed_at' => now(),
-            ]),
-            'read' => false,
-        ]);
-
-        return response()->json(['message' => 'Order confirmed successfully'], 200);
+        return response()->json($response, $response['message'] === 'Order cancelled successfully' ? 200 : 400);
     }
-
 
 
     public function reactivate($id)
@@ -115,7 +99,6 @@ class OrderProductController extends Controller
             return response()->json(['message' => 'Order is not cancelled, cannot reactivate'], 400);
         }
     }
-    // app/Http/Controllers/OrderController.php
     public function getOrdersByUserId($id)
     {
         $orders = Order::where('user_id', $id)->get();
@@ -125,17 +108,17 @@ class OrderProductController extends Controller
         }
         return response()->json($orders, 200);
     }
-
-    public function deleteOrder($id)
+    public function updateStatusPaymentOrder($id)
     {
-        $order = Order::findOrFail($id);
-        $order->delete();
-        return response()->json(['message' => 'Order deleted successfully'], 200);
-    }
-    public function updateStatusPaymentOrder($id){
-        $order = Order::findOrFail($id);
+        $order = Order::find($id);
+        if (!$order) {
+            // Handle the case where the order is not found
+            return response()->json(['error', 'Order not found'], 404);
+        }
+
         $order->payment_status = 'paid';
-        $order->save();
-        return response()->json(['message' => 'Payment status updated successfully'], 200);
+        $order->save(); // Save the updated status to the database
+
+        return  response()->json(['success', 'Payment status updated successfully'], 200);
     }
 }
