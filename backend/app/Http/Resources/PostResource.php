@@ -14,17 +14,17 @@ class PostResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-       return [
-        'id' => $this->id,
-        'name' => $this->name,
-        'date_match' => $this->date_match,
-        'logo' => $this->logo,
-        'start_time' => $this->start_time,
-        'end_time' => $this->end_time,
-        'post_date' => $this->post_date,
-        'location' => $this->location,
-        'created_at' => $this->created_at->format('Y-m-d H:i:s'),
-        'updated_at' => $this->updated_at->format('Y-m-d H:i:s'),
-       ];
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'date_match' => $this->date_match,
+            'logo' => $this->logo,
+            'start_time' => $this->start_time,
+            'end_time' => $this->end_time,
+            'post_date' => $this->post_date,
+            'location' => $this->location,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
+        ];
     }
 }
