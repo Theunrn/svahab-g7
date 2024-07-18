@@ -21,7 +21,8 @@ class DashboardController extends Controller
         $totalFiels = Field::count();
         $totalFeedbacks = Feedback::count();
         $totalPayments = Payment::sum('amount'); // Total amount of all payments
-
+        $payments = Payment::with('customer')->get();
+        $totalAmount = $payments->sum('amount');
         $daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
         $weeklyPayment = [];
         $weeklyDataField = [];
@@ -61,6 +62,8 @@ class DashboardController extends Controller
         });
 
         return view('dashboard', compact('totalBookings', 'totalUsers', 'totalFiels', 'totalFeedbacks', 'totalPayments', 'weeklyPayment', 'weeklyDataField', 'totalWeekAmount', 'totalWeekBookings', 'productData', 'totalOrders'));
+        
+
     }
 
 }

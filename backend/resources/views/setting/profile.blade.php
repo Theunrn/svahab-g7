@@ -86,7 +86,7 @@
           this.imgurl     = "";
         }
       };
-    }
+    }z
 
 </script>
 </x-app-layout>
