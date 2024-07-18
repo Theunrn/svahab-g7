@@ -29,6 +29,12 @@ class BookingResource extends JsonResource
             'payment_status' => $this->payment_status,
             'created_at' => $this->created_at->format('d-m-Y'),
             'updated_at' => $this->updated_at->format('d-m-Y'),
+            'options' => $this->options->map(function ($option) {
+                return [
+                    'name' => $option->name,
+                    'qty' => $option->pivot->qty
+                ];
+            })
         ];
     }
 }

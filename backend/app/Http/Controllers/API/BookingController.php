@@ -17,7 +17,7 @@ class BookingController extends Controller
      */
     public function index()
     {
-        $bookings = Booking::all();
+        $bookings = Booking::with('options')->get();
         $bookings = BookingResource::collection($bookings);
         return response()->json(['success' => true, 'data' => $bookings]);
     }
@@ -44,7 +44,7 @@ class BookingController extends Controller
      */
     public function show(string $id)
     {
-        $booking = Booking::find($id);
+        $booking = Booking::with('options')->findOrFail($id);
         $booking = new BookingShowResource($booking);
         return response()->json(['success' => true, 'data' => $booking]);
     }

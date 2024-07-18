@@ -22,18 +22,22 @@ class BookingController extends Controller
 
     public function index()
     {
+        // Ensure user is authenticated
         $user = Auth::user();
 
         if ($user->isAdmin()) {
-            // Admin: get all bookings
-            $bookings = Booking::latest()->get();
+            // Admin: get all bookings with options
+            $bookings = Booking::with('options')->latest()->get();
         } else {
-            // Owner: get bookings for their fields
+            // Owner: get bookings for their fields with options
             $fields = $user->fields()->pluck('id');
-            $bookings = Booking::whereIn('field_id', $fields)->latest()->get();
+            $bookings = Booking::whereIn('field_id', $fields)->with('options')->latest()->get();
         }
 
+        // Transform bookings to BookingResource collection
         $bookings = BookingResource::collection($bookings);
+
+        // Pass bookings to view
         return view('setting.booking.index', compact('bookings'));
     }
 
@@ -49,7 +53,7 @@ class BookingController extends Controller
 
     public function show(string $id)
     {
-        $booking = Booking::find($id);
+        $booking = Booking::with('options')->findOrFail($id);
         $booking = new BookingResource($booking);
         return view('setting.booking.show', compact('booking'));
     }
@@ -134,5 +138,4 @@ class BookingController extends Controller
         $notification->read = false;
         $notification->save();
     }
-
 }
