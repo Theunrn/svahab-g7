@@ -119,8 +119,8 @@ export default {
           currency: 'USD',
           code: this.generateRandomCode(9),
           payment_date: this.paymentDate
-        });
-        
+        })
+
         // Display SweetAlert for success
         Swal.fire({
           icon: 'success',
@@ -129,12 +129,11 @@ export default {
           confirmButtonText: 'OK'
         }).then((result) => {
           if (result.isConfirmed) {
-            this.isPaid = true;
-            this.updatePaymentStatus();
+            this.isPaid = true
+            this.updatePaymentStatus()
             // You can add further actions here if needed
           }
-        });
-
+        })
       } catch (error) {
         // Display SweetAlert for error
         Swal.fire({
@@ -142,8 +141,8 @@ export default {
           title: 'Payment Failed',
           text: 'Something is gone wrong. Please try again.',
           confirmButtonText: 'OK'
-        });
-        console.error('Error creating payment intent:', error);
+        })
+        console.error('Error creating payment intent:', error)
       }
     },
 
@@ -189,7 +188,7 @@ export default {
     },
     async fetchOrder() {
       try {
-        const { data } = await axios.get(`http://127.0.0.1:8000/api/orders/show/${this.orderId}`, {
+        const { data } = await axios.get(`http://127.0.0.1:8000/api/order/show/${this.orderId}`, {
           headers: {
             Authorization: `Bearer ${this.token}`
           }
@@ -197,6 +196,7 @@ export default {
 
         this.total_price = data.data.total_amount
         this.product_id = data.data.products[0].id
+        console.log(data.data)
       } catch (error) {
         console.error('Error fetching order data:', error)
       }

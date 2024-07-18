@@ -27,9 +27,11 @@ use App\Http\Controllers\API\AddToCardController;
 use App\Http\Controllers\API\DeliveryController;
 use App\Http\Controllers\API\EventController;
 use App\Http\Controllers\API\MatchTeamController;
+use App\Http\Controllers\API\OptionController as APIOptionController;
 use App\Http\Controllers\API\ProfileController;
 use App\Http\Controllers\API\ScheduleMatchController as APIScheduleMatchController;
 use App\Http\Controllers\Auth\ProfileController as AuthProfileController;
+use App\Http\Controllers\OptionController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ScheduleMatchController;
 use App\Http\Controllers\StripePaymentController;
@@ -70,13 +72,14 @@ Route::put('/profile/update', [ProfileController::class, 'update'])->middleware(
 Route::get('/me', [AuthController::class, 'index'])->middleware('auth:sanctum');
 Route::get('/owner/show/{id}', [AuthController::class, 'show']);
 
+//Field
 Route::get('fields/list', [FildController::class, 'index'])->name('field.list');
 Route::post('field/create', [FildController::class, 'store'])->name('field.create');
-Route::get('field/show/{id}', [FildController::class, 'show'])->name('field.show');
+Route::get('/field/show/{id}', [FildController::class, 'show'])->name('field.show');
 Route::put('field/update/{id}', [FildController::class, 'update'])->name('field.update');
 Route::delete('field/delete/{id}', [FildController::class, 'destroy'])->name('field.delete');
 
-
+//Order
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('orders/list', [OrderProductController::class, 'index']);
     Route::post('orders/create', [OrderProductController::class, 'store']);
@@ -143,8 +146,6 @@ Route::put('/notification/update/{id}', [NotificationController::class, 'updateN
 Route::delete('/notifications/delete/{id}', [NotificationController::class, 'destroy']);
 Route::post('/notifications/store', [NotificationController::class, 'store']);
 
-
-
 //Payment
 Route::post('/stripe/payment', [StripePaymentController::class, 'makePayment']);
 Route::post('/payment/create', [APIPaymentController::class, 'createPayment']);
@@ -198,5 +199,5 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::get('/post/list', [PostController::class, 'index'])->middleware('auth:sanctum');
 Route::put('/post/update/{id}', [PostController::class, 'updatePostStatus']);
 
-
-
+//option
+Route::get('/options', [APIOptionController::class, 'index']);
