@@ -62,10 +62,12 @@
                                         <a href="{{ route('admin.discounts.edit', $discount->id) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded inline-block">
                                             <i class='bx bx-edit text-2xl'></i>
                                         </a>
-                                        <form action="{{ route('admin.discounts.destroy', $discount->id) }}" method="POST" class="inline-block">
-                                          @csrf
-                                          @method('DELETE')
-                                          <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded inline-block">  <i class='bx bx-trash text-xl'></i></button>
+                                        <form action="{{ route('admin.discounts.destroy', $discount->id) }}" method="POST" class="inline-block delete-form">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="button" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded inline-block delete-button">
+                                                <i class='bx bx-trash text-xl'></i>
+                                            </button>
                                         </form>
                                     </td>
                                 </tr>
@@ -76,4 +78,41 @@
             </div>
         </div>
     </div>
+
+    <!-- Include SweetAlert2 CSS and JS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const deleteButtons = document.querySelectorAll('.delete-button');
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    const form = this.closest('.delete-form');
+
+                    Swal.fire({
+                        title: '<span style="color: #d33; font-weight: bold;">Are you sure?</span>',
+                        text: "You won't be able to revert this!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: '<span style="font-weight: bold;">Yes, delete it!</span>',
+                        cancelButtonText: '<span style="font-weight: bold;">Cancel</span>',
+                        background: '#f7f7f7',
+                        customClass: {
+                            popup: 'border-2 border-gray-300',
+                            confirmButton: 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded',
+                            cancelButton: 'bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded'
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                });
+            });
+        });
+    </script>
 </x-app-layout>

@@ -51,7 +51,8 @@ class DiscountController extends Controller
 
         $discount->products()->attach($request->product_id);
 
-        return redirect()->route('admin.discounts.index')->with('success', 'Discount created successfully.');
+        // return redirect()->route('admin.discounts.index')->with('success', 'Discount created successfully.');
+        return redirect()->route('admin.discounts.index')->with('success', 'Your product has a discount successfully.');
     }
 
     public function edit(Discount $discount)

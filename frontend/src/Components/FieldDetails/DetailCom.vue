@@ -225,17 +225,17 @@
                 <a
                   @click="deleteItem(feedback.id)"
                   class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                  >Delete
-                  <div class="pos-demo"></div>
-                </a>
+                  >Delete 
+                  </a
+                >
               </li>
               <li v-if="feedback.user_id == userId">
                 <a
                   @click="showEditModal(feedback)"
                   class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                   >Edit
-                  <div class="pos-demo"></div>
-                </a>
+                  </a 
+                >
               </li>
               <li v-else>
                 <span
