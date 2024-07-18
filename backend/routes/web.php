@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\Admin\FeedbackController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ProductController;
@@ -14,12 +15,14 @@ use App\Http\Controllers\Admin\ChatCotroller;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\SettingController;
+// use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\SlideshowController; // Add this line
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\SlideshowAdminController; // Add this line
 use App\Http\Controllers\MailController;
 use Faker\Core\File;
 use GuzzleHttp\Psr7\Response;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -97,6 +100,7 @@ Route::namespace('App\Http\Controllers\Admin')->name('admin.')->prefix('admin')
         Route::resource('discounts', 'DiscountController');
         Route::resource('chats', 'ChatCotroller');
 
+        Route::get('/profile', [ProfileController::class, 'list'])->name('profile');
         Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
         Route::put('/profile-update', [ProfileController::class, 'update'])->name('profile.update');
         Route::get('/mail', [MailSettingController::class, 'index'])->name('mail.index');
@@ -158,5 +162,11 @@ Route::post('/admin/users', [UserController::class, 'store'])->name('admin.users
 
 
 
+Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
+Route::post('/settings', [SettingController::class, 'store'])->name('settings.store');
+Route::get('/settings/{id}/edit', [SettingController::class, 'edit'])->name('settings.edit');
+Route::delete('/settings/{id}', [SettingController::class, 'destroy'])->name('settings.destroy');
 
 // Route::get('/send-email', [MailController::class, 'sendEmail']);
+
+Route::put('/profile/password', [SettingController::class, 'updatePassword'])->name('admin.profile.updatePassword');
