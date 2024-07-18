@@ -1,5 +1,11 @@
 <x-app-layout>
     <div class="container mx-auto p-6">
+
+        <head>
+            <!-- Tailwind CSS -->
+            <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+        </head>
+
         <!-- Flash Messages -->
         @if (session('status'))
         <div id="statusMessage" class="bg-green-500 text-white p-4 rounded mb-4">
@@ -74,17 +80,10 @@
                                         <label for="old_password" class="text-gray-700 select-none font-medium">Old Password</label>
                                         <input id="old_password" type="password" name="old_password" placeholder="Enter old password" class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-200 w-full">
                                     </div>
-                                    <div>
-                                        <label for="new_password" class="text-gray-700 select-none font-medium">New Password</label>
-                                        <input id="new_password" type="password" name="new_password" placeholder="Enter new password" class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-200 w-full">
-                                    </div>
-                                    <div>
-                                        <label for="new_password_confirmation" class="text-gray-700 select-none font-medium">Confirm New Password</label>
-                                        <input id="new_password_confirmation" type="password" name="new_password_confirmation" placeholder="Confirm new password" class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-200 w-full">
-                                    </div>
+
                                 </div>
                                 <div class="text-center mt-6">
-                                    <button type="submit" class="bg-red-500 text-white font-bold px-5 py-2 rounded-lg shadow hover:bg-red-600 transition-colors">Update Password</button>
+                                    <button id="toggleModal" type="button" class="bg-red-500 text-white font-bold px-5 py-2 rounded-lg shadow hover:bg-red-600 transition-colors">Update Password</button>
                                 </div>
                             </form>
                             <hr class="my-6">
@@ -94,4 +93,48 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal -->
+    <div id="defaultModal" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
+        <div class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+            <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-lg">
+                <div class="mb-4">
+                    <h2 class="text-xl font-semibold mb-4">Change Password</h2>
+                    <form method="POST" action="{{ route('admin.profile.updatePassword') }}">
+                        <div class="flex flex-col space-y-4">
+                            <div>
+                                <label for="new_password" class="text-gray-700 select-none font-medium">New Password</label>
+                                <input id="new_password" type="password" name="new_password" placeholder="Enter new password" class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-200 w-full">
+                            </div>
+                            <div>
+                                <label for="new_password_confirmation" class="text-gray-700 select-none font-medium">Confirm New Password</label>
+                                <input id="new_password_confirmation" type="password" name="new_password_confirmation" placeholder="Confirm new password" class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-200 w-full">
+                            </div>
+                        </div>
+                        <div class="text-center mt-6">
+                            <button type="submit" class="bg-blue-500 text-white font-bold px-5 py-2 rounded-lg shadow hover:bg-blue-600 transition-colors">Update Password</button>
+                            <button type="button" @click="open = false" class="bg-gray-500 text-white font-bold px-5 py-2 rounded-lg shadow hover:bg-gray-600 transition-colors ml-2">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get elements
+        const toggleModalButton = document.getElementById('toggleModal');
+        const modal = document.getElementById('defaultModal');
+        const closeModalButton = document.getElementById('closeModal');
+
+        // Function to toggle modal visibility
+        const toggleModal = () => {
+            modal.classList.toggle('hidden');
+        };
+
+        // Event listeners
+        toggleModalButton.addEventListener('click', toggleModal);
+        closeModalButton.addEventListener('click', toggleModal);
+    </script>
 </x-app-layout>
+<script src="//unpkg.com/alpinejs" defer></script>
