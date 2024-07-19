@@ -16,7 +16,7 @@ class CreatePostsTable extends Migration
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('logo');
+            $table->string('logo')->nullable();
             $table->string('name');
             $table->date('post_date')->nullable();
             $table->date('date_match')->nullable();  // Change to date

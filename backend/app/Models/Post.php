@@ -11,34 +11,41 @@ class Post extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id','logo', 'name', 'post_date', 'start_match', 'end_match','start_time','end_time', 'location'];
+    protected $fillable = ['user_id', 'status', 'logo', 'name', 'post_date', 'date_match', 'start_time', 'end_time', 'location'];
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
-    
-
-    /**
+      /**
      * Store a new post.
      *
-     * @param array $data
+     * @param \Illuminate\Http\Request $request
+     * @param int|null $id
      * @return \App\Models\Post
      */
-    public static function store($data)
+    public static function store($request, $id = null)
     {
-        // Handle logo file upload
-        if (isset($data['logo']) && $data['logo']->isValid()) {
-            $imageName = time() . '.' . $data['logo']->extension();
-            $data['logo']->storeAs('public/images', $imageName);
-            $data['logo'] = 'images/' . $imageName;
+        $data = $request->only('name', 'post_date', 'date_match', 'start_time', 'end_time', 'location');
+
+        if ($request->hasFile('logo')) {
+            try {
+                if ($request->logo && Storage::exists('public/' . $request->logo)) {
+                    Storage::delete('public/' . $request->logo);
+                }
+    
+                $file = $request->file('logo');
+                $filename = time() . '.' . $file->extension();
+                $file->storeAs('public/images', $filename);
+                $data['logo'] = 'images/' . $filename;
+
+            } catch (\Exception $e) {
+                return response()->json(['error' => 'Failed to upload new logo: ' . $e->getMessage()], 500);
+            }
         }
-
-        // Set post_date to current date and time
-        $data['post_date'] = now();
-
-        // Create and return a new post instance
-        return self::create($data);
+        $data['user_id'] = Auth::id();
+        $data['status'] = false;
+        $data = self::updateOrCreate(['id' => $id], $data);
+        return $data;
     }
-
 }
