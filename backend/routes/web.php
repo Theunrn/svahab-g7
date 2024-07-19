@@ -117,7 +117,6 @@ Route::get('/users/create', [UserController::class, 'createAccount'])->name('use
 Route::post('/register/store', [UserController::class, 'register'])->name('register.store');
 Route::get('/admin/loginform', [UserController::class, 'loginform'])->name('admin.loginform');
 
-// Route::resource('dashboards', DashboardController::class);
 
 // Chat routes
 Route::middleware(['auth'])->group(function () {
