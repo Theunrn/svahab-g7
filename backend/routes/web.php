@@ -169,4 +169,5 @@ Route::delete('/settings/{id}', [SettingController::class, 'destroy'])->name('se
 
 // Route::get('/send-email', [MailController::class, 'sendEmail']);
 
-Route::put('/profile/password', [SettingController::class, 'updatePassword'])->name('admin.profile.updatePassword');
+Route::put('/profile/password', [SettingController::class, 'checkPassword'])->name('admin.profile.checkPassword');
+Route::put('/profile/password/update', [SettingController::class, 'updatePassword'])->name('admin.profile.updatePassword');
