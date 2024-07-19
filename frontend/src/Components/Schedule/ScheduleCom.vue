@@ -1,33 +1,23 @@
 <template>
   <div class="container mx-auto my-4 p-4 bg-white shadow-md rounded-lg">
-    <h1 class="text-3xl font-bold text-center mb-6">Check your available time</h1>
+    <h1 class="text-3xl font-bold text-center mb-6">Class Schedule</h1>
     <FullCalendar :options="calendarOptions" />
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted,computed } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import FullCalendar from '@fullcalendar/vue3';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import axiosInstance from '@/plugins/axios';
-import { defineProps } from 'vue'
+import { defineProps } from 'vue';
 
 const props = defineProps({
-  fieldId:String
+  fieldId: String
 });
+
 const events = ref([]);
-const handleDateClick = (info) => {
-  const title = prompt('Enter Event Title:');
-  if (title) {
-    events.value.push({
-      title,
-      start: info.dateStr,
-      allDay: info.allDay,
-    });
-    saveEvent(title, info.dateStr);
-  }
-};
 
 const calendarOptions = computed(() => ({
   plugins: [timeGridPlugin, interactionPlugin],
@@ -37,11 +27,12 @@ const calendarOptions = computed(() => ({
     center: 'title',
     right: 'timeGridDay,timeGridWeek',
   },
-  slotMinTime: '07:00:00',
+  slotMinTime: '06:00:00',
   slotMaxTime: '23:00:00',
-  dateClick: handleDateClick,
+  events: events.value,
   editable: true,
-  events: events.value, // Make sure events are correctly bound here
+  eventClick: handleEventClick,
+  dateClick: handleDateClick,
 }));
 
 onMounted(async () => {
@@ -51,25 +42,124 @@ onMounted(async () => {
 const fetchEvents = async () => {
   try {
     const response = await axiosInstance.get(`/event/list/${props.fieldId}`);
-    events.value = response.data.data;
+    const fetchedEvents = response.data.data;
+    fetchedEvents.forEach(event => {
+      event.backgroundColor = getRandomColor();
+    });
+    events.value = fetchedEvents;
   } catch (error) {
     console.error('Error fetching events:', error);
   }
 };
 
-const saveEvent = async (title, date) => {
+const handleDateClick = (info) => {
+  const title = prompt('Enter Event Title:');
+  if (title) {
+    const newEvent = {
+      title,
+      start: info.dateStr,
+      allDay: info.allDay,
+      backgroundColor: getRandomColor(),
+    };
+    events.value.push(newEvent);
+    saveEvent(newEvent);
+  }
+};
+
+const handleEventClick = (info) => {
+  // Format the start and end times without time zone details
+  const formatDate = (date) => {
+    return new Intl.DateTimeFormat('en-US', {
+      dateStyle: 'medium',
+      timeStyle: 'short',
+    }).format(date);
+  };
+
+  alert(`Event: ${info.event.title}\nStart: ${formatDate(info.event.start)}\nEnd: ${formatDate(info.event.end)}`);
+};
+
+const saveEvent = async (event) => {
   try {
     const response = await axiosInstance.post('/event/store', {
-      title,
-      start: date,
+      title: event.title,
+      start: event.start,
     });
     console.log('Event saved:', response.data);
   } catch (error) {
     console.error('Error saving event:', error);
   }
 };
+
+const getRandomColor = () => {
+  const letters = '0123456789ABCDEF';
+  let color = '#';
+  for (let i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+};
 </script>
 
 <style scoped>
-/* Add any additional styles if needed */
+.container {
+  max-width: 1200px;
+}
+
+.fc-toolbar {
+  background-color: #f8f9fa;
+  padding: 10px;
+  border-radius: 5px 5px 0 0;
+}
+
+.fc-header-toolbar .fc-toolbar-title {
+  font-size: 1.5rem;
+  color: #007bff;
+}
+
+.fc-event {
+  border: none;
+  color: white;
+  padding: 5px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.fc-event:hover {
+  background-color: #0056b3;
+}
+
+.fc-timegrid-slot {
+  background-color: #ffffff;
+}
+
+.fc-timegrid-slot:hover {
+  background-color: #f1f1f1;
+}
+
+.fc-day-today {
+  background-color: #df7819;
+  border-radius: 5px;
+}
+
+.fc-timegrid .fc-scroller {
+  overflow: visible !important;
+}
+
+.fc-timegrid-axis-cushion {
+  color: #333;
+}
+
+.fc-timegrid-slot-label {
+  color: #007bff;
+}
+
+.fc-timegrid-event {
+  padding: 5px;
+  border-radius: 4px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.fc-timegrid .fc-daygrid {
+  border-right: none; /* Remove the border */
+}
 </style>
