@@ -314,6 +314,8 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import axiosInstance from '@/plugins/axios'
+
+const post_team_id = ref('')
 const route = useRoute()
 const userId = computed(() => route.query.customer)
 const post_id = ref('')
@@ -351,11 +353,39 @@ const createMatch = async () => {
       formData.append('team_logo', team_post_logo.value)
     }
 
+    // Log formData entries for debugging
+    // formData.forEach((value, key) => {
+    //   console.log(`${key}:`, value)
+    // })
     const response = await axiosInstance.post('/post/match', formData, {
       headers: {
         'Content-Type': 'multipart/form-data' // Ensure correct content type for file uploads
       }
     })
+
+    // const dataForm = new FormData()
+    // dataForm.append('team1_name',  name.value)
+    // dataForm.append('team2_name',  team_name.value)
+    // dataForm.append('date_match', date_match.value)
+    // dataForm.append('start_time', start_time.value)
+    // dataForm.append('end_time',  end_time.value)
+    // dataForm.append('location', location.value)
+    // if (team_post_logo.value && team_logo.value) {
+    //   formData.append('team2_logo', team_post_logo.value)
+    //   formData.append('team1_logo', team_logo.value)
+    // }
+    // dataForm.forEach((value, key) => {
+    //   console.log(`${key}:`, value)
+    // })
+    // const data = await axiosInstance.post('/schedule/create', dataForm, {
+    //   headers: {
+    //     'Content-Type': 'multipart/form-data' // Ensure correct content type for file uploads
+    //   }
+    // })
+    // console.log(data.data)
+
+    // await axiosInstance.delete(`/post/delete/${post_team_id.value}`,)
+
     alert('Match created successfully')
     window.location.reload()
   } catch (error) {
@@ -363,6 +393,7 @@ const createMatch = async () => {
     console.error('Error creating match:', error.response ? error.response.data : error)
   }
 }
+
 
 
 // Function to handle file change
@@ -491,10 +522,9 @@ const fetchAllTeams = async () => {
 const getImageUrl = (imagePath) => {
   return (imagePath = `http://127.0.0.1:8000/storage/${imagePath}`)
 }
-const setPostId = (id) => {
-  postId.value = id;
-  
-};
+const setPostId = (postId) => {
+  post_id.value = postId
+}
 onMounted(() => {
   fetchAllTeams()
   
