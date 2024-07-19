@@ -29,14 +29,12 @@
 
       <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
-
           <div
             v-for="(team, index) in allTeams"
             :key="team.id"
             class="carousel-item"
             :class="{ active: index === 0 }"
           >
-
             <div v-if="team" class="find-match flex flex-col items-center justify-center w-200">
               <div class="match-items grid grid-cols-1 gap-10">
                 <div
@@ -64,7 +62,7 @@
                       />
                       <div v-if="team.user_id == posterId" class="flex items-center ml-3 mt-3">
                         <!-- Edit Button -->
-                        <button 
+                        <button
                           class="edit-post-btn text-gray-700 rounded-md px-3 py-1 mr-2 hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 shadow-md hover:shadow-lg z-20"
                           data-bs-toggle="modal"
                           data-bs-target="#editModal"
@@ -113,8 +111,8 @@
                 </div>
               </div>
             </div>
-            <div v-else class="find-match flex flex-col items-center justify-center w-200" >
-              <img width="400" height="400" src="../../assets/image/404.png" alt="">
+            <div v-else class="find-match flex flex-col items-center justify-center w-200">
+              <img width="400" height="400" src="../../assets/image/404.png" alt="" />
             </div>
           </div>
         </div>
@@ -257,12 +255,23 @@
       </div>
     </div>
     <!-- Edit Team Modal -->
-    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div
+      class="modal fade"
+      id="editModal"
+      tabindex="-1"
+      aria-labelledby="editModalLabel"
+      aria-hidden="true"
+    >
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="editModalLabel">Update your team post</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
           </div>
           <div class="modal-body">
             <form @submit.prevent="updatePost">
@@ -325,13 +334,21 @@ const end_time = ref('')
 const location = ref('')
 const allTeams = ref([])
 const status = ref(false)
-const postId = ref(null);
-const props= defineProps({
-  customer:Object
+const postId = ref(null)
+
+const formatDate = (date) => {
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0') // Months are zero-based
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
+const now = () => formatDate(new Date())
+const props = defineProps({
+  customer: Object
 })
 
-const posterId = ref(props.customer.id);
-
+const posterId = ref(props.customer.id)
 
 // Function to handle file upload
 const handleFileUpload = (event: Event) => {
@@ -360,8 +377,7 @@ const createMatch = async () => {
       }
     })
 
-
-    await axiosInstance.put(`/post/update/${post_id.value}`,)
+    await axiosInstance.put(`/post/update/${post_id.value}`)
 
     alert('Match created successfully')
     window.location.reload()
@@ -371,13 +387,11 @@ const createMatch = async () => {
   }
 }
 
-
-
 // Function to handle file change
 const onFileChange = (event: Event) => {
   const target = event.target as HTMLInputElement
   if (target.files && target.files[0]) {
-    team_logo.value = target.files[0]
+    team_logo.value = target.files[0].name
   }
 }
 
@@ -389,6 +403,7 @@ const postTeam = async () => {
     formData.append('start_time', start_time.value)
     formData.append('end_time', end_time.value)
     formData.append('location', location.value)
+    formData.append('post_date', now())
     if (team_logo.value) {
       formData.append('logo', team_logo.value)
     }
@@ -400,7 +415,7 @@ const postTeam = async () => {
         'Content-Type': 'multipart/form-data'
       }
     })
-    alert ("Post created successfully")
+    alert('Post created successfully')
     clearForm()
     window.location.reload()
   } catch (error) {
@@ -419,68 +434,63 @@ const clearForm = () => {
 }
 const updatePost = async () => {
   if (!postId.value) {
-    alert('No post ID available for update');
-    return;
+    alert('No post ID available for update')
+    return
   }
 
   try {
-    const formData = new FormData();
-    formData.append('name', name.value);
-    formData.append('date_match', date_match.value);
-    formData.append('start_time', start_time.value);
-    formData.append('end_time', end_time.value);
-    formData.append('location', location.value);
-    if (team_logo.value) {
-      formData.append('logo', team_logo.value);
+    const requestBody = {
+      name: name.value,
+      date_match: formatDate(new Date(date_match.value)), // Format the date here
+      start_time: start_time.value,
+      end_time: end_time.value,
+      post_date: formatDate(new Date()), // Format current date here
+      location: location.value,
+      logo: team_logo.value ? team_logo.value : null // Include logo if it exists, otherwise null
     }
-
-    const response = await axiosInstance.put(`/posts/${postId.value}`, formData, {
+    console.log(requestBody)
+    // Make sure to set the Content-Type header to application/json
+    const response = await axiosInstance.put(`/post/modify/${postId.value}`, requestBody, {
       headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
+        'Content-Type': 'application/json'
+      }
+    })
 
-    alert('Post updated successfully');
-    clearForm();
-    await fetchAllTeams(); // Fetch the updated list of teams
-    window.location.reload();
+    alert('Post updated successfully')
+    clearForm()
+    window.location.reload()
   } catch (error) {
-    alert('Error updating post');
-    console.error('Error updating post:', error.response ? error.response.data : error);
+    console.error('Error:', error)
   }
-};
-
+}
 
 const editPost = (team: any) => {
-  postId.value = team.id;
-  name.value = team.name;
-  date_match.value = team.date_match;
-  start_time.value = team.start_time;
-  end_time.value = team.end_time;
-  location.value = team.location;
+  postId.value = team.id
+  name.value = team.name
+  date_match.value = team.date_match
+  start_time.value = team.start_time
+  end_time.value = team.end_time
+  location.value = team.location
   // Assuming `team_logo` is handled separately if needed
-  team_logo.value = getImageUrl(team.logo); // Update this if necessary
-};
-
-
+  team_logo.value = getImageUrl(team.logo) // Update this if necessary
+}
 
 // Method to delete a post
 const deletePost = async (postId) => {
   try {
     // Make an API call to delete the post by postId
-    const response = await axiosInstance.delete(`/posts/${postId}`);
-
+    const response = await axiosInstance.delete(`/posts/${postId}`)
 
     // Optionally, handle success message or update UI
-    alert('Post deleted successfully');
+    alert('Post deleted successfully')
     // Example: Refresh the list of teams after deletion (assuming `fetchAllTeams` is a method to update your data)
-    await fetchAllTeams();
+    await fetchAllTeams()
   } catch (error) {
     // Handle error responses
-    alert('Error deleting post');
-    console.error('Error deleting post:', error.response ? error.response.data : error);
+    alert('Error deleting post')
+    console.error('Error deleting post:', error.response ? error.response.data : error)
   }
-};
+}
 
 const teamLogoUrl = (logoPath: string) => {
   return logoPath ? `/storage/${logoPath}` : '' // Adjust according to your storage path
@@ -491,7 +501,6 @@ const fetchAllTeams = async () => {
     const response = await axiosInstance.get('/post/list') // Adjust endpoint based on your API
     allTeams.value = response.data.data
     console.log('All teams fetched:', allTeams.value) // Log the fetched teams for debugging purposes
-    
   } catch (error) {
     console.error('Error fetching all teams:', error.response ? error.response.data : error)
   }
@@ -504,10 +513,7 @@ const setPostId = (postId) => {
 }
 onMounted(() => {
   fetchAllTeams()
-  
 })
-
-
 
 const formatTime = (time: string) => {
   // Assuming time is in 24-hour format 'HH:mm'
