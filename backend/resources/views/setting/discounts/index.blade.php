@@ -2,7 +2,7 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-4 lg:px-4 text-sm font-medium">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg text-sm font-medium">
-                <div class="flex items-center justify-between">
+                <div class="flex items-center justify-between m-3">
                     <div class="ml-5">
                         <h2 class="text-2xl font-semibold text-gray-800 mb-2 border-b-2 border-gray-500 inline-block">
                             Discounts
