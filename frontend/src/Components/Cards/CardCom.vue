@@ -24,11 +24,15 @@
             <h3 class="text-1xl font-bold text-gray-900 mb-2">{{ field.name }}</h3>
             <p class="mt-3 flex items-center gap-2">
               <span class="dollar bg-blue text-white p-1 rounded-md"> ${{ field.price }}.00 </span>
-                <svg
-                  key="n"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27z"
                   fill="#FCD34D"
                 />
               </svg>
@@ -88,7 +92,7 @@
     </div>
   </div> -->
 </template>
-<!-- 
+
 <script>
 import { ref, onMounted, computed, watch } from 'vue'
 import axiosInstance from '@/plugins/axios'
@@ -134,28 +138,7 @@ export default {
       getImageUrl
     }
   }
-};
-
-const filteredFields = computed(() => {
-  if (!searchQuery.value.trim()) {
-    return fields.value;
-  } else {
-    const query = searchQuery.value.toLowerCase();
-    return fields.value.filter((field) => field.name.toLowerCase().includes(query));
-  }
-});
-
-const getImageUrl = (imagePath) => {
-  return imagePath ? `http://127.0.0.1:8000/storage/${imagePath}` : '/default-image.jpg';
-};
-
-watch(searchQuery, () => {
-  filteredFields.value = filteredFields();
-});
-
-onMounted(() => {
-  fetchFields();
-});
+}
 </script>
 
 <style scoped>
@@ -220,4 +203,4 @@ onMounted(() => {
     width: 100%;
   }
 }
-</style> -->
+</style>
