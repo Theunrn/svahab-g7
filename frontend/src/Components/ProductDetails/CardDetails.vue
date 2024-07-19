@@ -8,8 +8,12 @@
     <div class="row" style="margin-left: -50px">
       <!-- Image Section -->
       <div class="col-md-6">
-        <div class="product-images mt-5">
+        <!-- <div class="product-images mt-5">
           <img :src="getImageUrl(product.image)" class="img-fluid" :alt="product.name" />
+        </div> -->
+        <div class="product-images mt-5" ref="imageContainer">
+          <img :src="getImageUrl(product.image)" class="img-fluid" :alt="product.name" @mousemove="zoomImage" @mouseleave="resetZoom" />
+          <div class="zoomed-image" v-show="zoomedIn" :style="{ backgroundImage: 'url(' + getImageUrl(product.image) + ')', backgroundSize: zoomScale }"></div>
         </div>
       </div>
       <!-- Product Details Section -->
@@ -18,25 +22,13 @@
         <h3 class="mb-2">{{ product.description }}</h3>
         <p class="mb-1"><strong>Call: </strong> 098753527</p>
         <div class="flex gap-3">
-          <p
-            class="price text-danger font-weight-bold mb-2"
-            :class="{
-              'text-decoration-line-through': product.discounts && product.discounts.length > 0
-            }"
-          >
+          <p class="price text-danger font-weight-bold mb-2" :class="{ 'text-decoration-line-through': product.discounts && product.discounts.length > 0 }" >
             <strong>Price: </strong> ${{ product.price }}
           </p>
-          <p
-            class="price text-success font-weight-bold mb-2"
-            v-if="product.discounts && product.discounts.length > 0"
-          >
-            ${{ calculateDiscountedPrice(product.price, product.discounts[0].discount) }}
+          <p class="price text-success font-weight-bold mb-2" v-if="product.discounts && product.discounts.length > 0" > ${{ calculateDiscountedPrice(product.price, product.discounts[0].discount) }}
           </p>
         </div>
-
-        <p
-          class="bg-white text-gray-700 border-2 border-green-300 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-40"
-        >
+        <p class="bg-white text-gray-700 border-2 border-green-300 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-40" >
           <span>Total: </span> ${{ total }}
         </p>
         <div class="rating mb-2">
@@ -50,31 +42,14 @@
         <div class="color-options mb-3">
           <h5 class="mb-2">Color:</h5>
           <div class="d-flex flex-wrap">
-            <div
-              v-for="color in product.colors"
-              :key="color.id"
-              :style="{ backgroundColor: color.hex_code }"
-              :class="[
-                'color-circle',
-                'mr-2',
-                'cursor-pointer',
-                `bg-${color.name.toLowerCase()}`,
-                { selected: selectedColor === color.id }
-              ]"
-              @click="toggleColorSelection(color.id)"
-            ></div>
+            <div v-for="color in product.colors" :key="color.id" :style="{ backgroundColor: color.hex_code }" :class="[  'color-circle', 'mr-2', 'cursor-pointer', `bg-${color.name.toLowerCase()}`, { selected: selectedColor === color.id }  ]"  @click="toggleColorSelection(color.id)" ></div>
           </div>
         </div>
         <div class="size-options mb-3 flex gap-3">
           <div class="size">
             <h5 class="mb-2">Size:</h5>
             <select class="form-select w-auto pe-5" v-model="selectedSize">
-              <option
-                class="text-start"
-                v-for="size in product.sizes"
-                :key="size.id"
-                :value="size.id"
-              >
+              <option class="text-start" v-for="size in product.sizes" :key="size.id"  :value="size.id" >
                 {{ size.name }}
               </option>
             </select>
@@ -91,28 +66,14 @@
           <h5 class="mb-2">Quantity:</h5>
           <div class="input-group w-auto">
             <div class="quantity-input">
-              <button @click="decrementQuantity" class="decrement btn btn-outline-secondary">
-                -
-              </button>
+              <button @click="decrementQuantity" class="decrement btn btn-outline-secondary">  -  </button>
               <input class="input-group min-max" type="text" v-model="quantity" />
-              <button @click="incrementQuantity" class="increment btn btn-outline-secondary">
-                +
-              </button>
+              <button @click="incrementQuantity" class="increment btn btn-outline-secondary">  +  </button>
             </div>
           </div>
         </div>
         <!-- <a @click="createOrder" class="btn btn-warning btn-block mb-4"> Order Now</a> -->
-        <router-link
-          @click="submitOrder"
-          :to="{ path: '/payment/' + userId, query: { order: order.id } }"
-          class="btn btn-yellow-500 btn-block ml-4 mb-4 text-white"
-          style="background-color: orange"
-        >
-          Pay Now</router-link
-        >
-        <!-- <router-link @click="submitOrder" :to="{ path: '/payment/' + userId, query: { order: order.id } }" class="btn btn-yellow-500 btn-block ml-4 mb-4 text-white" style="background-color: orange">
-          Pay Now
-        </router-link> -->
+        <router-link  @click="submitOrder"  :to="{ path: '/payment/' + userId, query: { order: order.id } }"  class="btn btn-yellow-500 btn-block ml-4 mb-4 text-white"  style="background-color: orange"  >  Pay Now</router-link >
         <div class="delivery-info mb-4">
           <p class="mb-1"><strong>Home Delivery:</strong> Available within 48 hours</p>
           <p class="mb-0"><strong>Click & Collect:</strong> Pickup in store within 4 hours</p>
@@ -126,8 +87,8 @@
 import { ref, computed, onMounted } from 'vue'
 import axiosInstance from '@/plugins/axios'
 import { useRoute, useRouter } from 'vue-router'
-import { useOrderedChildren } from 'element-plus'
 import Swal from 'sweetalert2'
+// import ImageZoomer from 'vue-image-zoomer'
 
 const route = useRoute()
 const router = useRouter()
@@ -141,6 +102,8 @@ const quantity = ref(1)
 const order = ref({})
 const userId = computed(() => route.query.customer)
 const discountPrice = ref(0)
+const zoomedIn = ref(false)
+const zoomScale = ref('100%')
 
 const fetchProductDetails = async () => {
   try {
@@ -176,12 +139,6 @@ const total = computed(() => {
   }
   return (product.value.price * quantity.value).toFixed(2)
 })
-// const total = computed(() => {
-//   if (product.value.price && quantity.value) {
-//     return product.value.price * quantity.value;
-//   }
-//   return 0;
-// });
 
 onMounted(() => {
   fetchProductDetails()
@@ -213,42 +170,18 @@ const calculateDiscountedPrice = (originalPrice, discountPercentage) => {
   return originalPrice - discount
 }
 
-// const submitOrder = async () => {
-//   try {
-//     const response = await axiosInstance.post('/orders/create', {
-//       product_id: productId.value.id,
-//       color_id: selectedColor.value,
-//       size_id: selectedSize.value,
-//       qty: quantity.value,
-//       total_amount: total.value
-//     });
+const zoomImage = (event) => {
+  const { offsetWidth, offsetHeight, naturalWidth, naturalHeight } = event.target
+  const { offsetX, offsetY } = event
+  const scaleX = naturalWidth / offsetWidth
+  const scaleY = naturalHeight / offsetHeight
+  zoomScale.value = `${scaleX * 100}%`
+  zoomedIn.value = true
+}
 
-//     // Assuming SweetAlert library is included in your project
-//     Swal.fire({
-//       icon: 'success',
-//       title: 'Success!',
-//       text: 'Your order has been successfully created.',
-//       confirmButtonText: 'OK'
-//     }).then((result) => {
-//       if (result.isConfirmed) {
-//         order.value = response.data.order;
-//         const orderId = order.value.id;
-//         localStorage.setItem("orderId", orderId);
-//         this.$router.push({ path: `/payment/${this.userId}`, query: { order: this.order.id } });
-//         // Redirect or perform any other action here
-//       }
-//     });
-
-//   } catch (error) {
-//     console.error('Error creating order:', error);
-//     Swal.fire({
-//       icon: 'error',
-//       title: 'Oops...',
-//       text: 'Something went wrong! Please try again.',
-//       confirmButtonText: 'OK'
-//     });
-//   }
-// };
+const resetZoom = () => {
+  zoomedIn.value = false
+}
 
 const submitOrder = async () => {
   try {
@@ -277,11 +210,30 @@ const submitOrder = async () => {
 }
 </script>
 
+
 <style scoped>
 .product-detail {
   color: #000;
   max-width: 900px;
   margin: 20px auto;
+}
+
+.product-images {
+  position: relative;
+  overflow: hidden;
+}
+
+.zoomed-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: rgba(255, 255, 255, 0.9);
+  z-index: 10;
+  display: none;
 }
 
 .price {

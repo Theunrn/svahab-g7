@@ -14,7 +14,7 @@
                             Orders
                         </h2>
                     </div>
-                    <form class="flex items-center my-1 mr-5 mt-2 shadow-sm" method="GET"
+                    {{-- <form class="flex items-center my-1 mr-5 mt-2 shadow-sm" method="GET"
                         action="{{ route('admin.orders.index') }}">
                         <div class="relative flex items-center border border-gray-300 rounded-md shadow-sm">
                             <input
@@ -31,7 +31,19 @@
                                 Search
                             </button>
                         </div>
-                    </form>
+                    </form> --}}
+                    <div class="inline-flex rounded-md shadow-sm space-x-2 justify-end mr-3">
+                        <button onclick="filterOrders('last-month')" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-l-lg hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700">
+                            Last Month
+                        </button>
+                        <button onclick="filterOrders('last-week')" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700">
+                            Last Week
+                        </button>
+                        <button onclick="filterOrders('today')" class="px-4 py-2 ml-5 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-r-lg hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700">
+                            Today
+                        </button>
+                    </div>
+        
                 </div>
 
                 <div class="p-3 bg-white border-b border-gray-200">
@@ -148,4 +160,12 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function filterOrders(period) {
+            let url = new URL(window.location.href);
+            url.searchParams.set('filter', period);
+            window.location.href = url.href;
+        }
+    </script>
 </x-app-layout>

@@ -18,14 +18,26 @@ class DashboardController extends Controller
     {
         $totalBookings = Booking::count();
         $totalUsers = User::count();
-        $totalFiels = Field::count();
+        $totalFields = Field::count();
         $totalFeedbacks = Feedback::count();
         $totalPayments = Payment::sum('amount'); // Total amount of all payments
         $payments = Payment::with('customer')->get();
         $totalAmount = $payments->sum('amount');
+
         $daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
         $weeklyPayment = [];
         $weeklyDataField = [];
+        $weeklyUsers = [];
+
+        // Data for today =============================================================================================
+
+        $todayBookings = Booking::whereDate('created_at', Carbon::today())->count();
+        $todayUsers = User::whereDate('created_at', Carbon::today())->count();
+        $todayFields = Field::whereDate('created_at', Carbon::today())->count();
+        $todayFeedbacks = Feedback::whereDate('created_at', Carbon::today())->count();
+        $todayPayments = Payment::whereDate('created_at', Carbon::today())->sum('amount');
+
+        // Data for week =============================================================================================
 
         foreach ($daysOfWeek as $day) {
             $totalAmount = Payment::whereDate('created_at', Carbon::parse('this week ' . $day)->format('Y-m-d'))
@@ -45,6 +57,33 @@ class DashboardController extends Controller
 
         $totalWeekBookings = array_sum($weeklyDataField); // Total sum for the week
 
+        foreach ($daysOfWeek as $day) {
+            $totalUsersRegister = User::whereDate('created_at', Carbon::parse('this week ' . $day)->format('Y-m-d'))
+                ->count();
+
+            $weeklyUsers[] = $totalUsersRegister; // Store total bookings for each day
+        }
+
+        $totalUsersRegister = array_sum($weeklyUsers); // Total sum for the week
+
+        foreach ($daysOfWeek as $day) {
+            $totalWeekField = Field::whereDate('created_at', Carbon::parse('this week ' . $day)->format('Y-m-d'))
+                ->count();
+
+            $weeklyField[] = $totalWeekField; // Store total bookings for each day
+        }
+
+        $totalWeekField = array_sum($weeklyField); // Total sum for the week
+
+        foreach ($daysOfWeek as $day) {
+            $totalWeekFeedback = Feedback::whereDate('created_at', Carbon::parse('this week ' . $day)->format('Y-m-d'))
+                ->count();
+
+            $weeklyFeedback[] = $totalWeekFeedback; // Store total bookings for each day
+        }
+
+        $totalWeekFeedback = array_sum($weeklyFeedback); // Total sum for the week
+
         // Get top 5 product orders with orders and calculate percentages
         $productOrders = Product::withCount('orders')
             ->having('orders_count', '>', 0)
@@ -61,10 +100,55 @@ class DashboardController extends Controller
             ];
         }) : collect([]);
 
+        // Data for month =============================================================================================
 
-        return view('dashboard', compact('totalBookings', 'totalUsers', 'totalFiels', 'totalFeedbacks', 'totalPayments', 'weeklyPayment', 'weeklyDataField', 'totalWeekAmount', 'totalWeekBookings', 'productData', 'totalOrders'));
-        
+         $startOfMonth = Carbon::now()->startOfMonth();
+         $endOfMonth = Carbon::now()->endOfMonth();
+         $startOfWeek = $startOfMonth->copy()->startOfWeek();
+         $monthlyData = [
+             'payments' => [],
+             'bookings' => [],
+             'fields' => [],
+             'users' => [],
+             'feedback' => [],
+         ];
+ 
+         while ($startOfWeek->lessThanOrEqualTo($endOfMonth)) {
+             $endOfWeek = $startOfWeek->copy()->endOfWeek()->min($endOfMonth);
+ 
+             $weekPayments = Payment::whereBetween('created_at', [$startOfWeek, $endOfWeek])->sum('amount');
+             $weekBookings = Booking::whereBetween('created_at', [$startOfWeek, $endOfWeek])->count();
+             $weekFields = Field::whereBetween('created_at', [$startOfWeek, $endOfWeek])->count();
+             $weekUsers = User::whereBetween('created_at', [$startOfWeek, $endOfWeek])->count();
+             $weekFeedback = Feedback::whereBetween('created_at', [$startOfWeek, $endOfWeek])->count();
+ 
+             $monthlyData['payments'][] = $weekPayments;
+             $monthlyData['bookings'][] = $weekBookings;
+             $monthlyData['fields'][] = $weekFields;
+             $monthlyData['users'][] = $weekUsers;
+             $monthlyData['feedback'][] = $weekFeedback;
+ 
+             $startOfWeek->addWeek();
+        }
 
+        // Data for years =============================================================================================
+        $startOfYear = Carbon::now()->startOfYear();
+        $endOfYear = Carbon::now()->endOfYear();
+        $yearlyData = [
+            'payments' => Payment::whereBetween('created_at', [$startOfYear, $endOfYear])->sum('amount'),
+            'bookings' => Booking::whereBetween('created_at', [$startOfYear, $endOfYear])->count(),
+            'users' => User::whereBetween('created_at', [$startOfYear, $endOfYear])->count(),
+            'fields' => Field::whereBetween('created_at', [$startOfYear, $endOfYear])->count(),
+            'feedback' => Feedback::whereBetween('created_at', [$startOfYear, $endOfYear])->count(),
+        ];
+
+        return view('dashboard', compact(
+            'totalBookings', 'totalUsers', 'totalFields', 'totalFeedbacks','totalPayments',
+            'weeklyPayment', 'weeklyDataField', 'totalWeekFeedback', 'totalWeekAmount', 'totalUsersRegister', 
+            'totalWeekBookings', 'productData', 'totalOrders', 'todayBookings', 'totalWeekField',
+            'todayUsers', 'todayFields', 'todayFeedbacks', 'todayPayments', 'monthlyData', 'yearlyData'
+        ));
+    
     }
 
 }
