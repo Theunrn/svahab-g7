@@ -70,14 +70,14 @@
   </div>
   <!-- Add Modal -->
   <div id="addModal" tabindex="-1" aria-hidden="true"
-    class="hidden fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
-    <div class="p-4 w-full max-w-xl max-h-full">
+    class="hidden fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50 overflow-y-auto">
+    <div class="p-4 w-full max-w-xl max-h-full ">
       <!-- Modal content -->
       <div class="bg-white rounded-lg shadow ">
         <!-- Modal header -->
-        <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+        <div class="flex items-center justify-between p-2 md:p-5 border-b rounded-t dark:border-gray-600">
           <h3 class="text-xl font-semibold text-gray-900 dark:text-black">
-            Add New Slide Show Image
+            Add New Slide Show Field
           </h3>
           <button id="closeAddModal" type="button"
             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white">
@@ -162,6 +162,15 @@
         </div>
         <!-- Modal body -->
         <div class="container mx-auto px-4 py-8">
+          @if ($errors->any())
+          <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+              <ul>
+                  @foreach ($errors->all() as $error)
+                  <li>{{ $error }}</li>
+                  @endforeach
+              </ul>
+          </div>
+          @endif
           <form action="{{ route('admin.fields.update', $field->id) }}" method="POST" enctype="multipart/form-data"
             class="mt-4 bg-white p-6 rounded-lg shadow-lg max-w-2xl mx-auto">
             @csrf
@@ -170,10 +179,10 @@
               <div class="flex flex-col space-y-2">
                 <label for="image" class="text-gray-700 select-none font-medium">Image</label>
                 <input type="file" id="image" name="image"
-                  class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-200">
+                  class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-200 ">
                 @if ($field->image)
-          <img src="{{ asset('storage/' . $field->image) }}" alt="Field Image" class="mt-2 h-32">
-        @endif
+                <img src="{{ asset('storage/' . $field->image) }}" alt="Field Image" class="mt-2 h-32">
+                 @endif
               </div>
 
               <div class="flex flex-col space-y-2">
@@ -223,18 +232,6 @@
 
       document.getElementById('closeAddModal').addEventListener('click', function () {
         document.getElementById('addModal').classList.add('hidden');
-      });
-      document.querySelectorAll('.openEditModal').forEach(button => {
-        button.addEventListener('click', function () {
-          const id = this.getAttribute('data-id');
-          const editForm = document.getElementById('editForm');
-          editForm.action = `/admin/field/${id}`;
-          document.getElementById('editModal').classList.remove('hidden');
-        });
-      });
-
-      document.getElementById('closeEditModal').addEventListener('click', function () {
-        document.getElementById('editModal').classList.add('hidden');
       });
       document.addEventListener('DOMContentLoaded', function () {
         const provinces = [
@@ -296,5 +293,18 @@
               }
           });
       }
+      //edit field
+      document.querySelectorAll('.openEditModal').forEach(button => {
+        button.addEventListener('click', function () {
+          const id = this.getAttribute('data-id');
+          const editForm = document.getElementById('editForm');
+          editForm.action = `/admin/field/${id}`;
+          document.getElementById('editModal').classList.remove('hidden');
+        });
+      });
+
+      document.getElementById('closeEditModal').addEventListener('click', function () {
+        document.getElementById('editModal').classList.add('hidden');
+      });
     </script>
 </x-app-layout>
