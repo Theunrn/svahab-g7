@@ -8,8 +8,19 @@
           <el-input placeholder="Email Address" v-model="email" size="large" />
         </el-form-item>
 
-        <el-form-item :error="nameError" class="mt-8">
-          <el-input placeholder="Password" v-model="password" size="large" type="password" />
+        <el-form-item :error="nameError" class="mt-8 relative">
+          <el-input
+            :placeholder="'Password'"
+            v-model="password"
+            :size="'large'"
+            :type="passwordVisible ? 'text' : 'password'"
+          />
+          <span
+            class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+            @click="togglePasswordVisibility"
+          >
+            <i :class="passwordVisible ? 'fa fa-eye' : 'fa fa-eye-slash'"></i>
+          </span>
         </el-form-item>
 
         <div>
@@ -24,7 +35,12 @@
         </div>
 
         <p class="text-sm font-light text-gray-500 dark:text-gray-400 mt-2">
-            Doesn't have account yet !  <a href="/register" class="font-medium text-blue-600 hover:underline dark:text-primary-500">Create account</a>
+          Doesn't have account yet?
+          <a
+            href="/register"
+            class="font-medium text-blue-600 hover:underline dark:text-primary-500"
+            >Create account</a
+          >
         </p>
       </el-form>
     </el-card>
@@ -36,6 +52,7 @@ import axiosInstance from '@/plugins/axios'
 import { useField, useForm } from 'vee-validate'
 import * as yup from 'yup'
 import { useRouter } from 'vue-router'
+import { ref } from 'vue'
 
 const router = useRouter()
 
@@ -64,10 +81,31 @@ const onSubmit = handleSubmit(async (values) => {
 
 const { value: password, errorMessage: nameError } = useField('password')
 const { value: email, errorMessage: emailError } = useField('email')
+
+const passwordVisible = ref(false)
+const togglePasswordVisibility = () => {
+  passwordVisible.value = !passwordVisible.value
+}
 </script>
 
 <style scoped>
 .min-h-screen {
   min-height: 100vh;
+}
+.absolute {
+  position: absolute;
+}
+.inset-y-0 {
+  top: 0;
+  bottom: 0;
+}
+.right-0 {
+  right: 0;
+}
+.pr-3 {
+  padding-right: 0.75rem;
+}
+.cursor-pointer {
+  cursor: pointer;
 }
 </style>
