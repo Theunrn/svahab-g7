@@ -5,6 +5,7 @@ import "./assets/tailwind.css";
 import './assets/main.css'
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import 'sweetalert2/dist/sweetalert2.min.css'
 
 dayjs.extend(relativeTime);
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -43,12 +44,13 @@ class CategoryController extends Controller
         return view('setting.categories.new');
     }
 
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
+    
         $request->validate([
             'name' => 'required|string|max:255|unique:categories',
         ]);
-
+        // dd($request);
         Category::create([
             'name' => $request->name,
             // 'owner_id' => Auth::id(), // Set the owner ID to the logged-in user

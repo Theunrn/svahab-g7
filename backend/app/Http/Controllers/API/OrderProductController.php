@@ -71,10 +71,7 @@ class OrderProductController extends Controller
                 'user_id' => $user->id,
                 'notification_type' => 'order_cancelled',
                 'notification_text' => 'Your order has been cancelled.',
-                'notification_data' => json_encode([
-                    'order_id' => $order->id,
-                    'cancelled_at' => now(),
-                ]),
+                'notification_data' => $order->id,
                 'read' => false,
             ]);
 

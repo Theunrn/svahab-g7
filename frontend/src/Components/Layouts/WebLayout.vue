@@ -12,18 +12,14 @@
         <p class="text-white mb-8 md:text-xl">Find the best fields near you and start your game!</p>
 
         <div class="relative w-full">
-          <input v-model="searchQuery" @input="searchFields" type="text" placeholder="Search Field By Location...." class="w-full px-4 py-2 rounded-md text-black" />
-          <button @click="searchByProvince" type="button" class="absolute right-0 top-0 bg-red-500 text-white px-4 py-2 rounded-md">
+          <input v-model="searchQuery"type="text" placeholder="Search by Name or Location....." class="w-full px-4 py-2 rounded-md text-black" />
+          <button @click="searchFields" type="button" class="absolute right-0 top-0 bg-green-500 text-white px-4 py-2 rounded-md flex justify-center items-center gap-3">
+            <svg class="w-4 h-4 text-white dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+            </svg>
             Search
           </button>
         </div>
-
-        <!-- <div class="relative w-full mt-3">
-          <input v-model="searchNameQuery" @input="searchFields" type="text" placeholder="Search Find Field by Name..." class="w-full px-4 py-2 rounded-md text-black" />
-          <button @click="searchByName" type="button" class="absolute right-0 top-0 bg-blue-500 text-white px-4 py-2 rounded-md">
-            Search by Name
-          </button>
-        </div> -->
 
       </div>
     </div>
@@ -43,18 +39,13 @@
           </div>
 
           <div class="relative flex gap-10 w-[334px]">
-            <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
-              <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
-              </svg>
-            </div>
-            <VueFlatpickr v-model="dateRange" :config="flatpickrConfig" class="px-4 py-3 text-center bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date" />
+            <div class="px-4 py-3 rounded-none rounded-s-lg bg-gray-50 border text-gray-900 leading-none focus:ring-blue-500 focus:border-blue-500 block flex-1 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" min="09:00" max="18:00" value="00:00" ><strong>OPEN DAY : </strong> MONDAY to SUNDAY </div>
           </div>
 
           <form class="w-[334px]">
             <div class="flex">
-              <!-- Time input -->
-              <input type="time" id="time" class="px-4 py-3 rounded-none rounded-s-lg bg-gray-50 border text-gray-900 leading-none focus:ring-blue-500 focus:border-blue-500 block flex-1 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" min="09:00" max="18:00" value="00:00" required />
+              
+              <div class="px-4 py-3 rounded-none rounded-s-lg bg-gray-50 border text-gray-900 leading-none focus:ring-blue-500 focus:border-blue-500 block flex-1 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" min="09:00" max="18:00" value="00:00" ><strong>OPEN TIME : </strong> 7:00 AM to 10:00 PM </div>
             </div>
           </form>
         </div>
@@ -142,7 +133,6 @@ const props = defineProps({
 })
 
 const searchQuery = ref('')
-const searchNameQuery = ref('')
 const fields = ref([])
 const message = ref('')
 
@@ -177,11 +167,14 @@ const filterFields = () => {
   }
 }
 
-const searchByProvince = () => {
+const searchFields = () => {
   if (searchQuery.value) {
     const normalizedQuery = searchQuery.value.toLowerCase().trim()
     filteredFields.value = fields.value.filter((field) => {
-      return field.location.toLowerCase().includes(normalizedQuery)
+      return (
+        field.name.toLowerCase().includes(normalizedQuery) ||
+        field.location.toLowerCase().includes(normalizedQuery)
+      )
     })
 
     if (filteredFields.value.length === 0) {
@@ -193,28 +186,7 @@ const searchByProvince = () => {
     filterFields()
   }
 
-  searchQuery.value = ''
-
 }
-
-// const searchByName = () => {
-//   if (searchNameQuery.value) {
-//     const normalizedQuery = searchNameQuery.value.toLowerCase().trim()
-//     filteredFields.value = fields.value.filter((field) => {
-//       return field.name.toLowerCase().includes(normalizedQuery)
-//     })
-
-//     if (filteredFields.value.length === 0) {
-//       message.value = 'Field Not Found'
-//     } else {
-//       message.value = ''
-//     }
-//   } else {
-//     filterFields()
-//   }
-
-//   searchNameQuery.value = ''
-// }
 
 watch(selectedProvince, () => {
   filterFields()
@@ -256,7 +228,6 @@ const provinces = ref([
   { name: 'Tboung Khmum', value: 'tboung khmum', icon: '📍' }
 ])
 </script>
-
 <style scoped>
 /* Additional styling if needed */
 

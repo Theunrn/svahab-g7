@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\Admin\FeedbackController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ProductController;
@@ -14,12 +15,14 @@ use App\Http\Controllers\Admin\ChatCotroller;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\SettingController;
+// use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\SlideshowController; // Add this line
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\SlideshowAdminController; // Add this line
 use App\Http\Controllers\MailController;
 use Faker\Core\File;
 use GuzzleHttp\Psr7\Response;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -31,7 +34,6 @@ use GuzzleHttp\Psr7\Response;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
 Route::get('/', function () {
     return view('auth.login');
 });
@@ -98,6 +100,7 @@ Route::namespace('App\Http\Controllers\Admin')->name('admin.')->prefix('admin')
         Route::resource('discounts', 'DiscountController');
         Route::resource('chats', 'ChatCotroller');
 
+        Route::get('/profile', [ProfileController::class, 'list'])->name('profile');
         Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
         Route::put('/profile-update', [ProfileController::class, 'update'])->name('profile.update');
         Route::get('/mail', [MailSettingController::class, 'index'])->name('mail.index');
@@ -108,28 +111,19 @@ Route::get('/admin/bookings/{id}/rebook', [BookingController::class, 'reStore'])
 Route::get('/admin/bookings/{id}/accept', [BookingController::class, 'accept'])->name('admin.bookings.accept');
 Route::get('/admin/bookings/{id}/reject', [BookingController::class, 'reject'])->name('admin.bookings.reject');
 Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
-
-
+// Route::get('/admin/dashboard', [DashboardController::class, 'weeklyRevenue'])->name('admin.dashboard');
+// Route::get('/admin/dashboard', [BookingController::class, 'weeklyRevenue'])->name('/admin.dashboard');
 //User
 Route::get('/users/create', [UserController::class, 'createAccount'])->name('users.create');
 Route::post('/register/store', [UserController::class, 'register'])->name('register.store');
 Route::get('/admin/loginform', [UserController::class, 'loginform'])->name('admin.loginform');
 
-// Route::resource('dashboards', DashboardController::class);
 
 // Chat routes
 Route::middleware(['auth'])->group(function () {
     Route::get('/chats/list', [ChatCotroller::class, 'index'])->name('chats.index');
     Route::post('/chats/create', [ChatCotroller::class, 'store'])->name('chats.store');
 });
-
-
-
-// Route::prefix('admin')->middleware(['auth'])->group(function () {
-//     // Other admin routes...
-
-//     Route::resource('dashboards', DashboardController::class);
-// });
 
 
 Route::get('/admin/categories', [CategoryController::class, 'index'])->name('admin.categories.index');
@@ -168,5 +162,12 @@ Route::post('/admin/users', [UserController::class, 'store'])->name('admin.users
 
 
 
+Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
+Route::post('/settings', [SettingController::class, 'store'])->name('settings.store');
+Route::get('/settings/{id}/edit', [SettingController::class, 'edit'])->name('settings.edit');
+Route::delete('/settings/{id}', [SettingController::class, 'destroy'])->name('settings.destroy');
 
 // Route::get('/send-email', [MailController::class, 'sendEmail']);
+
+Route::put('/profile/password', [SettingController::class, 'checkPassword'])->name('admin.profile.checkPassword');
+Route::put('/profile/password/update', [SettingController::class, 'updatePassword'])->name('admin.profile.updatePassword');

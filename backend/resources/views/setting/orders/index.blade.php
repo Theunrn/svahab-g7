@@ -39,11 +39,11 @@
                         <thead>
                             <tr class="bg-gray-200">
                                 <th class="px-4 py-2 text-left">ID</th>
-                                <th class="px-4 py-2 text-left">User Name</th>
+                                <th class="px-4 py-2 text-left">Customer</th>
                                 <th class="px-4 py-2 text-left">Product Name</th>
                                 <th class="px-4 py-2 text-left">Quantity</th>
                                 <th class="px-4 py-2 text-left">Total</th>
-                                <th class="px-4 py-2 text-left">Order Status</th>
+                                <th class="px-4 py-2 text-left">Status</th>
                                 <th class="px-4 py-2 text-left">Payment Status</th>
                                 <th class="px-4 py-2 text-left">Order Date</th>
                                 <th class="px-4 py-2 text-left">Actions</th>

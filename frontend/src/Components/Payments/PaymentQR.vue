@@ -59,6 +59,7 @@
 </template>
 <script>
 import axios from 'axios'
+import Swal from 'sweetalert2'
 
 export default {
   data() {
@@ -119,11 +120,28 @@ export default {
           code: this.generateRandomCode(9),
           payment_date: this.paymentDate
         })
-        this.isPaid = true
-        this.updatePaymentStatus()
-        alert('Payment successful')
+
+        // Display SweetAlert for success
+        Swal.fire({
+          icon: 'success',
+          title: 'Success!',
+          text: 'You have confirmed payment successfully.',
+          confirmButtonText: 'OK'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.isPaid = true
+            this.updatePaymentStatus()
+            // You can add further actions here if needed
+          }
+        })
       } catch (error) {
-        alert('Failed creating payment')
+        // Display SweetAlert for error
+        Swal.fire({
+          icon: 'error',
+          title: 'Payment Failed',
+          text: 'Something is gone wrong. Please try again.',
+          confirmButtonText: 'OK'
+        })
         console.error('Error creating payment intent:', error)
       }
     },
@@ -170,7 +188,7 @@ export default {
     },
     async fetchOrder() {
       try {
-        const { data } = await axios.get(`http://127.0.0.1:8000/api/orders/show/${this.orderId}`, {
+        const { data } = await axios.get(`http://127.0.0.1:8000/api/order/show/${this.orderId}`, {
           headers: {
             Authorization: `Bearer ${this.token}`
           }
@@ -178,6 +196,7 @@ export default {
 
         this.total_price = data.data.total_amount
         this.product_id = data.data.products[0].id
+        console.log(data.data)
       } catch (error) {
         console.error('Error fetching order data:', error)
       }
@@ -201,7 +220,8 @@ export default {
       }
     },
     async getImageUrl() {
-      this.image = `http://127.0.0.1:8000${this.qr}`
+      this.image = `http://127.0.0.1:8000/storage/${this.qr}`
+      console.log(this.image)
     }
   }
 }

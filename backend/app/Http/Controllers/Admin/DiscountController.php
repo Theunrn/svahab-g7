@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Discount;
 use App\Models\Product;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\DiscountRequest;
 use Illuminate\Support\Facades\Auth;
 
 class DiscountController extends Controller
@@ -34,7 +35,7 @@ class DiscountController extends Controller
         return view('setting.discounts.create', compact('products'));
     }
 
-    public function store(Request $request)
+    public function store(DiscountRequest $request)
     {
         $request->validate([
             'title' => 'required|string|max:255',
@@ -50,7 +51,8 @@ class DiscountController extends Controller
 
         $discount->products()->attach($request->product_id);
 
-        return redirect()->route('admin.discounts.index')->with('success', 'Discount created successfully.');
+        // return redirect()->route('admin.discounts.index')->with('success', 'Discount created successfully.');
+        return redirect()->route('admin.discounts.index')->with('success', 'Your product has a discount successfully.');
     }
 
     public function edit(Discount $discount)

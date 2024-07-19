@@ -17,5 +17,12 @@ class DatabaseSeeder extends Seeder
         $this->call(AdminSeeder::class);
         \App\Models\Post::factory(17)->create();
         $this->call(MailsettingSeeder::class);
+        $this->call([OptionSeeder::class]);
+        $this->call([SizeSeeder::class]);
+        $this->call([ColorSeeder::class]);
+            
+        
+            
+        
     }
 }

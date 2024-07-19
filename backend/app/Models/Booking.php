@@ -17,11 +17,27 @@ class Booking extends Model
     {
         return $this->belongsTo(Field::class, 'field_id');
     }
-    public static function store($request, $id = null) {
+    public function options()
+    {
+        return $this->belongsToMany(Option::class, 'booking_options')
+                    ->withPivot('qty')
+                    ->withTimestamps();
+    }
+    public static function store($request, $id = null)
+    {
+        $data = $request->only('user_id', 'field_id', 'booking_date', 'start_time', 'end_time', 'total_price', 'status', 'payment_status');
+        
+        $booking = self::updateOrCreate(['id' => $id], $data);
 
-        $data = $request->only('user_id', 'field_id', 'booking_date', 'start_time', 'end_time','total_price', 'status', 'payment_status');
-        $data = self::updateOrCreate(['id' => $id], $data);
-        return $data;
+        if ($request->has('options')) {
+            $options = [];
+            foreach ($request->options as $option) {
+                $options[$option['id']] = ['qty' => $option['qty'] ?? null];
+            }
+            $booking->options()->sync($options);
+        }
+
+        return response()->json($booking->load('options'), 201);
     }
     public function user()
     {
@@ -32,4 +48,5 @@ class Booking extends Model
     {
         return $this->hasOne(Payment::class);
     }
+    
 }

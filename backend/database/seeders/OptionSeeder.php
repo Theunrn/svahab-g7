@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class OptionSeeder extends Seeder
 {
@@ -12,9 +13,13 @@ class OptionSeeder extends Seeder
      */
     public function run(): void
     {
-        $Option = ['water','live','take_photo'];
-        foreach($Option as $option) {
-            \App\Models\Option::create(['option' => $option]);
+        $options = ["Live", "Take Photo", "Water"];
+        foreach ($options as $option) {
+            DB::table('options')->insert([
+                'name' => $option,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
         }
       
     }

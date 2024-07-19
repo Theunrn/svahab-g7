@@ -1,10 +1,18 @@
 <?php
 
+
 namespace App\Http\Controllers\Admin;
+
+use Illuminate\Support\Facades\Validator;
 
 use App\Http\Controllers\Controller;
 use App\Models\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Hash;
+
+use function Laravel\Prompts\password;
 
 class SettingController extends Controller
 {
@@ -13,42 +21,107 @@ class SettingController extends Controller
      */
     public function index()
     {
-        $setting = Setting::all();
-        return view('setting.setting.mail', compact('setting'));
+        $user = auth()->user();
+        return view('setting.settings.index', compact('user'));
+    }
+    // =======================================
+    public function checkPassword(Request $request)
+    {
+        $request->validate([
+            'old_password' => 'required',
+        ]);
+
+        // Get the currently authenticated user
+        $user = Auth::user();
+        if (!Hash::check($request->input('old_password'), $user->password)) {
+            Cache::put('failed', 'Old password does not match our records.', 1000);
+            return redirect()->back();
+        } else {
+            session(['password_change_modal' => true]);
+
+            return view('setting.settings.edit');
+        }
+    }
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'new_password' => 'required|string|min:8|confirmed',
+        ]);
+
+        // Get the currently authenticated user
+        $user = Auth::user();
+
+        // Update the user's password
+        $user->password = Hash::make($request->input('new_password'));
+        $user->save();
+
+        // Clear the password change session variable
+        session()->forget('password_change_modal');
+
+        return redirect()->route('settings.index')->with('success', 'Password successfully updated.');
+    }
+
+
+
+    /**
+     * Show the form for creating a new setting.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function create()
+    {
+        return view('settings.create');
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Store a newly created setting in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
      */
-
-    public function edit($id)
+    public function store(Request $request)
     {
-        $setting = Setting::find($id);
-        return view('setting.setting.edit', compact('setting'));
+        // Validation can be added here if needed
+
+        $setting = new Setting();
+        $setting->key = $request->input('key');
+        $setting->value = $request->input('value');
+        $setting->email_address = $request->input('email_address');
+        $setting->responsible = $request->input('responsible');
+        $setting->email_notifications = $request->input('email_notifications', 0); // Assuming default is disabled
+
+        $setting->save();
+
+        return redirect()->route('settings.index')
+            ->with('success', 'Setting created successfully.');
     }
 
-    public function update(Request $request, $id)
+
+    /**
+     * Show the form for editing the specified setting.
+     *
+     * @param  int  $id
+     * @return \Illuminate\View\View
+     */
+    public function edit($id)
     {
-        $request->validate([
-            'key' => 'required|string|max:255',
-            'value' => 'required|string|max:255',
-            'email_address' => 'required|email',
-            'responsible' => 'required|string|max:255',
-            'email_notifications' => 'required|boolean',
-            'phone_number' => 'nullable|string|max:20',
-            'address' => 'nullable|string|max:255',
-            'timezone' => 'nullable|string|max:255',
-            'language' => 'nullable|string|max:10',
-            'currency' => 'nullable|string|max:10',
-            'date_format' => 'nullable|string|max:10',
-            'time_format' => 'nullable|string|max:10',
-            'maintenance_mode' => 'nullable|boolean',
-            'additional_data' => 'nullable|json',
-        ]);
+        $setting = Setting::findOrFail($id); // Assuming Setting is your model
 
-        $setting = Setting::find($id);
-        $setting->update($request->all());
+        return view('settings.edit', compact('setting'));
+    }
 
-        return redirect()->route('setting.setting.index')->with('success', 'Settings updated successfully');
+    /**
+     * Remove the specified setting from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function destroy($id)
+    {
+        $setting = Setting::findOrFail($id); // Assuming Setting is your model
+        $setting->delete();
+
+        return redirect()->route('settings.index')
+            ->with('success', 'Setting deleted successfully.');
     }
 }
