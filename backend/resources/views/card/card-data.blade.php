@@ -193,7 +193,7 @@
                     class="flex gap-5 p-6 bg-yellow-100 border border-gray-200 rounded-lg shadow transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 hover:bg-blue-900 hover:text-white">
                     <i class='bx bx-money text-3xl'></i>
                     <div class="content">
-                        <strong style="font-size: 25px">${{ $yearlyData['payments'] }}</strong>
+                        <strong style="font-size: 25px">${{ number_format($yearlyData['payments'], 0) }}</strong>
                         <p class="mb-3 font-normal text-black-500">Total Payments</p>
                     </div>
                 </div>
