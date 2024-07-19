@@ -9,7 +9,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
+
+use function Laravel\Prompts\password;
 
 class SettingController extends Controller
 {
@@ -22,25 +25,42 @@ class SettingController extends Controller
         return view('setting.settings.index', compact('user'));
     }
     // =======================================
-    public function updatePassword(Request $request)
+    public function checkPassword(Request $request)
     {
         $request->validate([
             'old_password' => 'required',
-            'new_password' => 'required|min:8|confirmed',
         ]);
 
+        // Get the currently authenticated user
+        $user = Auth::user();
+        if (!Hash::check($request->input('old_password'), $user->password)) {
+            Cache::put('failed', 'Old password does not match our records.', 1000);
+            return redirect()->back();
+        } else {
+            session(['password_change_modal' => true]);
+
+            return view('setting.settings.edit');
+        }
+    }
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'new_password' => 'required|string|min:8|confirmed',
+        ]);
+
+        // Get the currently authenticated user
         $user = Auth::user();
 
-        if (!Hash::check($request->old_password, $user->password)) {
-            return back()->withErrors(['old_password' => 'The provided password does not match your current password.']);
-        }
+        // Update the user's password
+        $user->password = Hash::make($request->input('new_password'));
+        $user->save();
 
-        $user->update([
-            'password' => Hash::make($request->new_password),
-        ]);
+        // Clear the password change session variable
+        session()->forget('password_change_modal');
 
-        return back()->with('status', 'Password updated successfully!');
+        return redirect()->route('settings.index')->with('success', 'Password successfully updated.');
     }
+
 
 
     /**
