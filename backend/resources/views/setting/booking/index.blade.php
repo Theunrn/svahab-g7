@@ -15,10 +15,7 @@
                 </select>
             </div>
             <div class="inline-flex rounded-md shadow-sm space-x-2 justify-end">
-                <button id="filter-all" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-l-lg hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700">
-                    Show All
-                </button>
-                <button id="filter-last-month" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700">
+                <button id="filter-last-month" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-l-lg hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700">
                     Last Month
                 </button>
                 <button id="filter-last-week" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700">
@@ -150,63 +147,31 @@
         document.addEventListener('DOMContentLoaded', () => {
             const statusFilter = document.getElementById('status_filter');
             const bookingList = document.getElementById('booking-list');
-            const filterButtons = {
-                all: document.getElementById('filter-all'),
-                lastMonth: document.getElementById('filter-last-month'),
-                lastWeek: document.getElementById('filter-last-week'),
-                today: document.getElementById('filter-today')
-            };
+            const cancelledBookingList = document.getElementById('cancelled-booking-list');
 
-            let selectedDateRange = '';
+            statusFilter.addEventListener('change', (event) => {
+                filterBookings(event.target.value);
+            });
 
-            statusFilter.addEventListener('change', () => filterBookings());
-            Object.keys(filterButtons).forEach(key => {
-                filterButtons[key].addEventListener('click', () => {
-                    selectedDateRange = key;
-                    filterBookings();
-                    setActiveButton(key);
+            Object.values(filterButtons).forEach(button => {
+                button.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    filterDateRange(button.id);
                 });
             });
 
-            function setActiveButton(activeKey) {
-                Object.keys(filterButtons).forEach(key => {
-                    filterButtons[key].classList.toggle('bg-gray-100', key === activeKey);
-                    filterButtons[key].classList.toggle('text-blue-700', key === activeKey);
-                });
+            function filterBookings(status) {
+                if (status === 'cancelled') {
+                    bookingList.classList.add('hidden');
+                    cancelledBookingList.classList.remove('hidden');
+                } else {
+                    bookingList.classList.remove('hidden');
+                    cancelledBookingList.classList.add('hidden');
+                    Array.from(bookingList.querySelectorAll('tr')).forEach(row => {
+                        row.classList.toggle('hidden', status && row.dataset.status !== status);
+                    });
+                }
             }
-
-            function filterBookings() {
-                const status = statusFilter.value;
-
-                Array.from(bookingList.querySelectorAll('tr')).forEach(row => {
-                    const bookingDate = new Date(row.dataset.date);
-                    const now = new Date();
-
-                    let dateMatch = true;
-
-                    if (selectedDateRange === 'lastMonth') {
-                        const startOfMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-                        const endOfMonth = new Date(now.getFullYear(), now.getMonth(), 0);
-                        dateMatch = bookingDate >= startOfMonth && bookingDate <= endOfMonth;
-                    } else if (selectedDateRange === 'lastWeek') {
-                        const startOfWeek = new Date(now);
-                        startOfWeek.setDate(startOfWeek.getDate() - (startOfWeek.getDay() + 7) % 7);
-                        const endOfWeek = new Date(now);
-                        endOfWeek.setDate(endOfWeek.getDate() - endOfWeek.getDay());
-                        dateMatch = bookingDate >= startOfWeek && bookingDate <= endOfWeek;
-                    } else if (selectedDateRange === 'today') {
-                        const startOfDay = new Date(now.setHours(0, 0, 0, 0));
-                        const endOfDay = new Date(now.setHours(23, 59, 59, 999));
-                        dateMatch = bookingDate >= startOfDay && bookingDate <= endOfDay;
-                    }
-
-                    const statusMatch = status ? row.dataset.status === status : true;
-                    row.style.display = dateMatch && statusMatch ? '' : 'none';
-                });
-            }
-
-            // Initialize
-            filterBookings();
         });
     </script>
 </x-app-layout>

@@ -24,6 +24,19 @@ class DashboardController extends Controller
         $payments = Payment::with('customer')->get();
         $totalAmount = $payments->sum('amount');
 
+        // Get user count by roles
+        $adminCount = User::whereHas('roles', function($query) {
+            $query->where('name', 'admin');
+        })->count();
+
+        $ownerCount = User::whereHas('roles', function($query) {
+            $query->where('name', 'owner');
+        })->count();
+
+        $customerCount = User::whereHas('roles', function($query) {
+            $query->where('name', 'customer');
+        })->count();
+
         $daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
         $weeklyPayment = [];
         $weeklyDataField = [];
@@ -84,21 +97,38 @@ class DashboardController extends Controller
 
         $totalWeekFeedback = array_sum($weeklyFeedback); // Total sum for the week
 
+        // // Get top 5 product orders with orders and calculate percentages
+        // $productOrders = Product::withCount('orders')
+        //     ->having('orders_count', '>', 0)
+        //     ->orderByDesc('orders_count')
+        //     ->take(5)
+        //     ->get();
+
+        // $totalOrders = Order::count();
+
+        // $productData = $totalOrders > 0 ? $productOrders->map(function ($product) use ($totalOrders) {
+        //     return [
+        //         'name' => $product->name,
+        //         'percentage' => ($product->orders_count / $totalOrders) * 100,
+        //     ];
+        // }) : collect([]);
+
         // Get top 5 product orders with orders and calculate percentages
         $productOrders = Product::withCount('orders')
             ->having('orders_count', '>', 0)
-            ->orderByDesc('orders_count')
+            ->orderBy('orders_count', 'desc')
             ->take(5)
             ->get();
 
         $totalOrders = Order::count();
 
-        $productData = $totalOrders > 0 ? $productOrders->map(function ($product) use ($totalOrders) {
+        $productData = $productOrders->map(function ($product) use ($totalOrders) {
             return [
                 'name' => $product->name,
                 'percentage' => ($product->orders_count / $totalOrders) * 100,
             ];
-        }) : collect([]);
+        });
+
 
         // Data for month =============================================================================================
 
@@ -146,7 +176,8 @@ class DashboardController extends Controller
             'totalBookings', 'totalUsers', 'totalFields', 'totalFeedbacks','totalPayments',
             'weeklyPayment', 'weeklyDataField', 'totalWeekFeedback', 'totalWeekAmount', 'totalUsersRegister', 
             'totalWeekBookings', 'productData', 'totalOrders', 'todayBookings', 'totalWeekField',
-            'todayUsers', 'todayFields', 'todayFeedbacks', 'todayPayments', 'monthlyData', 'yearlyData'
+            'todayUsers', 'todayFields', 'todayFeedbacks', 'todayPayments', 'monthlyData', 'yearlyData',
+            'adminCount', 'ownerCount', 'customerCount'
         ));
     
     }

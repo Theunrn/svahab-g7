@@ -1,7 +1,7 @@
-<div class="container mx-auto px-6 py-5 bg-white m-5 rounded-lg shadow-md">
+<div class="container mx-auto px-6 py-5 bg-white m-5 rounded-lg shadow-md" style="width: 550px; height: 350px;">
   <h1 class="text-2xl font-bold mb-4">Field Booking Frequency</h1>
   <div>
-    <canvas id="fieldBookingChart" class="w-full max-w-1000px h-200px mx-auto"></canvas>
+    <canvas id="fieldBookingChart"></canvas>
   </div>
 </div>
 
