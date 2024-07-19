@@ -1,7 +1,7 @@
 <template>
   <WebLayout :customer="authStore.user"></WebLayout>
  <CardCom :customer="authStore.user"></CardCom>
- <MatchTeam></MatchTeam>
+ <MatchTeam :customer="authStore.user"></MatchTeam>
 
  <MatchSchedule></MatchSchedule>
  <WeatherCom></WeatherCom>
