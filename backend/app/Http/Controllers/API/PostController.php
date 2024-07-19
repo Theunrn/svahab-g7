@@ -7,6 +7,8 @@ use App\Http\Resources\PostResource;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log; // Add this line
 
 class PostController extends Controller
 {
@@ -25,8 +27,8 @@ class PostController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'date_match' => 'required',
-            'start_time' => 'required|date_format:H:i', 
-            'end_time' => 'required|date_format:H:i',  
+            'start_time' => 'required|date_format:H:i',
+            'end_time' => 'required|date_format:H:i',
             'location' => 'required|string|max:255',
             'logo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
@@ -35,12 +37,12 @@ class PostController extends Controller
         if ($request->hasFile('logo')) {
             try {
                 $file = $request->file('logo');
-                $filename = time(). '.'. $file->extension(); 
-               
+                $filename = time() . '.' . $file->extension();
+
                 $file->storeAs('public/images', $filename);
 
                 $post = new Post();
-                $post->user_id = Auth::id(); 
+                $post->user_id = Auth::id();
                 $post->name = $request->name;
                 $post->date_match = $request->date_match;
                 $post->start_time = $request->start_time;
@@ -63,21 +65,80 @@ class PostController extends Controller
         }
     }
 
-    public function getLatestPostTeam()
+    public function show($id)
     {
-        $latestPostTeam = Post::latest()->first();
-        $latestPostTeam->logo = asset('storage/' . $latestPostTeam->logo); // Assuming logo is stored in 'public/storage/images/'
-        return response()->json($latestPostTeam);
-    }
-    public function show($id){
         $post = Post::find($id);
-        return response()->json(['success' => true, 'data' =>$post]);
-
+        return response()->json(['success' => true, 'data' => $post]);
     }
-    public function destroy($id){
-        Post::find($id)->delete();
-        return response()->json(['message' => 'Post deleted successfully'], 200);
 
+    public function update(Request $request, $id)
+{
+    // Find the post by ID
+    $post = Post::find($id);
+    if (!$post) {
+        return response()->json(['error' => 'Post not found'], 404);
+    }
+
+    // Validate incoming request data
+    $validatedData = $request->validate([
+        'name' => 'sometimes|required|string|max:255',
+        'date_match' => 'sometimes|required|date',
+        'start_time' => 'sometimes|required|date_format:H:i',
+        'end_time' => 'sometimes|required|date_format:H:i',
+        'location' => 'sometimes|required|string|max:255',
+        'logo' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048'
+    ]);
+
+    // Update post fields if provided
+    $post->name = $request->input('name', $post->name);
+    $post->date_match = $request->input('date_match', $request->date_match);
+    $post->start_time = $request->input('start_time', $post->start_time);
+    $post->end_time = $request->input('end_time', $post->end_time);
+    $post->location = $request->input('location', $post->location);
+
+    // Handle logo file upload if provided
+    if ($request->hasFile('logo')) {
+        try {
+            // Delete old logo if exists
+            if ($post->logo && Storage::exists('public/' . $post->logo)) {
+                Storage::delete('public/' . $post->logo);
+            }
+
+            $file = $request->file('logo');
+            $filename = time() . '.' . $file->extension();
+            $file->storeAs('public/images', $filename);
+            $post->logo = 'images/' . $filename;
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to upload new logo: ' . $e->getMessage()], 500);
+        }
+    }
+
+    // Save the updated post
+    $post->save();
+
+    // Return the updated post data
+    return response()->json(['message' => 'Post updated successfully', 'data' => $post], 200);
+}
+
+
+    public function destroy($id)
+    {
+        // Find the post by ID
+        $post = Post::find($id);
+
+        if (!$post) {
+            return response()->json(['error' => 'Post not found'], 404);
+        }
+
+        // Delete the logo file if exists
+        if ($post->logo && Storage::exists('public/' . $post->logo)) {
+            Storage::delete('public/' . $post->logo);
+        }
+
+        // Delete the post
+        $post->delete();
+
+        return response()->json(['message' => 'Post deleted successfully'], 200);
     }
     public function updatePostStatus( $id){
         $post = Post::find($id);

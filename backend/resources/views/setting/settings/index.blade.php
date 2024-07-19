@@ -12,14 +12,15 @@
             {{ session('status') }}
         </div>
         @elseif ($errors->any())
-        <div class="bg-red-500 text-white p-4 rounded mb-4">
+        <div id="errorMessages" class="bg-red-500 text-white p-4 rounded mb-4">
             <ul>
                 @foreach ($errors->all() as $error)
                 <li>{{ $error }}</li>
                 @endforeach
             </ul>
         </div>
-        @endif
+        @endif 
+        
 
         <div class="main-body">
             <div class="flex flex-wrap -mx-4">
@@ -48,7 +49,7 @@
                 <div class="w-full md:w-2/3 px-4 mb-4">
                     <div class="bg-white rounded-lg shadow-lg p-6">
                         <div class="mb-4">
-                            <form method="POST" action="{{ route('admin.profile.updatePassword') }}">
+                            <form method="POST" action="{{ route('admin.profile.checkPassword') }}">
                                 @csrf
                                 @method('put')
                                 <!-- Personal Information -->
@@ -78,12 +79,21 @@
                                 <div class="flex flex-col space-y-4">
                                     <div>
                                         <label for="old_password" class="text-gray-700 select-none font-medium">Old Password</label>
-                                        <input id="old_password" type="password" name="old_password" placeholder="Enter old password" class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-200 w-full">
+                                        <input id="old_password" type="password" name="old_password" required placeholder="Enter old password" class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-200 w-full">
+                                        @if(Cache::get('failed'))
+                                            <div id="errorAlert" class="alert alert-danger text-red-500" role="alert">
+                                                {{ Cache::get('failed') }}
+                                                @php
+                                                    // Clear the cache message after displaying it
+                                                    Cache::forget('failed');
+                                                @endphp
+                                            </div>
+                                        @endif
                                     </div>
 
                                 </div>
                                 <div class="text-center mt-6">
-                                    <button id="toggleModal" type="button" class="bg-red-500 text-white font-bold px-5 py-2 rounded-lg shadow hover:bg-red-600 transition-colors">Update Password</button>
+                                    <button type="submit" class="bg-red-500 text-white font-bold px-5 py-2 rounded-lg shadow hover:bg-red-600 transition-colors">Update Password</button>
                                 </div>
                             </form>
                             <hr class="my-6">
@@ -100,7 +110,7 @@
             <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-lg">
                 <div class="mb-4">
                     <h2 class="text-xl font-semibold mb-4">Change Password</h2>
-                    <form method="POST" action="{{ route('admin.profile.updatePassword') }}">
+                    <form method="POST" action="{{ route('admin.profile.checkPassword') }}">
                         <div class="flex flex-col space-y-4">
                             <div>
                                 <label for="new_password" class="text-gray-700 select-none font-medium">New Password</label>
@@ -123,18 +133,37 @@
 
     <script>
         // Get elements
+        const errorAlert = document.getElementById('errorAlert');
+
+        // Function to hide the error alert after 1000 seconds
+        const hideErrorAlert = () => {
+            if (errorAlert) {
+                setTimeout(() => {
+                    errorAlert.style.display = 'none';
+                }, 5000); // 1000 seconds
+            }
+        };
+
+        // Call the function to start the timer
+        hideErrorAlert();
+
+        // Get elements for modal
         const toggleModalButton = document.getElementById('toggleModal');
         const modal = document.getElementById('defaultModal');
-        const closeModalButton = document.getElementById('closeModal');
+        const closeModalButton = document.querySelector('#defaultModal button[aria-label="Close"]');
 
         // Function to toggle modal visibility
         const toggleModal = () => {
             modal.classList.toggle('hidden');
         };
 
-        // Event listeners
-        toggleModalButton.addEventListener('click', toggleModal);
-        closeModalButton.addEventListener('click', toggleModal);
+        // Event listeners for modal
+        if (toggleModalButton) {
+            toggleModalButton.addEventListener('click', toggleModal);
+        }
+        if (closeModalButton) {
+            closeModalButton.addEventListener('click', toggleModal);
+        }
     </script>
 </x-app-layout>
 <script src="//unpkg.com/alpinejs" defer></script>

@@ -67,4 +67,5 @@ class ProfileController extends Controller
 
         return redirect()->route('admin.users.index')->withSuccess('User updated !!!');
     }
+    
 }

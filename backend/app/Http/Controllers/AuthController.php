@@ -13,32 +13,47 @@ use Illuminate\Support\Facades\Hash;
 class AuthController extends Controller
 {
     public function login(Request $request): JsonResponse
-    {
-        $validator = Validator::make($request->all(), [
-            'email'     => 'required|string|max:255',
-            'password'  => 'required|string'
-        ]);
+{
+    // Validate the request data
+    $validator = Validator::make($request->all(), [
+        'email'     => 'required|string|email|max:255',
+        'password'  => 'required|string'
+    ]);
     
-        if ($validator->fails()) {
-            return response()->json($validator->errors());
-        }
-    
-        $credentials = $request->only('email', 'password');
-        $user = User::where('email', $request->email)->first();
-        if (!$user) {
-            return response()->json([
-                'message' => 'User not found'
-            ], 401);
-        }
-    
-        $token = $user->createToken('auth_token')->plainTextToken;
-    
-        return response()->json([
-            'message'       => 'Login success',
-            'access_token'  => $token,
-            'token_type'    => 'Bearer'
-        ]);
+    // Return validation errors if any
+    if ($validator->fails()) {
+        return response()->json($validator->errors(), 422);
     }
+
+    $credentials = $request->only('email', 'password');
+
+    // Find the user by email
+    $user = User::where('email', $request->email)->first();
+
+    // Check if the user exists
+    if (!$user) {
+        return response()->json([
+            'message' => 'User not found'
+        ], 401);
+    }
+
+    // Check if the provided password matches the stored hashed password
+    if (!Hash::check($request->password, $user->password)) {
+        return response()->json([
+            'message' => 'Incorrect password'
+        ], 401);
+    }
+
+    // Generate the token
+    $token = $user->createToken('auth_token')->plainTextToken;
+
+    // Return success response with token
+    return response()->json([
+        'message'       => 'Login success',
+        'access_token'  => $token,
+        'token_type'    => 'Bearer'
+    ]);
+}
     
     public function index(Request $request)
     {

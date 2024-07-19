@@ -17,7 +17,7 @@
           <button
             class="font-bold py-1 px-2 mt-2 rounded-lg w-30 hover:bg-orange-700 bg-orange-500 text-white hover:text-white"
             data-bs-toggle="modal"
-            data-bs-target="#startModal"
+            data-bs-target="#postModal"
           >
             Post Here
           </button>
@@ -31,8 +31,8 @@
         <div class="carousel-inner">
 
           <div
-            v-for="(team, index) in allTeams" 
-            :key="index" 
+            v-for="(team, index) in allTeams"
+            :key="team.id"
             class="carousel-item"
             :class="{ active: index === 0 }"
           >
@@ -62,6 +62,24 @@
                         alt="Team Logo"
                         class="w-30 h-30 object-cover rounded-full border-4 border-orange-500 overflow-hidden shadow-md hover:shadow-lg animate-sink"
                       />
+                      <div v-if="team.user_id == posterId" class="flex items-center ml-3 mt-3">
+                        <!-- Edit Button -->
+                        <button 
+                          class="edit-post-btn text-gray-700 rounded-md px-3 py-1 mr-2 hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 shadow-md hover:shadow-lg z-20"
+                          data-bs-toggle="modal"
+                          data-bs-target="#editModal"
+                          @click="editPost(team)"
+                        >
+                          <i class="bx bx-edit text-sm text-blue-500"></i>
+                        </button>
+                        <!-- Delete Button -->
+                        <button
+                          class="delete-post-btn text-gray-700 rounded-md px-3 py-1 mr-2 hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 shadow-md hover:shadow-lg z-20"
+                          @click="deletePost(team.id)"
+                        >
+                          <i class="bx bx-trash text-sm text-red-500"></i>
+                        </button>
+                      </div>
                     </div>
                     <div class="team-logo flex items-center gap-2 p-2">
                       <p class="team-name text-sm font-bold text-gray-700 font-size-5">
@@ -175,12 +193,12 @@
         </div>
       </div>
     </div>
-    <!-- Start Modal -->
+    <!-- post Modal -->
     <div
       class="modal fade"
-      id="startModal"
+      id="postModal"
       tabindex="-1"
-      aria-labelledby="startModalLabel"
+      aria-labelledby="postModalLabel"
       aria-hidden="true"
     >
       <div class="modal-dialog modal-dialog-centered">
@@ -238,15 +256,64 @@
         </div>
       </div>
     </div>
+    <!-- Edit Team Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editModalLabel">Update your team post</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form @submit.prevent="updatePost">
+              <div class="mb-3">
+                <label for="teamLogoInput" class="form-label">Upload your team logo *</label>
+                <input
+                  type="file"
+                  name="team_logo"
+                  class="form-control"
+                  id="teamLogoInput"
+                  @change="onFileChange"
+                />
+              </div>
+              <div class="mb-3"></div>
+              <div class="mb-3">
+                <label for="teamNameInput" class="form-label">Team Name *</label>
+                <input type="text" class="form-control" v-model="name" id="teamNameInput" />
+              </div>
+              <div class="mb-3">
+                <label for="dateMatchInput" class="form-label">Date Match *</label>
+                <input type="date" class="form-control" v-model="date_match" id="dateMatchInput" />
+              </div>
+              <div class="mb-3">
+                <label for="startTimeInput" class="form-label">Start Time *</label>
+                <input type="time" class="form-control" v-model="start_time" id="startTimeInput" />
+              </div>
+              <div class="mb-3">
+                <label for="endTimeInput" class="form-label">End Time *</label>
+                <input type="time" class="form-control" v-model="end_time" id="endTimeInput" />
+              </div>
+              <div class="mb-3">
+                <label for="locationInput" class="form-label">Location *</label>
+                <input type="text" class="form-control" v-model="location" id="locationInput" />
+              </div>
+              <button type="submit" class="btn btn-primary">Update Post</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import axiosInstance from '@/plugins/axios'
-import { useRouter } from 'vue-router'
 const router = useRouter()
 const post_team_id = ref('')
+const route = useRoute()
+const userId = computed(() => route.query.customer)
 const post_id = ref('')
 const team_name = ref('')
 const team_logo = ref<File | null>(null)
@@ -258,6 +325,14 @@ const end_time = ref('')
 const location = ref('')
 const allTeams = ref([])
 const status = ref(false)
+const postId = ref(null);
+const props= defineProps({
+  customer:Object
+})
+
+const posterId = ref(props.customer.id);
+
+
 // Function to handle file upload
 const handleFileUpload = (event: Event) => {
   const target = event.target as HTMLInputElement
@@ -295,6 +370,8 @@ const createMatch = async () => {
     console.error('Error creating match:', error.response ? error.response.data : error)
   }
 }
+
+
 
 // Function to handle file change
 const onFileChange = (event: Event) => {
@@ -340,6 +417,70 @@ const clearForm = () => {
   location.value = ''
   team_logo.value = null
 }
+const updatePost = async () => {
+  if (!postId.value) {
+    alert('No post ID available for update');
+    return;
+  }
+
+  try {
+    const formData = new FormData();
+    formData.append('name', name.value);
+    formData.append('date_match', date_match.value);
+    formData.append('start_time', start_time.value);
+    formData.append('end_time', end_time.value);
+    formData.append('location', location.value);
+    if (team_logo.value) {
+      formData.append('logo', team_logo.value);
+    }
+
+    const response = await axiosInstance.put(`/posts/${postId.value}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
+    alert('Post updated successfully');
+    clearForm();
+    await fetchAllTeams(); // Fetch the updated list of teams
+    window.location.reload();
+  } catch (error) {
+    alert('Error updating post');
+    console.error('Error updating post:', error.response ? error.response.data : error);
+  }
+};
+
+
+const editPost = (team: any) => {
+  postId.value = team.id;
+  name.value = team.name;
+  date_match.value = team.date_match;
+  start_time.value = team.start_time;
+  end_time.value = team.end_time;
+  location.value = team.location;
+  // Assuming `team_logo` is handled separately if needed
+  team_logo.value = getImageUrl(team.logo); // Update this if necessary
+};
+
+
+
+// Method to delete a post
+const deletePost = async (postId) => {
+  try {
+    // Make an API call to delete the post by postId
+    const response = await axiosInstance.delete(`/posts/${postId}`);
+
+
+    // Optionally, handle success message or update UI
+    alert('Post deleted successfully');
+    // Example: Refresh the list of teams after deletion (assuming `fetchAllTeams` is a method to update your data)
+    await fetchAllTeams();
+  } catch (error) {
+    // Handle error responses
+    alert('Error deleting post');
+    console.error('Error deleting post:', error.response ? error.response.data : error);
+  }
+};
 
 const teamLogoUrl = (logoPath: string) => {
   return logoPath ? `/storage/${logoPath}` : '' // Adjust according to your storage path
@@ -349,6 +490,8 @@ const fetchAllTeams = async () => {
   try {
     const response = await axiosInstance.get('/post/list') // Adjust endpoint based on your API
     allTeams.value = response.data.data
+    console.log('All teams fetched:', allTeams.value) // Log the fetched teams for debugging purposes
+    
   } catch (error) {
     console.error('Error fetching all teams:', error.response ? error.response.data : error)
   }
@@ -359,10 +502,12 @@ const getImageUrl = (imagePath) => {
 const setPostId = (postId) => {
   post_id.value = postId
 }
-
 onMounted(() => {
   fetchAllTeams()
+  
 })
+
+
 
 const formatTime = (time: string) => {
   // Assuming time is in 24-hour format 'HH:mm'
