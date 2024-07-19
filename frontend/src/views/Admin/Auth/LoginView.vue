@@ -1,14 +1,13 @@
-<!-- src/components/Login.vue -->
 <template>
   <div class="flex items-center justify-center min-h-screen bg-gray-100">
     <el-card class="w-full max-w-md shadow-lg">
       <h2 class="text-2xl font-bold mb-6 text-center">Login</h2>
-      <el-form @submit="onSubmit">
+      <el-form @submit.prevent="onSubmit">
         <el-form-item :error="emailError">
           <el-input placeholder="Email Address" v-model="email" size="large" />
         </el-form-item>
 
-        <el-form-item :error="nameError" class="mt-8 relative">
+        <el-form-item :error="passwordError" class="mt-8 relative">
           <el-input
             :placeholder="'Password'"
             v-model="password"
@@ -35,7 +34,7 @@
         </div>
 
         <p class="text-sm font-light text-gray-500 dark:text-gray-400 mt-2">
-          Doesn't have account yet?
+          Doesn't have an account yet?
           <a
             href="/register"
             class="font-medium text-blue-600 hover:underline dark:text-primary-500"
@@ -55,7 +54,8 @@ import { useRouter } from 'vue-router'
 import { ref } from 'vue'
 
 const router = useRouter()
-
+const emailError = ref('')
+const passwordError = ref('')
 const formSchema = yup.object({
   password: yup.string().required().label('Password'),
   email: yup.string().required().email().label('Email address')
@@ -75,12 +75,22 @@ const onSubmit = handleSubmit(async (values) => {
     localStorage.setItem('access_token', data.access_token)
     router.push('/')
   } catch (error) {
-    console.warn('Error')
+    // Handle specific error messages
+    if (error.response.status === 401) {
+      // Assuming 401 status for incorrect password or user not found
+      if (error.response.data.message.includes('User not found')) {
+        emailError.value = 'User not found'
+      } else if (error.response.data.message.includes('Incorrect password')) {
+        passwordError.value = 'Password is not correct'
+      }
+    } else {
+      console.warn('Error:', error)
+    }
   }
 })
 
-const { value: password, errorMessage: nameError } = useField('password')
-const { value: email, errorMessage: emailError } = useField('email')
+const { value: password, errorMessage: passwordFieldError } = useField('password')
+const { value: email, errorMessage: emailFieldError } = useField('email')
 
 const passwordVisible = ref(false)
 const togglePasswordVisibility = () => {
