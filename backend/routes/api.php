@@ -171,14 +171,16 @@ Route::get('/match/delete/{id}', [MatchTeamController::class,'destroy']);
 Route::post('/schedule/create', [APIScheduleMatchController::class,'store']);
 Route::get('/schedule/list', [APIScheduleMatchController::class,'index']);
 
-Route::delete('/post/delete/{id}', [PostController::class,'destroy']);
+// Route::delete('/post/delete/{id}', [PostController::class,'destroy']);
+
 Route::get('/post/show/{id}', [PostController::class, 'show']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/posts', [PostController::class, 'store']);
     Route::get('/post/list', [PostController::class, 'index']);
+    Route::delete('/posts/{id}', [PostController::class, 'destroy']);
+    Route::put('/posts/{id}', [PostController::class, 'update']); 
 });
-Route::get('/latest-post-team', [PostController::class, 'getLatestPostTeam']);
 
 //Events
 Route::post('/event/create', [EventController::class,'store']);

@@ -140,7 +140,7 @@
       </div>
     </div>
   </div>
-  <!-- Edit Modal -->
+  {{-- <!-- Edit Modal -->
   <div id="editModal" tabindex="-1" aria-hidden="true"
     class="hidden fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
     <div class="p-4 w-full max-w-xl max-h-full">
@@ -223,8 +223,8 @@
               </button>
           </form>
         </div>
-      </div>
-    </div>
+      </div> --}}
+    {{-- </div> --}}
     <script>
       document.getElementById('openAddModal').addEventListener('click', function () {
         document.getElementById('addModal').classList.remove('hidden');
