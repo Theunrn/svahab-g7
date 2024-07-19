@@ -31,7 +31,7 @@
         <div class="carousel-inner">
           <div
             v-for="(team, index) in allTeams"
-            :key="index"
+            :key="team.id"
             class="carousel-item"
             :class="{ active: index === 0 }"
           >
@@ -60,7 +60,7 @@
                         alt="Team Logo"
                         class="w-30 h-30 object-cover rounded-full border-4 border-orange-500 overflow-hidden shadow-md hover:shadow-lg animate-sink"
                       />
-                      <div class="flex items-center ml-3 mt-3">
+                      <div v-if="team.user_id == posterId" class="flex items-center ml-3 mt-3">
                         <!-- Edit Button -->
                         <button 
                           class="edit-post-btn text-gray-700 rounded-md px-3 py-1 mr-2 hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 shadow-md hover:shadow-lg z-20"
@@ -68,14 +68,14 @@
                           data-bs-target="#editModal"
                           @click="editPost(team)"
                         >
-                          <i class="bx bx-edit text-sm"></i>
+                          <i class="bx bx-edit text-sm text-blue-500"></i>
                         </button>
                         <!-- Delete Button -->
                         <button
                           class="delete-post-btn text-gray-700 rounded-md px-3 py-1 mr-2 hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 shadow-md hover:shadow-lg z-20"
                           @click="deletePost(team.id)"
                         >
-                          <i class="bx bx-trash text-sm"></i>
+                          <i class="bx bx-trash text-sm text-red-500"></i>
                         </button>
                       </div>
                     </div>
@@ -312,9 +312,10 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import axiosInstance from '@/plugins/axios'
-
-const post_team_id = ref('')
+const route = useRoute()
+const userId = computed(() => route.query.customer)
 const post_id = ref('')
 const team_name = ref('')
 const team_logo = ref<File | null>(null)
@@ -326,6 +327,13 @@ const end_time = ref('')
 const location = ref('')
 const allTeams = ref([])
 const postId = ref(null);
+const props= defineProps({
+  customer:Object
+})
+
+const posterId = ref(props.customer.id);
+
+
 // Function to handle file upload
 const handleFileUpload = (event: Event) => {
   const target = event.target as HTMLInputElement
@@ -356,22 +364,6 @@ const createMatch = async () => {
   }
 }
 
-const isUsersPost = (team) => {
-  // Implement your logic here to check if the current user is the owner of the post
-  // For example, compare user ID or username with the post's creator ID or username
-  // Assuming you have a way to get the current user's ID or username
-  // Replace this with your actual logic based on your authentication and user management setup
-  const currentUser = getCurrentUser() // Replace with your actual implementation
-  return team.user_id === currentUser.id // Adjust this based on your user and post data structure
-}
-
-const getCurrentUser = () => {
-  return {
-    id: 'user123', // Example user ID
-    username: 'exampleUser', // Example username
-    // Add other relevant user details if needed
-  }
-}
 
 // Function to handle file change
 const onFileChange = (event: Event) => {
@@ -417,44 +409,50 @@ const clearForm = () => {
   location.value = ''
   team_logo.value = null
 }
-
 const updatePost = async () => {
+  if (!postId.value) {
+    alert('No post ID available for update');
+    return;
+  }
+
   try {
-    const formData = new FormData()
-    formData.append('name', name.value)
-    formData.append('date_match', date_match.value)
-    formData.append('start_time', start_time.value)
-    formData.append('end_time', end_time.value)
-    formData.append('location', location.value)
+    const formData = new FormData();
+    formData.append('name', name.value);
+    formData.append('date_match', date_match.value);
+    formData.append('start_time', start_time.value);
+    formData.append('end_time', end_time.value);
+    formData.append('location', location.value);
     if (team_logo.value) {
-      formData.append('logo', team_logo.value)
+      formData.append('logo', team_logo.value);
     }
 
-    const response = await axiosInstance.put(`/post/update/${post_id.value}`, formData, {
+    const response = await axiosInstance.put(`/posts/${postId.value}`, formData, {
       headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    })
+        'Content-Type': 'multipart/form-data',
+      },
+    });
 
-    console.log(response.data) // Log the response for debugging
-    // Handle success (e.g., update the team in the list, show success message, etc.)
+    alert('Post updated successfully');
+    clearForm();
+    await fetchAllTeams(); // Fetch the updated list of teams
+    window.location.reload();
   } catch (error) {
-    console.error(error) // Log the error for debugging
-    // Handle error (e.g., show error message, etc.)
+    alert('Error updating post');
+    console.error('Error updating post:', error.response ? error.response.data : error);
   }
-}
+};
 
-const editPost = (team) => {
-  name.value = team.name
-  date_match.value = team.date_match
-  start_time.value = team.start_time
-  end_time.value = team.end_time
-  location.value = team.location
-  // If the team logo is a URL, you'll need to handle how to display it or how to re-upload it
-  // You may need to adjust this part based on how the team logo is managed
-  team_logo.value = team.logo // Set to null to avoid pre-filling the file input with any value
-  post_id.value = team.id // Assuming `post_id` is the identifier for the post
-}
+
+const editPost = (team: any) => {
+  postId.value = team.id;
+  name.value = team.name;
+  date_match.value = team.date_match;
+  start_time.value = team.start_time;
+  end_time.value = team.end_time;
+  location.value = team.location;
+  // Assuming `team_logo` is handled separately if needed
+  team_logo.value = getImageUrl(team.logo); // Update this if necessary
+};
 
 
 
@@ -484,6 +482,8 @@ const fetchAllTeams = async () => {
   try {
     const response = await axiosInstance.get('/post/list') // Adjust endpoint based on your API
     allTeams.value = response.data.data
+    console.log('All teams fetched:', allTeams.value) // Log the fetched teams for debugging purposes
+    
   } catch (error) {
     console.error('Error fetching all teams:', error.response ? error.response.data : error)
   }
@@ -497,7 +497,10 @@ const setPostId = (id) => {
 };
 onMounted(() => {
   fetchAllTeams()
+  
 })
+
+
 
 const formatTime = (time: string) => {
   // Assuming time is in 24-hour format 'HH:mm'

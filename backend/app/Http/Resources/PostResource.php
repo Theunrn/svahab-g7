@@ -17,6 +17,7 @@ class PostResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'user_id' => $this->user_id,
             'date_match' => $this->date_match,
             'logo' => $this->logo,
             'start_time' => $this->start_time,

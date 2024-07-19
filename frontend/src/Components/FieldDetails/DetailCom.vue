@@ -65,70 +65,60 @@
           <form @submit.prevent="submitBooking">
             <div class="form-group half-width">
               <label for="date">Date *</label>
-              <input type="date" id="date" @change="bookingDate" v-model="booking_date" />
+              <input type="date" id="date" @change="bookingDate" v-model="booking_date" required />
             </div>
             <div class="form-group half-width">
               <label for="start">Start time *</label>
-              <input type="time" id="start" @change="start" v-model="start_time" />
+              <input type="time" id="start" @change="start" v-model="start_time" required />
             </div>
             <div class="clearfix"></div>
             <div class="form-group">
               <label for="end">End time *</label>
-              <input type="time" id="end" @change="end" v-model="end_time" />
+              <input type="time" id="end" @change="end" v-model="end_time" required />
             </div>
-            <!-- <div class="form-group">
-              <label for="duration">Your duration (hour) *</label>
-              <input type="text" id="duration" v-model="duration" disabled />
-            </div> -->
-            <div class="form-group">
-              <label for="number-of-guests">Total Price ($) *</label>
-              <input disabled type="number" id="number-of-guests" v-model="total_price" />
+            <div class="flex">
+              <div class="form-group">
+                <label for="duration">Duration <strong>(hour)</strong></label>
+                <input type="text" id="duration" v-model="duration" disabled  class="py-3 text-center text-green-500" style="font-weight: bold;"/>
+              </div>
+              <div class="form-group">
+                <label for="number-of-guests">Total Price <strong>($)</strong> </label>
+                <input disabled type="number" id="number-of-guests" v-model="total_price" class="text-center py-3 text-green-500" style="font-weight: bold;"/>
+              </div>
             </div>
             <div class="wrapper-card relative w-full mx-2 my-2 rounded-md">
               <h2>Your Option (optional)</h2>
-              <div class="flex items-center">
+              <div class="flex items-center mt-3" v-for="option in options" :key="option.name">
                 <input
-                  id="vue-checkbox"
+                  :id="option.name + '-checkbox'"
                   type="checkbox"
-                  value=""
+                  :value="option"
+                  v-model="selectedOptions"
                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                 />
                 <label
-                  for="vue-checkbox"
-                  class="w-full py-2 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >Water</label
+                  :for="option.name + '-checkbox'"
+                  class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  >{{ option.name }}</label
                 >
               </div>
-              <div class="flex items-center">
+
+              <div v-if="selectedOptions.some((option) => option.name === 'Water')" class="mt-2">
+                <label for="water-quantity" class="block text-sm font-medium text-gray-700">
+                  Number of Water (Carry):
+                </label>
                 <input
-                  id="react-checkbox"
-                  type="checkbox"
-                  value=""
-                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                  id="water-quantity"
+                  type="number"
+                  v-model.number="waterQuantity"
+                  required
+                  class="mt-1 block w-full px-3 py-1 rounded-md border-gray-400 shadow-sm focus:border-gray-500 focus:ring-indigo-500 sm:text-sm"
                 />
-                <label
-                  for="react-checkbox"
-                  class="w-full py-2 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >Live</label
-                >
-              </div>
-              <div class="flex items-center">
-                <input
-                  id="angular-checkbox"
-                  type="checkbox"
-                  value=""
-                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                />
-                <label
-                  for="angular-checkbox"
-                  class="w-full py-2 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >Take Photo</label
-                >
               </div>
             </div>
             <button
               type="submit"
-              class="btn-book match-btn mr-2 bg-orange-500 w-40 text-white rounded-md px-3 py-1 mt-2 mb-2 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50 shadow-md hover:shadow-lg z-20"
+              class="btn-book match-btn mr-2 bg-orange-500 w-40 text-white rounded-md px-3 py-1 mt-3 mb-2 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50 shadow-md hover:shadow-lg z-20"
             >
               Payment
             </button>
@@ -207,7 +197,10 @@
         <div v-for="feedback in Feedbacklist" :key="feedback.id" class="comment-item">
           <img src="../../assets/image/liep.jpg" alt="Commenter's avatar" />
           <div class="comment-content">
-            <h3><strong>{{ feedback.user.toUpperCase() }} </strong> <span class="text-sm"> - {{ feedback.created_at }}</span></h3>
+            <h3>
+              <strong>{{ feedback.user.toUpperCase() }} </strong>
+              <span class="text-sm"> - {{ feedback.created_at }}</span>
+            </h3>
             <p>{{ feedback.feedback_text }}</p>
           </div>
           <div class="relative flex">
@@ -228,21 +221,27 @@
               v-if="feedback.showDropdown"
               class="absolute right-0 mt-4 w-30 bg-white border rounded-lg shadow-xl flex flex-col"
             >
-              <!-- <button class="flex-1 text-danger" @click="deleteItem(feedback.id)">Delete</button> -->
-              <!-- <button class="flex-1" @click="showEditModal(feedback)">Edit</button> -->
-              <li>
+              <li v-if="feedback.user_id == userId">
                 <a
                   @click="deleteItem(feedback.id)"
                   class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                  >Delete</a
+                  >Delete 
+                  </a
                 >
               </li>
-              <li>
+              <li v-if="feedback.user_id == userId">
                 <a
                   @click="showEditModal(feedback)"
                   class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                  >Edit</a
+                  >Edit
+                  </a 
                 >
+              </li>
+              <li v-else>
+                <span
+                  class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                  ><i class="bx bxs-comment-error"></i
+                ></span>
               </li>
             </ul>
           </div>
@@ -260,6 +259,7 @@
               v-model="feedback_text"
               class="usercomment"
             />
+            <div class="pos-demo"></div>
             <div class="buttons">
               <button @click="SubmitFeedback" :disabled="!feedback_text" id="publish">
                 Submit
@@ -377,7 +377,6 @@
               </div>
               <!-- Map Container -->
               <div class="map w-1/2 pt-5 pr-1">
-                <!-- Ensure this div takes 50% width -->
                 <MapCom :address="receivedAddress" :location="location" />
               </div>
             </div>
@@ -390,6 +389,7 @@
 </template>
 
 <script setup lang="ts">
+// ======================= import nuccesary files and libraries =======================
 import WebHeaderMenu from '@/Components/WebHeaderMenu.vue'
 import MapCom from '@/Components/Maps/MapCom.vue'
 import CurrentUser from '@/Components/Maps/CurrentUser.vue'
@@ -402,10 +402,12 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import type { Action } from 'element-plus'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
+import Swal from 'sweetalert2'
 
-// Load the relativeTime plugin
+// =========== Load the relativeTime plugin =========
 dayjs.extend(relativeTime)
 
+// =============================== All variables==================================
 const route = useRoute()
 const router = useRouter()
 const userId = computed(() => route.query.customer)
@@ -426,17 +428,25 @@ const feedback_text = ref('')
 const Feedbacklist = ref([])
 const isclear = ref(false)
 const receivedAddress = ref<string>('')
+const isWaterChecked = ref(false)
+const waterQuantity = ref('')
+const options = ref([])
+const selectedOptions = ref([])
+const editFeedbackModalVisible = ref(false)
+const editedFeedbackText = ref('')
+let feedbackToEdit = ref(null)
 
-// Event handler for address-updated event
+// ========== Event handler for address-updated event==========
 const updateAddress = (updatedAddress: string) => {
   receivedAddress.value = updatedAddress
 }
 
-// Event handler for location-updated event
+// ========= Event handler for location-updated event ==============
 const updateLocation = (updatedLocation: string) => {
   location.value = updatedLocation
 }
 
+//===========================calculation of total price =====================
 const calculateTotalPrice = () => {
   const startTimeParts = start_time.value.split(':').map(Number)
   const endTimeParts = end_time.value.split(':').map(Number)
@@ -448,9 +458,10 @@ const calculateTotalPrice = () => {
   const pricePerMinute = price.value / 60
 
   total_price.value = (durationInMinutes * pricePerMinute).toFixed(2)
-  duration.value = durationInMinutes / 60
+  duration.value = (durationInMinutes / 60).toFixed(1)
 }
 
+//================== Make a booking =====================
 const submitBooking = async () => {
   try {
     const response = await axiosInstance.post('/booking/create', {
@@ -461,13 +472,17 @@ const submitBooking = async () => {
       booking_date: booking_date.value,
       total_price: total_price.value,
       status: 'pending',
-      payment_status: 'unpaid'
+      payment_status: 'unpaid',
+      options: selectedOptions.value.map((option) => ({
+        id: option.id,
+        ...(option.name === 'Water' ? { qty: waterQuantity.value } : {})
+      }))
     })
 
     bookings.value.push(response.data)
-    booking.value = response.data.data
+    booking.value = response.data.data.original
 
-    // Create event
+    // ========= Create event ==========
     try {
       const startDateTime = `${booking_date.value} ${start_time.value}:00`
       const endDateTime = `${booking_date.value} ${end_time.value}:00`
@@ -483,17 +498,30 @@ const submitBooking = async () => {
       console.error('Error creating event:', error)
     }
 
-    alert('Thank you for your booking! We will send you a notification soon')
-    router.push({
-      path: `/payment/${userId.value}`,
-      query: { booking: booking.value.id }
+    Swal.fire({
+      position: 'center',
+      icon: 'success',
+      html: `<span style="font-size: 26px; font-weight: bold;">Thank you for your booking! We will send you a notification soon</span>`,
+      showConfirmButton: false,
+      timer: 1000
+    }).then(() => {
+      router.push({
+        path: `/payment/${userId.value}`,
+        query: { booking: booking.value.id }
+      })
     })
   } catch (error) {
-    alert('Your booking is failed. Please try again')
+    // ========== Show error message ===========
+    Swal.fire({
+      title: 'Error',
+      text: 'Your booking is failed. Please try again',
+      icon: 'error',
+      confirmButtonText: 'OK'
+    })
     console.error('Error creating booking:', error)
   }
 }
-
+//================================ fetch field specifict ================================
 const fetchField = async () => {
   try {
     const response = await axiosInstance.get(`/field/show/${fieldId.value}`)
@@ -505,6 +533,7 @@ const fetchField = async () => {
   }
 }
 
+//========================== Fetch fields =========================
 const fetchFields = async () => {
   try {
     const response = await axiosInstance.get('/fields/list')
@@ -514,6 +543,7 @@ const fetchFields = async () => {
   }
 }
 
+//========================== create feedback =========================
 const SubmitFeedback = async () => {
   try {
     const response = await axiosInstance.post('/feedback/create', {
@@ -521,16 +551,17 @@ const SubmitFeedback = async () => {
       field_id: fieldId.value,
       feedback_text: feedback_text.value
     })
-    alert('Create successfull')
+    $('.pos-demo').notify('Create feedback successful', 'success', { position: 'top' })
     isclear.value = true
     fetchFeedbackList()
     clearFeedbackData()
   } catch (error) {
-    alert('Create fail')
+    $('.pos-demo').notify('Create feedback fail', 'danger', { position: 'top' })
     console.error('Error creating booking:', error)
   }
 }
 
+//=======================fetch Feedbacks =============================
 const fetchFeedbackList = async () => {
   try {
     const response = await axiosInstance.get(`/feedbacks/${fieldId.value}`, {
@@ -544,10 +575,22 @@ const fetchFeedbackList = async () => {
   }
 }
 
+//============================= fetch Options =============================
+const fetchOptions = async () => {
+  try {
+    const response = await axiosInstance.get('/options')
+    options.value = response.data.data
+  } catch (error) {
+    console.error('Error fetching options:', error)
+  }
+}
+
+//============================= show dropdown=============================
 const toggleDropdown = (feedback) => {
   feedback.showDropdown = !feedback.showDropdown
 }
 
+//========================= Delete feedback========================
 const deleteItem = async (itemId) => {
   try {
     await axiosInstance.delete(`/feedback/delete/${itemId}`, {
@@ -556,25 +599,26 @@ const deleteItem = async (itemId) => {
       }
     })
     Feedbacklist.value = Feedbacklist.value.filter((item) => item.id !== itemId)
+    $('.pos-demo').notify('Feedback remove successful', 'success', { position: 'top' })
   } catch (error) {
     console.error('Error deleting item:', error)
+    $('.pos-demo').notify('Failed remove feedback', 'danger', { position: 'top' })
   }
 }
 
-const editFeedbackModalVisible = ref(false)
-const editedFeedbackText = ref('')
-let feedbackToEdit = ref(null)
-
+// ==================== Show modal edit feedback ====================
 const showEditModal = (feedback) => {
   feedbackToEdit.value = feedback
   editedFeedbackText.value = feedback.feedback_text
   editFeedbackModalVisible.value = true
 }
 
+// ==================== Close modal edit feedback ====================
 const closeEditModal = () => {
   editFeedbackModalVisible.value = false
 }
 
+// ==================== Update feedback ====================
 const updateFeedback = async () => {
   try {
     const response = await axiosInstance.put(`/feedback/update/${feedbackToEdit.value.id}`, {
@@ -587,13 +631,14 @@ const updateFeedback = async () => {
       Feedbacklist.value[updatedFeedbackIndex].feedback_text = editedFeedbackText.value
     }
     closeEditModal()
-    alert('Feedback updated successfully!')
+    $('.pos-demo').notify('Feedback updated successfully!', 'success', { position: 'top' })
   } catch (error) {
-    alert('Failed to update feedback.')
+    $('.pos-demo').notify('Failed to update feedback.', 'success', { position: 'top' })
     console.error('Error updating feedback:', error)
   }
 }
 
+//===========CLear form of feedback =================
 const clearFeedbackData = () => {
   feedback_text.value = ''
 }
@@ -601,12 +646,15 @@ const clearFeedbackData = () => {
 onMounted(() => {
   fetchField()
   fetchFields()
+  fetchOptions()
   fetchFeedbackList()
   if (isclear.value) {
     clearFeedbackData()
   }
+  console.log(selectedOptions.value)
 })
 
+//============ fetch image api =================
 const getImageUrl = (imagePath) => {
   return imagePath ? `http://127.0.0.1:8000/storage/${imagePath}` : '/default-image.jpg'
 }
@@ -625,6 +673,11 @@ watch([start_time, end_time], calculateTotalPrice)
   height: 100px;
   background-color: rgb(144, 124, 91);
 }
+
+.notifyjs-corner {
+  z-index: 10000 !important;
+}
+
 h2 {
   margin-top: 10px;
   margin-bottom: 10px;
