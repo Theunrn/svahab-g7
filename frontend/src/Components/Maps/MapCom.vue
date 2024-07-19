@@ -98,6 +98,7 @@ export default {
 </template>
 
 <script>
+
 export default {
   props: {
     address: String, // Destination address
@@ -169,13 +170,14 @@ export default {
     },
   },
 };
+
 </script>
 
 
-  <style scoped>
-  #map {
+<style scoped>
+#map {
     width: 100%;
     height: 80vh;
   }
-  </style>
+</style>
   
