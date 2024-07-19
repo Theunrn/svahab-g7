@@ -26,7 +26,7 @@ class ProductController extends Controller
             $categories = Category::all();
         } else {
             // Owner can see only their own products and categories
-            $products = $user->products()->with(['category', 'colors', 'sizes', 'discounts'])->get();
+            $products = $user->products()->with(['category', 'colors', 'sizes', 'discounts'])->latest()->get();
             // $categories = Category::where('owner_id', $user->id)->get();
             $categories = Category::all();
         }

@@ -79,11 +79,11 @@
             <div class="flex">
               <div class="form-group">
                 <label for="duration">Duration <strong>(hour)</strong></label>
-                <input type="text" id="duration" v-model="duration" disabled  class="py-3 text-center text-green-500" style="font-weight: bold;"/>
+                <input type="text" id="duration" v-model="duration" disabled  class="py-3 text-center text-green-500 text-xl" style="font-weight: bold;"/>
               </div>
               <div class="form-group">
                 <label for="number-of-guests">Total Price <strong>($)</strong> </label>
-                <input disabled type="number" id="number-of-guests" v-model="total_price" class="text-center py-3 text-green-500" style="font-weight: bold;"/>
+                <input disabled type="number" id="number-of-guests" v-model="total_price" class="text-center py-3 text-green-500 text-xl" style="font-weight: bold;"/>
               </div>
             </div>
             <div class="wrapper-card relative w-full mx-2 my-2 rounded-md">
@@ -436,6 +436,13 @@ const editFeedbackModalVisible = ref(false)
 const editedFeedbackText = ref('')
 let feedbackToEdit = ref(null)
 
+// =========== Function to check if the end time is before 10:00 PM ============
+const isValidEndTime = (endTime: string): boolean => {
+  const end = dayjs(endTime, 'HH:mm');
+  const limit = dayjs('22:01', 'HH:mm');
+  return end.isBefore(limit);
+};
+
 // ========== Event handler for address-updated event==========
 const updateAddress = (updatedAddress: string) => {
   receivedAddress.value = updatedAddress
@@ -463,6 +470,14 @@ const calculateTotalPrice = () => {
 
 //================== Make a booking =====================
 const submitBooking = async () => {
+  if (!isValidEndTime(end_time.value)) {
+    Swal.fire({
+      icon: 'error',
+      title: 'We are closed',
+      text: 'You cannot book a slot that ends after 10:00 PM.',
+    });
+    return;
+  }
   try {
     const response = await axiosInstance.post('/booking/create', {
       user_id: userId.value,

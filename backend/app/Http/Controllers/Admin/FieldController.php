@@ -13,7 +13,8 @@ class FieldController extends Controller
 {
     public function index()
     {
-        $fields = auth()->user()->isAdmin() ? Field::all() : auth()->user()->fields;
+        $fields = auth()->user()->isAdmin() ? Field::latest()->get() : auth()->user()->fields;
+        
         $fields = FieldResource::collection($fields);
         return view('setting.fields.index', compact('fields'));
     }

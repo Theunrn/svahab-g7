@@ -1,7 +1,7 @@
 <template>
   <div class="title">
     <h4>Let shopping with our products here!</h4>
-    <div class="container-card card-me">
+    <div class="container-card card-me p-5">
       <div
         class="card-wrapper"
         v-for="(product, index) in uniqueProductsByCategory"

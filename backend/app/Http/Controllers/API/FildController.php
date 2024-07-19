@@ -17,7 +17,7 @@ class FildController extends Controller
      */
     public function index()
     {
-        $fields = Field::all();
+        $fields = Field::latest()->get();;
         $fields = FieldResource::collection($fields);
         return response()->json(
             [
