@@ -66,9 +66,6 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanc
 
 //Profile
 Route::put('/profile/update', [ProfileController::class, 'update'])->middleware('auth:sanctum');
-// Route::middleware('auth:api')->put('/profile/update', [ProfileController::class, 'update']);
-// Route::get('profile/list', [ProfileController::class,'index'])->middleware('auth:sanctum');
-
 Route::get('/me', [AuthController::class, 'index'])->middleware('auth:sanctum');
 Route::get('/owner/show/{id}', [AuthController::class, 'show']);
 
@@ -168,19 +165,20 @@ Route::post('/post/match', [MatchTeamController::class,'store']);
 Route::get('/match/list', [MatchTeamController::class,'index']);
 Route::get('/match/delete/{id}', [MatchTeamController::class,'destroy']);
 
+//Schedule
 Route::post('/schedule/create', [APIScheduleMatchController::class,'store']);
 Route::get('/schedule/list', [APIScheduleMatchController::class,'index']);
 
-// Route::delete('/post/delete/{id}', [PostController::class,'destroy']);
-
-Route::get('/post/show/{id}', [PostController::class, 'show']);
-
+//Post team find partner
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/posts', [PostController::class, 'store']);
     Route::get('/post/list', [PostController::class, 'index']);
     Route::delete('/posts/{id}', [PostController::class, 'destroy']);
-    Route::put('/post/modify/{id}', [PostController::class, 'update']); 
+    
 });
+Route::put('/post/update/{id}', [PostController::class, 'updatePostStatus']);
+Route::get('/post/show/{id}', [PostController::class, 'show']);
+Route::put('/post/modify/{id}', [PostController::class, 'update']); 
 
 //Events
 Route::post('/event/create', [EventController::class,'store']);
@@ -196,10 +194,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('feedback/update/{id}', [FeedbackController::class, 'update']);
     Route::delete('feedback/delete/{id}', [FeedbackController::class, 'destroy']);
 });
-
-//Posts
-Route::get('/post/list', [PostController::class, 'index'])->middleware('auth:sanctum');
-Route::put('/post/update/{id}', [PostController::class, 'updatePostStatus']);
 
 //option
 Route::get('/options', [APIOptionController::class, 'index']);

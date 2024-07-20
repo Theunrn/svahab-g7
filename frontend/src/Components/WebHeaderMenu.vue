@@ -119,7 +119,6 @@
               aria-expanded="false"
             >
               <img class="w-10 h-10 rounded-full ring-2 ring-gray-300 dark:ring-gray-400" src="../assets/image/liep.jpg" alt="avatar">
-              <!-- <i class="bx bxs-user-circle text-4xl text-white  "></i> -->
             </a>
             <ul
               class="px-3 dropdown-menu dropdown-animation dropdown-menu-end shadow pt-3"
@@ -130,7 +129,6 @@
                 <div class="d-flex align-items-center">
                   <!-- Avatar -->
                   <div class="me-3">
-                    <!-- <img class="avatar-img w-10 h-10 rounded-circle shadow" src="../assets/image/liep.jpg" alt="profiles"> -->
                     <i class="bx bxs-user-circle text-4xl mt-2"></i>
                   </div>
                   <div>

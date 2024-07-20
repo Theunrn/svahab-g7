@@ -2,13 +2,13 @@
     <div>
         <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-200">
             @include('card.card-data')
-            <div class="group-chart flex gap-8 justify-center">
-                @include('chart.booking')
+            <div class="group-chart flex gap-5 justify-center px-5">
+                @include('chart.price')
                 @include('chart.product')
             </div>
-            <div class="line-chart flex gap-8 justify-center">
+            <div class="group-chart flex gap-5 justify-center px-5">
                 @include('chart.booking-field')
-                @include('chart.field-chart')
+                @include('chart.users')
             </div>
         </main>
     </div>

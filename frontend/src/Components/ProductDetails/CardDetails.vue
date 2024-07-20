@@ -88,7 +88,6 @@ import { ref, computed, onMounted } from 'vue'
 import axiosInstance from '@/plugins/axios'
 import { useRoute, useRouter } from 'vue-router'
 import Swal from 'sweetalert2'
-// import ImageZoomer from 'vue-image-zoomer'
 
 const route = useRoute()
 const router = useRouter()

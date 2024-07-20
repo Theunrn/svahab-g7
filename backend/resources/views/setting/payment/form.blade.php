@@ -26,12 +26,12 @@
                             class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                             required />
                     </div>
-                    {{-- <div class="form-group">
+                    <div class="form-group">
                         <label for="total" class="block text-sm font-medium text-gray-700">You need to pay ($) *</label>
                         <input type="number" id="total" value="50"
                             class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                             required disabled />
-                    </div> --}}
+                    </div>
                     <div class="form-group">
                         <label for="amount" class="block text-sm font-medium text-gray-700">Amount ($) *</label>
                         <input type="number" id="amount" name="amount"
