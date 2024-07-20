@@ -36,9 +36,9 @@
           </tr>
         </thead>
         <tbody class="divide-y divide-gray-200">
-          @foreach($fields as $field)
+          @foreach($fields as $index => $field)
         <tr>
-        <td class="px-4 py-4 whitespace-nowrap">{{ $field->id }}</td>
+        <td class="px-4 py-4 whitespace-nowrap">{{ $index+1 }}</td>
         <td class="px-4 py-4 whitespace-nowrap">{{ $field->name }}</td>
         <td class="px-4 py-4 whitespace-nowrap">{{ $field->location }}</td>
         <td class="px-6 py-4 whitespace-nowrap">

@@ -1,6 +1,7 @@
 <div class="flex items-center justify-center">
-    <div class="chart-text bg-white p-6 rounded-lg shadow-lg flex items-center justify-center" style="width: 485px; height: 350px;">
+    <div class="chart-text bg-white p-6 rounded-lg shadow-lg flex items-center justify-center" style="width: 510px; height: 350px; flex-direction: column;">
         <canvas id="visitorChart" style="max-width: 100%; max-height: 100%; padding: 15px;"></canvas>
+        <h1 class="text-2xl font-bold mb-4">Users</h1>
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

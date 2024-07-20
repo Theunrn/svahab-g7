@@ -109,19 +109,18 @@ export default {
     },
 
     async submitPayment() {
+      console.log(this.total_price)
       try {
-        // Create a Payment Intent on the backend
         const { data } = await axios.post('http://127.0.0.1:8000/api/payment/create', {
           user_id: this.userId,
           owner_id: this.ownerId,
-          amount: this.total_price, // Use total_price as amount
+          amount: this.total_price,
           method: 'QR',
           currency: 'USD',
           code: this.generateRandomCode(9),
           payment_date: this.paymentDate
         })
 
-        // Display SweetAlert for success
         Swal.fire({
           icon: 'success',
           title: 'Success!',
@@ -131,18 +130,16 @@ export default {
           if (result.isConfirmed) {
             this.isPaid = true
             this.updatePaymentStatus()
-            // You can add further actions here if needed
           }
         })
       } catch (error) {
-        // Display SweetAlert for error
         Swal.fire({
           icon: 'error',
           title: 'Payment Failed',
           text: 'Something is gone wrong. Please try again.',
           confirmButtonText: 'OK'
         })
-        console.error('Error creating payment intent:', error)
+        console.error('Error creating payment:', error)
       }
     },
 
@@ -153,14 +150,11 @@ export default {
             const { data } = await axios.put(
               `http://127.0.0.1:8000/api/update/payment/booking/${this.bookingId}`
             )
-            console.log('Payment status in booking updated successfully')
           } else if (this.orderId) {
             const { data } = await axios.put(
               `http://127.0.0.1:8000/api/update/payment/order/${this.orderId}`
             )
             localStorage.removeItem('orderId')
-
-            console.log('Payment status in order updated successfully')
           }
           this.$router.push({ path: '/' })
         } catch (error) {
@@ -193,10 +187,8 @@ export default {
             Authorization: `Bearer ${this.token}`
           }
         })
-
         this.total_price = data.data.total_amount
         this.product_id = data.data.products[0].id
-        console.log(data.data)
       } catch (error) {
         console.error('Error fetching order data:', error)
       }
@@ -221,7 +213,6 @@ export default {
     },
     async getImageUrl() {
       this.image = `http://127.0.0.1:8000/storage/${this.qr}`
-      console.log(this.image)
     }
   }
 }

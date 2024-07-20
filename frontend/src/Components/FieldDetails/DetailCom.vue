@@ -65,7 +65,14 @@
           <form @submit.prevent="submitBooking">
             <div class="form-group half-width">
               <label for="date">Date *</label>
-              <input type="date" id="date" @change="bookingDate" v-model="booking_date" required />
+              <input
+                type="date"
+                id="date"
+                @change="bookingDate"
+                v-model="booking_date"
+                :min="minDate"
+                required
+              />
             </div>
             <div class="form-group half-width">
               <label for="start">Start time *</label>
@@ -79,11 +86,25 @@
             <div class="flex">
               <div class="form-group">
                 <label for="duration">Duration <strong>(hour)</strong></label>
-                <input type="text" id="duration" v-model="duration" disabled  class="py-3 text-center text-green-500 text-xl" style="font-weight: bold;"/>
+                <input
+                  type="text"
+                  id="duration"
+                  v-model="duration"
+                  disabled
+                  class="py-3 text-center text-green-500 text-xl"
+                  style="font-weight: bold"
+                />
               </div>
               <div class="form-group">
                 <label for="number-of-guests">Total Price <strong>($)</strong> </label>
-                <input disabled type="number" id="number-of-guests" v-model="total_price" class="text-center py-3 text-green-500 text-xl" style="font-weight: bold;"/>
+                <input
+                  disabled
+                  type="number"
+                  id="number-of-guests"
+                  v-model="total_price"
+                  class="text-center py-3 text-green-500 text-xl"
+                  style="font-weight: bold"
+                />
               </div>
             </div>
             <div class="wrapper-card relative w-full mx-2 my-2 rounded-md">
@@ -225,17 +246,15 @@
                 <a
                   @click="deleteItem(feedback.id)"
                   class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                  >Delete 
-                  </a
-                >
+                  >Delete
+                </a>
               </li>
               <li v-if="feedback.user_id == userId">
                 <a
                   @click="showEditModal(feedback)"
                   class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                   >Edit
-                  </a 
-                >
+                </a>
               </li>
               <li v-else>
                 <span
@@ -435,13 +454,15 @@ const selectedOptions = ref([])
 const editFeedbackModalVisible = ref(false)
 const editedFeedbackText = ref('')
 let feedbackToEdit = ref(null)
+const minDate = ref(new Date().toISOString().split('T')[0])
+const currentTime = ref(new Date().toTimeString().split(' ')[0].substring(0, 5))
 
 // =========== Function to check if the end time is before 10:00 PM ============
 const isValidEndTime = (endTime: string): boolean => {
-  const end = dayjs(endTime, 'HH:mm');
-  const limit = dayjs('22:01', 'HH:mm');
-  return end.isBefore(limit);
-};
+  const end = dayjs(endTime, 'HH:mm')
+  const limit = dayjs('22:01', 'HH:mm')
+  return end.isBefore(limit)
+}
 
 // ========== Event handler for address-updated event==========
 const updateAddress = (updatedAddress: string) => {
@@ -474,9 +495,33 @@ const submitBooking = async () => {
     Swal.fire({
       icon: 'error',
       title: 'We are closed',
-      text: 'You cannot book a slot that ends after 10:00 PM.',
-    });
-    return;
+      text: 'You cannot book a slot that ends after 10:00 PM.'
+    })
+    return
+  }
+  if (new Date(booking_date.value) < new Date(minDate.value)) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Booking failed date',
+      text: 'You cannot book a slot that earlier than the current day.'
+    })
+    return
+  }
+  const selectedDate = new Date(booking_date.value)
+  const currentDate = new Date()
+  const selectedStartTime = start_time.value
+  const currentTimeStr = currentTime.value
+
+  if (
+    selectedDate.toDateString() === currentDate.toDateString() &&
+    selectedStartTime < currentTimeStr
+  ) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Booking failed date',
+      text: 'Booking time cannot be earlier than the current time.'
+    })
+    return
   }
   try {
     const response = await axiosInstance.post('/booking/create', {

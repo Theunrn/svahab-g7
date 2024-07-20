@@ -23,7 +23,7 @@ class User extends Authenticatable
         'password',
         'phone_number',
         'profile',
-        'qr', // Ensure 'qr' field is in fillable array
+        'qr', 
     ];
 
     protected $hidden = [
@@ -37,39 +37,28 @@ class User extends Authenticatable
 
     public static function store($request)
     {
-        // Initialize image path variable
         $imagePath = null;
-
-        // Check if request has 'qr' file
         if ($request->hasFile('qr')) {
-            // Validate 'qr' file
             $request->validate([
                 'qr' => 'mimes:jpeg,png,jpg,gif,svg|max:20480',
             ]);
-
-            // Store 'qr' file and get its path
             $imagePath = $request->file('qr')->store('images', 'public');
         }
-
-        // Create user with form data and image path
         $user = self::create([
             'name'              => $request->name,
             'email'             => $request->email,
             'password'          => bcrypt($request->password),
             'phone_number'      => $request->phone_number,
-            'qr'                => $imagePath ? Storage::url($imagePath) : null, // Store URL if image uploaded, otherwise null
+            'qr'                => $imagePath ? $imagePath: null,
             'email_verified_at' => now(),
             'remember_token'    => Str::random(20),
         ]);
     
-        // Assign the role
         if ($request->roles) {
             $user->assignRole($request->roles);
         } else {
             $user->assignRole('owner');
         }
-        
-        // Assign role or perform any other operations as needed
 
         return $user;
     }

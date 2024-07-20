@@ -62,22 +62,8 @@ class UserController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
-    //  */
-    // public function store(RegisterRequest $request)
-    // {
-    //     $request->validate([
-    //         'name' => 'required|string|max:255',
-    //         'email' => 'required|string|email|max:255|unique:users',
-    //         'password' => 'required|string|min:8|confirmed',
-    //         'phone_number' => 'required|string|max:20',
-    //         'qr' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg|max:20480',
+    // */
 
-    //     ]);
-    //     $user = User::store($request);
-
-    //     // Redirect with success message
-    //     return redirect()->route('admin.users.index')->with('success', 'User created successfully.');
-    // }
 
     public function store(RegisterRequest $request)
     {
@@ -105,8 +91,6 @@ class UserController extends Controller
 
         // Assign roles
         $user->syncRoles($request->roles);
-
-        // return redirect()->route('admin.users.index')->with('success', 'User created successfully.');
         return redirect()->route('admin.users.index')->with('success', 'New user created successfully');
     }   
 

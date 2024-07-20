@@ -1,24 +1,24 @@
 <div class="container mx-auto px-6 py-5" x-data="{ selectedDay: 'today' }">
     <strong style="font-size: 30px">Dashboard</strong><br>
-    <div class="inline-flex rounded-md shadow-sm">
+    <div class="inline-flex rounded-md shadow-sm ">
         <a href="#" @click.prevent="selectedDay = 'today'"
             :class="selectedDay === 'today' ? 'text-blue-700 bg-gray-100' : 'text-gray-900 bg-white'"
-            class="px-4 py-2 text-sm font-medium border-t border-b border-gray-200 hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700">
+            class="px-4 py-2 text-sm font-medium rounded-l-lg border-t border-b border-gray-200 hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700">
             Today
         </a>
         <a href="#" @click.prevent="selectedDay = 'thisWeek'"
             :class="selectedDay === 'thisWeek' ? 'text-blue-700 bg-gray-100' : 'text-gray-900 bg-white'"
-            class="px-4 py-2 text-sm font-medium border border-gray-200 rounded-r-lg hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700">
+            class="px-4 py-2 text-sm font-medium border border-gray-200 hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700">
             This Week
         </a>
         <a href="#" @click.prevent="selectedDay = 'thisMonth'"
             :class="selectedDay === 'thisMonth' ? 'text-blue-700 bg-gray-100' : 'text-gray-900 bg-white'"
-            class="px-4 py-2 text-sm font-medium border border-gray-200 rounded-l-lg hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700">
+            class="px-4 py-2 text-sm font-medium border border-gray-200  hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700">
             This Month
         </a>
         <a href="#" @click.prevent="selectedDay = 'thisYear'"
             :class="selectedDay === 'thisYear' ? 'text-blue-700 bg-gray-100' : 'text-gray-900 bg-white'"
-            class="px-4 py-2 text-sm font-medium border border-gray-200 rounded-l-lg hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700">
+            class="px-4 py-2 text-sm font-medium border border-gray-200 rounded-r-lg hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700">
             This Year
         </a>
     </div>
@@ -194,7 +194,7 @@
                     <i class='bx bx-money text-3xl'></i>
                     <div class="content">
                         <strong style="font-size: 25px">${{ number_format($yearlyData['payments'], 0) }}</strong>
-                        <p class="mb-3 font-normal text-black-500">Total Payments</p>
+                        <p class="mb-3 font-normal text-black-500">Revenue</p>
                     </div>
                 </div>
                 <div style="width: 19%;"
