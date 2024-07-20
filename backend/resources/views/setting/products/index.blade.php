@@ -47,7 +47,7 @@
                                 <th class="py-4 px-1 bg-gray-100 font-bold text-sm text-gray-800 border-b border-gray-200">Action</th>
                             </tr>
                         </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
+                        <tbody class="bg-white divide-y divide-gray-200 ">
                             
                             @foreach ($products as $product)
                                 <tr class="hover:bg-gray-100">
@@ -93,7 +93,6 @@
             </div>
         </div>
     </div>
-
     <script>
         document.getElementById('category_filter').addEventListener('change', function() {
             let categoryId = this.value;

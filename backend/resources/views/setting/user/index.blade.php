@@ -120,8 +120,8 @@
     </div>
 
     <!-- Create User Modal -->
-    <div id="createUserModal" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
-      <div class="p-4 w-full max-w-xl max-h-full">
+    <div id="createUserModal" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50 overflow-y-auto">
+      <div class="p-4 w-full max-w-xl max-h-full ">
         <!-- Modal content -->
         <div class="bg-white rounded-lg shadow dark:bg-gray-700">
           <!-- Modal header -->

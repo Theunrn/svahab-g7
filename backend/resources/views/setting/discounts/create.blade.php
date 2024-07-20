@@ -20,7 +20,7 @@
                 });
             </script>
         @endif
-        <div class="max-w-7xl mx-auto sm:px-4 lg:px-4 text-sm font-medium">
+        <div class="max-w-xl mx-auto sm:px-4 lg:px-4 text-sm font-medium">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg text-sm font-medium">
                 <div class="flex items-center justify-between">
                     <div class="ml-5">

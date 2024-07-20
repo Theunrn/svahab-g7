@@ -26,7 +26,7 @@
                 });
             </script>
         @endif
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6">
                 <form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data" id="create-product-form">
                     @csrf
@@ -69,7 +69,7 @@
                     <!-- Colors Selection -->
                     <div class="mb-4">
                         <label for="colors" class="block text-sm font-medium text-gray-700">Colors</label>
-                        <div class="mt-1 grid grid-cols-2 gap-4">
+                        <div class="mt-1 grid grid-cols-3 gap-4">
                             @foreach ($colors as $color)
                                 <label class="flex items-center">
                                     <input type="checkbox" name="colors[]" value="{{ $color->id }}" class="rounded text-blue-500">
@@ -82,7 +82,7 @@
                     <!-- Sizes Selection -->
                     <div class="mb-4">
                         <label for="sizes" class="block text-sm font-medium text-gray-700">Sizes</label>
-                        <div class="mt-1 grid grid-cols-2 gap-4">
+                        <div class="mt-1 grid grid-cols-3 gap-4">
                             @foreach ($sizes as $size)
                                 <label class="flex items-center">
                                     <input type="checkbox" name="sizes[]" value="{{ $size->id }}" class="rounded text-blue-500">

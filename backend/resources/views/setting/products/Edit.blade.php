@@ -6,7 +6,7 @@
     </x-slot>
 
     <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6">
                 <form action="{{ route('admin.products.update', $product->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
@@ -55,7 +55,7 @@
 
                     <div class="mb-4">
                         <label for="colors" class="block text-sm font-medium text-gray-700">Colors</label>
-                        <div class="mt-1 grid grid-cols-2 gap-4">
+                        <div class="mt-1 grid grid-cols-3 gap-4">
                             @foreach ($colors as $color)
                                 <label class="flex items-center">
                                     <input type="checkbox" name="colors[]" value="{{ $color->id }}" {{ in_array($color->id, $product->colors->pluck('id')->toArray()) ? 'checked' : '' }} class="rounded text-blue-500">
@@ -67,7 +67,7 @@
 
                     <div class="mb-4">
                         <label for="sizes" class="block text-sm font-medium text-gray-700">Sizes</label>
-                        <div class="mt-1 grid grid-cols-2 gap-4">
+                        <div class="mt-1 grid grid-cols-3 gap-4">
                             @foreach ($sizes as $size)
                                 <label class="flex items-center">
                                     <input type="checkbox" name="sizes[]" value="{{ $size->id }}" {{ in_array($size->id, $product->sizes->pluck('id')->toArray()) ? 'checked' : '' }} class="rounded text-blue-500">

@@ -179,7 +179,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/posts', [PostController::class, 'store']);
     Route::get('/post/list', [PostController::class, 'index']);
     Route::delete('/posts/{id}', [PostController::class, 'destroy']);
-    Route::put('/posts/{id}', [PostController::class, 'update']); 
+    Route::put('/post/modify/{id}', [PostController::class, 'update']); 
 });
 
 //Events
