@@ -128,17 +128,21 @@ import VueFlatpickr from 'vue-flatpickr-component';
 import 'flatpickr/dist/flatpickr.css';
 import FootballFields from '../../Components/Cards/CardCom.vue'; // Assuming this is your field display component
 import axiosInstance from '@/plugins/axios';
-
+const props = defineProps({
+  customer: Object
+})
 const searchQuery = ref('');
 const user = { id: 'your_user_id' }; // Replace with actual user object or ID
 
 const fields = ref([]);
 const filteredFields = ref([]);
 
+
 const fetchFields = async () => {
   try {
     const response = await axiosInstance.get('/fields/list');
     fields.value = response.data.data;
+    console.log(fields.value)
     filterFields(); // Initial fetch, also filters if searchQuery already has a value
   } catch (error) {
     console.error('Error fetching fields:', error);
@@ -166,7 +170,9 @@ watch(searchQuery, () => {
 });
 
 fetchFields();
-
+const getImageUrl = (imagePath) => {
+      return imagePath ? `http://127.0.0.1:8000/storage/${imagePath}` : '/default-image.jpg'
+}
 
 const showDatePicker = ref(false);
 const selectedProvince = ref('')
