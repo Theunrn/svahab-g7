@@ -125,12 +125,7 @@ const router = createRouter({
       path: '/lineUp',
       name: 'lineUp',
       component: () => import('../views/Web/Field/LineUpView.vue')
-    },
-    {
-      path: '/translate',
-      name: 'translate',
-      component: () => import('../views/Web/TranslateView.vue')
-    },
+    }
 
   ]
 })
