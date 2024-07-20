@@ -21,7 +21,7 @@ class AddToCardController extends Controller
     public function index()
     {
         $cartItems = AddToCard::with(['product', 'user']) 
-            ->get();
+            ->latest()->get();
         return response()->json(['success' => true, 'data' => $cartItems]);
 
     }

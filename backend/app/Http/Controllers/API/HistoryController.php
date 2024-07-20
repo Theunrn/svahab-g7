@@ -13,7 +13,7 @@ class HistoryController extends Controller
      */
     public function index()
     {
-        $histories = History::all();
+        $histories = History::latest()->get();;
         return response()->json(['success'=>true, 'data'=>$histories], 200);
     }
 

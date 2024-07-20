@@ -16,7 +16,7 @@ class PostController extends Controller
     public function index()
     {
         // Retrieve all posts
-        $posts = Post::where('status', false)->get();
+        $posts = Post::where('status', false)->latest()->get();
         $posts = PostResource::collection($posts);
         // Return posts as a JSON response
         return response()->json(['success' => true, 'data' => $posts]);

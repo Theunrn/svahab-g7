@@ -125,7 +125,7 @@ const router = createRouter({
       path: '/lineUp',
       name: 'lineUp',
       component: () => import('../views/Web/Field/LineUpView.vue')
-    },
+    }
 
   ]
 })
