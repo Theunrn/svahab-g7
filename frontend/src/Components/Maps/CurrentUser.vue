@@ -69,6 +69,8 @@
   };
   </script> -->
 
+  <!-- frontend/src/Components/Maps/CurrentUser.vue -->
+   
   <template>
     <section class="container ui two column center">
       <div class="column">

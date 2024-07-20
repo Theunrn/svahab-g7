@@ -1,3 +1,4 @@
+<!-- frontend/src/views/Web/Map/MapView.vue -->
 <template>
     <div>
       <h2>Map View</h2>

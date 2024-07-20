@@ -6,8 +6,9 @@
                 @include('chart.booking')
                 @include('chart.product')
             </div>
-            <div class="line-chart">
+            <div class="line-chart flex gap-8 justify-center">
                 @include('chart.booking-field')
+                @include('chart.field-chart')
             </div>
         </main>
     </div>
