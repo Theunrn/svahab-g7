@@ -123,7 +123,7 @@ export default {
         Swal.fire(
           'Deleted!',
           'Your item has been deleted.',
-          'success'
+          'success',
         )
       } catch (error) {
         console.error('Error deleting item:', error)

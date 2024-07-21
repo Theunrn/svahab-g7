@@ -6,18 +6,18 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
-import FullCalendar from '@fullcalendar/vue3';
-import timeGridPlugin from '@fullcalendar/timegrid';
-import interactionPlugin from '@fullcalendar/interaction';
-import axiosInstance from '@/plugins/axios';
-import { defineProps } from 'vue';
+import { ref, onMounted, computed } from 'vue'
+import FullCalendar from '@fullcalendar/vue3'
+import timeGridPlugin from '@fullcalendar/timegrid'
+import interactionPlugin from '@fullcalendar/interaction'
+import axiosInstance from '@/plugins/axios'
+import { defineProps } from 'vue'
 
 const props = defineProps({
   fieldId: String
-});
+})
 
-const events = ref([]);
+const events = ref([])
 
 const calendarOptions = computed(() => ({
   plugins: [timeGridPlugin, interactionPlugin],
@@ -25,79 +25,92 @@ const calendarOptions = computed(() => ({
   headerToolbar: {
     left: 'prev,next today',
     center: 'title',
-    right: 'timeGridDay,timeGridWeek',
+    right: 'timeGridDay,timeGridWeek'
   },
   slotMinTime: '06:00:00',
   slotMaxTime: '23:00:00',
   events: events.value,
   editable: true,
   eventClick: handleEventClick,
-  dateClick: handleDateClick,
-}));
+  dateClick: handleDateClick
+}))
 
 onMounted(async () => {
-  await fetchEvents();
-});
+  await fetchEvents()
+})
 
 const fetchEvents = async () => {
   try {
-    const response = await axiosInstance.get(`/event/list/${props.fieldId}`);
-    const fetchedEvents = response.data.data;
-    fetchedEvents.forEach(event => {
-      event.backgroundColor = getRandomColor();
-    });
-    events.value = fetchedEvents;
+    const response = await axiosInstance.get(`/event/list/${props.fieldId}`)
+    let fetchedEvents = response.data.data
+
+    // Filter out events with booking_status 'cancelled' or 'rejected'
+    fetchedEvents = fetchedEvents.filter(
+      (event) => !['cancelled', 'rejected'].includes(event.booking_status)
+    )
+
+    // Assign random background colors to the remaining events
+    fetchedEvents.forEach((event) => {
+      event.backgroundColor = getRandomColor()
+    })
+
+    // Update the events.value with the filtered events
+    events.value = fetchedEvents
   } catch (error) {
-    console.error('Error fetching events:', error);
+    console.error('Error fetching events:', error)
   }
-};
+}
 
 const handleDateClick = (info) => {
-  const title = prompt('Enter Event Title:');
+  const title = prompt('Enter Event Title:')
   if (title) {
     const newEvent = {
       title,
       start: info.dateStr,
       allDay: info.allDay,
-      backgroundColor: getRandomColor(),
-    };
-    events.value.push(newEvent);
-    saveEvent(newEvent);
+      backgroundColor: getRandomColor()
+    }
+    events.value.push(newEvent)
+    saveEvent(newEvent)
   }
-};
+}
 
 const handleEventClick = (info) => {
   // Format the start and end times without time zone details
   const formatDate = (date) => {
     return new Intl.DateTimeFormat('en-US', {
       dateStyle: 'medium',
-      timeStyle: 'short',
-    }).format(date);
-  };
+      timeStyle: 'short'
+    }).format(date)
+  }
 
-  alert(`Event: ${info.event.title}\nStart: ${formatDate(info.event.start)}\nEnd: ${formatDate(info.event.end)}`);
-};
+  alert(
+    `Event: ${info.event.title}\nStart: ${formatDate(info.event.start)}\nEnd: ${formatDate(
+      info.event.end
+    )}`
+  )
+}
 
 const saveEvent = async (event) => {
   try {
     const response = await axiosInstance.post('/event/store', {
       title: event.title,
-      start: event.start,
-    });
-    console.log('Event saved:', response.data);
+      start: event.start
+    })
+    console.log('Event saved:', response.data)
   } catch (error) {
-    console.error('Error saving event:', error);
+    console.error('Error saving event:', error)
   }
-};
+}
 
 const getRandomColor = () => {
-  const letters = '0123456789ABCDEF';
-  let color = '#';
+  const letters = '0123456789ABCDEF'
+  let color = '#'
   for (let i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
+    color += letters[Math.floor(Math.random() * 16)]
   }
-  return color;
-};
+  return color
+}
 </script>
 
 <style scoped>

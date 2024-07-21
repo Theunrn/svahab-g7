@@ -547,6 +547,7 @@ const submitBooking = async () => {
       const startDateTime = `${booking_date.value} ${start_time.value}:00`
       const endDateTime = `${booking_date.value} ${end_time.value}:00`
       const eventResponse = await axiosInstance.post('/event/create', {
+        booking_id: booking.value.id,
         field_id: fieldId.value,
         title: `Booking for ${field.value.name}`,
         start: startDateTime,

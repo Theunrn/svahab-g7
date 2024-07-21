@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('events', function (Blueprint $table) {
             $table->id();
+            $table->integer('booking_id');
             $table->integer('field_id');
             $table->string('title');
             $table->datetime('start');

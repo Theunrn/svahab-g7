@@ -8,10 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Event extends Model
 {
     use HasFactory;
-    protected $fillable = ['id', 'field_id', 'title', 'start', 'end'];
-
+    protected $fillable = ['id', 'field_id', 'booking_id', 'title', 'start', 'end'];
+    public function booking(){
+        return $this->belongsTo(Booking::class, 'booking_id');
+    }
     public static function store($request, $id=null){
-        $data = $request->only('field_id', 'title', 'start', 'end');
+        $data = $request->only('field_id', 'booking_id', 'title', 'start', 'end');
         $data = self::updateOrCreate(['id' => $id], $data);
         return $data;
     }
