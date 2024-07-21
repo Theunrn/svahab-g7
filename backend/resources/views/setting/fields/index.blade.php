@@ -29,8 +29,6 @@
             <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Price</th>
             <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">field_type
             </th>
-            {{-- <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">owner</th>
-            --}}
             <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Province</th>
             <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Actions</th>
           </tr>
