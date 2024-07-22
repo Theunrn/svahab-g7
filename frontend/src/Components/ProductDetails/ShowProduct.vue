@@ -110,11 +110,11 @@
   })
 
   // ======================= Utility Functions =======================
-  const getImageUrl = (imagePath: string) => {
+  const getImageUrl = (imagePath) => {
     return imagePath ? `http://127.0.0.1:8000/storage/${imagePath}` : '/default-image.jpg'
   }
 
-  const calculateDiscountedPrice = (product: any) => {
+  const calculateDiscountedPrice = (product) => {
     if (product.discounts && product.discounts.length > 0) {
       const discount = product.discounts[0]
       const discountedPrice = product.price - (product.price * (discount.discount / 100))
@@ -124,7 +124,7 @@
   }
 
   // ======================= Add to Cart =======================
-  const addToCart = (product: any) => {
+  const addToCart = (product) => {
     axios.post('http://127.0.0.1:8000/api/cart/create', {
       product_id: product.id,
       quantity: 1,
@@ -143,7 +143,7 @@
   }
 
   // ======================= Toggle Favorite =======================
-  const toggleFavorite = (product: any) => {
+  const toggleFavorite = (product) => {
     product.isFavorite = !product.isFavorite
   }
 </script>
