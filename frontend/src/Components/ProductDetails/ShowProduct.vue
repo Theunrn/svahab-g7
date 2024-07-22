@@ -151,7 +151,7 @@ const toggleFavorite = (product) => {
 }
 
 .card-wrapper {
-  width: 27%;
+  width: 24%;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   border-radius: 15px;
   overflow: hidden;
