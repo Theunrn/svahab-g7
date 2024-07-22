@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Storage;
 class ProductController extends Controller
 {
 
-
+    //=================Listing Products =============================//
     public function index(Request $request)
     {
         $user = Auth::user();
@@ -34,6 +34,7 @@ class ProductController extends Controller
         return view('setting.products.index', compact('products', 'categories'));
     }
 
+    //==============Create product =================//
     public function create()
     {
         // $categories = Category::where('owner_id', Auth::id())->get();

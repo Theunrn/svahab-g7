@@ -24,7 +24,7 @@ class SettingController extends Controller
         $user = auth()->user();
         return view('setting.settings.index', compact('user'));
     }
-    // =======================================
+    // ==================checking password=====================//
     public function checkPassword(Request $request)
     {
         $request->validate([
@@ -42,6 +42,8 @@ class SettingController extends Controller
             return view('setting.settings.edit');
         }
     }
+
+    //======================Update password =================//
     public function updatePassword(Request $request)
     {
         $request->validate([

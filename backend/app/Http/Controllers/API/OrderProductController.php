@@ -30,7 +30,7 @@ class OrderProductController extends Controller
         return response()->json(['success' => true, 'data' => $orders], 200);
     }
 
-
+    //=====================Create order product =================//
     public function store(Request $request)
     {
         $validatedData = $request->validate([
@@ -45,19 +45,16 @@ class OrderProductController extends Controller
 
         return response()->json(['message' => 'Order created successfully', 'order' => $order], 201);
     }
-   
+
     public function show($id)
     {
-        // Get authenticated user (customer)
-        // $user = Auth::user();
-
         // Find the order with products for the authenticated user
         $order = Order::with('products')->findOrFail($id);
 
         return response()->json(['success' => true, 'data' => $order], 200);
     }
 
-
+    //===================Cancel Order================//
     public function cancel($id)
     { {
             $user = Auth::user();
@@ -78,6 +75,8 @@ class OrderProductController extends Controller
             return response()->json(['message' => 'Order cancelled successfully'], 200);
         }
     }
+
+    //===================Confirm Order================//
     public function confirm(Request $request, $id)
     {
         $user = Auth::user();

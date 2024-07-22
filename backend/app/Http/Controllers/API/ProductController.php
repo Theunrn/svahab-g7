@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
-   
+   //=================Get all products=================//
     public function index()
     {
         $products = Product::with(['category', 'colors', 'sizes', 'discounts'])->latest()->get();
@@ -29,7 +29,7 @@ class ProductController extends Controller
         ]);
     }
 
-    
+    //====================Create products =================//
     public function store(ProductRequest $request)
     {
         if (Auth::check()) {
@@ -64,7 +64,7 @@ class ProductController extends Controller
             return response()->json(['error' => 'User not authenticated'], 401);
         }
     }
-
+    //=====================Show specific products====================//
     public function show($id)
     {
         try {
@@ -79,7 +79,7 @@ class ProductController extends Controller
         }
     }
 
-
+    //========================Update products =========================//
     public function update(ProductRequest $request, $id)
     {
         if (!Auth::check()) {
@@ -121,9 +121,7 @@ class ProductController extends Controller
     }
 
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    //================Remove Product =================//
     public function destroy($id)
     {
         if (Auth::check()) {

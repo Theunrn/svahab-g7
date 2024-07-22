@@ -11,19 +11,12 @@ use Illuminate\Support\Facades\Auth;
 class CategoryController extends Controller
 {
 
-
+    //=====================Listing Categories =================//
     public function index(Request $request)
     {
         $search = $request->input('search');
 
         $categoriesQuery = Category::query();
-
-        // if (Auth::user()->isAdmin()) {
-        //     // If the user is an admin, show all categories
-        // } else {
-        //     // If the user is an owner, show only categories they created
-        //     $categoriesQuery->where('owner_id', Auth::id());
-        // }
 
         if ($search) {
             // Search for categories by name
@@ -38,6 +31,9 @@ class CategoryController extends Controller
 
         return view('setting.categories.index', compact('categories'));
     }
+
+    //=================Create categories ============================//
+
 
     public function create()
     {
@@ -59,6 +55,9 @@ class CategoryController extends Controller
         return redirect()->route('admin.categories.index')->with('success', 'Category created successfully.');
     }
 
+
+    //======================Updte categories==================//
+
     public function edit(Category $category)
     {
         return view('setting.categories.edit', compact('category'));
@@ -74,6 +73,8 @@ class CategoryController extends Controller
 
         return redirect()->route('admin.categories.index')->with('success', 'Category updated successfully.');
     }
+
+    //========================Remove category =========================//
 
     public function destroy(Category $category)
     {

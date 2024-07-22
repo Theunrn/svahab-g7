@@ -66,9 +66,6 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanc
 
 //Profile
 Route::put('/profile/update', [ProfileController::class, 'update'])->middleware('auth:sanctum');
-// Route::middleware('auth:api')->put('/profile/update', [ProfileController::class, 'update']);
-// Route::get('profile/list', [ProfileController::class,'index'])->middleware('auth:sanctum');
-
 Route::get('/me', [AuthController::class, 'index'])->middleware('auth:sanctum');
 Route::get('/owner/show/{id}', [AuthController::class, 'show']);
 
@@ -105,7 +102,6 @@ Route::apiResource('feedback', FeedbackResource::class);
 // Categories API Routes
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/category/list', [CategoryController::class, 'index']);
-
     Route::post('/category/create', [CategoryController::class, 'store']);
     Route::put('/category/update/{id}', [CategoryController::class, 'update']);
     Route::delete('/category/delete/{id}', [CategoryController::class, 'destroy']);
@@ -118,7 +114,6 @@ Route::post('/product/create', [APIProductController::class, 'store'])->middlewa
 Route::put('/product/update/{id}', [APIProductController::class, 'update'])->middleware('auth:sanctum');
 Route::get('/product/show/{id}', [APIProductController::class, 'show']);
 Route::delete('/product/delete/{id}', [APIProductController::class, 'destroy'])->middleware('auth:sanctum');
-
 Route::get('/sizes', [SizeController::class, 'index']);
 Route::get('/colors', [ColorController::class, 'index']);
 
@@ -163,24 +158,25 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('cart/delete/{id}', [AddToCardController::class, 'destroy']);
 });
 
-//Team post and match 
+//match 
 Route::post('/post/match', [MatchTeamController::class,'store']);
 Route::get('/match/list', [MatchTeamController::class,'index']);
 Route::get('/match/delete/{id}', [MatchTeamController::class,'destroy']);
 
+// Schedule
 Route::post('/schedule/create', [APIScheduleMatchController::class,'store']);
 Route::get('/schedule/list', [APIScheduleMatchController::class,'index']);
 
-// Route::delete('/post/delete/{id}', [PostController::class,'destroy']);
-
-Route::get('/post/show/{id}', [PostController::class, 'show']);
-
+//post
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/posts', [PostController::class, 'store']);
     Route::get('/post/list', [PostController::class, 'index']);
     Route::delete('/posts/{id}', [PostController::class, 'destroy']);
     Route::put('/post/modify/{id}', [PostController::class, 'update']); 
 });
+Route::get('/post/show/{id}', [PostController::class, 'show']);
+Route::get('/post/list', [PostController::class, 'index'])->middleware('auth:sanctum');
+Route::put('/post/update/{id}', [PostController::class, 'updatePostStatus']);
 
 //Events
 Route::post('/event/create', [EventController::class,'store']);
@@ -197,9 +193,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('feedback/delete/{id}', [FeedbackController::class, 'destroy']);
 });
 
-//Posts
-Route::get('/post/list', [PostController::class, 'index'])->middleware('auth:sanctum');
-Route::put('/post/update/{id}', [PostController::class, 'updatePostStatus']);
 
 //option
 Route::get('/options', [APIOptionController::class, 'index']);

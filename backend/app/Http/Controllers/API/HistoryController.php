@@ -16,15 +16,6 @@ class HistoryController extends Controller
         $histories = History::latest()->get();;
         return response()->json(['success'=>true, 'data'=>$histories], 200);
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
     /**
      * Store a newly created resource in storage.
      */
@@ -32,30 +23,6 @@ class HistoryController extends Controller
     {
         History::store($request);
         return response()->json(['success'=>true, 'message'=>'History created successfully'], 201);
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
     }
 
     /**

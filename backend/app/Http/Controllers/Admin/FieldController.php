@@ -11,13 +11,16 @@ use Illuminate\Support\Facades\Auth;
 
 class FieldController extends Controller
 {
+    //================Listing Fields =============================//
     public function index()
     {
         $fields = auth()->user()->isAdmin() ? Field::latest()->get() : auth()->user()->fields;
-        
+
         $fields = FieldResource::collection($fields);
         return view('setting.fields.index', compact('fields'));
     }
+
+    //=========================Create Field =========================//
 
     public function create()
     {
@@ -26,31 +29,35 @@ class FieldController extends Controller
     }
 
     public function store(FieldRequest $request)
-{
-    $validated = $request->validated();
+    {
+        $validated = $request->validated();
         // Store the file in the 'public' disk (or any other disk you have configured)
-    $imageName = time() . '.' . $request->image->extension();
-    $request->image->storeAs('public/images', $imageName);
-    $validated['image'] = 'images/' . $imageName; 
-    $validated['owner_id'] = Auth::id();
-    Field::create($validated);
-    return redirect()->route('admin.fields.index')->with('success', 'Field created successfully.');
-}
+        $imageName = time() . '.' . $request->image->extension();
+        $request->image->storeAs('public/images', $imageName);
+        $validated['image'] = 'images/' . $imageName;
+        $validated['owner_id'] = Auth::id();
+        Field::create($validated);
+        return redirect()->route('admin.fields.index')->with('success', 'Field created successfully.');
+    }
 
+    //==========================Show specific fields =========================//
     public function show($id)
     {
         $validated = $request->validated();
-        
+
         if ($request->hasFile('image')) {
             $imageName = time() . '.' . $request->image->extension();
             $request->image->storeAs('public/images', $imageName);
             $validated['image'] = 'images/' . $imageName;
         }
-        
+
         Field::create($validated);
-        
+
         return redirect()->route('admin.fields.index')->with('success', 'Field created successfully.');
     }
+
+
+    //=========================Update Field =========================//
 
     public function edit($id)
     {
@@ -85,12 +92,13 @@ class FieldController extends Controller
         $field->price = $validatedData['price'];
         $field->field_type = $validatedData['field_type'];
         $field->province = $validatedData['province'];
-       
+
         $field->save();
 
         return redirect()->route('admin.fields.index')->with('success', 'Field updated successfully.');
     }
 
+    //========================Remove field =========================//
     public function destroy($id)
     {
         $field = Field::findOrFail($id);

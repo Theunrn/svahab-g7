@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Auth;
 
 class DiscountController extends Controller
 {
+
+    //==============Listing dicount =================//
     public function index()
     {
         $user = Auth::user();
@@ -29,6 +31,7 @@ class DiscountController extends Controller
         return view('setting.discounts.index', compact('discounts'));
     }
 
+    //==============Create dicount =================//
     public function create()
     {
         $products = Product::where('owner_id', Auth::id())->get(); // Owner can only create discounts for their own products
@@ -55,6 +58,8 @@ class DiscountController extends Controller
         return redirect()->route('admin.discounts.index')->with('success', 'Your product has a discount successfully.');
     }
 
+
+    //==================Update discount================//
     public function edit(Discount $discount)
     {
         $products = Product::where('owner_id', Auth::id())->get(); // Owner can only edit discounts for their own products
@@ -79,12 +84,12 @@ class DiscountController extends Controller
 
         return redirect()->route('admin.discounts.index')->with('success', 'Discount updated successfully.');
     }
-
+      
+    //================Delete discount================//
     public function destroy(Discount $discount)
     {
         $discount->products()->detach();
         $discount->delete();
-
         return redirect()->route('admin.discounts.index')->with('success', 'Discount deleted successfully.');
     }
 }

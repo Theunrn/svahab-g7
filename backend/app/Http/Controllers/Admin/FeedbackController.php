@@ -8,12 +8,14 @@ use Illuminate\Http\Request;
 
 class FeedbackController extends Controller
 {
+    //==================Listing Feedback ========================//
     public function index()
     {
         $feedbacks = Feedback::with(['user', 'field'])->get();
         return view('setting.feedback.index', compact('feedbacks'));
     }
-
+     
+    //=================Create Feedback =================//
     public function create()
     {
         return view('setting.feedback.create');
@@ -29,6 +31,8 @@ class FeedbackController extends Controller
 
         return redirect()->route('admin.feedbacks.index')->with('success', 'Feedback created successfully');
     }
+
+    //=================Update feedback =================//
 
     public function edit(string $id)
     {
@@ -47,6 +51,7 @@ class FeedbackController extends Controller
         return redirect()->route('admin.feedbacks.index')->with('success', 'Feedback updated successfully');
     }
 
+    //=================Remove feedback =================//
     public function destroy(string $id)
     {
         Feedback::findOrFail($id)->delete();

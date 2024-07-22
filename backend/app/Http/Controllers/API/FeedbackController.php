@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 
 class FeedbackController extends Controller
 {
+
+    //=============Listing feedback==================//
     public function index($id)
     {
         $feedbacks = Feedback::with(['user', 'field'])
@@ -31,6 +33,7 @@ class FeedbackController extends Controller
         return response()->json(['success' => true, 'message' => 'Feedback created successfully', 'data' => $feedback], 201);
     }
 
+    //=================Show feedback==================//
     public function show($id)
     {
         $feedback = Feedback::with(['user', 'field'])->find($id);

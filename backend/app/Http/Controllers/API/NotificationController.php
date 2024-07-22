@@ -43,12 +43,7 @@ class NotificationController extends Controller
             return response()->json(['success' => false, 'message' => 'Notification not found'], 404);
         }
 
-        // Ensure only the notification owner can mark it as read
-        // $user = Auth::user();
-        // if ($notification->user_id !== $user->id) {
-        //     return response()->json(['success' => false, 'message' => 'Unauthorized'], 401);
-        // }
-
+ 
         $notification->read = true;
         $notification->save();
 
@@ -65,13 +60,6 @@ class NotificationController extends Controller
         if (!$notification) {
             return response()->json(['success' => false, 'message' => 'Notification not found'], 404);
         }
-
-        // Ensure only the notification owner can delete it
-        // $user = Auth::user();
-        // if ($notification->user_id !== $user->id) {
-        //     return response()->json(['success' => false, 'message' => 'Unauthorized'], 401);
-        // }
-
         $notification->delete();
 
         return response()->json(['success' => true, 'message' => 'Notification deleted successfully']);

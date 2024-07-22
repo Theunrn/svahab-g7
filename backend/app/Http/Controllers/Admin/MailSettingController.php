@@ -33,6 +33,8 @@ class MailSettingController extends Controller
         return view('setting.setting.mail',['mail'=>$mail]);
     }
 
+
+    //==========================Update Mails Settings===================//
     public function update(Request $request, Mailsetting $mailsetting)
     {
 

@@ -8,6 +8,8 @@ use App\Models\Notification;
 
 class OrderController extends Controller
 {
+
+    //=====================Listing Order =====================//
     public function index(Request $request)
     {
         $date = $request->input('date');
@@ -22,7 +24,7 @@ class OrderController extends Controller
         return view('setting.orders.index', compact('orders'));
     }
     
-
+    //===========================Show specific order products =================//
     public function show($id)
     {
         $order = Order::with(['user', 'products.colors', 'products.sizes'])->find($id);
@@ -33,7 +35,7 @@ class OrderController extends Controller
 
         return view('setting.orders.show', compact('order'));
     }
-
+    //=====================Cancel Order =================//
     public function cancel($id)
     {
         $order = Order::find($id);
@@ -50,6 +52,7 @@ class OrderController extends Controller
         return redirect()->route('admin.orders.index')->with('success', 'Order cancelled successfully');
     }
 
+    //=====================Confirm Order =================//
     public function confirm($id)
     {
         $order = Order::find($id);
@@ -66,6 +69,7 @@ class OrderController extends Controller
         return redirect()->route('admin.orders.index')->with('success', 'Order confirmed successfully');
     }
 
+    //=====================Create notification =================//
     private function createNotification($userId, $type, $text, $orderId)
     {
         $notification = new Notification();

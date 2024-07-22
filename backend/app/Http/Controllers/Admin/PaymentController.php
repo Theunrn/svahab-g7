@@ -15,6 +15,7 @@ use Stripe\Stripe;
 class PaymentController extends Controller
 {
 
+    //==============display list of payments============//
     public function index()
     {
         $user = Auth::user();
@@ -33,23 +34,21 @@ class PaymentController extends Controller
         return view('setting.payment.index', compact('payments', 'totalAmount'));
     }
 
-    public function create()
-    {
-        //
-    }
-
+   //=============show payment form============//
     public function showPaymentForm(Request $request)
     {
         $clientSecret = $this->createPaymentIntent($request);
         return view('setting.payment.form', compact('clientSecret'));
     }
 
+    //=============show payment form for month============//
     public function showPaymentFormMonth(Request $request)
     {
         $clientSecret = $this->createPaymentIntent($request);
         return view('setting.payment.payMonth', compact('clientSecret'));
     }
 
+    //=============create payment intent============//
     private function createPaymentIntent($request)
     {
         Stripe::setApiKey(env('STRIPE_SECRET'));
@@ -63,7 +62,7 @@ class PaymentController extends Controller
         return $paymentIntent->client_secret;
     }
 
-
+    //======================Create Payment====================//
     public function store(PaymentRequest $request)
     {
         $validatedData = $request->validated();

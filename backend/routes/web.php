@@ -70,7 +70,6 @@ Route::get('/storage/{filename}', function ($filename) {
 })->where('filename', '.*');
 
 // routes/web.php
-
 Route::get('/dropdown', function () {
     return view('dropdown');
 });
@@ -92,46 +91,36 @@ Route::namespace('App\Http\Controllers\Admin')->name('admin.')->prefix('admin')
         Route::resource('products', 'ProductController');
         Route::resource('categories', 'CategoryController');
         Route::resource('payments', 'PaymentController');
-        // Route::resource('feedbacks', 'FeedbackController');
-
         Route::resource('admin/feedbacks', FeedbackController::class);
-
         Route::resource('orders', 'OrderController');
         Route::resource('discounts', 'DiscountController');
         Route::resource('chats', 'ChatCotroller');
-
         Route::get('/profile', [ProfileController::class, 'list'])->name('profile');
         Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
         Route::put('/profile-update', [ProfileController::class, 'update'])->name('profile.update');
         Route::get('/mail', [MailSettingController::class, 'index'])->name('mail.index');
         Route::put('/mail-update/{mailsetting}', [MailSettingController::class, 'update'])->name('mail.update');
     });
+
+//booking
 Route::get('/admin/bookings/{id}/cancel', [BookingController::class, 'cancel'])->name('admin.bookings.cancel');
 Route::get('/admin/bookings/{id}/rebook', [BookingController::class, 'reStore'])->name('admin.bookings.rebook');
 Route::get('/admin/bookings/{id}/accept', [BookingController::class, 'accept'])->name('admin.bookings.accept');
 Route::get('/admin/bookings/{id}/reject', [BookingController::class, 'reject'])->name('admin.bookings.reject');
 Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
-// Route::get('/admin/dashboard', [DashboardController::class, 'weeklyRevenue'])->name('admin.dashboard');
-// Route::get('/admin/dashboard', [BookingController::class, 'weeklyRevenue'])->name('/admin.dashboard');
+
 //User
 Route::get('/users/create', [UserController::class, 'createAccount'])->name('users.create');
 Route::post('/register/store', [UserController::class, 'register'])->name('register.store');
 Route::get('/admin/loginform', [UserController::class, 'loginform'])->name('admin.loginform');
-
 
 // Chat routes
 Route::middleware(['auth'])->group(function () {
     Route::get('/chats/list', [ChatCotroller::class, 'index'])->name('chats.index');
     Route::post('/chats/create', [ChatCotroller::class, 'store'])->name('chats.store');
 });
-
-
 Route::get('/admin/categories', [CategoryController::class, 'index'])->name('admin.categories.index');
 
-
-//Order
-Route::get('/admin/orders/{id}/cancel', [OrderController::class, 'cancel'])->name('admin.orders.cancel');
-Route::get('/admin/orders/{id}/accept', [OrderController::class, 'confirm'])->name('admin.orders.confirm');
 
 //payment
 Route::get('/payment/list', [PaymentController::class, 'index'])->name('admin.payment.list');
@@ -140,34 +129,29 @@ Route::get('/payment/month', [PaymentController::class, 'showPaymentFormMonth'])
 Route::post('/payment/intent', [PaymentController::class, 'createPaymentIntent'])->name('payment.intent');
 Route::post('/stripe/payment', [PaymentController::class, 'makePayment'])->name('payment.process');
 
-
-Route::get('/admin/orders', function () {
-    return "Route reached";
-});
-
-Route::get('/admin/orders', [OrderController::class, 'index']);
-
-Route::get('/admin/orders', [OrderController::class, 'index'])->name('admin.orders.index');
-Route::get('/admin/orders/confirm/{id}', [OrderController::class, 'confirm'])->name('admin.orders.confirm');
-Route::get('/admin/orders/cancel/{id}', [OrderController::class, 'cancel'])->name('admin.orders.cancel');
-
-
-
+//order
 Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('orders', [OrderController::class, 'index'])->name('admin.orders.index');
     Route::get('orders/confirm/{id}', [OrderController::class, 'confirm'])->name('admin.orders.confirm');
     Route::get('orders/cancel/{id}', [OrderController::class, 'cancel'])->name('admin.orders.cancel');
 });
 Route::post('/admin/users', [UserController::class, 'store'])->name('admin.users.store');
+Route::get('/admin/orders/{id}/cancel', [OrderController::class, 'cancel'])->name('admin.orders.cancel');
+Route::get('/admin/orders/{id}/accept', [OrderController::class, 'confirm'])->name('admin.orders.confirm');
+Route::get('/admin/orders', [OrderController::class, 'index']);
+Route::get('/admin/orders', [OrderController::class, 'index'])->name('admin.orders.index');
+Route::get('/admin/orders/confirm/{id}', [OrderController::class, 'confirm'])->name('admin.orders.confirm');
+Route::get('/admin/orders/cancel/{id}', [OrderController::class, 'cancel'])->name('admin.orders.cancel');
+Route::get('/admin/orders', function () {
+    return "Route reached";
+});
 
-
-
+// setting
 Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
 Route::post('/settings', [SettingController::class, 'store'])->name('settings.store');
 Route::get('/settings/{id}/edit', [SettingController::class, 'edit'])->name('settings.edit');
 Route::delete('/settings/{id}', [SettingController::class, 'destroy'])->name('settings.destroy');
 
-// Route::get('/send-email', [MailController::class, 'sendEmail']);
-
+//profile
 Route::put('/profile/password', [SettingController::class, 'checkPassword'])->name('admin.profile.checkPassword');
 Route::put('/profile/password/update', [SettingController::class, 'updatePassword'])->name('admin.profile.updatePassword');

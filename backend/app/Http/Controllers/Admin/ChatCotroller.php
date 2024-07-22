@@ -8,19 +8,14 @@ use Illuminate\Http\Request;
 
 class ChatCotroller extends Controller
 {
-
+    //====================Display All Cart================//
     public function index()
     {
         $user = auth()->user();
         return view('setting.chats.index', ['user' => $user]);
     }
 
-
-    public function create()
-    {
-        //
-    }
-
+    //====================Create Cart================//
     public function store(Request $request)
     {
         $request->validate([
@@ -35,28 +30,5 @@ class ChatCotroller extends Controller
         return redirect()->route('chats.index');
     }
 
-
-    public function show(string $id)
-    {
-        //
-    }
-
-
-    public function edit(string $id)
-    {
-        //
-    }
-
-
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-   
-    public function destroy(string $id)
-    {
-        //
-    }
 
 }

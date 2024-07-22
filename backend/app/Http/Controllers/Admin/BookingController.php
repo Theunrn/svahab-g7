@@ -41,16 +41,8 @@ class BookingController extends Controller
         return view('setting.booking.index', compact('bookings'));
     }
 
-    public function create()
-    {
-        //
-    }
-
-    public function store(Request $request)
-    {
-        //
-    }
-
+    
+    // ===================show specifect booking======================//
     public function show(string $id)
     {
         $booking = Booking::with('options')->findOrFail($id);
@@ -58,11 +50,8 @@ class BookingController extends Controller
         return view('setting.booking.show', compact('booking'));
     }
 
-    public function update(string $id)
-    {
-        //
-    }
-
+    
+    //===========================Cancel bookings========================//
     public function cancel($id)
     {
         $booking = Booking::find($id);
@@ -77,7 +66,7 @@ class BookingController extends Controller
 
         return redirect()->route('admin.bookings.index')->with('success', 'Booking cancelled successfully');
     }
-
+    //=====================Reject booking========================//
     public function reject(string $id)
     {
         $booking = Booking::find($id);
@@ -92,7 +81,7 @@ class BookingController extends Controller
 
         return redirect()->route('admin.bookings.index')->with('success', 'Booking rejected successfully');
     }
-
+    //=================Accept bookings=========================//
     public function accept(string $id)
     {
         $booking = Booking::find($id);
@@ -107,7 +96,7 @@ class BookingController extends Controller
 
         return redirect()->route('admin.bookings.index')->with('success', 'Booking accepted successfully');
     }
-
+    //================Restore bookings===================//
     public function reStore(string $id)
     {
         $booking = Booking::find($id);

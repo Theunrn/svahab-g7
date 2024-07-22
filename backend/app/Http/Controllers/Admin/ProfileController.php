@@ -34,12 +34,7 @@ class ProfileController extends Controller
         return view('setting.profile', ['user' => $user]);
     }
     
-
-
-
-
-
-
+    //=======================Update Profile =================//
     public function update(Request $request)
     {
         $user = auth()->user();

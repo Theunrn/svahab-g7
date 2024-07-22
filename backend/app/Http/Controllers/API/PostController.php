@@ -12,7 +12,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log; // Add this line
 
 class PostController extends Controller
-{
+{   
+    //=================listing of posts =================//
     public function index()
     {
         // Retrieve all posts
@@ -22,12 +23,14 @@ class PostController extends Controller
         return response()->json(['success' => true, 'data' => $posts]);
     }
 
+    //=====================Create posts=====================//
     public function store(PostRequest $request)
     {
         Post::store($request);
         return response()->json(['success' => true, 'message' => "Post created successfully"], 201);
     }
 
+    //====================Update psots =================//
     public function update(PostRequest $request, $id)
     {
 
@@ -35,7 +38,7 @@ class PostController extends Controller
         return response()->json(['success'=>true, 'message' => 'Post updated successfully'], 200);
     }
 
-
+    //====================Show specific posts =================//
     public function show($id)
     {
         $post = Post::find($id);
@@ -44,7 +47,7 @@ class PostController extends Controller
 
 
 
-
+    //===================Remove posts =================//
     public function destroy($id)
     {
         // Find the post by ID
@@ -64,6 +67,8 @@ class PostController extends Controller
 
         return response()->json(['message' => 'Post deleted successfully'], 200);
     }
+
+    //====================Update post status =================//
     public function updatePostStatus($id)
     {
         $post = Post::find($id);

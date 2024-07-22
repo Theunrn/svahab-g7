@@ -15,6 +15,7 @@ class DeliveryController extends Controller
         $this->middleware('auth:sanctum'); // Ensure that the user is authenticated
     }
 
+    //=====================Listing delivery==================//
     public function index()
     {
         $deliveries = Delivery::with('user')->get();
