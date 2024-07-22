@@ -42,45 +42,47 @@
                 >
                   <div class="flex justify-center">
                     <div
-                      class="bg-blue w-30 rounded-2xl relative mb-2"
+                      class="bg-blue w-20 sm:w-24 rounded-xl relative mb-2"
                       v-if="team.start_time && team.end_time"
                     >
                       <p
-                        class="match-time text-center p-1 text-sm text-white font-bold text-orange-500 relative z-10"
+                        class="match-time text-center p-1 sm:p-2 text-xs sm:text-sm text-white font-semibold text-orange-500 relative z-10"
                       >
                         {{ formatTime(team.start_time) }} - {{ formatTime(team.end_time) }} Date:
                         {{ team.date_match }}
                       </p>
                     </div>
                   </div>
+
                   <div class="team-info flex justify-between items-center relative z-10">
-                    <div class="relative z-40">
+                    <div class="relative z-30">
                       <img
                         :src="getImageUrl(team.logo)"
                         alt="Team Logo"
-                        class="w-30 h-30 object-cover rounded-full border-4 border-orange-500 overflow-hidden shadow-md hover:shadow-lg animate-sink"
+                        class="w-20 h-20 object-cover rounded-full border-4 border-orange-500 overflow-hidden shadow-md hover:shadow-lg animate-sink md:w-24 md:h-24 lg:w-30 lg:h-30"
                       />
+
                       <div v-if="team.user_id == posterId" class="flex items-center ml-3 mt-3">
                         <!-- Edit Button -->
-                        <button 
-                          class="edit-post-btn text-gray-700 rounded-md px-3 py-1 mr-2 hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 shadow-md hover:shadow-lg z-20"
+                        <button
+                          class="edit-post-btn text-gray-700 rounded-md px-2 py-1 mr-2 hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 shadow-sm hover:shadow-md z-20 text-xs md:text-sm"
                           data-bs-toggle="modal"
                           data-bs-target="#editModal"
                           @click="editPost(team)"
                         >
-                          <i class="bx bx-edit text-sm text-blue-500"></i>
+                          <i class="bx bx-edit text-xs md:text-sm text-blue-500"></i>
                         </button>
                         <!-- Delete Button -->
                         <button
-                          class="delete-post-btn text-gray-700 rounded-md px-3 py-1 mr-2 hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 shadow-md hover:shadow-lg z-20"
+                          class="delete-post-btn text-gray-700 rounded-md px-2 py-1 mr-2 hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 shadow-sm hover:shadow-md z-20 text-xs md:text-sm"
                           @click="deletePost(team.id)"
                         >
-                          <i class="bx bx-trash text-sm text-red-500"></i>
+                          <i class="bx bx-trash text-xs md:text-sm text-red-500"></i>
                         </button>
                       </div>
                     </div>
                     <div class="team-logo flex items-center gap-2 p-2">
-                      <p class="team-name text-sm font-bold text-gray-700 font-size-5">
+                      <p class="team-name text-xs font-larg text-gray-700">
                         {{ team.name }}
                       </p>
                     </div>
@@ -88,15 +90,16 @@
                       <img
                         src="../../assets/image/vs1.png"
                         alt="VS"
-                        class="vs w-19 h-19 mr-15 animate-pulse z-20"
+                        class="vs w-12 h-12 sm:w-16 sm:h-16 md:w-19 md:h-19 mr-4 sm:mr-6 md:mr-8 animate-pulse z-20"
                       />
                     </div>
+
                     <button
                       type="button"
                       data-bs-toggle="modal"
                       data-bs-target="#match"
                       @click="setPostId(team.id)"
-                      class="match-btn mr-2 bg-orange-500 text-white rounded-md px-3 py-1 mt-2 mb-2 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50 shadow-md hover:shadow-lg z-20"
+                      class="match-btn mr-1 sm:mr-2 bg-orange-500 text-white rounded-md text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-1.5 mt-1 sm:mt-2 mb-1 sm:mb-2 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50 shadow-md hover:shadow-lg z-20"
                     >
                       Match Now
                     </button>
@@ -112,7 +115,7 @@
                   </div>
                   <div class="location">
                     <button
-                      class="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
+                      class="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-xs sm:text-sm px-3 sm:px-5 py-1.5 sm:py-2.5 text-center me-1 sm:me-2 mb-1 sm:mb-2"
                     >
                       {{ team.location }}
                     </button>
@@ -261,12 +264,23 @@
       </div>
     </div>
     <!-- Edit Team Modal -->
-    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div
+      class="modal fade"
+      id="editModal"
+      tabindex="-1"
+      aria-labelledby="editModalLabel"
+      aria-hidden="true"
+    >
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="editModalLabel">Update your team post</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
           </div>
           <div class="modal-body">
             <form @submit.prevent="updatePost">
@@ -328,13 +342,12 @@ const start_time = ref('')
 const end_time = ref('')
 const location = ref('')
 const allTeams = ref([])
-const postId = ref(null);
-const props= defineProps({
-  customer:Object
+const postId = ref(null)
+const props = defineProps({
+  customer: Object
 })
 
-const posterId = ref(props.customer.id);
-
+const posterId = ref(props.customer.id)
 
 // Function to handle file upload
 const handleFileUpload = (event: Event) => {
@@ -394,8 +407,6 @@ const createMatch = async () => {
   }
 }
 
-
-
 // Function to handle file change
 const onFileChange = (event: Event) => {
   const target = event.target as HTMLInputElement
@@ -442,68 +453,64 @@ const clearForm = () => {
 }
 const updatePost = async () => {
   if (!postId.value) {
-    alert('No post ID available for update');
-    return;
+    alert('No post ID available for update')
+    return
   }
 
   try {
-    const formData = new FormData();
-    formData.append('name', name.value);
-    formData.append('date_match', date_match.value);
-    formData.append('start_time', start_time.value);
-    formData.append('end_time', end_time.value);
-    formData.append('location', location.value);
+    const formData = new FormData()
+    formData.append('name', name.value)
+    formData.append('date_match', date_match.value)
+    formData.append('start_time', start_time.value)
+    formData.append('end_time', end_time.value)
+    formData.append('location', location.value)
     if (team_logo.value) {
-      formData.append('logo', team_logo.value);
+      formData.append('logo', team_logo.value)
     }
 
     const response = await axiosInstance.put(`/posts/${postId.value}`, formData, {
       headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
+        'Content-Type': 'multipart/form-data'
+      }
+    })
 
-    alert('Post updated successfully');
-    clearForm();
-    await fetchAllTeams(); // Fetch the updated list of teams
-    window.location.reload();
+    alert('Post updated successfully')
+    clearForm()
+    await fetchAllTeams() // Fetch the updated list of teams
+    window.location.reload()
   } catch (error) {
-    alert('Error updating post');
-    console.error('Error updating post:', error.response ? error.response.data : error);
+    alert('Error updating post')
+    console.error('Error updating post:', error.response ? error.response.data : error)
   }
-};
-
+}
 
 const editPost = (team: any) => {
-  postId.value = team.id;
-  name.value = team.name;
-  date_match.value = team.date_match;
-  start_time.value = team.start_time;
-  end_time.value = team.end_time;
-  location.value = team.location;
+  postId.value = team.id
+  name.value = team.name
+  date_match.value = team.date_match
+  start_time.value = team.start_time
+  end_time.value = team.end_time
+  location.value = team.location
   // Assuming `team_logo` is handled separately if needed
-  team_logo.value = getImageUrl(team.logo); // Update this if necessary
-};
-
-
+  team_logo.value = getImageUrl(team.logo) // Update this if necessary
+}
 
 // Method to delete a post
 const deletePost = async (postId) => {
   try {
     // Make an API call to delete the post by postId
-    const response = await axiosInstance.delete(`/posts/${postId}`);
-
+    const response = await axiosInstance.delete(`/posts/${postId}`)
 
     // Optionally, handle success message or update UI
-    alert('Post deleted successfully');
+    alert('Post deleted successfully')
     // Example: Refresh the list of teams after deletion (assuming `fetchAllTeams` is a method to update your data)
-    await fetchAllTeams();
+    await fetchAllTeams()
   } catch (error) {
     // Handle error responses
-    alert('Error deleting post');
-    console.error('Error deleting post:', error.response ? error.response.data : error);
+    alert('Error deleting post')
+    console.error('Error deleting post:', error.response ? error.response.data : error)
   }
-};
+}
 
 const teamLogoUrl = (logoPath: string) => {
   return logoPath ? `/storage/${logoPath}` : '' // Adjust according to your storage path
@@ -514,7 +521,6 @@ const fetchAllTeams = async () => {
     const response = await axiosInstance.get('/post/list') // Adjust endpoint based on your API
     allTeams.value = response.data.data
     console.log('All teams fetched:', allTeams.value) // Log the fetched teams for debugging purposes
-    
   } catch (error) {
     console.error('Error fetching all teams:', error.response ? error.response.data : error)
   }
@@ -527,10 +533,7 @@ const setPostId = (postId) => {
 }
 onMounted(() => {
   fetchAllTeams()
-  
 })
-
-
 
 const formatTime = (time: string) => {
   // Assuming time is in 24-hour format 'HH:mm'
