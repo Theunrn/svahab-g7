@@ -1,24 +1,16 @@
 <template>
   <header
-    style="padding-left: 50px; padding-right: 50px"
-    class="flex justify-between items-center py-3 px-4 shadow-md navbar-light fixed top-0 left-0 right-0 bg-green-600 z-50"
+    style="padding-left: 50px; padding-right:50px;"
+    class="flex justify-between py-3 items-center shadow-md navbar-light fixed top-0 left-0 right-0 bg-green-600 z-50"
   >
     <!-- Logo -->
-    <!-- <div class="left">
+    <div class="left">
       <a href="/"><img width="200" height="200" src="../assets/image/logo.png" alt="Logo" /></a>
-    </div> -->
-    <button @click="toggleSidebar" class="md:hidden text-white text-3xl">
-      <i class="bx bx-menu"></i>
-    </button>
-    <div class="ml-5 flex-grow flex justify-center md:justify-start">
-      <a href="/"
-        ><img width="200" height="200" class="logo" src="../assets/image/logo.png" alt="Logo"
-      /></a>
     </div>
     <!-- Menu Items -->
-    <nav class="hidden md:flex items-center gap-5">
+    <nav class="flex center gap-5">
       <a
-        :href="'/'"
+        :href="'/'" style="margin-left: 100px;"
         :class="[
           'font-bold-200 py-2 text-white custom-hover text-decoration-none',
           { active: route.path === '/' }
@@ -28,7 +20,7 @@
       <a
         :href="'/about'"
         :class="[
-          'font-bold-200 py-2 text-white custom-hover text-decoration-none',
+          'font-bold-200 py-2 text-white custom-hover text-decoration-none ',
           { active: route.path === '/about' }
         ]"
         >ABOUT</a
@@ -44,16 +36,15 @@
       <a
         :href="'/contact'"
         :class="[
-          'font-bold-200 py-2 text-white custom-hover text-decoration-none',
+          'font-bold-200 py-2 me-5 text-white custom-hover text-decoration-none ',
           { active: route.path === '/contact' }
         ]"
         >CONTACT</a
       >
     </nav>
-
-    <div class="right flex justify-center align-items-center">
+    <div class=" right flex justify-center align-items-center">
       <!-- Cart Button -->
-      <button class="relative inline-flex w-fit mx-3 cart-btn">
+      <button class="relative inline-flex w-fit mx-3">
         <div
           class="absolute top-0 right-0 transform translate-x-2/4 -translate-y-1/2 z-10 flex items-center justify-center h-5 w-5 bg-red-600 rounded-full text-white text-xs font-bold"
         >
@@ -63,10 +54,12 @@
           to="/addtocart"
           class="flex items-center justify-center rounded-lg bg-primary-500 text-white dark:text-gray-200"
         >
-          <i class="bx bxs-cart-add text-3xl ml-4 text-white cart-icon"></i>
+          <i class="bx bxs-cart-add text-3xl ml-4 text-white"></i>
+          <!-- Larger cart icon -->
         </router-link>
       </button>
-      <button class="relative inline-flex w-fit mx-3 notification-btn" @click="clearNotifications">
+      <!-- Notification Button -->
+      <button class="relative inline-flex w-fit mx-3" @click="clearNotifications">
         <div
           class="absolute top-0 right-0 transform translate-x-2/4 -translate-y-1/2 z-10 flex items-center justify-center h-5 w-5 bg-red-600 rounded-full text-white text-xs font-bold"
           v-if="notifications.length > 0"
@@ -83,21 +76,22 @@
           :to="{ path: '/notification/' + authStore.user.id }"
           class="flex items-center justify-center rounded-lg bg-primary-500 text-white dark:text-gray-200"
         >
-          <i class="bx bx-bell text-3xl notification-icon"></i>
+          <i class="bx bx-bell text-3xl"></i>
+          <!-- Larger bell icon -->
         </router-link>
       </button>
       <!-- History Button -->
-      <button class="relative inline-flex items-center mx-3 history-btn">
+      <button class="relative inline-flex items-center mx-3">
         <router-link
           :to="{ path: '/history/' + authStore.user.id }"
           class="flex items-center justify-center rounded-lg bg-primary-500 text-white dark:text-gray-200"
         >
           <span
             v-if="showText"
-            class="absolute top-0 left-3/2 transform -translate-x-1/2 -translate-y-full text-lg font-semibold history-text"
+            class="absolute top-0 left-3/2 transform -translate-x-1/2 -translate-y-full text-lg font-semibold"
             >History</span
           >
-          <i class="bx bx-history text-3xl history-icon"></i>
+          <i class="bx bx-history text-3xl"></i>
         </router-link>
       </button>
       <!-- Authentication Button -->
@@ -106,8 +100,7 @@
         <div v-if="!authStore.isAuthenticated" class="flex gap-2 py-2">
           <a href="/login"
             ><button
-              class="text-bold hover:bg-red-400 text-dark bg-white px-4 py-1 border-1 border-red-700 hover:border-red-500 rounded-md"
-              style="border-radius: 50px; font-weight: bold"
+              class="text-bold hover:bg-red-400 text-dark bg-white px-4 py-1 border-1 border-red-700 hover:border-red-500 rounded-md" style="border-radius: 50px; font-weight: bold;"
             >
               Sign in
             </button></a

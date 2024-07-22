@@ -19,7 +19,7 @@
           <div class="image-container">
             <div class="flex justify-between absolute w-full mt-1">
               <div class="discount-banner mt-1">
-                <span  v-if="product.discounted_price !== null" class="discount-text bg-orange-500 px-4 py-2 rounded-md text-white text-2xl">
+                <span  v-if="product.discount!== null" class="discount-text bg-orange-500 px-4 py-2 rounded-md text-white text-2xl">
                   {{ product.discount }}% OFF
                 </span>
               </div>
