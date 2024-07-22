@@ -11,6 +11,7 @@ class ScheduleMatch extends Model
 
     protected $fillable = ['team1_name', 'team1_logo', 'team2_name', 'team2_logo', 'date_match', 'start_time', 'end_time', 'location'];
 
+    //======== store new or update SchdeuleMatch =========================
     public static function store(Request $request, $id = null)
     {
         $data = $request->only('team1_name', 'team2_name', 'date_match', 'start_time', 'end_time', 'location');

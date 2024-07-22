@@ -16,22 +16,22 @@ class AddToCard extends Model
         'price',
         'total_amount',
     ];
-
+    // ======================= Relationships =======================
     public function user()
     {
         return $this->belongsTo(User::class);
     }
-
+    
     public function product()
     {
         return $this->belongsTo(Product::class);
     }
-
+    // ======================= item list =======================
     public static function list()
     {
         return self::with('products')->get();
     }
-
+    // ======================= Add To Cart =======================
     public static function addToCart($userId, $productId, $quantity)
     {
         $product = Product::findOrFail($productId);

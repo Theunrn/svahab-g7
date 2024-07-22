@@ -9,6 +9,8 @@ class Booking extends Model
 {
     use HasFactory;
     protected $fillable = ['user_id','field_id','booking_date', 'total_price','status','payment_status', 'start_time','end_time'];
+
+    // ======================= Relationships =======================
     public function customer()
     {
         return $this->belongsTo(User::class, 'user_id');
@@ -23,6 +25,17 @@ class Booking extends Model
                     ->withPivot('qty')
                     ->withTimestamps();
     }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function payment()
+    {
+        return $this->hasOne(Payment::class);
+    }
+    
+    // ======================= Methods create and update =======================
     public static function store($request, $id = null)
     {
         $data = $request->only('user_id', 'field_id', 'booking_date', 'start_time', 'end_time', 'total_price', 'status', 'payment_status');
@@ -39,14 +52,6 @@ class Booking extends Model
 
         return response()->json($booking->load('options'), 201);
     }
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    public function payment()
-    {
-        return $this->hasOne(Payment::class);
-    }
+    
     
 }

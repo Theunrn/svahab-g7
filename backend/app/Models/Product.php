@@ -13,6 +13,7 @@ class Product extends Model
     use HasFactory;
     protected $fillable = ['image', 'name', 'description', 'owner_id', 'price', 'color', 'size', 'category_id'];
 
+    //============== show all products=============
     public function index(Request $request)
     {
         $date = $request->input('date');
@@ -28,6 +29,7 @@ class Product extends Model
         return view('setting.orders.index', compact('orders'));
     }
 
+    //============ show the product by id =================
     public function show($id)
     {
         $order = Order::with(['user', 'products.colors', 'products.sizes'])->find($id);
@@ -40,6 +42,7 @@ class Product extends Model
     }
 
 
+    //========= relationship =============
     public function category()
     {
         return $this->belongsTo(Category::class);

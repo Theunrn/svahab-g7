@@ -44,7 +44,7 @@
             </div>
         </main>
     </div>
-    <!-- Add Modal -->
+    <!-- Add Category Modal -->
     <div id="addModal" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
         <div class="p-4 w-full max-w-xl max-h-full">
             <!-- Modal content -->
@@ -81,7 +81,7 @@
             </div>
         </div>
     </div>
-    <!-- Edit Modal -->
+    <!-- Edit Category Modal -->
     <div id="editModal" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
         <div class="p-4 w-full max-w-xl max-h-full">
             <!-- Modal content -->
@@ -125,6 +125,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
+        //=============create new categories ===
         document.getElementById('openAddModal').addEventListener('click', function () {
             document.getElementById('addModal').classList.remove('hidden');
         });
@@ -132,7 +133,7 @@
         document.getElementById('closeAddModal').addEventListener('click', function () {
             document.getElementById('addModal').classList.add('hidden');
         });
-
+        //============edit new category============
         document.querySelectorAll('.openEditModal').forEach(button => {
             button.addEventListener('click', function () {
                 const id = this.getAttribute('data-id');
@@ -147,7 +148,7 @@
         document.getElementById('closeEditModal').addEventListener('click', function () {
             document.getElementById('editModal').classList.add('hidden');
         });
-
+        //=============== search category =================
         document.getElementById('search-input').addEventListener('input', function() {
             fetch(`{{ route('admin.categories.index') }}?search=${this.value}`, {
                     headers: {

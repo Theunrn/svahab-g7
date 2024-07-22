@@ -20,6 +20,7 @@ class Field extends Model
         'owner_id',
         'province',
     ];
+    //============= relationship =============================
     public function feedbacks()
     {
         return $this->hasMany(Feedback::class);
@@ -31,6 +32,8 @@ class Field extends Model
     public function owner(){
         return $this->belongsTo(User::class, 'owner_id');
     }
+
+    //============ custom function store =============================
     public static function store($request, $id = null) {
 
         $data = $request->only('name', 'location', 'price', 'field_type','owner_id', 'province');

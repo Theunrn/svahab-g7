@@ -13,7 +13,7 @@ class Chat extends Model
         'user_id', 
         'message',
     ];
-
+    //================ Relationships============================
     public function user()
     {
         return $this->belongsTo(User::class);

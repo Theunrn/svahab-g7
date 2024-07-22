@@ -57,7 +57,7 @@
     </main>
   </div>
 
-  <!-- Add Modal -->
+  <!-- Add Permission Modal -->
   <div id="addModal" tabindex="-1" aria-hidden="true"
     class="hidden fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
     <main class="p-4 w-full max-w-xl max-h-full">
@@ -98,7 +98,7 @@
     </main>
   </div>
 
-  <!-- Edit Modal -->
+  <!-- Edit Permission Modal -->
   <div id="editModal" tabindex="-1" aria-hidden="true"
     class="hidden fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
     <main class="p-4 w-full max-w-xl max-h-full">
@@ -141,6 +141,7 @@
   </div>
 
   <script>
+    //============== delete permissions and alert =============
     function deleteField(permissionId) {
       Swal.fire({
         title: '<span style="color: #d33; font-weight: bold;">Are you sure?</span>',
@@ -163,6 +164,7 @@
         }
       });
     }
+    //============== create new permission=============
     document.getElementById('openAddModal').addEventListener('click', function () {
       document.getElementById('addModal').classList.remove('hidden');
     });
@@ -170,7 +172,7 @@
     document.getElementById('closeAddModal').addEventListener('click', function () {
       document.getElementById('addModal').classList.add('hidden');
     });
-
+    //================edit permissions================================
     document.querySelectorAll('.openEditModal').forEach(button => {
       button.addEventListener('click', function () {
         const id = this.getAttribute('data-id');

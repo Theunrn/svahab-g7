@@ -10,6 +10,7 @@ class Customer extends Model
 {
     use HasFactory;
 
+    //================ Relationships============================
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

@@ -15,17 +15,18 @@ class Order extends Model
         'user_id',
     ];
 
-    
+    //============= relationship with customer============
     public function customer()
     {
         return $this->belongsTo(Customer::class, 'user_id');
     }
+    //============= relationship with user============
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    
+    //============= relationship many to many============
     public function products()
     {
         // return $this->belongsToMany(Product::class)->withPivot('qty', 'color_id', 'size_id');
@@ -33,6 +34,7 @@ class Order extends Model
             ->withPivot('qty', 'color_id', 'size_id');
     }
 
+    //============= createOrder ===============
     public static function createOrder($validatedData)
     {
         $user = Auth::user();
