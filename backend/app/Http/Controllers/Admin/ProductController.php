@@ -8,6 +8,7 @@ use App\Models\Color;
 use App\Models\Product;
 use App\Models\Size;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
@@ -75,7 +76,7 @@ class ProductController extends Controller
         $product->price = $validatedData['price'];
         $product->image = 'images/' . $imageName; // assuming storage symlink is set up
         $product->category_id = $validatedData['category_id'];
-        
+        $product->owner_id = Auth::id(); 
         $product->save();
 
         // Attach colors and sizes
