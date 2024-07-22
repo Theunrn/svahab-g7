@@ -120,6 +120,7 @@
     </div>
 
     <script>
+        //============ create new image =================
         document.getElementById('openAddModal').addEventListener('click', function() {
             document.getElementById('addModal').classList.remove('hidden');
         });
@@ -128,6 +129,7 @@
             document.getElementById('addModal').classList.add('hidden');
         });
 
+        //================ edit image slideshow==========
         document.querySelectorAll('.openEditModal').forEach(button => {
             button.addEventListener('click', function() {
                 const id = this.getAttribute('data-id');
@@ -140,6 +142,32 @@
         document.getElementById('closeEditModal').addEventListener('click', function() {
             document.getElementById('editModal').classList.add('hidden');
         });
+         // Add event listener to the form
+         document.getElementById('edit-slideShow-form').addEventListener('submit', function(event) {
+          event.preventDefault(); // Prevent the form from submitting normally
+    
+          const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 1000,
+            timerProgressBar: true,
+            customClass: {
+              icon: 'colored-toast',
+              popup: 'colored-toast',
+              title: 'colored-toast',
+            },
+            iconColor: '#a5dc86', // Green background for success
+          });
+    
+          Toast.fire({
+            icon: 'success',
+            title: 'Slide show updated successfully!',
+          }).then(() => {
+            this.submit(); // Submit the form programmatically after the alert
+          });
+        });
+        //=============Delete slideshow============
         function deleteSlideshow(slideshowId) {
             Swal.fire({
                 title: '<span style="color: #d33; font-weight: bold;">Are you sure?</span>',
@@ -162,32 +190,8 @@
                 }
             });
         }
-        document.getElementById('create-slideShow-form').addEventListener('submit', function(event) {
-        event.preventDefault(); // Prevent the form from submitting normally
-  
-        const Toast = Swal.mixin({
-          toast: true,
-          position: 'top-end',
-          showConfirmButton: false,
-          timer: 1000,
-          timerProgressBar: true,
-          customClass: {
-            icon: 'colored-toast',
-            popup: 'colored-toast',
-            title: 'colored-toast',
-            width: '800px', // Set width for the alert
-          },
-          iconColor: '#a5dc86', // Green background for success
-        });
-  
-        Toast.fire({
-          icon: 'success',
-          title: 'Slide show created successfully!',
-        }).then(() => {
-          this.submit(); // Submit the form programmatically after the alert
-        });
-      });
-      document.getElementById('editForm').addEventListener('submit', function(event) {
+        // =================== alert ===================
+        document.getElementById('editForm').addEventListener('submit', function(event) {
           event.preventDefault(); // Prevent the form from submitting normally
     
           const Toast = Swal.mixin({

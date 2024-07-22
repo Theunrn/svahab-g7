@@ -13,6 +13,7 @@ class OrderProduct extends Model
 
     protected $fillable = ['order_id', 'product_id', 'qty', 'color_id', 'size_id'];
 
+    //============== Relationships =================
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);

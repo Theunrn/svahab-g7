@@ -25,11 +25,6 @@ class Feedback extends Model
         return $this->belongsTo(Field::class, 'field_id');
     }
 
-    // Get list of feedbacks with related fields
-    // public static function list()
-    // {
-    //     return self::with('field')->get();
-    // }
 
     public static function list()
     {

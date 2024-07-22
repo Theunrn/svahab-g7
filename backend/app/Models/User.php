@@ -35,6 +35,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    //===============store user ================
     public static function store($request)
     {
         $imagePath = null;
@@ -63,6 +64,7 @@ class User extends Authenticatable
         return $user;
     }
 
+    //============== reationships ===========================
     public function customer(): HasOne
     {
         return $this->hasOne(Customer::class);

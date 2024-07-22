@@ -39,7 +39,6 @@
                                 <th class="py-4 px-6 bg-gray-100 font-bold text-sm text-gray-800 border-b border-gray-200">Image</th>
                                 <th class="py-4 px-1 bg-gray-100 font-bold text-sm text-gray-800 border-b border-gray-200">Name</th>
                                 <th class="py-4 px-1 bg-gray-100 font-bold text-sm text-gray-800 border-b border-gray-200">Category</th>
-                                {{-- <th class="py-4 px-1 bg-gray-100 font-bold text-sm text-gray-800 border-b border-gray-200">Description</th> --}}
                                 <th class="py-4 px-1 bg-gray-100 font-bold text-sm text-gray-800 border-b border-gray-200">Price</th>
                                 <th class="py-4 px-1 bg-gray-100 font-bold text-sm text-gray-800 border-b border-gray-200">Colors</th>
                                 <th class="py-4 px-1 bg-gray-100 font-bold text-sm text-gray-800 border-b border-gray-200">Sizes</th>
@@ -56,7 +55,6 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">{{ $product->name }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap">{{ $product->category ? $product->category->name : 'Uncategorized' }}</td>
-                                    {{-- <td class="px-6 py-4 whitespace-nowrap">{{ $product->description }}</td> --}}
                                     <td class="px-6 py-4 whitespace-nowrap">${{ number_format($product->price, 2) }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         @foreach ($product->colors as $color)

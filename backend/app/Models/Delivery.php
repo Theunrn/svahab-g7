@@ -13,16 +13,17 @@ class Delivery extends Model
 
     protected $fillable = ['address', 'user_id', 'delivery_status'];
 
+    //================ Define relationship with order ============================
     public function order()
     {
         return $this->belongsTo(Order::class);
     }
-
+    //================ Define relationship with user ===========================
     public function user()
     {
         return $this->belongsTo(User::class);
     }
-
+    //================ create delivery ============================
     public static function createDelivery(Request $request)
     {
         $request->validate([
@@ -36,6 +37,7 @@ class Delivery extends Model
         return self::create($deliveryData);
     }
 
+    //================ update delivery ============================
     public static function updateDelivery(Request $request, string $id)
     {
         $request->validate([

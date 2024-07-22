@@ -14,6 +14,7 @@ class Category extends Model
         'name',
         'owner_id', // Add this field to fillable
     ];
+    //================ Relationships============================
     public function products()
     {
         return $this->hasMany(Product::class);

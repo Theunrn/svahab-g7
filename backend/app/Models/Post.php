@@ -13,6 +13,7 @@ class Post extends Model
 
     protected $fillable = ['user_id', 'status', 'logo', 'name', 'post_date', 'date_match', 'start_time', 'end_time', 'location'];
 
+    //======== relationships with users =================================
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -24,6 +25,8 @@ class Post extends Model
      * @param int|null $id
      * @return \App\Models\Post
      */
+
+     //========  functions update and create =================================
     public static function store($request, $id = null)
     {
         $data = $request->only('name', 'post_date', 'date_match', 'start_time', 'end_time', 'location', 'user_id');

@@ -9,7 +9,7 @@ class Size extends Model
 {
     use HasFactory;
     protected $fillable = ['name'];
-
+    //========relations with products======
     public function products()
     {
         return $this->belongsToMany(Product::class, 'product_sizes', 'size_id', 'product_id');

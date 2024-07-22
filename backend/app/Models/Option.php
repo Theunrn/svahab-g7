@@ -9,6 +9,7 @@ class Option extends Model
 {
     use HasFactory;
     protected $fillable = ['name'];
+    //============= relationship =============================
     public function bookings()
     {
         return $this->belongsToMany(Booking::class, 'booking_options')

@@ -64,7 +64,7 @@
       </table>
     </div>
   </div>
-  <!-- Add Modal -->
+  <!-- Add failed Modal -->
   <div id="addModal" tabindex="-1" aria-hidden="true"
     class="hidden fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50 overflow-y-auto">
     <div class="p-4 w-full max-w-xl max-h-full ">
@@ -138,6 +138,7 @@
   </div>
 
     <script>
+      //========= create fields ================
       document.getElementById('openAddModal').addEventListener('click', function () {
         document.getElementById('addModal').classList.remove('hidden');
       });
@@ -145,6 +146,7 @@
       document.getElementById('closeAddModal').addEventListener('click', function () {
         document.getElementById('addModal').classList.add('hidden');
       });
+      //============select province ================
       document.addEventListener('DOMContentLoaded', function () {
         const provinces = [
           'Banteay Meanchey',
@@ -183,6 +185,7 @@
           provinceSelect.appendChild(option);
         });
       });
+      //========= delete fields ================
       function deleteField(fieldId) {
           Swal.fire({
               title: '<span style="color: #d33; font-weight: bold;">Are you sure?</span>',
