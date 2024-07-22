@@ -560,7 +560,7 @@
               timer: 1000,
               showConfirmButton: false
             })
-            closeModal('deleteModal')
+            // closeModal('deleteModal')
           } catch (error) {
             console.error('Error deleting item:', error)
             swalWithBootstrapButtons.fire({
