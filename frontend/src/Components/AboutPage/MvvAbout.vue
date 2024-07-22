@@ -8,14 +8,16 @@
             <div
               class="absolute inset-0 flex items-center justify-start -mt-50"
               style="margin-left: 550px"
-              
             >
-            
               <div
-              class="font-semibold bg-gray-800 p-2 bg-opacity-50 rounded-sm text-center mr-10 mb-50"
+                class="hidden md:block font-semibold bg-gray-800 p-2 bg-opacity-50 rounded-sm text-center mr-10 mb-50"
               >
-                <p class="text-white text-lg md:text-3xl mb-4 font-bold">Why schoose Svahab?</p>
-                <p class="text-white mb-8 md:text-xl">At SVAHAB, we are passionate about football and dedicated to making it accessible and enjoyable for everyone. Join our growing community of football enthusiasts and take your game to the next level.</p>
+                <p class="text-white text-lg md:text-3xl mb-4 font-bold">Why Choose Svahab?</p>
+                <p class="text-white mb-8 md:text-xl">
+                  At SVAHAB, we are passionate about football and dedicated to making it accessible
+                  and enjoyable for everyone. Join our growing community of football enthusiasts and
+                  take your game to the next level.
+                </p>
               </div>
             </div>
             <div class="flex flex-wrap text-center -mx-4 -mt-15">

@@ -38,7 +38,7 @@
               <img width="100" height="100" class="border border-2 border-info avatar-img rounded-circle" src="../../assets/image/shop.jpg" alt="">
             </div>
             <h3 class="text-xl font-semibold text-gray-900 mb-2">Shop</h3>
-            <p class="text-gray-700">Look and buy sprot material easily with our secure online payment system.</p>
+            <p class="text-gray-700">Look and buy sport material easily with our secure online payment system.</p>
           </div>
         </div>
       </div>
@@ -52,10 +52,9 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
 .card {
- 
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .card:hover {
@@ -63,4 +62,17 @@ export default {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
+@media (max-width: 768px) {
+  .card {
+    padding: 2rem; /* Reduce padding for smaller screens */
+    width: auto; /* Adjust width for smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: 1rem; /* Further reduce padding for smallest screens */
+    width: auto; /* Adjust width for smallest screens */
+  }
+}
 </style>
