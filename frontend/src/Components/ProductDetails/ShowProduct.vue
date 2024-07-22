@@ -1,5 +1,5 @@
 <template>
-  <div class="container" style="margin-top: 120px;">
+  <div class="container " style="margin-top: 120px; margin-bottom:20px">
     <div class="d-flex justify-content-between align-items-center mb-4">
       <router-link to="/shop" class="btn btn-outline-primary">Back</router-link>
       <h2 class="text-center font-bold fs-2 mb-0 text-info">{{ category.name }}</h2>
@@ -145,13 +145,13 @@ const toggleFavorite = (product) => {
 .container-card {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
   justify-content: flex-start;
   align-items: flex-start;
 }
 
 .card-wrapper {
-  width: 27%;
+  width: 23%;
+  margin: 10px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   border-radius: 15px;
   overflow: hidden;
@@ -160,12 +160,12 @@ const toggleFavorite = (product) => {
 
 .card-wrapper:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .image-container {
   height: 240px;
   display: flex;
+  justify-content: start;
   overflow: hidden;
   background-color: #f0f0f0;
 }
@@ -194,7 +194,6 @@ const toggleFavorite = (product) => {
 }
 
 .card {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
   border-radius: 15px;
   overflow: hidden;
   cursor: pointer;

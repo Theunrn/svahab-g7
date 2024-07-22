@@ -94,6 +94,7 @@ export default {
 </script>
 
 <style scoped>
+
 .card-me {
   justify-content: left;
   align-items: start;
