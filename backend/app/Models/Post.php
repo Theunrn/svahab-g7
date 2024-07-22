@@ -26,7 +26,7 @@ class Post extends Model
      */
     public static function store($request, $id = null)
     {
-        $data = $request->only('name', 'post_date', 'date_match', 'start_time', 'end_time', 'location');
+        $data = $request->only('name', 'post_date', 'date_match', 'start_time', 'end_time', 'location', 'user_id');
 
         if ($request->hasFile('logo')) {
             try {
@@ -43,7 +43,9 @@ class Post extends Model
                 return response()->json(['error' => 'Failed to upload new logo: ' . $e->getMessage()], 500);
             }
         }
-        $data['user_id'] = Auth::id();
+        if(Auth::id()){
+            $data['user_id'] = Auth::id();
+        }
         $data['status'] = false;
         $data = self::updateOrCreate(['id' => $id], $data);
         return $data;

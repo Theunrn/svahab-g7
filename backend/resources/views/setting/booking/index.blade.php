@@ -149,12 +149,6 @@
             const bookingList = document.getElementById('booking-list');
             const cancelledBookingList = document.getElementById('cancelled-booking-list');
 
-            const filterButtons = {
-                lastMonth: document.getElementById('filter-last-month'),
-                lastWeek: document.getElementById('filter-last-week'),
-                today: document.getElementById('filter-today'),
-            };
-
             statusFilter.addEventListener('change', (event) => {
                 filterBookings(event.target.value);
             });
@@ -177,21 +171,6 @@
                         row.classList.toggle('hidden', status && row.dataset.status !== status);
                     });
                 }
-            }
-
-            function filterDateRange(filterId) {
-                const today = new Date();
-                const startDate = new Date();
-                if (filterId === 'filter-last-month') {
-                    startDate.setMonth(today.getMonth() - 1);
-                } else if (filterId === 'filter-last-week') {
-                    startDate.setDate(today.getDate() - 7);
-                }
-
-                Array.from(bookingList.querySelectorAll('tr')).forEach(row => {
-                    const bookingDate = new Date(row.querySelector('td:nth-child(6)').innerText);
-                    row.classList.toggle('hidden', bookingDate < startDate || bookingDate > today);
-                });
             }
         });
     </script>

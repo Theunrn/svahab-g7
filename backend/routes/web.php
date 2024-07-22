@@ -113,14 +113,20 @@ Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('adm
 Route::get('/users/create', [UserController::class, 'createAccount'])->name('users.create');
 Route::post('/register/store', [UserController::class, 'register'])->name('register.store');
 Route::get('/admin/loginform', [UserController::class, 'loginform'])->name('admin.loginform');
+Route::post('/admin/users', [UserController::class, 'store'])->name('admin.users.store');
 
 // Chat routes
 Route::middleware(['auth'])->group(function () {
     Route::get('/chats/list', [ChatCotroller::class, 'index'])->name('chats.index');
     Route::post('/chats/create', [ChatCotroller::class, 'store'])->name('chats.store');
 });
+
+//Category
 Route::get('/admin/categories', [CategoryController::class, 'index'])->name('admin.categories.index');
 
+//Order
+Route::get('/admin/orders/{id}/cancel', [OrderController::class, 'cancel'])->name('admin.orders.cancel');
+Route::get('/admin/orders/{id}/accept', [OrderController::class, 'confirm'])->name('admin.orders.confirm');
 
 //payment
 Route::get('/payment/list', [PaymentController::class, 'index'])->name('admin.payment.list');
@@ -129,29 +135,27 @@ Route::get('/payment/month', [PaymentController::class, 'showPaymentFormMonth'])
 Route::post('/payment/intent', [PaymentController::class, 'createPaymentIntent'])->name('payment.intent');
 Route::post('/stripe/payment', [PaymentController::class, 'makePayment'])->name('payment.process');
 
-//order
+//orders
+Route::get('/admin/orders', function () {
+    return "Route reached";
+});
+
+Route::get('/admin/orders', [OrderController::class, 'index']);
+Route::get('/admin/orders', [OrderController::class, 'index'])->name('admin.orders.index');
+Route::get('/admin/orders/confirm/{id}', [OrderController::class, 'confirm'])->name('admin.orders.confirm');
+Route::get('/admin/orders/cancel/{id}', [OrderController::class, 'cancel'])->name('admin.orders.cancel');
 Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('orders', [OrderController::class, 'index'])->name('admin.orders.index');
     Route::get('orders/confirm/{id}', [OrderController::class, 'confirm'])->name('admin.orders.confirm');
     Route::get('orders/cancel/{id}', [OrderController::class, 'cancel'])->name('admin.orders.cancel');
 });
-Route::post('/admin/users', [UserController::class, 'store'])->name('admin.users.store');
-Route::get('/admin/orders/{id}/cancel', [OrderController::class, 'cancel'])->name('admin.orders.cancel');
-Route::get('/admin/orders/{id}/accept', [OrderController::class, 'confirm'])->name('admin.orders.confirm');
-Route::get('/admin/orders', [OrderController::class, 'index']);
-Route::get('/admin/orders', [OrderController::class, 'index'])->name('admin.orders.index');
-Route::get('/admin/orders/confirm/{id}', [OrderController::class, 'confirm'])->name('admin.orders.confirm');
-Route::get('/admin/orders/cancel/{id}', [OrderController::class, 'cancel'])->name('admin.orders.cancel');
-Route::get('/admin/orders', function () {
-    return "Route reached";
-});
 
-// setting
+//setting
 Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
 Route::post('/settings', [SettingController::class, 'store'])->name('settings.store');
 Route::get('/settings/{id}/edit', [SettingController::class, 'edit'])->name('settings.edit');
 Route::delete('/settings/{id}', [SettingController::class, 'destroy'])->name('settings.destroy');
 
-//profile
+//password
 Route::put('/profile/password', [SettingController::class, 'checkPassword'])->name('admin.profile.checkPassword');
 Route::put('/profile/password/update', [SettingController::class, 'updatePassword'])->name('admin.profile.updatePassword');

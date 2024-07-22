@@ -103,9 +103,11 @@
 </template>
 
 <script>
+// ======================= Import Necessary Files and Libraries =======================
 import axiosInstance from '@/plugins/axios'
 
 export default {
+  // ======================= Component Data =======================
   data() {
     return {
       activeIndex: 0,
@@ -114,18 +116,23 @@ export default {
       autoSlideDelay: 5000 // Adjust auto slide delay in milliseconds (e.g., 5000 = 5 seconds)
     }
   },
+
+  // ======================= Lifecycle Hooks =======================
   mounted() {
     this.fetchSlideshows() // Fetch the slideshow data when the component is mounted
     this.startAutoSlide() // Start auto sliding when component is mounted
   },
+
+  // ======================= Component Methods =======================
   methods: {
+    // ======================= Fetch Slideshows =======================
     async fetchSlideshows() {
       try {
         const response = await axiosInstance.get('slideshow/list')
 
         console.log(response.data) // Log the API response for debugging
         if (response.data) {
-          this.slides = response.data// Ensure the correct property is assigned
+          this.slides = response.data // Ensure the correct property is assigned
           console.log(this.slides) // Log the API response for debugging
         } else {
           console.error('Failed to fetch slideshows: ', response.data.message)
@@ -136,26 +143,39 @@ export default {
         console.error('Error fetching slideshows:', error)
       }
     },
+
+    // ======================= Set Active Slide =======================
     setActiveSlide(index) {
       this.activeIndex = index
     },
+
+    // ======================= Previous Slide =======================
     prevSlide() {
       this.activeIndex = (this.activeIndex - 1 + this.slides.length) % this.slides.length
     },
+
+    // ======================= Next Slide =======================
     nextSlide() {
       this.activeIndex = (this.activeIndex + 1) % this.slides.length
     },
+
+    // ======================= Start Auto Slide =======================
     startAutoSlide() {
       this.autoSlideInterval = setInterval(() => {
         this.nextSlide()
       }, this.autoSlideDelay)
     },
+
+    // ======================= Stop Auto Slide =======================
     stopAutoSlide() {
       clearInterval(this.autoSlideInterval) // Stop auto sliding when hovering over the carousel
     },
+
+    // ======================= Get Image URL =======================
     getImageUrl(imagePath) {
-      return `http://127.0.0.1:8000/storage/${imagePath}`; // Adjust URL if needed
-    },
+      return `http://127.0.0.1:8000/storage/${imagePath}` // Adjust URL if needed
+    }
   }
 }
 </script>
+

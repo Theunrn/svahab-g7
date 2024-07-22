@@ -163,20 +163,20 @@ Route::post('/post/match', [MatchTeamController::class,'store']);
 Route::get('/match/list', [MatchTeamController::class,'index']);
 Route::get('/match/delete/{id}', [MatchTeamController::class,'destroy']);
 
-// Schedule
+//Schedule
 Route::post('/schedule/create', [APIScheduleMatchController::class,'store']);
 Route::get('/schedule/list', [APIScheduleMatchController::class,'index']);
 
-//post
+//Post team find partner
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/posts', [PostController::class, 'store']);
     Route::get('/post/list', [PostController::class, 'index']);
     Route::delete('/posts/{id}', [PostController::class, 'destroy']);
-    Route::put('/post/modify/{id}', [PostController::class, 'update']); 
+    
 });
-Route::get('/post/show/{id}', [PostController::class, 'show']);
-Route::get('/post/list', [PostController::class, 'index'])->middleware('auth:sanctum');
 Route::put('/post/update/{id}', [PostController::class, 'updatePostStatus']);
+Route::get('/post/show/{id}', [PostController::class, 'show']);
+Route::put('/post/modify/{id}', [PostController::class, 'update']); 
 
 //Events
 Route::post('/event/create', [EventController::class,'store']);
@@ -192,7 +192,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('feedback/update/{id}', [FeedbackController::class, 'update']);
     Route::delete('feedback/delete/{id}', [FeedbackController::class, 'destroy']);
 });
-
 
 //option
 Route::get('/options', [APIOptionController::class, 'index']);

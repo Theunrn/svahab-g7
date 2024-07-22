@@ -1,4 +1,4 @@
-import 'bootstrap/dist/css/bootstrap.min.css' // Import Bootstrap CSS
+import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.js' // Import Bootstrap JS
 // import 'boxicons/css/boxicons.min.css';
 import "./assets/tailwind.css";

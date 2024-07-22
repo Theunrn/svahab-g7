@@ -20,30 +20,31 @@
   <WebFooter></WebFooter>
 </template>
   
-  <script setup lang="ts">
-import WebHeaderMenu from '@/Components/WebHeaderMenu.vue'
-import WebFooter from '../../Components/WebFooter.vue'
-import CardCom from '../../Components/Cards/CardField.vue'
+<script setup lang="ts">
+  // import necessary components here
+  import WebHeaderMenu from '@/Components/WebHeaderMenu.vue'
+  import WebFooter from '../../Components/WebFooter.vue'
+  import CardCom from '../../Components/Cards/CardField.vue'
 </script>
-  
-  <style scoped>
-html,
-body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-}
 
-.search-container {
-  position: relative;
-  width: 100%;
-}
+<style scoped>
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+  }
 
-.search-container input {
-  padding: 10px;
-  font-size: 17px;
-  border: 1px solid #ddd;
-}
+  .search-container {
+    position: relative;
+    width: 100%;
+  }
+
+  .search-container input {
+    padding: 10px;
+    font-size: 17px;
+    border: 1px solid #ddd;
+  }
 </style>
   

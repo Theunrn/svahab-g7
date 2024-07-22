@@ -62,8 +62,9 @@ class UserController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
-    //  */
-   
+    // */
+
+
     public function store(RegisterRequest $request)
     {
         $request->validate([
@@ -90,8 +91,6 @@ class UserController extends Controller
 
         // Assign roles
         $user->syncRoles($request->roles);
-
-        // return redirect()->route('admin.users.index')->with('success', 'User created successfully.');
         return redirect()->route('admin.users.index')->with('success', 'New user created successfully');
     }   
 

@@ -1,16 +1,9 @@
 <template>
-    <!-- <WebHeaderMenu></WebHeaderMenu> -->
     <NotificationCom/>
-    <!-- <WebFooter></WebFooter> -->
 </template>
 
 
 <script setup lang="ts">
-    // import WebHeaderMenu from "../../Components/WebHeaderMenu.vue";
-    // import WebFooter from "../../Components/WebFooter.vue";
+    // Import the NotificationCom component from the specified path
     import NotificationCom from "../../Components/NotificationCom.vue";
 </script>
-
-<style>
-
-</style>

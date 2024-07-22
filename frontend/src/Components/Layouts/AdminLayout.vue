@@ -9,5 +9,6 @@
 </template>
 
 <script setup lang="ts">
-import HeaderMenu from '@/Components/HeaderMenu.vue'
+  // ======================= import nuccesary files and libraries =======================
+  import HeaderMenu from '@/Components/HeaderMenu.vue'
 </script>

@@ -1,7 +1,6 @@
 <template>
   <div>
     <div class="card-me flex flex-wrap justify-content-start align-items-start ml-10">
-      <!-- Loop to generate 6 cards -->
       <div class="card-wrapper rounded-md shadow-lg relative w-1/3 sm:w-full mx-2 my-2" v-for="field in fields" :key="field">
         <div class="container bg-overlay" 
           :style="{
@@ -58,102 +57,115 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue';
-import axiosInstance from '@/plugins/axios';
+  // ======================= Import Necessary Files and Libraries =======================
+  import { ref, onMounted } from 'vue'
+  import axiosInstance from '@/plugins/axios'
 
-export default {
-  name: 'FootballFields',
-  props: {
-    user: Object
-  },
-  setup() {
-    const fields = ref([]);
+  export default {
+    name: 'FootballFields',
 
-    const fetchFields = async () => {
-      try {
-        const response = await axiosInstance.get('/fields/list');
-        fields.value = response.data.data;
-        console.log(fields.value);
-      } catch (error) {
-        console.error('Error fetching fields:', error);
+    // ======================= Props =======================
+    props: {
+      user: Object // User object passed as a prop
+    },
+
+    setup() {
+      // ======================= Reactive State =======================
+      const fields = ref([]) 
+
+      // ======================= Fetch Data =======================
+      const fetchFields = async () => {
+        try {
+          const response = await axiosInstance.get('/fields/list')
+          fields.value = response.data.data 
+          console.log(fields.value) 
+        } catch (error) {
+          console.error('Error fetching fields:', error) 
+        }
       }
-    };
 
-    onMounted(() => {
-      fetchFields();
-    });
-    const getImageUrl = (imagePath) => {
-      return imagePath ? `http://127.0.0.1:8000/storage/${imagePath}` : '/default-image.jpg';
-    };
-    return {
-      fields,
-      getImageUrl
-    };
+      // ======================= Lifecycle Hooks =======================
+      onMounted(() => {
+        fetchFields() 
+      })
+
+      // ======================= Utility Functions =======================
+      const getImageUrl = (imagePath) => {
+        return imagePath ? `http://127.0.0.1:8000/storage/${imagePath}` : '/default-image.jpg' // Generate image URL or return default
+      }
+
+      // ======================= Return Values =======================
+      return {
+        fields,
+        getImageUrl
+      }
+    }
   }
-};
 </script>
 
+
 <style scoped>
-.card-me {
-  justify-content: left;
-  align-items: start;
-  text-align: left;
-  flex-wrap: wrap;
-}
 
-.card-wrapper {
-  width: 23%;
-  height: 40%;
-  transition: transform 0.3s ease;
-  position: relative;
-
-}
-
-.card-wrapper:hover {
-  transform: scale(1.05);
-}
-
-.dollar {
-  border-radius: 5px 5px 5px 0px;
-}
-
-.bg-overlay {
-  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
-    url('../../assets/image/field.png');
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center center;
-  color: #fff;
-  height: 200px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 20px;
-  border-radius: 6px 6px 0px 0px;
-  position: relative;
-}
-
-.btn-group {
-  position: absolute;
-  bottom: 30px;
-  width: 80%;
-  display: flex;
-  justify-content: center;
-  opacity: 0;
-  transition: opacity 0.3s ease, transform 0.3s ease;
-  transform: translateY(20px);
-}
-
-/* Show buttons on hover */
-.card-wrapper:hover .btn-group {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-@media (max-width: 768px) {
-  .card-wrapper {
-    width: 100%;
+  .card-me {
+    justify-content: left;
+    align-items: start;
+    text-align: left;
+    flex-wrap: wrap;
   }
-}
+
+  .card-wrapper {
+    width: 23%;
+    height: 40%;
+    transition: transform 0.3s ease;
+    position: relative;
+
+  }
+
+  .card-wrapper:hover {
+    transform: scale(1.05);
+  }
+
+  .dollar {
+    border-radius: 5px 5px 5px 0px;
+  }
+
+  .bg-overlay {
+    background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+      url('../../assets/image/field.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    color: #fff;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+    border-radius: 6px 6px 0px 0px;
+    position: relative;
+  }
+
+  .btn-group {
+    position: absolute;
+    bottom: 30px;
+    width: 80%;
+    display: flex;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    transform: translateY(20px);
+  }
+
+  /* Show buttons on hover */
+  .card-wrapper:hover .btn-group {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (max-width: 768px) {
+    .card-wrapper {
+      width: 100%;
+    }
+  }
 </style>

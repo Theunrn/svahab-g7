@@ -73,195 +73,202 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
-import { useRoute } from 'vue-router'
+  // ======================= Import Necessary Files and Libraries =======================
+  import { ref, computed, watch } from 'vue'
+  import { useRoute } from 'vue-router'
 
-const route = useRoute()
-const userId = computed(() => route.query.user as string)
-const fieldId = computed(() => route.query.field as string)
+  // ======================= Route and Query Parameters =======================
+  const route = useRoute()
+  const userId = computed(() => route.query.user as string)
+  const fieldId = computed(() => route.query.field as string)
 
-const formationInputTeamA = ref('')
-const formationInputTeamB = ref('')
-const formationTeamA = ref<{ top: string, left: string }[]>([])
-const formationTeamB = ref<{ top: string, left: string }[]>([])
+  // ======================= Reactive State =======================
+  const formationInputTeamA = ref('')
+  const formationInputTeamB = ref('')
+  const formationTeamA = ref<{ top: string, left: string }[]>([])
+  const formationTeamB = ref<{ top: string, left: string }[]>([])
 
-const maxSum = 10
+  const maxSum = 10 // Maximum allowed sum of digits in the input
 
-const updateFormation = (team: 'A' | 'B') => {
-  const inputValues = (team === 'A' ? formationInputTeamA.value : formationInputTeamB.value).trim().split(' ').map(num => Number(num));
+  // ======================= Update Formation =======================
+  const updateFormation = (team: 'A' | 'B') => {
+    const inputValues = (team === 'A' ? formationInputTeamA.value : formationInputTeamB.value)
+      .trim().split(' ').map(num => Number(num))
 
-  // Validate input format
-  if (inputValues.some(num => isNaN(num) || num <= 0)) {
-    console.error('Invalid input format');
-    return;
-  }
+    // Validate input format
+    if (inputValues.some(num => isNaN(num) || num <= 0)) {
+      console.error('Invalid input format')
+      return
+    }
 
-  // Clear previous formations
-  if (team === 'A') {
-    formationTeamA.value = [];
-  } else {
-    formationTeamB.value = [];
-  }
+    // Clear previous formations
+    if (team === 'A') {
+      formationTeamA.value = []
+    } else {
+      formationTeamB.value = []
+    }
 
-  const totalColumns = inputValues.length;
-  const totalHeight = 100;
-  const verticalCenter = 50; // Center of the field vertically
-  const teamACenter = 52.5; // Center of the field horizontally
-  const horizontalCenter = 49; // Center of the field horizontally
-  const columnGap = 8; // Adjust this value to reduce the gap between columns
+    const totalColumns = inputValues.length
+    const totalHeight = 100
+    const verticalCenter = 50 // Center of the field vertically
+    const teamACenter = 52.5 // Center of the field horizontally for Team A
+    const horizontalCenter = 49 // Center of the field horizontally for Team B
+    const columnGap = 8 // Adjust this value to reduce the gap between columns
 
-  for (let col = 0; col < totalColumns; col++) {
-    const numPlayers = inputValues[col];
-    const verticalGap = totalHeight / (numPlayers + 1);
+    for (let col = 0; col < totalColumns; col++) {
+      const numPlayers = inputValues[col]
+      const verticalGap = totalHeight / (numPlayers + 1)
 
-    for (let i = 0; i < numPlayers; i++) {
-      const topPosition = `${verticalCenter + (i - (numPlayers - 1) / 2) * verticalGap + 10}%`;
+      for (let i = 0; i < numPlayers; i++) {
+        const topPosition = `${verticalCenter + (i - (numPlayers - 1) / 2) * verticalGap + 10}%`
 
-      if (team === 'A') {
-        // Left side (Team A)
-        formationTeamA.value.push({
-          top: topPosition,
-          left: `${teamACenter - (totalColumns - col) * columnGap}%`, // Start from the left side
-        });
-      } else {
-        // Right side (Team B)
-        formationTeamB.value.push({
-          top: topPosition,
-          left: `${horizontalCenter + (totalColumns - col) * columnGap}%`, // Start from the right side
-        });
+        if (team === 'A') {
+          // Left side (Team A)
+          formationTeamA.value.push({
+            top: topPosition,
+            left: `${teamACenter - (totalColumns - col) * columnGap}%`, // Start from the left side
+          })
+        } else {
+          // Right side (Team B)
+          formationTeamB.value.push({
+            top: topPosition,
+            left: `${horizontalCenter + (totalColumns - col) * columnGap}%`, // Start from the right side
+          })
+        }
       }
     }
   }
-}
 
-const formatCardNumber = (team: 'A' | 'B') => {
-  let cleanedInput = (team === 'A' ? formationInputTeamA.value : formationInputTeamB.value).replace(/\D/g, '');
+  // ======================= Format Card Number =======================
+  const formatCardNumber = (team: 'A' | 'B') => {
+    let cleanedInput = (team === 'A' ? formationInputTeamA.value : formationInputTeamB.value)
+      .replace(/\D/g, '')
 
-  let sum = 0;
-  for (let digit of cleanedInput) {
-    sum += parseInt(digit);
-  }
-
-  cleanedInput = cleanedInput.replace(/(\d{1})(?=\d)/g, '$1 ');
-
-  if (sum > maxSum) {
-    let excess = sum - maxSum;
-    let trimmedInput = cleanedInput.split(' ').join('');
-    trimmedInput = trimmedInput.slice(0, -excess);
-
-    if (team === 'A') {
-      formationInputTeamA.value = trimmedInput.replace(/(\d{1})(?=\d)/g, '$1 ');
-    } else {
-      formationInputTeamB.value = trimmedInput.replace(/(\d{1})(?=\d)/g, '$1 ');
+    let sum = 0
+    for (let digit of cleanedInput) {
+      sum += parseInt(digit)
     }
-  } else {
-    if (team === 'A') {
-      formationInputTeamA.value = cleanedInput;
+
+    cleanedInput = cleanedInput.replace(/(\d{1})(?=\d)/g, '$1 ')
+
+    if (sum > maxSum) {
+      let excess = sum - maxSum
+      let trimmedInput = cleanedInput.split(' ').join('')
+      trimmedInput = trimmedInput.slice(0, -excess)
+
+      if (team === 'A') {
+        formationInputTeamA.value = trimmedInput.replace(/(\d{1})(?=\d)/g, '$1 ')
+      } else {
+        formationInputTeamB.value = trimmedInput.replace(/(\d{1})(?=\d)/g, '$1 ')
+      }
     } else {
-      formationInputTeamB.value = cleanedInput;
+      if (team === 'A') {
+        formationInputTeamA.value = cleanedInput
+      } else {
+        formationInputTeamB.value = cleanedInput
+      }
     }
   }
-}
 
-const clearInput = (team: 'A' | 'B') => {
-  if (team === 'A') {
-    formationInputTeamA.value = '';
-    formationTeamA.value = [];
-  } else {
-    formationInputTeamB.value = '';
-    formationTeamB.value = [];
+  // ======================= Clear Input =======================
+  const clearInput = (team: 'A' | 'B') => {
+    if (team === 'A') {
+      formationInputTeamA.value = ''
+      formationTeamA.value = []
+    } else {
+      formationInputTeamB.value = ''
+      formationTeamB.value = []
+    }
   }
-}
 
-// Watch for changes in formationInputTeamA and update formation for Team A
-watch(formationInputTeamA, () => updateFormation('A'))
-
-// Watch for changes in formationInputTeamB and update formation for Team B
-watch(formationInputTeamB, () => updateFormation('B'))
+  // ======================= Watchers =======================
+  watch(formationInputTeamA, () => updateFormation('A')) // Watch for changes in formationInputTeamA and update formation for Team A
+  watch(formationInputTeamB, () => updateFormation('B')) // Watch for changes in formationInputTeamB and update formation for Team B
 </script>
 
+
 <style scoped>
-.header-detail {
-  height: 100px;
-  background-color: rgb(144, 124, 91);
-}
+  .header-detail {
+    height: 100px;
+    background-color: rgb(144, 124, 91);
+  }
 
-.select {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  border-radius: 5px;
-  padding: 0.5rem 1rem;
-  box-shadow: 0 1px 3px rgba(245, 242, 242, 0.1);
-}
+  .select {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border-radius: 5px;
+    padding: 0.5rem 1rem;
+    box-shadow: 0 1px 3px rgba(245, 242, 242, 0.1);
+  }
 
-.menu-item {
-  align-items: center;
-  text-align: center;
-  padding: 0.5rem;
-  color: white;
-  text-decoration: none;
-  transition: background-color 0.3s ease;
-  margin-right: 0.75rem;
-}
+  .menu-item {
+    align-items: center;
+    text-align: center;
+    padding: 0.5rem;
+    color: white;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    margin-right: 0.75rem;
+  }
 
-.menu-item:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-}
+  .menu-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
 
-.menu-item i {
-  margin-right: 0.5rem;
-}
+  .menu-item i {
+    margin-right: 0.5rem;
+  }
 
-.bg-green {
-  background-color: #38a169;
-}
+  .bg-green {
+    background-color: #38a169;
+  }
 
-.bg-opacity-90 {
-  background-color: rgba(56, 161, 105, 0.9);
-}
+  .bg-opacity-90 {
+    background-color: rgba(56, 161, 105, 0.9);
+  }
 
-.image-container {
-  width: 98vw;
-  height: 100vh;
-  overflow: hidden;
-  position: relative;
-  background-position: center;
-}
+  .image-container {
+    width: 98vw;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+    background-position: center;
+  }
 
-.image-container img {
-  min-width: 100%;
-  height: 80%;
-  object-fit: cover;
-  position: absolute;
-  margin: 10px;
-  top: 19%;
-  left: 0;
-}
+  .image-container img {
+    min-width: 100%;
+    height: 80%;
+    object-fit: cover;
+    position: absolute;
+    margin: 10px;
+    top: 19%;
+    left: 0;
+  }
 
-.circle {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  position: absolute;
-  transform: translate(-50%, -50%);
-}
+  .circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+  }
 
-.team-a {
-  border: 2px solid rgb(224, 218, 218);
-  background-color: rgba(221, 51, 51, 0.932);
-}
+  .team-a {
+    border: 2px solid rgb(224, 218, 218);
+    background-color: rgba(221, 51, 51, 0.932);
+  }
 
-.team-b {
-  border: 2px solid white;
-  background-color: rgba(10, 10, 235, 0.959);
-}
+  .team-b {
+    border: 2px solid white;
+    background-color: rgba(10, 10, 235, 0.959);
+  }
 
-.relative {
-  position: relative;
-}
+  .relative {
+    position: relative;
+  }
 
-.absolute {
-  position: absolute;
-}
+  .absolute {
+    position: absolute;
+  }
 </style>

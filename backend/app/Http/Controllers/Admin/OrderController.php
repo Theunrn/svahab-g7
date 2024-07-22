@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Order;
@@ -12,11 +13,23 @@ class OrderController extends Controller
     //=====================Listing Order =====================//
     public function index(Request $request)
     {
-        $date = $request->input('date');
         $ordersQuery = Order::query();
+        $filter = $request->input('filter');
 
-        if ($date) {
-            $ordersQuery->whereDate('created_at', $date);
+        switch ($filter) {
+            case 'last-month':
+                $ordersQuery->whereMonth('created_at', now()->subMonth()->month);
+                $ordersQuery->whereYear('created_at', now()->subMonth()->year);
+                break;
+            case 'last-week':
+                $ordersQuery->whereBetween('created_at', [now()->subWeek(), now()]);
+                break;
+            case 'today':
+                $ordersQuery->whereDate('created_at', today());
+                break;
+            default:
+                // Optionally handle other cases or set a default query
+                break;
         }
 
         $orders = $ordersQuery->with(['user', 'products.colors', 'products.sizes'])->get();
@@ -76,8 +89,9 @@ class OrderController extends Controller
         $notification->user_id = $userId;
         $notification->notification_type = $type;
         $notification->notification_text = $text;
-        $notification->notification_data =$orderId;
+        $notification->notification_data = $orderId;
         $notification->read = false;
         $notification->save();
     }
+
 }

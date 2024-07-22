@@ -47,20 +47,12 @@
 </template>
 
 <script>
-export default {
 
-}
 </script>
 
 <style>
-
-.card {
- 
-}
-
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
 </style>

@@ -34,146 +34,146 @@
 </script>
 
 <style scoped>
-.contaner {
-    color: #000;
-    margin: 0 auto;
-    padding: 20px;
-    border-radius: 8px;
-    margin-left: 50px;
-}
+    .contaner {
+        color: #000;
+        margin: 0 auto;
+        padding: 20px;
+        border-radius: 8px;
+        margin-left: 50px;
+    }
 
-.head {
-    text-transform: uppercase;
-    margin-bottom: 20px;
-}
-h1{
-    font-size: 1.5em;
-    font-weight: 700;
-}
-.text {
-    margin: 10px 0;
-    font-family: sans-serif;
-    font-size: 0.9em;
-}
+    .head {
+        text-transform: uppercase;
+        margin-bottom: 20px;
+    }
+    h1{
+        font-size: 1.5em;
+        font-weight: 700;
+    }
+    .text {
+        margin: 10px 0;
+        font-family: sans-serif;
+        font-size: 0.9em;
+    }
 
-.comment {
-    margin-bottom: 20px;
-}
+    .comment {
+        margin-bottom: 20px;
+    }
 
-.comment-item {
-    display: flex;
-    align-items: flex-start;
-    padding: 10px;
-    border-bottom: 1px solid #ccc;
-    margin-bottom: 10px;
-}
+    .comment-item {
+        display: flex;
+        align-items: flex-start;
+        padding: 10px;
+        border-bottom: 1px solid #ccc;
+        margin-bottom: 10px;
+    }
 
-.comment-item img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    margin-right: 20px;
-    object-fit: cover;
-    object-position: center;
-}
+    .comment-item img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-right: 20px;
+        object-fit: cover;
+        object-position: center;
+    }
 
-.comment-content {
-    width: 100%;
-}
+    .comment-content {
+        width: 100%;
+    }
 
-.comment-content h3 {
-    font-size: 16px;
-    margin: 0;
-    margin-bottom: 5px;
-}
+    .comment-content h3 {
+        font-size: 16px;
+        margin: 0;
+        margin-bottom: 5px;
+    }
 
-.comment-content p {
-    margin: 0;
-    color: #555;
-}
+    .comment-content p {
+        margin: 0;
+        color: #555;
+    }
 
-.commentbox {
-    display: flex;
-    align-items: flex-start;
-    padding: 10px;
-}
+    .commentbox {
+        display: flex;
+        align-items: flex-start;
+        padding: 10px;
+    }
 
-.commentbox img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    margin-right: 20px;
-    object-fit: cover;
-    object-position: center;
-}
+    .commentbox img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-right: 20px;
+        object-fit: cover;
+        object-position: center;
+    }
 
-.content {
-    width: 100%;
-}
+    .content {
+        width: 100%;
+    }
 
-.user {
-    width: 100%;
-    padding: 10px;
-    margin: 5px 0;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    outline: none;
-    color: #808080;
-}
+    .user {
+        width: 100%;
+        padding: 10px;
+        margin: 5px 0;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        outline: none;
+        color: #808080;
+    }
 
-.commentinput {
-    display: flex;
-    flex-direction: column;
-}
+    .commentinput {
+        display: flex;
+        flex-direction: column;
+    }
 
-.usercomment {
-    width: 100%;
-    padding: 10px;
-    border: none;
-    border-bottom: 2px solid blue;
-    outline: none;
-}
+    .usercomment {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-bottom: 2px solid blue;
+        outline: none;
+    }
 
-.buttons {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: #808080;
-    margin-top: 10px;
-}
+    .buttons {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: #808080;
+        margin-top: 10px;
+    }
 
-.buttons button {
-    padding: 8px 16px;
-    border: none;
-    background-color: #007bff;
-    color: #fff;
-    border-radius: 4px;
-    cursor: pointer;
-}
+    .buttons button {
+        padding: 8px 16px;
+        border: none;
+        background-color: #007bff;
+        color: #fff;
+        border-radius: 4px;
+        cursor: pointer;
+    }
 
-.buttons button:disabled {
-    background-color: #ccc;
-}
+    .buttons button:disabled {
+        background-color: #ccc;
+    }
 
-.notify {
-    display: flex;
-    align-items: center;
-    margin-left: 10px;
-}
+    .notify {
+        display: flex;
+        align-items: center;
+        margin-left: 10px;
+    }
 
-.notifyinput {
-    margin-right: 5px;
-}
+    .notifyinput {
+        margin-right: 5px;
+    }
 
-.policy {
-    margin: 20px 0;
-    font-size: 0.8em;
-    font-family: Arial, Helvetica, sans-serif;
-    color: #808080;
-}
+    .policy {
+        margin: 20px 0;
+        font-size: 0.8em;
+        font-family: Arial, Helvetica, sans-serif;
+        color: #808080;
+    }
 
-.policy a {
-    text-decoration: none;
-    color: blue;
-}
+    .policy a {
+        text-decoration: none;
+        color: blue;
+    }
 </style>
