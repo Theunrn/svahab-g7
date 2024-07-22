@@ -163,9 +163,6 @@
           </div>
           <div class="modal-body">
             <form @submit.prevent="createMatch">
-              <!-- <div class="mb-3" v-if="team_post_logo">
-                <img :src="getImageUrl(team_post_log)" width="100" height="100" :alt="team_post_logo" />
-              </div> -->
               <div class="mb-3">
                 <label for="teamLogoInput" class="form-label">Upload your team logo *</label>
                 <input
@@ -215,9 +212,6 @@
           </div>
           <div class="modal-body">
             <form @submit.prevent="postTeam">
-              <!-- <div class="mb-3" v-if="team_logo">
-                <img :src="teamLogoUrl" width="100" height="100" alt="Team Logo" />
-              </div> -->
               <div class="mb-3">
                 <label for="teamLogoInput" class="form-label">Upload your team logo *</label>
                 <input
@@ -319,281 +313,282 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import axiosInstance from '@/plugins/axios'
-import Swal from 'sweetalert2'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap/dist/js/bootstrap.bundle.min.js'
+  // ======================= import nuccesary files and libraries =======================
+  import { ref, computed, onMounted } from 'vue'
+  import { useRoute, useRouter } from 'vue-router'
+  import axiosInstance from '@/plugins/axios'
+  import Swal from 'sweetalert2'
+  import 'bootstrap/dist/css/bootstrap.min.css'
+  import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 
-//=========== All variables =================
-const router = useRouter()
-const post_team_id = ref('')
-const route = useRoute()
-const userId = computed(() => route.query.customer)
-const post_id = ref('')
-const team_name = ref('')
-const team_logo = ref<File | null>(null)
-const team_post_logo = ref<File | null>(null)
-const name = ref('')
-const date_match = ref('')
-const start_time = ref('')
-const end_time = ref('')
-const location = ref('')
-const allTeams = ref([])
-const status = ref(false)
-const postId = ref(null)
-const deleteItemId = ref(null)
-const props = defineProps({ customer: Object })
-const posterId = ref(props.customer.id)
-const now = () => formatDate(new Date())
+  //=========== All variables =================
+  const router = useRouter()
+  const post_team_id = ref('')
+  const route = useRoute()
+  const userId = computed(() => route.query.customer)
+  const post_id = ref('')
+  const team_name = ref('')
+  const team_logo = ref<File | null>(null)
+  const team_post_logo = ref<File | null>(null)
+  const name = ref('')
+  const date_match = ref('')
+  const start_time = ref('')
+  const end_time = ref('')
+  const location = ref('')
+  const allTeams = ref([])
+  const status = ref(false)
+  const postId = ref(null)
+  const deleteItemId = ref(null)
+  const props = defineProps({ customer: Object })
+  const posterId = ref(props.customer.id)
+  const now = () => formatDate(new Date())
 
-//=========== set date formatting ============
-const formatDate = (date) => {
-  const year = date.getFullYear()
-  const month = String(date.getMonth() + 1).padStart(2, '0')
-  const day = String(date.getDate()).padStart(2, '0')
-  return `${year}-${month}-${day}`
-}
-
-// ============ Function to handle file upload =============
-const handleFileUpload = (event: Event) => {
-  const target = event.target as HTMLInputElement
-  if (target.files && target.files[0]) {
-    team_post_logo.value = target.files[0]
+  //=========== set date formatting ============
+  const formatDate = (date) => {
+    const year = date.getFullYear()
+    const month = String(date.getMonth() + 1).padStart(2, '0')
+    const day = String(date.getDate()).padStart(2, '0')
+    return `${year}-${month}-${day}`
   }
-}
 
-//============== match team for playyings =============
-const createMatch = async () => {
-  try {
-    const formData = new FormData()
-    formData.append('team_post_id', post_id.value)
-    formData.append('team_name', team_name.value)
-    if (team_post_logo.value) {
-      formData.append('team_logo', team_post_logo.value)
+  // ============ Function to handle file upload =============
+  const handleFileUpload = (event: Event) => {
+    const target = event.target as HTMLInputElement
+    if (target.files && target.files[0]) {
+      team_post_logo.value = target.files[0]
     }
-  
-    await axiosInstance.post('/post/match', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
+  }
+
+  //============== match team for playyings =============
+  const createMatch = async () => {
+    try {
+      const formData = new FormData()
+      formData.append('team_post_id', post_id.value)
+      formData.append('team_name', team_name.value)
+      if (team_post_logo.value) {
+        formData.append('team_logo', team_post_logo.value)
       }
-    })
-
-    await axiosInstance.put(`/post/update/${post_id.value}`)
-    Swal.fire({
-      position: 'center',
-      icon: 'success',
-      html: `<span style="font-size: 26px; font-weight: bold;">Matched successfully</span>`,
-      showConfirmButton: false,
-      timer: 1000
-    }).then(() => {
-      window.location.reload()
-    })
-  } catch (error) {
-    alert('Error creating match')
-    console.error('Error creating match:', error.response ? error.response.data : error)
-  }
-}
-
-// ======================== Function to handle file change ===================
-const onFileChange = (event: Event) => {
-  const target = event.target as HTMLInputElement
-  if (target.files && target.files[0]) {
-    team_logo.value = target.files[0]
-  }
-}
-
-// ======================== Function to create post =========================
-const postTeam = async () => {
-  try {
-    const formData = new FormData()
-    formData.append('name', name.value)
-    formData.append('date_match', date_match.value)
-    formData.append('start_time', start_time.value)
-    formData.append('end_time', end_time.value)
-    formData.append('location', location.value)
-    formData.append('post_date', now())
-    if (team_logo.value) {
-      formData.append('logo', team_logo.value)
-    }
     
-    const response = await axiosInstance.post('/posts', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    })
-    Swal.fire({
-      position: 'center',
-      icon: 'success',
-      html: `<span style="font-size: 26px; font-weight: bold;">You posted successfully</span>`,
-      showConfirmButton: false,
-      timer: 1000
-    }).then(() => {
-      window.location.reload()
-    })
-  } catch (error) {
-    alert('Error posting team')
-    console.error('Error posting team:', error.response ? error.response.data : error)
-  }
-}
+      await axiosInstance.post('/post/match', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
 
-// ======================== Function to update post status=========================
-const updatePost = async () => {
-  if (!postId.value) {
-    alert('No post ID available for update')
-    return
-  }
-  try {
-    const requestBody = {
-      name: name.value,
-      date_match: formatDate(new Date(date_match.value)),
-      start_time: start_time.value,
-      end_time: end_time.value,
-      post_date: formatDate(new Date()),
-      location: location.value,
-      // logo: team_logo.value ? team_logo.value.name : null,
-      user_id: posterId.value,
+      await axiosInstance.put(`/post/update/${post_id.value}`)
+      Swal.fire({
+        position: 'center',
+        icon: 'success',
+        html: `<span style="font-size: 26px; font-weight: bold;">Matched successfully</span>`,
+        showConfirmButton: false,
+        timer: 1000
+      }).then(() => {
+        window.location.reload()
+      })
+    } catch (error) {
+      alert('Error creating match')
+      console.error('Error creating match:', error.response ? error.response.data : error)
     }
-    console.log(requestBody)
-    const response = await axiosInstance.put(`/post/modify/${postId.value}`, requestBody, {
-      headers: {
-        'Content-Type': 'application/json'
+  }
+
+  // ======================== Function to handle file change ===================
+  const onFileChange = (event: Event) => {
+    const target = event.target as HTMLInputElement
+    if (target.files && target.files[0]) {
+      team_logo.value = target.files[0]
+    }
+  }
+
+  // ======================== Function to create post =========================
+  const postTeam = async () => {
+    try {
+      const formData = new FormData()
+      formData.append('name', name.value)
+      formData.append('date_match', date_match.value)
+      formData.append('start_time', start_time.value)
+      formData.append('end_time', end_time.value)
+      formData.append('location', location.value)
+      formData.append('post_date', now())
+      if (team_logo.value) {
+        formData.append('logo', team_logo.value)
       }
-    })
-
-    Swal.fire({
-      position: 'center',
-      icon: 'success',
-      html: `<span style="font-size: 26px; font-weight: bold;">You updated poste successfully</span>`,
-      showConfirmButton: false,
-      timer: 1000
-    }).then(() => {
-      window.location.reload()
-    })
-  } catch (error) {
-    Swal.fire({
-      title: 'Error',
-      text: 'Edit your post is failed. Please try again',
-      icon: 'error',
-      confirmButtonText: 'OK'
-    })
-    console.error('Error:', error)
+      
+      const response = await axiosInstance.post('/posts', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+      Swal.fire({
+        position: 'center',
+        icon: 'success',
+        html: `<span style="font-size: 26px; font-weight: bold;">You posted successfully</span>`,
+        showConfirmButton: false,
+        timer: 1000
+      }).then(() => {
+        window.location.reload()
+      })
+    } catch (error) {
+      alert('Error posting team')
+      console.error('Error posting team:', error.response ? error.response.data : error)
+    }
   }
-}
-// ======================== Function to show post specifict for edit =========================
-const editPost = (team: any) => {
-  postId.value = team.id
-  name.value = team.name
-  date_match.value = team.date_match
-  start_time.value = team.start_time
-  end_time.value = team.end_time
-  location.value = team.location
-  team_logo.value = getImageUrl(team.logo)
-}
 
-// ====================get logo url api =================
-const teamLogoUrl = (logoPath: string) => {
-  return logoPath ? `/storage/${logoPath}` : ''
-}
+  // ======================== Function to update post status=========================
+  const updatePost = async () => {
+    if (!postId.value) {
+      alert('No post ID available for update')
+      return
+    }
+    try {
+      const requestBody = {
+        name: name.value,
+        date_match: formatDate(new Date(date_match.value)),
+        start_time: start_time.value,
+        end_time: end_time.value,
+        post_date: formatDate(new Date()),
+        location: location.value,
+        // logo: team_logo.value ? team_logo.value.name : null,
+        user_id: posterId.value,
+      }
+      console.log(requestBody)
+      const response = await axiosInstance.put(`/post/modify/${postId.value}`, requestBody, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
 
-//================ get all team posted ====================
-const fetchAllTeams = async () => {
-  try {
-    const response = await axiosInstance.get('/post/list')
-    allTeams.value = response.data.data
-  } catch (error) {
-    console.error('Error fetching all teams:', error.response ? error.response.data : error)
+      Swal.fire({
+        position: 'center',
+        icon: 'success',
+        html: `<span style="font-size: 26px; font-weight: bold;">You updated poste successfully</span>`,
+        showConfirmButton: false,
+        timer: 1000
+      }).then(() => {
+        window.location.reload()
+      })
+    } catch (error) {
+      Swal.fire({
+        title: 'Error',
+        text: 'Edit your post is failed. Please try again',
+        icon: 'error',
+        confirmButtonText: 'OK'
+      })
+      console.error('Error:', error)
+    }
   }
-}
-
-// ====================get image url api =================
-const getImageUrl = (imagePath) => {
-  return (imagePath = `http://127.0.0.1:8000/storage/${imagePath}`)
-}
-// ============= get post id =================
-const setPostId = (postId) => {
-  post_id.value = postId
-}
-onMounted(() => {
-  fetchAllTeams()
-})
-
-// ================= Assuming time is in 24-hour format 'HH:mm' =================
-const formatTime = (time: string) => {
-  const [hours, minutes] = time.split(':')
-  let formattedTime = ''
-  if (parseInt(hours) >= 12) {
-    formattedTime = `${parseInt(hours) > 12 ? parseInt(hours) - 12 : 12}:${minutes} PM`
-  } else {
-    formattedTime = `${hours}:${minutes} AM`
+  // ======================== Function to show post specifict for edit =========================
+  const editPost = (team: any) => {
+    postId.value = team.id
+    name.value = team.name
+    date_match.value = team.date_match
+    start_time.value = team.start_time
+    end_time.value = team.end_time
+    location.value = team.location
+    team_logo.value = getImageUrl(team.logo)
   }
-  return formattedTime
-}
 
-//================ fuction for closte mondal =================
-const closeModal = (modalId) => {
-  const modalElement = document.getElementById(modalId)
-  modalElement.classList.remove('show')
-  modalElement.style.display = 'none'
-  document.body.classList.remove('modal-open')
-  const backdrop = document.querySelector('.modal-backdrop')
-  if (backdrop) {
-    backdrop.parentNode.removeChild(backdrop)
+  // ====================get logo url api =================
+  const teamLogoUrl = (logoPath: string) => {
+    return logoPath ? `/storage/${logoPath}` : ''
   }
-}
 
-// ============= function for delete post =================
-const confirmDelete = async (id) => {
-  deleteItemId.value = id
-  console.log(deleteItemId.value)
-  const swalWithBootstrapButtons = Swal.mixin({
-    customClass: {
-      confirmButton: 'btn btn-success',
-      cancelButton: 'btn btn-danger me-2'
-    },
-    buttonsStyling: false
+  //================ get all team posted ====================
+  const fetchAllTeams = async () => {
+    try {
+      const response = await axiosInstance.get('/post/list')
+      allTeams.value = response.data.data
+    } catch (error) {
+      console.error('Error fetching all teams:', error.response ? error.response.data : error)
+    }
+  }
+
+  // ====================get image url api =================
+  const getImageUrl = (imagePath) => {
+    return (imagePath = `http://127.0.0.1:8000/storage/${imagePath}`)
+  }
+  // ============= get post id =================
+  const setPostId = (postId) => {
+    post_id.value = postId
+  }
+  onMounted(() => {
+    fetchAllTeams()
   })
 
-  swalWithBootstrapButtons
-    .fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Yes, delete it!',
-      cancelButtonText: 'No, cancel!',
-      reverseButtons: true
+  // ================= Assuming time is in 24-hour format 'HH:mm' =================
+  const formatTime = (time: string) => {
+    const [hours, minutes] = time.split(':')
+    let formattedTime = ''
+    if (parseInt(hours) >= 12) {
+      formattedTime = `${parseInt(hours) > 12 ? parseInt(hours) - 12 : 12}:${minutes} PM`
+    } else {
+      formattedTime = `${hours}:${minutes} AM`
+    }
+    return formattedTime
+  }
+
+  //================ fuction for closte mondal =================
+  const closeModal = (modalId) => {
+    const modalElement = document.getElementById(modalId)
+    modalElement.classList.remove('show')
+    modalElement.style.display = 'none'
+    document.body.classList.remove('modal-open')
+    const backdrop = document.querySelector('.modal-backdrop')
+    if (backdrop) {
+      backdrop.parentNode.removeChild(backdrop)
+    }
+  }
+
+  // ============= function for delete post =================
+  const confirmDelete = async (id) => {
+    deleteItemId.value = id
+    console.log(deleteItemId.value)
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: 'btn btn-success',
+        cancelButton: 'btn btn-danger me-2'
+      },
+      buttonsStyling: false
     })
-    .then(async (result) => {
-      if (result.isConfirmed) {
-        try {
-          await axiosInstance.delete(`/posts/${deleteItemId.value}`)
-          swalWithBootstrapButtons.fire({
-            title: 'Deleted!',
-            text: 'Your file has been deleted.',
-            icon: 'success',
-            timer: 1000,
-            showConfirmButton: false
-          })
-          closeModal('deleteModal')
-        } catch (error) {
-          console.error('Error deleting item:', error)
-          swalWithBootstrapButtons.fire({
-            title: 'Error',
-            text: 'There was an error deleting the item.',
-            icon: 'error',
-            timer: 1000,
-            showConfirmButton: false
-          })
+
+    swalWithBootstrapButtons
+      .fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'No, cancel!',
+        reverseButtons: true
+      })
+      .then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            await axiosInstance.delete(`/posts/${deleteItemId.value}`)
+            swalWithBootstrapButtons.fire({
+              title: 'Deleted!',
+              text: 'Your file has been deleted.',
+              icon: 'success',
+              timer: 1000,
+              showConfirmButton: false
+            })
+            closeModal('deleteModal')
+          } catch (error) {
+            console.error('Error deleting item:', error)
+            swalWithBootstrapButtons.fire({
+              title: 'Error',
+              text: 'There was an error deleting the item.',
+              icon: 'error',
+              timer: 1000,
+              showConfirmButton: false
+            })
+          }
         }
-      }
-    })
-}
+      })
+  }
 </script>
 
 <style scoped>
-.bg-blue {
-  width: 150px;
-}
+  .bg-blue {
+    width: 150px;
+  }
 </style>

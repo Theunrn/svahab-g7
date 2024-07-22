@@ -55,111 +55,121 @@
 </template>
 
 <script>
-import axios from 'axios'
-import Swal from 'sweetalert2'
+  // ======================= Import Necessary Files and Libraries =======================
+  import axios from 'axios'
+  import Swal from 'sweetalert2'
 
-export default {
-  data() {
-    return {
-      cartItems: []
-    }
-  },
-
-  computed: {
-    totalAmount() {
-      return this.cartItems
-        .reduce((total, item) => total + item.quantity * item.price, 0)
-        .toFixed(2)
-    }
-  },
-
-  created() {
-    this.fetchCartItems()
-  },
-
-  methods: {
-    async fetchCartItems() {
-      try {
-        const response = await axios.get('http://127.0.0.1:8000/api/cart/list', {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('access_token')}`
-          }
-        })
-        if (response.data.success) {
-          this.cartItems = response.data.data
-          console.log(this.cartItems)
-        } else {
-          console.error('Failed to fetch cart items')
-        }
-      } catch (error) {
-        console.error('Error fetching cart items:', error)
+  export default {
+    // ======================= Data =======================
+    data() {
+      return {
+        cartItems: []
       }
     },
 
-    async confirmDeleteItem(itemId) {
-      Swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.deleteItem(itemId)
-        }
-      })
-    },
-
-    async deleteItem(itemId) {
-      try {
-        await axios.delete(`http://127.0.0.1:8000/api/cart/delete/${itemId}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('access_token')}`
-          }
-        })
-        this.cartItems = this.cartItems.filter((item) => item.id !== itemId)
-        Swal.fire(
-          'Deleted!',
-          'Your item has been deleted.',
-          'success',
-        )
-      } catch (error) {
-        console.error('Error deleting item:', error)
+    // ======================= Computed Properties =======================
+    computed: {
+      totalAmount() {
+        return this.cartItems
+          .reduce((total, item) => total + item.quantity * item.price, 0)
+          .toFixed(2)
       }
     },
 
-    async updateCartItem(item) {
-      item.total_amount = (item.quantity * item.price).toFixed(2)
-      try {
-        const response = await axios.put(
-          `http://127.0.0.1:8000/api/cart/update/${item.id}`,
-          {
-            quantity: item.quantity,
-            total_amount: item.total_amount
-          },
-          {
+    // ======================= Lifecycle Hooks =======================
+    created() {
+      this.fetchCartItems()
+    },
+
+    // ======================= Methods =======================
+    methods: {
+      // ======================= Fetch Cart Items =======================
+      async fetchCartItems() {
+        try {
+          const response = await axios.get('http://127.0.0.1:8000/api/cart/list', {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('access_token')}`
             }
+          })
+          if (response.data.success) {
+            this.cartItems = response.data.data
+            console.log(this.cartItems)
+          } else {
+            console.error('Failed to fetch cart items')
           }
-        )
-        if (response.data.success) {
-          console.log('Item updated successfully')
-        } else {
-          console.error('Failed to update item')
+        } catch (error) {
+          console.error('Error fetching cart items:', error)
         }
-      } catch (error) {
-        console.error('Error updating item:', error)
-      }
-    },
+      },
 
-    getImageUrl(imagePath) {
-      return `http://127.0.0.1:8000/storage/${imagePath}` // Adjust URL if needed
-    },
+      // ======================= Confirm Delete Item =======================
+      async confirmDeleteItem(itemId) {
+        Swal.fire({
+          title: 'Are you sure?',
+          text: "You won't be able to revert this!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.deleteItem(itemId)
+          }
+        })
+      },
+
+      // ======================= Delete Item =======================
+      async deleteItem(itemId) {
+        try {
+          await axios.delete(`http://127.0.0.1:8000/api/cart/delete/${itemId}`, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('access_token')}`
+            }
+          })
+          this.cartItems = this.cartItems.filter((item) => item.id !== itemId)
+          Swal.fire(
+            'Deleted!',
+            'Your item has been deleted.',
+            'success'
+          )
+        } catch (error) {
+          console.error('Error deleting item:', error)
+        }
+      },
+
+      // ======================= Update Cart Item =======================
+      async updateCartItem(item) {
+        item.total_amount = (item.quantity * item.price).toFixed(2)
+        try {
+          const response = await axios.put(
+            `http://127.0.0.1:8000/api/cart/update/${item.id}`,
+            {
+              quantity: item.quantity,
+              total_amount: item.total_amount
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem('access_token')}`
+              }
+            }
+          )
+          if (response.data.success) {
+            console.log('Item updated successfully')
+          } else {
+            console.error('Failed to update item')
+          }
+        } catch (error) {
+          console.error('Error updating item:', error)
+        }
+      },
+
+      // ======================= Get Image URL =======================
+      getImageUrl(imagePath) {
+        return `http://127.0.0.1:8000/storage/${imagePath}` // Adjust URL if needed
+      }
+    }
   }
-}
 </script>
 
 <style scoped>

@@ -297,693 +297,692 @@
 </template>
 
 <script setup lang="ts">
-// ======================= import nuccesary files and libraries =======================
-import WebHeaderMenu from '@/Components/WebHeaderMenu.vue'
-import MapCom from '@/Components/Maps/MapCom.vue'
-import CurrentUser from '@/Components/Maps/CurrentUser.vue'
-import { ref, computed, watch, onMounted } from 'vue'
-import VueFlatpickr from 'vue-flatpickr-component'
-import 'flatpickr/dist/flatpickr.css'
-import { useRoute, useRouter } from 'vue-router'
-import axiosInstance from '@/plugins/axios'
-import { ElMessage, ElMessageBox } from 'element-plus'
-import type { Action } from 'element-plus'
-import dayjs from 'dayjs'
-import relativeTime from 'dayjs/plugin/relativeTime'
-import Swal from 'sweetalert2'
+  // ======================= import nuccesary files and libraries =======================
+  import WebHeaderMenu from '@/Components/WebHeaderMenu.vue'
+  import MapCom from '@/Components/Maps/MapCom.vue'
+  import CurrentUser from '@/Components/Maps/CurrentUser.vue'
+  import { ref, computed, watch, onMounted } from 'vue'
+  import VueFlatpickr from 'vue-flatpickr-component'
+  import 'flatpickr/dist/flatpickr.css'
+  import { useRoute, useRouter } from 'vue-router'
+  import axiosInstance from '@/plugins/axios'
+  import { ElMessage, ElMessageBox } from 'element-plus'
+  import type { Action } from 'element-plus'
+  import dayjs from 'dayjs'
+  import relativeTime from 'dayjs/plugin/relativeTime'
+  import Swal from 'sweetalert2'
 
-// =========== Load the relativeTime plugin =========
-dayjs.extend(relativeTime)
+  // =========== Load the relativeTime plugin =========
+  dayjs.extend(relativeTime)
 
-// =============================== All variables==================================
-const route = useRoute()
-const router = useRouter()
-const userId = computed(() => route.query.customer)
-const fieldId = computed(() => route.params.id)
-const start_time = ref('')
-const end_time = ref('')
-const total_price = ref('00.00')
-const booking_date = ref<Date | null>(null)
-const bookings = ref<any[]>([])
-const field = ref({})
-const price = ref(0)
-const booking = ref({})
-const duration = ref(0)
-const isBook = ref(false)
-const fields = ref([])
-const location = ref('')
-const feedback_text = ref('')
-const Feedbacklist = ref([])
-const isclear = ref(false)
-const receivedAddress = ref<string>('')
-const isWaterChecked = ref(false)
-const waterQuantity = ref('')
-const options = ref([])
-const selectedOptions = ref([])
-const editFeedbackModalVisible = ref(false)
-const editedFeedbackText = ref('')
-let feedbackToEdit = ref(null)
-const minDate = ref(new Date().toISOString().split('T')[0])
-const currentTime = ref(new Date().toTimeString().split(' ')[0].substring(0, 5))
+  // =============================== All variables==================================
+  const route = useRoute()
+  const router = useRouter()
+  const userId = computed(() => route.query.customer)
+  const fieldId = computed(() => route.params.id)
+  const start_time = ref('')
+  const end_time = ref('')
+  const total_price = ref('00.00')
+  const booking_date = ref<Date | null>(null)
+  const bookings = ref<any[]>([])
+  const field = ref({})
+  const price = ref(0)
+  const booking = ref({})
+  const duration = ref(0)
+  const isBook = ref(false)
+  const fields = ref([])
+  const location = ref('')
+  const feedback_text = ref('')
+  const Feedbacklist = ref([])
+  const isclear = ref(false)
+  const receivedAddress = ref<string>('')
+  const isWaterChecked = ref(false)
+  const waterQuantity = ref('')
+  const options = ref([])
+  const selectedOptions = ref([])
+  const editFeedbackModalVisible = ref(false)
+  const editedFeedbackText = ref('')
+  let feedbackToEdit = ref(null)
+  const minDate = ref(new Date().toISOString().split('T')[0])
+  const currentTime = ref(new Date().toTimeString().split(' ')[0].substring(0, 5))
 
-// =========== Function to check if the end time is before 10:00 PM ============
-const isValidEndTime = (endTime: string): boolean => {
-  const end = dayjs(endTime, 'HH:mm')
-  const limit = dayjs('22:01', 'HH:mm')
-  return end.isBefore(limit)
-}
-
-// ========== Event handler for address-updated event==========
-const updateAddress = (updatedAddress: string) => {
-  receivedAddress.value = updatedAddress
-}
-
-// ========= Event handler for location-updated event ==============
-const updateLocation = (updatedLocation: string) => {
-  location.value = updatedLocation
-}
-
-//===========================calculation of total price =====================
-const calculateTotalPrice = () => {
-  const startTimeParts = start_time.value.split(':').map(Number)
-  const endTimeParts = end_time.value.split(':').map(Number)
-
-  const startMinutes = startTimeParts[0] * 60 + startTimeParts[1]
-  const endMinutes = endTimeParts[0] * 60 + endTimeParts[1]
-
-  const durationInMinutes = endMinutes - startMinutes
-  const pricePerMinute = price.value / 60
-
-  total_price.value = (durationInMinutes * pricePerMinute).toFixed(2)
-  duration.value = (durationInMinutes / 60).toFixed(1)
-}
-
-//================== Make a booking =====================
-const submitBooking = async () => {
-  if (!isValidEndTime(end_time.value)) {
-    Swal.fire({
-      icon: 'error',
-      title: 'We are closed',
-      text: 'You cannot book a slot that ends after 10:00 PM.'
-    })
-    return
+  // =========== Function to check if the end time is before 10:00 PM ============
+  const isValidEndTime = (endTime: string): boolean => {
+    const end = dayjs(endTime, 'HH:mm')
+    const limit = dayjs('22:01', 'HH:mm')
+    return end.isBefore(limit)
   }
-  if (new Date(booking_date.value) < new Date(minDate.value)) {
-    Swal.fire({
-      icon: 'error',
-      title: 'Booking failed date',
-      text: 'You cannot book a slot that earlier than the current day.'
-    })
-    return
+
+  // ========== Event handler for address-updated event==========
+  const updateAddress = (updatedAddress: string) => {
+    receivedAddress.value = updatedAddress
   }
-  const selectedDate = new Date(booking_date.value)
-  const currentDate = new Date()
-  const selectedStartTime = start_time.value
-  const currentTimeStr = currentTime.value
 
-  if (
-    selectedDate.toDateString() === currentDate.toDateString() &&
-    selectedStartTime < currentTimeStr
-  ) {
-    Swal.fire({
-      icon: 'error',
-      title: 'Booking failed date',
-      text: 'Booking time cannot be earlier than the current time.'
-    })
-    return
+  // ========= Event handler for location-updated event ==============
+  const updateLocation = (updatedLocation: string) => {
+    location.value = updatedLocation
   }
-  try {
-    const response = await axiosInstance.post('/booking/create', {
-      user_id: userId.value,
-      field_id: fieldId.value,
-      start_time: start_time.value,
-      end_time: end_time.value,
-      booking_date: booking_date.value,
-      total_price: total_price.value,
-      status: 'pending',
-      payment_status: 'unpaid',
-      options: selectedOptions.value.map((option) => ({
-        id: option.id,
-        ...(option.name === 'Water' ? { qty: waterQuantity.value } : {})
-      }))
-    })
 
-    bookings.value.push(response.data)
-    booking.value = response.data.data.original
+  //===========================calculation of total price =====================
+  const calculateTotalPrice = () => {
+    const startTimeParts = start_time.value.split(':').map(Number)
+    const endTimeParts = end_time.value.split(':').map(Number)
 
-    // ========= Create event ==========
+    const startMinutes = startTimeParts[0] * 60 + startTimeParts[1]
+    const endMinutes = endTimeParts[0] * 60 + endTimeParts[1]
+
+    const durationInMinutes = endMinutes - startMinutes
+    const pricePerMinute = price.value / 60
+
+    total_price.value = (durationInMinutes * pricePerMinute).toFixed(2)
+    duration.value = (durationInMinutes / 60).toFixed(1)
+  }
+
+  //================== Make a booking =====================
+  const submitBooking = async () => {
+    if (!isValidEndTime(end_time.value)) {
+      Swal.fire({
+        icon: 'error',
+        title: 'We are closed',
+        text: 'You cannot book a slot that ends after 10:00 PM.'
+      })
+      return
+    }
+    if (new Date(booking_date.value) < new Date(minDate.value)) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Booking failed date',
+        text: 'You cannot book a slot that earlier than the current day.'
+      })
+      return
+    }
+    const selectedDate = new Date(booking_date.value)
+    const currentDate = new Date()
+    const selectedStartTime = start_time.value
+    const currentTimeStr = currentTime.value
+
+    if (
+      selectedDate.toDateString() === currentDate.toDateString() &&
+      selectedStartTime < currentTimeStr
+    ) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Booking failed date',
+        text: 'Booking time cannot be earlier than the current time.'
+      })
+      return
+    }
     try {
-      const startDateTime = `${booking_date.value} ${start_time.value}:00`
-      const endDateTime = `${booking_date.value} ${end_time.value}:00`
-      const eventResponse = await axiosInstance.post('/event/create', {
-        booking_id: booking.value.id,
+      const response = await axiosInstance.post('/booking/create', {
+        user_id: userId.value,
         field_id: fieldId.value,
-        title: `Booking for ${field.value.name}`,
-        start: startDateTime,
-        end: endDateTime
+        start_time: start_time.value,
+        end_time: end_time.value,
+        booking_date: booking_date.value,
+        total_price: total_price.value,
+        status: 'pending',
+        payment_status: 'unpaid',
+        options: selectedOptions.value.map((option) => ({
+          id: option.id,
+          ...(option.name === 'Water' ? { qty: waterQuantity.value } : {})
+        }))
       })
 
-      console.log('Event created:', eventResponse.data)
+      bookings.value.push(response.data)
+      booking.value = response.data.data.original
+
+      // ========= Create event ==========
+      try {
+        const startDateTime = `${booking_date.value} ${start_time.value}:00`
+        const endDateTime = `${booking_date.value} ${end_time.value}:00`
+        const eventResponse = await axiosInstance.post('/event/create', {
+          booking_id: booking.value.id,
+          field_id: fieldId.value,
+          title: `Booking for ${field.value.name}`,
+          start: startDateTime,
+          end: endDateTime
+        })
+
+        console.log('Event created:', eventResponse.data)
+      } catch (error) {
+        console.error('Error creating event:', error)
+      }
+
+      Swal.fire({
+        position: 'center',
+        icon: 'success',
+        html: `<span style="font-size: 26px; font-weight: bold;">Thank you for your booking! We will send you a notification soon</span>`,
+        showConfirmButton: false,
+        timer: 1000
+      }).then(() => {
+        router.push({
+          path: `/payment/${userId.value}`,
+          query: { booking: booking.value.id }
+        })
+      })
     } catch (error) {
-      console.error('Error creating event:', error)
-    }
-
-    Swal.fire({
-      position: 'center',
-      icon: 'success',
-      html: `<span style="font-size: 26px; font-weight: bold;">Thank you for your booking! We will send you a notification soon</span>`,
-      showConfirmButton: false,
-      timer: 1000
-    }).then(() => {
-      router.push({
-        path: `/payment/${userId.value}`,
-        query: { booking: booking.value.id }
+      // ========== Show error message ===========
+      Swal.fire({
+        title: 'Error',
+        text: 'Your booking is failed. Please try again',
+        icon: 'error',
+        confirmButtonText: 'OK'
       })
-    })
-  } catch (error) {
-    // ========== Show error message ===========
-    Swal.fire({
-      title: 'Error',
-      text: 'Your booking is failed. Please try again',
-      icon: 'error',
-      confirmButtonText: 'OK'
-    })
-    console.error('Error creating booking:', error)
-  }
-}
-//================================ fetch field specifict ================================
-const fetchField = async () => {
-  try {
-    const response = await axiosInstance.get(`/field/show/${fieldId.value}`)
-    field.value = response.data.data
-    price.value = field.value.price
-    location.value = field.value.location
-  } catch (error) {
-    console.error('Error fetching fields:', error)
-  }
-}
-
-//========================== Fetch fields =========================
-const fetchFields = async () => {
-  try {
-    const response = await axiosInstance.get('/fields/list')
-    fields.value = response.data.data
-  } catch (error) {
-    console.error('Error fetching fields:', error)
-  }
-}
-
-//========================== create feedback =========================
-const SubmitFeedback = async () => {
-  try {
-    const response = await axiosInstance.post('/feedback/create', {
-      user_id: userId.value,
-      field_id: fieldId.value,
-      feedback_text: feedback_text.value
-    })
-    $('.pos-demo').notify('Create feedback successful', 'success', { position: 'top' })
-    isclear.value = true
-    fetchFeedbackList()
-    clearFeedbackData()
-  } catch (error) {
-    $('.pos-demo').notify('Create feedback fail', 'danger', { position: 'top' })
-    console.error('Error creating booking:', error)
-  }
-}
-
-//=======================fetch Feedbacks =============================
-const fetchFeedbackList = async () => {
-  try {
-    const response = await axiosInstance.get(`/feedbacks/${fieldId.value}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('access_token')}`
-      }
-    })
-    Feedbacklist.value = response.data.data
-  } catch (error) {
-    console.error('Error fetching feedbacks:', error)
-  }
-}
-
-//============================= fetch Options =============================
-const fetchOptions = async () => {
-  try {
-    const response = await axiosInstance.get('/options')
-    options.value = response.data.data
-  } catch (error) {
-    console.error('Error fetching options:', error)
-  }
-}
-
-//============================= show dropdown=============================
-const toggleDropdown = (feedback) => {
-  feedback.showDropdown = !feedback.showDropdown
-}
-
-//========================= Delete feedback========================
-const deleteItem = async (itemId) => {
-  try {
-    await axiosInstance.delete(`/feedback/delete/${itemId}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('access_token')}`
-      }
-    })
-    Feedbacklist.value = Feedbacklist.value.filter((item) => item.id !== itemId)
-    $('.pos-demo').notify('Feedback remove successful', 'success', { position: 'top' })
-  } catch (error) {
-    console.error('Error deleting item:', error)
-    $('.pos-demo').notify('Failed remove feedback', 'danger', { position: 'top' })
-  }
-}
-
-// ==================== Show modal edit feedback ====================
-const showEditModal = (feedback) => {
-  feedbackToEdit.value = feedback
-  editedFeedbackText.value = feedback.feedback_text
-  editFeedbackModalVisible.value = true
-}
-
-// ==================== Close modal edit feedback ====================
-const closeEditModal = () => {
-  editFeedbackModalVisible.value = false
-}
-
-// ==================== Update feedback ====================
-const updateFeedback = async () => {
-  try {
-    const response = await axiosInstance.put(`/feedback/update/${feedbackToEdit.value.id}`, {
-      feedback_text: editedFeedbackText.value
-    })
-    const updatedFeedbackIndex = Feedbacklist.value.findIndex(
-      (item) => item.id === feedbackToEdit.value.id
-    )
-    if (updatedFeedbackIndex !== -1) {
-      Feedbacklist.value[updatedFeedbackIndex].feedback_text = editedFeedbackText.value
+      console.error('Error creating booking:', error)
     }
-    closeEditModal()
-    $('.pos-demo').notify('Feedback updated successfully!', 'success', { position: 'top' })
-  } catch (error) {
-    $('.pos-demo').notify('Failed to update feedback.', 'success', { position: 'top' })
-    console.error('Error updating feedback:', error)
   }
-}
-
-//===========CLear form of feedback =================
-const clearFeedbackData = () => {
-  feedback_text.value = ''
-}
-
-onMounted(() => {
-  fetchField()
-  fetchFields()
-  fetchOptions()
-  fetchFeedbackList()
-  if (isclear.value) {
-    clearFeedbackData()
+  //================================ fetch field specifict ================================
+  const fetchField = async () => {
+    try {
+      const response = await axiosInstance.get(`/field/show/${fieldId.value}`)
+      field.value = response.data.data
+      price.value = field.value.price
+      location.value = field.value.location
+    } catch (error) {
+      console.error('Error fetching fields:', error)
+    }
   }
-  console.log(selectedOptions.value)
-})
 
-//============ fetch image api =================
-const getImageUrl = (imagePath) => {
-  return imagePath ? `http://127.0.0.1:8000/storage/${imagePath}` : '/default-image.jpg'
-}
+  //========================== Fetch fields =========================
+  const fetchFields = async () => {
+    try {
+      const response = await axiosInstance.get('/fields/list')
+      fields.value = response.data.data
+    } catch (error) {
+      console.error('Error fetching fields:', error)
+    }
+  }
 
-watch([start_time, end_time], calculateTotalPrice)
+  //========================== create feedback =========================
+  const SubmitFeedback = async () => {
+    try {
+      const response = await axiosInstance.post('/feedback/create', {
+        user_id: userId.value,
+        field_id: fieldId.value,
+        feedback_text: feedback_text.value
+      })
+      $('.pos-demo').notify('Create feedback successful', 'success', { position: 'top' })
+      isclear.value = true
+      fetchFeedbackList()
+      clearFeedbackData()
+    } catch (error) {
+      $('.pos-demo').notify('Create feedback fail', 'danger', { position: 'top' })
+      console.error('Error creating booking:', error)
+    }
+  }
+
+  //=======================fetch Feedbacks =============================
+  const fetchFeedbackList = async () => {
+    try {
+      const response = await axiosInstance.get(`/feedbacks/${fieldId.value}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        }
+      })
+      Feedbacklist.value = response.data.data
+    } catch (error) {
+      console.error('Error fetching feedbacks:', error)
+    }
+  }
+
+  //============================= fetch Options =============================
+  const fetchOptions = async () => {
+    try {
+      const response = await axiosInstance.get('/options')
+      options.value = response.data.data
+    } catch (error) {
+      console.error('Error fetching options:', error)
+    }
+  }
+
+  //============================= show dropdown=============================
+  const toggleDropdown = (feedback) => {
+    feedback.showDropdown = !feedback.showDropdown
+  }
+
+  //========================= Delete feedback========================
+  const deleteItem = async (itemId) => {
+    try {
+      await axiosInstance.delete(`/feedback/delete/${itemId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        }
+      })
+      Feedbacklist.value = Feedbacklist.value.filter((item) => item.id !== itemId)
+      $('.pos-demo').notify('Feedback remove successful', 'success', { position: 'top' })
+    } catch (error) {
+      console.error('Error deleting item:', error)
+      $('.pos-demo').notify('Failed remove feedback', 'danger', { position: 'top' })
+    }
+  }
+
+  // ==================== Show modal edit feedback ====================
+  const showEditModal = (feedback) => {
+    feedbackToEdit.value = feedback
+    editedFeedbackText.value = feedback.feedback_text
+    editFeedbackModalVisible.value = true
+  }
+
+  // ==================== Close modal edit feedback ====================
+  const closeEditModal = () => {
+    editFeedbackModalVisible.value = false
+  }
+
+  // ==================== Update feedback ====================
+  const updateFeedback = async () => {
+    try {
+      const response = await axiosInstance.put(`/feedback/update/${feedbackToEdit.value.id}`, {
+        feedback_text: editedFeedbackText.value
+      })
+      const updatedFeedbackIndex = Feedbacklist.value.findIndex(
+        (item) => item.id === feedbackToEdit.value.id
+      )
+      if (updatedFeedbackIndex !== -1) {
+        Feedbacklist.value[updatedFeedbackIndex].feedback_text = editedFeedbackText.value
+      }
+      closeEditModal()
+      $('.pos-demo').notify('Feedback updated successfully!', 'success', { position: 'top' })
+    } catch (error) {
+      $('.pos-demo').notify('Failed to update feedback.', 'success', { position: 'top' })
+      console.error('Error updating feedback:', error)
+    }
+  }
+
+  //===========CLear form of feedback =================
+  const clearFeedbackData = () => {
+    feedback_text.value = ''
+  }
+
+  onMounted(() => {
+    fetchField()
+    fetchFields()
+    fetchOptions()
+    fetchFeedbackList()
+    if (isclear.value) {
+      clearFeedbackData()
+    }
+    console.log(selectedOptions.value)
+  })
+
+  //============ fetch image api =================
+  const getImageUrl = (imagePath) => {
+    return imagePath ? `http://127.0.0.1:8000/storage/${imagePath}` : '/default-image.jpg'
+  }
+
+  watch([start_time, end_time], calculateTotalPrice)
 </script>
 
 <style scoped>
 
-/* Additional styling if needed */
-/* Responsive Styles for Tablet */
-@media (min-width: 481px) and (max-width: 768px) {
+  /* Responsive Styles for Tablet */
+  @media (min-width: 481px) and (max-width: 768px) {
+
+    .header-text {
+      width: 100%;
+    }
+    .header-detail .select {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      margin-right: 20px;
+    }
+
+    .map-left {
+      width: 100%;
+      padding-top: 0px;
+    }
+
+    .map-right {
+      width: 100%;
+      margin-right: 100px;
+    }
+  
+    .card-check {
+      display: flex;
+      gap: 20px;
+      padding-top: 5px;
+    }
+
+    .card-display-container img {
+      width: 100%;
+    }
+
+    .flex-contain-card {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }
+
+    .user-detail, .commentbox {
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .form-group.half-width {
+      width: 100%;
+    }
+
+    .form-group {
+      width: 100%;
+    }
+
+    .flex {
+      flex-direction: column;
+    }
+
+    .card-container {
+      width: 100%;
+      order: 2;
+    }
+
+    .map-display {
+      width: 100%;
+      order: 1;
+    }
+
+    .modal-dialog {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .modal-content {
+      padding: 1rem;
+    }
+
+    .card-container-flex {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }
+
+    .button-contain .btn {
+      display: flex;
+      flex-direction: row;
+    }
+
+    .location-flex {
+      display: flex;
+      flex-direction: row;
+    }
+
+  }
 
   .header-text {
-    width: 100%;
+    color: #000;
   }
-  .header-detail .select {
+  .header-detail {
+    height: 100px;
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    margin-right: 20px;
+    justify-content: center;
+    background-color: rgb(144, 124, 91);
   }
 
-  .map-left {
-    width: 100%;
-    padding-top: 0px;
+  .notifyjs-corner {
+    z-index: 10000 !important;
   }
 
-  .map-right {
-    width: 100%;
-    margin-right: 100px;
+  h2 {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 20px;
+    font-weight: bold;
   }
- 
-  .card-check {
-    display: flex;
-    gap: 20px;
-    padding-top: 5px;
-  }
-
-  .card-display-container img {
-    width: 100%;
+  h5 {
+    font-size: 15px;
+    font-weight: bold;
+    text-align: center;
   }
 
-  .flex-contain-card {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+  .rating .star {
+    color: #ffcc00;
+    font-size: 20px;
   }
-
-  .user-detail, .commentbox {
-    width: 100%;
-    margin: 0 auto;
+  .viewer {
+    font-size: 15px;
+    text-align: center;
+    color: #808080;
   }
-
-  .form-group.half-width {
-    width: 100%;
-  }
-
-  .form-group {
-    width: 100%;
-  }
-
-  .flex {
-    flex-direction: column;
-  }
-
-  .card-container {
-    width: 100%;
-    order: 2;
-  }
-
-  .map-display {
-    width: 100%;
-    order: 1;
-  }
-
-  .modal-dialog {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-  }
-
-  .modal-content {
-    padding: 1rem;
-  }
-
-  .card-container-flex {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-  }
-
-  .button-contain .btn {
-    display: flex;
-    flex-direction: row;
-  }
-
-  .location-flex {
-    display: flex;
-    flex-direction: row;
-  }
-
-}
-
-.header-text {
-  color: #000;
-}
-.header-detail {
-  height: 100px;
-  display: flex;
-  justify-content: center;
-  background-color: rgb(144, 124, 91);
-}
-
-.notifyjs-corner {
-  z-index: 10000 !important;
-}
-
-h2 {
-  margin-top: 10px;
-  margin-bottom: 10px;
-  font-size: 20px;
-  font-weight: bold;
-}
-h5 {
-  font-size: 15px;
-  font-weight: bold;
-  text-align: center;
-}
-
-.rating .star {
-  color: #ffcc00;
-  font-size: 20px;
-}
-.viewer {
-  font-size: 15px;
-  text-align: center;
-  color: #808080;
-}
-.card-wrapper {
-  border-radius: 20px 20px 0px 0px;
-}
-.btn-book {
-  display: flex;
-  justify-content: center;
-}
-.bg-overlay {
-  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
-    url('../../assets/image/map.png');
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center center;
-  color: #fff;
-  height: 200px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 20px;
-  border-radius: 10px 10px 0px 0px;
-  position: relative;
-}
-
-.price {
-  border-radius: 7px 7px 7px 0px;
-}
-
-@media (max-width: 480px) {
   .card-wrapper {
+    border-radius: 20px 20px 0px 0px;
+  }
+  .btn-book {
+    display: flex;
+    justify-content: center;
+  }
+  .bg-overlay {
+    background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+      url('../../assets/image/map.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    color: #fff;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+    border-radius: 10px 10px 0px 0px;
+    position: relative;
+  }
+
+  .price {
+    border-radius: 7px 7px 7px 0px;
+  }
+
+  @media (max-width: 480px) {
+    .card-wrapper {
+      width: 100%;
+    }
+  }
+
+  .user-detail {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    color: #000;
+    margin-bottom: 20px;
+  }
+
+  h1 {
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    color: #000;
+  }
+
+  .form-group label {
+    display: block;
+    margin-top: 10px;
+  }
+
+  .form-group input,
+  .form-group select {
+    width: calc(100% - 20px);
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  .header-text {
+    color: #000;
+  }
+  .header-detail {
+    height: 100px;
+    background-color: rgb(144, 124, 91);
+  }
+  .select {
+    display: flex;
+    justify-content: space-around; /* Centers items horizontally */
+    align-items: center; /* Centers items vertically */
+    border-radius: 5px;
+    padding: 0.5rem 1rem;
+    box-shadow: 0 1px 3px rgba(245, 242, 242, 0.1);
+  }
+
+  .menu-item {
+    align-items: center;
+    text-align: center;
+    padding: 0.5rem;
+    color: white;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    margin-right: 0.75rem;
+  }
+
+  .menu-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .menu-item i {
+    margin-right: 0.5rem;
+  }
+
+  .bg-green {
+    background-color: #38a169; /* Tailwind green color */
+  }
+
+  .bg-opacity-90 {
+    background-color: rgba(56, 161, 105, 0.9); /* Adjusted opacity */
+  }
+
+  /*feedback*/
+  .contaner {
+    width: 95%;
+    color: #000;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 8px;
+  }
+
+  .head {
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .text {
+    margin: 10px 0;
+    font-family: sans-serif;
+    font-size: 0.9em;
+  }
+
+  .comment {
+    margin-bottom: 20px;
+  }
+
+  .comment-item {
+    display: flex;
+    align-items: flex-start;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+
+  .comment-item img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 20px;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .comment-content {
     width: 100%;
   }
-}
 
-.user-detail {
-  background: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  color: #000;
-  margin-bottom: 20px;
-}
+  .comment-content h3 {
+    font-size: 16px;
+    margin: 0;
+    margin-bottom: 5px;
+  }
 
-h1 {
-  text-align: center;
-  font-size: 20px;
-  font-weight: bold;
-  color: #000;
-}
+  .comment-content p {
+    margin: 0;
+    color: #555;
+  }
 
-.form-group label {
-  display: block;
-  margin-top: 10px;
-}
+  .commentbox {
+    display: flex;
+    align-items: flex-start;
+    padding: 10px;
+  }
 
-.form-group input,
-.form-group select {
-  width: calc(100% - 20px);
-  padding: 5px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-.header-text {
-  color: #000;
-}
-.header-detail {
-  height: 100px;
-  background-color: rgb(144, 124, 91);
-}
-.select {
-  display: flex;
-  justify-content: space-around; /* Centers items horizontally */
-  align-items: center; /* Centers items vertically */
-  border-radius: 5px;
-  padding: 0.5rem 1rem;
-  box-shadow: 0 1px 3px rgba(245, 242, 242, 0.1);
-}
+  .commentbox img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 20px;
+    object-fit: cover;
+    object-position: center;
+  }
 
-.menu-item {
-  align-items: center;
-  text-align: center;
-  padding: 0.5rem;
-  color: white;
-  text-decoration: none;
-  transition: background-color 0.3s ease;
-  margin-right: 0.75rem;
-}
+  .content {
+    width: 100%;
+  }
 
-.menu-item:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-}
+  .user {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+    color: #808080;
+  }
 
-.menu-item i {
-  margin-right: 0.5rem;
-}
+  .commentinput {
+    display: flex;
+    flex-direction: column;
+  }
 
-.bg-green {
-  background-color: #38a169; /* Tailwind green color */
-}
+  .usercomment {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-bottom: 2px solid blue;
+    outline: none;
+  }
 
-.bg-opacity-90 {
-  background-color: rgba(56, 161, 105, 0.9); /* Adjusted opacity */
-}
+  .buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #808080;
+    margin-top: 10px;
+  }
 
-/*feedback*/
-.contaner {
-  width: 95%;
-  color: #000;
-  margin: 0 auto;
-  padding: 20px;
-  border-radius: 8px;
-}
+  .buttons button {
+    padding: 8px 16px;
+    border: none;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+  }
 
-.head {
-  text-transform: uppercase;
-  margin-bottom: 20px;
-}
+  .buttons button:disabled {
+    background-color: #ccc;
+  }
 
-.text {
-  margin: 10px 0;
-  font-family: sans-serif;
-  font-size: 0.9em;
-}
+  .notify {
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+  }
 
-.comment {
-  margin-bottom: 20px;
-}
+  .notifyinput {
+    margin-right: 5px;
+  }
 
-.comment-item {
-  display: flex;
-  align-items: flex-start;
-  padding: 10px;
-  margin-bottom: 10px;
-}
-
-.comment-item img {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  margin-right: 20px;
-  object-fit: cover;
-  object-position: center;
-}
-
-.comment-content {
-  width: 100%;
-}
-
-.comment-content h3 {
-  font-size: 16px;
-  margin: 0;
-  margin-bottom: 5px;
-}
-
-.comment-content p {
-  margin: 0;
-  color: #555;
-}
-
-.commentbox {
-  display: flex;
-  align-items: flex-start;
-  padding: 10px;
-}
-
-.commentbox img {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  margin-right: 20px;
-  object-fit: cover;
-  object-position: center;
-}
-
-.content {
-  width: 100%;
-}
-
-.user {
-  width: 100%;
-  padding: 10px;
-  margin: 5px 0;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  outline: none;
-  color: #808080;
-}
-
-.commentinput {
-  display: flex;
-  flex-direction: column;
-}
-
-.usercomment {
-  width: 100%;
-  padding: 10px;
-  border: none;
-  border-bottom: 2px solid blue;
-  outline: none;
-}
-
-.buttons {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: #808080;
-  margin-top: 10px;
-}
-
-.buttons button {
-  padding: 8px 16px;
-  border: none;
-  background-color: #007bff;
-  color: #fff;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.buttons button:disabled {
-  background-color: #ccc;
-}
-
-.notify {
-  display: flex;
-  align-items: center;
-  margin-left: 10px;
-}
-
-.notifyinput {
-  margin-right: 5px;
-}
-
-.policy a {
-  text-decoration: none;
-  color: blue;
-}
-.action {
-  margin-top: 20px;
-  display: flex;
-}
+  .policy a {
+    text-decoration: none;
+    color: blue;
+  }
+  .action {
+    margin-top: 20px;
+    display: flex;
+  }
 
 
 </style>

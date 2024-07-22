@@ -88,288 +88,298 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-import axiosInstance from '@/plugins/axios'
-import { useRoute, useRouter } from 'vue-router'
-import Swal from 'sweetalert2'
+  // ======================= import nuccesary files and libraries =======================
+  import { ref, computed, onMounted } from 'vue'
+  import axiosInstance from '@/plugins/axios'
+  import { useRoute, useRouter } from 'vue-router'
+  import Swal from 'sweetalert2'
 
-const route = useRoute()
-const router = useRouter()
-const productId = computed(() => route.params)
-const product = ref({})
-const colors = ref([]) // Reactive reference for colors
-const selectedColor = ref(null) // Reactive reference for selected color
-const sizes = ref([]) // Reactive reference for sizes
-const selectedSize = ref(null) // Reactive reference for selected size
-const quantity = ref(1)
-const order = ref({})
-const userId = computed(() => route.query.customer)
-const discountPrice = ref(0)
-const zoomedIn = ref(false)
-const zoomScale = ref('100%')
+  // ======================= Reactive References =======================
+  const route = useRoute()
+  const router = useRouter()
+  const productId = computed(() => route.params)
+  const product = ref({}) // Reactive reference for product details
+  const colors = ref([]) // Reactive reference for colors
+  const selectedColor = ref(null) // Reactive reference for selected color
+  const sizes = ref([]) // Reactive reference for sizes
+  const selectedSize = ref(null) // Reactive reference for selected size
+  const quantity = ref(1) // Reactive reference for product quantity
+  const order = ref({}) // Reactive reference for the created order
+  const userId = computed(() => route.query.customer) // Reactive reference for user ID
+  const discountPrice = ref(0) // Reactive reference for discounted price
+  const zoomedIn = ref(false) // Reactive reference for zoom state
+  const zoomScale = ref('100%') // Reactive reference for zoom scale
 
-const fetchProductDetails = async () => {
-  try {
-    const response = await axiosInstance.get(`/product/show/${productId.value.id}`)
-    product.value = response.data.data
-    product.discounts = product.value.discounts || [] // Initialize discounts
-  } catch (error) {
-    console.error('Error fetching product details:', error)
+  // ======================= Fetch Product Details =======================
+  const fetchProductDetails = async () => {
+    try {
+      const response = await axiosInstance.get(`/product/show/${productId.value.id}`)
+      product.value = response.data.data
+      product.value.discounts = product.value.discounts || [] // Initialize discounts if not present
+    } catch (error) {
+      console.error('Error fetching product details:', error)
+    }
   }
-}
 
-const fetchSizes = async () => {
-  try {
-    const response = await axiosInstance.get('/sizes')
-    sizes.value = response.data.data
-  } catch (error) {
-    console.error('Error fetching sizes:', error)
+  // ======================= Fetch Sizes =======================
+  const fetchSizes = async () => {
+    try {
+      const response = await axiosInstance.get('/sizes')
+      sizes.value = response.data.data
+    } catch (error) {
+      console.error('Error fetching sizes:', error)
+    }
   }
-}
 
-const fetchColors = async () => {
-  try {
-    const response = await axiosInstance.get('/colors')
-    colors.value = response.data.data
-  } catch (error) {
-    console.error('Error fetching colors:', error)
+  // ======================= Fetch Colors =======================
+  const fetchColors = async () => {
+    try {
+      const response = await axiosInstance.get('/colors')
+      colors.value = response.data.data
+    } catch (error) {
+      console.error('Error fetching colors:', error)
+    }
   }
-}
 
-const total = computed(() => {
-  if (discountPrice.value) {
-    return (discountPrice.value * quantity.value).toFixed(2)
+  // ======================= Computed Properties =======================
+  const total = computed(() => {
+    if (discountPrice.value) {
+      return (discountPrice.value * quantity.value).toFixed(2)
+    }
+    return (product.value.price * quantity.value).toFixed(2)
+  })
+
+  // ======================= Lifecycle Hook =======================
+  onMounted(() => {
+    fetchProductDetails()
+    fetchColors()
+    fetchSizes()
+  })
+
+  // ======================= Utility Functions =======================
+  const getImageUrl = (imagePath: string) => {
+    return imagePath ? `http://127.0.0.1:8000/storage/${imagePath}` : '/default-image.jpg'
   }
-  return (product.value.price * quantity.value).toFixed(2)
-})
 
-onMounted(() => {
-  fetchProductDetails()
-  fetchColors()
-  fetchSizes()
-})
-
-const getImageUrl = (imagePath) => {
-  return imagePath ? `http://127.0.0.1:8000/storage/${imagePath}` : '/default-image.jpg'
-}
-
-const incrementQuantity = () => {
-  quantity.value++
-}
-
-const decrementQuantity = () => {
-  if (quantity.value > 1) {
-    quantity.value--
+  const incrementQuantity = () => {
+    quantity.value++
   }
-}
 
-const toggleColorSelection = (colorId) => {
-  selectedColor.value = colorId
-}
-
-const calculateDiscountedPrice = (originalPrice, discountPercentage) => {
-  const discount = (originalPrice * discountPercentage) / 100
-  discountPrice.value = originalPrice - discount
-  return originalPrice - discount
-}
-
-const zoomImage = (event) => {
-  const { offsetWidth, offsetHeight, naturalWidth, naturalHeight } = event.target
-  const { offsetX, offsetY } = event
-  const scaleX = naturalWidth / offsetWidth
-  const scaleY = naturalHeight / offsetHeight
-  zoomScale.value = `${scaleX * 100}%`
-  zoomedIn.value = true
-}
-
-const resetZoom = () => {
-  zoomedIn.value = false
-}
-
-const submitOrder = async () => {
-  try {
-    const response = await axiosInstance.post('/orders/create', {
-      product_id: productId.value.id,
-      color_id: selectedColor.value,
-      size_id: selectedSize.value,
-      qty: quantity.value,
-      total_amount: total.value
-    })
-
-    order.value = response.data.order
-    const orderId = order.value.id
-    localStorage.setItem('orderId', orderId)
-    Swal.fire({
-      position: 'center',
-      icon: 'success',
-      // title: 'Your order has been created successfully',
-      html: `<span style="font-size: 26px; font-weight: bold;">Your order has been created successfully</span>`,
-      showConfirmButton: false,
-      timer: 1000
-    })
-  } catch (error) {
-    console.error('Error creating order:', error)
+  const decrementQuantity = () => {
+    if (quantity.value > 1) {
+      quantity.value--
+    }
   }
-}
+
+  const toggleColorSelection = (colorId: number) => {
+    selectedColor.value = colorId
+  }
+
+  const calculateDiscountedPrice = (originalPrice: number, discountPercentage: number) => {
+    const discount = (originalPrice * discountPercentage) / 100
+    discountPrice.value = originalPrice - discount
+    return originalPrice - discount
+  }
+
+  const zoomImage = (event: MouseEvent) => {
+    const target = event.target as HTMLImageElement
+    const { offsetWidth, offsetHeight, naturalWidth, naturalHeight } = target
+    const { offsetX, offsetY } = event as any
+    const scaleX = naturalWidth / offsetWidth
+    const scaleY = naturalHeight / offsetHeight
+    zoomScale.value = `${scaleX * 100}%`
+    zoomedIn.value = true
+  }
+
+  const resetZoom = () => {
+    zoomedIn.value = false
+  }
+
+  // ======================= Submit Order =======================
+  const submitOrder = async () => {
+    try {
+      const response = await axiosInstance.post('/orders/create', {
+        product_id: productId.value.id,
+        color_id: selectedColor.value,
+        size_id: selectedSize.value,
+        qty: quantity.value,
+        total_amount: total.value
+      })
+
+      order.value = response.data.order
+      const orderId = order.value.id
+      localStorage.setItem('orderId', orderId)
+      Swal.fire({
+        position: 'center',
+        icon: 'success',
+        html: `<span style="font-size: 26px; font-weight: bold;">Your order has been created successfully</span>`,
+        showConfirmButton: false,
+        timer: 1000
+      })
+    } catch (error) {
+      console.error('Error creating order:', error)
+    }
+  }
 </script>
 
+
 <style scoped>
-.product-detail {
-  color: #000;
-  max-width: 900px;
-  margin: 20px auto;
-}
-
-.product-images {
-  position: relative;
-  overflow: hidden;
-}
-
-.zoomed-image {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-color: rgba(255, 255, 255, 0.9);
-  z-index: 10;
-  display: none;
-}
-
-.price {
-  font-size: 1.5em;
-}
-
-.rating .star {
-  font-size: 1.2em;
-}
-
-.text-decoration-line-through {
-  text-decoration: line-through;
-}
-
-.color-options .color-circle {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  border: 1px solid #ddd;
-  cursor: pointer;
-}
-
-.color-options .color-circle.selected {
-  border: 2px solid #000;
-}
-
-.bg-red {
-  background-color: red;
-}
-
-.bg-black {
-  background-color: black;
-}
-
-.bg-white {
-  background-color: white;
-}
-
-.bg-pink {
-  background-color: pink;
-}
-
-.bg-yellow {
-  background-color: yellow;
-}
-
-.bg-blue {
-  background-color: blue;
-}
-
-.btn {
-  background-color: #fff;
-  color: #000;
-  text-decoration: none;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-  outline: none;
-  border: none;
-  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
-  position: relative;
-}
-
-.quantity-input {
-  display: inline-flex;
-  align-items: center;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  padding: 5px;
-}
-
-.quantity-input button {
-  width: 30px;
-  height: 30px;
-  font-size: 18px;
-  background-color: #f2f2f2;
-  border: none;
-  cursor: pointer;
-}
-
-.quantity-input input {
-  width: 50px;
-  height: 30px;
-  text-align: center;
-  border: none;
-  margin: 0 10px;
-}
-
-.cursor-pointer {
-  cursor: pointer;
-}
-
-@media (min-width: 481px) and (max-width: 768px) {
-  .product-row {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+  .product-detail {
+    color: #000;
+    max-width: 900px;
+    margin: 20px auto;
   }
 
   .product-images {
-    order: 1;
+    position: relative;
+    overflow: hidden;
   }
 
-  .order-details {
-    order: 2;
+  .zoomed-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: rgba(255, 255, 255, 0.9);
+    z-index: 10;
+    display: none;
   }
 
-  .button-row {
-    margin-top: 80px;
-    margin-left: 30px;
+  .price {
+    font-size: 1.5em;
   }
 
-  .img-section {
-    display: flex;
-    justify-content: center;
+  .rating .star {
+    font-size: 1.2em;
+  }
+
+  .text-decoration-line-through {
+    text-decoration: line-through;
+  }
+
+  .color-options .color-circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 1px solid #ddd;
+    cursor: pointer;
+  }
+
+  .color-options .color-circle.selected {
+    border: 2px solid #000;
+  }
+
+  .bg-red {
+    background-color: red;
+  }
+
+  .bg-black {
+    background-color: black;
+  }
+
+  .bg-white {
+    background-color: white;
+  }
+
+  .bg-pink {
+    background-color: pink;
+  }
+
+  .bg-yellow {
+    background-color: yellow;
+  }
+
+  .bg-blue {
+    background-color: blue;
+  }
+
+  .btn {
+    background-color: #fff;
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    outline: none;
+    border: none;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
+    position: relative;
+  }
+
+  .quantity-input {
+    display: inline-flex;
     align-items: center;
-    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 5px;
   }
 
-  .product-section-detail {
-    margin-left: 70px;
-    display: flex;
-    justify-content: space-between;
+  .quantity-input button {
+    width: 30px;
+    height: 30px;
+    font-size: 18px;
+    background-color: #f2f2f2;
+    border: none;
+    cursor: pointer;
   }
 
-  .section-information {
-    margin-left: 70px;
+  .quantity-input input {
+    width: 50px;
+    height: 30px;
+    text-align: center;
+    border: none;
+    margin: 0 10px;
   }
 
-  .section-detail {
-    flex-direction: column;
-    margin-right: 100px;
-    margin-top: 30px;
+  .cursor-pointer {
+    cursor: pointer;
   }
-}
+
+  @media (min-width: 481px) and (max-width: 768px) {
+    .product-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .product-images {
+      order: 1;
+    }
+
+    .order-details {
+      order: 2;
+    }
+
+    .button-row {
+      margin-top: 80px;
+      margin-left: 30px;
+    }
+
+    .img-section {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 10px;
+    }
+
+    .product-section-detail {
+      margin-left: 70px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .section-information {
+      margin-left: 70px;
+    }
+
+    .section-detail {
+      flex-direction: column;
+      margin-right: 100px;
+      margin-top: 30px;
+    }
+  }
 
 </style>

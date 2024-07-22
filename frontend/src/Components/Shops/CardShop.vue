@@ -67,23 +67,29 @@
 </template>
 
 <script>
+// ======================= Import Necessary Files and Libraries =======================
 import axios from 'axios'
 import Swal from 'sweetalert2'
 
 export default {
+  // ======================= Component Props =======================
   props: {
     user: Object
   },
+  // ======================= Component Data =======================
   data() {
     return {
       products: [],
       uniqueProductsByCategory: []
     }
   },
+  // ======================= Lifecycle Hooks =======================
   created() {
     this.fetchProducts()
   },
+  // ======================= Component Methods =======================
   methods: {
+    // ======================= Fetch Products =======================
     async fetchProducts() {
       try {
         const response = await axios.get('http://127.0.0.1:8000/api/product/list')
@@ -103,6 +109,7 @@ export default {
       }
     },
 
+    // ======================= Filter Unique Products by Category =======================
     filterUniqueProductsByCategory() {
       const uniqueProducts = []
       const categoryIds = new Set()
@@ -117,14 +124,17 @@ export default {
       this.uniqueProductsByCategory = uniqueProducts
     },
 
+    // ======================= Get Image URL =======================
     getImageUrl(imagePath) {
       return `http://127.0.0.1:8000/storage/${imagePath}`
     },
 
+    // ======================= Toggle Favorite =======================
     toggleFavorite(product) {
       product.isFavorite = !product.isFavorite
     },
 
+    // ======================= Calculate Discounted Price =======================
     calculateDiscountedPrice(product) {
       if (product.discounts.length > 0) {
         const discount = product.discounts[0]
@@ -134,6 +144,7 @@ export default {
       return null
     },
 
+    // ======================= Add to Cart =======================
     addToCart(product) {
       axios
         .post(
@@ -154,8 +165,6 @@ export default {
           Swal.fire({
             position: 'center',
             icon: 'success',
-            // title: `${product.name} added to cart successfully`,
-            // html: `<span style="font-size: 26px;">added to cart successfully</span>`,
             html: `<span style="font-size: 26px; font-weight: bold;">${product.name} added to cart successfully</span>`,
             showConfirmButton: false,
             timer: 1000
@@ -176,6 +185,7 @@ export default {
   }
 }
 </script>
+
 
 
 <style scoped>

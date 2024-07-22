@@ -1,6 +1,5 @@
 <template>
     <div class="container w-50 p-2 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700" style="margin-top: 100px; margin-bottom: 50px;">
-      <!-- <h1 class="text-2xl font-bold text-gray-800 m-3 dark:text-gray-100">Payment Form <i class='bx bxl-visa text-4xl'></i></h1><hr> -->
       <div class="flex text-center justify-center">
         <h1 class="text-3xl font-bold text-gray-800 m-3 dark:text-gray-100">Payment Form </h1>
         <img class="w-13 h-8 mt-3" src="https://lh6.googleusercontent.com/proxy/T8fjld7xQK5zAxSh8SfzGOT7Ufidp8BZcHByP9_Bl3r-opUtdBHT_Ws7XoOkKkb7mloIy-U3GQEr_dhFYg8Sjosli8qBKIY6HA" alt="">
@@ -47,39 +46,43 @@
       </form>
   </div>
   
-  </template>
+</template>
   
-  <script>
+<script>
   import { loadStripe } from '@stripe/stripe-js';
   import axios from "axios";
   
   export default {
     data() {
       return {
-        stripe: null,
-        elements: null,
-        cardNumber: null,
-        cardExpiry: null,
-        cardCvc: null,
-        email: '',
-        name: '',
-        amount: 0,
-        postalCode: '',
-        isPaid: false,
-        bookingId: null,
-        total_price: '00.00',
+        stripe: null, // Stripe instance
+        elements: null, // Stripe Elements instance
+        cardNumber: null, // Card Number Element
+        cardExpiry: null, // Card Expiry Element
+        cardCvc: null, // Card CVC Element
+        email: '', // Customer's email
+        name: '', // Customer's name
+        amount: 0, // Payment amount
+        postalCode: '', // Customer's postal code
+        isPaid: false, // Payment status
+        bookingId: null, // Booking ID from query
+        total_price: '00.00', // Total price of booking
       };
     },
     async mounted() {
-      this.bookingId = this.$route.query.booking;
+      // ======================= Component Mounted Lifecycle =======================
+      this.bookingId = this.$route.query.booking; // Get booking ID from route query
       if (this.bookingId) {
         await this.fetchBooking();
       }
   
+      // Initialize Stripe
       this.stripe = await loadStripe('pk_test_51PY0rM2LbQW9hazpTrN6pOrbmkotW9UrQkyEAW9YojtC3VyakwQmUqqN3EJgG2yjLoEH1lo54bKdrJK35ZQ1sK0E00Vv0cUxjY'); // Replace with your publishable key
   
+      // Initialize Stripe Elements
       this.elements = this.stripe.elements();
   
+      // Create and mount card number element
       this.cardNumber = this.elements.create('cardNumber', {
         style: {
           base: {
@@ -96,6 +99,7 @@
       });
       this.cardNumber.mount('#card-number');
   
+      // Create and mount card expiry element
       this.cardExpiry = this.elements.create('cardExpiry', {
         style: {
           base: {
@@ -112,6 +116,7 @@
       });
       this.cardExpiry.mount('#card-expiry');
   
+      // Create and mount card CVC element
       this.cardCvc = this.elements.create('cardCvc', {
         style: {
           base: {
@@ -120,7 +125,8 @@
             fontWeight: 400,
             fontFamily: 'Helvetica Neue, Helvetica, Arial, sans-serif',
             fontSize: '16px',
-            '::placeholder': {            color: '#CFD7E0',
+            '::placeholder': {
+              color: '#CFD7E0',
             },
           },
         },
@@ -156,6 +162,7 @@
       });
     },
     methods: {
+      // ======================= Submit Payment =======================
       async submitPayment() {
         try {
           // Create a Payment Intent on the backend
@@ -188,43 +195,42 @@
               console.log('Payment succeeded:', paymentIntent);
               // Show a success message to your customer
               alert('Payment succeeded!');
-              await this.updatePaymentStatus()
+              await this.updatePaymentStatus();
             }
           }
         } catch (error) {
           console.error('Error creating payment intent:', error);
         }
-        
       },
+  
+      // ======================= Update Payment Status =======================
       async updatePaymentStatus() {
         if (this.isPaid) {
           try {
-            const { data } = await axios.put(
-              `http://127.0.0.1:8000/api/update/payment/booking/${this.bookingId}`
-            )
-            console.log('Payment status in booking updated successfully')
-            this.$router.push({ path: '/' })
-  
+            await axios.put(`http://127.0.0.1:8000/api/update/payment/booking/${this.bookingId}`);
+            console.log('Payment status in booking updated successfully');
+            this.$router.push({ path: '/' });
           } catch (error) {
-            console.error('Error fetching payment status:', error)
+            console.error('Error updating payment status:', error);
           }
         }
       },
+  
+      // ======================= Fetch Booking Details =======================
       async fetchBooking() {
         try {
-          const { data } = await axios.get(
-            `http://127.0.0.1:8000/api/booking/show/${this.bookingId}`
-          )
+          const { data } = await axios.get(`http://127.0.0.1:8000/api/booking/show/${this.bookingId}`);
           this.total_price = data.data.total_price;
         } catch (error) {
-          console.error('Error fetching booking data:', error)
+          console.error('Error fetching booking data:', error);
         }
       }
     }
   };
-  </script>
+</script>
   
-  <style>
+  
+<style>
   #card-element {
     border: 1px solid #ced4da;
     padding: 10px;
@@ -234,5 +240,5 @@
     max-width: 500px;
     margin: auto;
   }
-  </style>
+</style>
   

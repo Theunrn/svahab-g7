@@ -53,94 +53,111 @@
 </template>
 
 <script>
-export default {
-  data() {
-    return {
-      currentIndex: 0,
-      items: [
-        { feedback: 'Great facilities and well-maintained fields. Highly recommended!' },
-        { feedback: 'Convenient location and competitive pricing. Will come back again.' },
-        { feedback: 'Professional staff and a friendly atmosphere. Perfect for our team.' },
-        { feedback: 'Easy to find available slots and hassle-free booking experience.' },
-        { feedback: 'Clean and spacious facilities. Great for both practice and games.' },
-        { feedback: 'Responsive management and quick to address any issues. Impressed!' }
-      ],
-      slideInterval: null,
-      transitioning: false
-    }
-  },
-  computed: {
-    duplicatedItems() {
-      return [...this.items, ...this.items]
-    },
-    carouselStyle() {
+  export default {
+    // ======================= Data =======================
+    data() {
       return {
-        transform: `translateX(-${(this.currentIndex % this.items.length) * 100}%)`,
-        transition: this.transitioning ? 'transform 0.5s' : 'none'
+        currentIndex: 0, // Index of the current slide
+        items: [
+          { feedback: 'Great facilities and well-maintained fields. Highly recommended!' },
+          { feedback: 'Convenient location and competitive pricing. Will come back again.' },
+          { feedback: 'Professional staff and a friendly atmosphere. Perfect for our team.' },
+          { feedback: 'Easy to find available slots and hassle-free booking experience.' },
+          { feedback: 'Clean and spacious facilities. Great for both practice and games.' },
+          { feedback: 'Responsive management and quick to address any issues. Impressed!' }
+        ],
+        slideInterval: null, // Interval ID for automatic sliding
+        transitioning: false // Flag to control slide transition
       }
+    },
+
+    // ======================= Computed Properties =======================
+    computed: {
+      // Duplicate items to create a seamless infinite scroll effect
+      duplicatedItems() {
+        return [...this.items, ...this.items]
+      },
+      // Style for the carousel container with dynamic translation
+      carouselStyle() {
+        return {
+          transform: `translateX(-${(this.currentIndex % this.items.length) * 100}%)`,
+          transition: this.transitioning ? 'transform 0.5s' : 'none'
+        }
+      }
+    },
+
+    // ======================= Lifecycle Hooks =======================
+    mounted() {
+      this.startAutoSlide() // Start auto-slide when the component is mounted
+    },
+
+    // ======================= Methods =======================
+    methods: {
+      // Start automatic sliding with an interval
+      startAutoSlide() {
+        this.slideInterval = setInterval(this.nextSlide, 5000) // Change slide every 5 seconds
+      },
+      // Stop automatic sliding by clearing the interval
+      stopAutoSlide() {
+        clearInterval(this.slideInterval)
+      },
+      // Go to the previous slide
+      prevSlide() {
+        this.stopAutoSlide()
+        this.transitioning = true
+        this.currentIndex = this.currentIndex === 0 ? this.items.length - 1 : this.currentIndex - 1
+        this.startAutoSlide()
+      },
+      // Go to the next slide
+      nextSlide() {
+        this.stopAutoSlide()
+        this.transitioning = true
+        this.currentIndex = (this.currentIndex + 1) % this.items.length
+        this.startAutoSlide()
+      },
+      // Handle the end of the slide transition
+      handleTransitionEnd() {
+        if (this.currentIndex >= this.items.length) {
+          this.transitioning = false
+          this.currentIndex = 0
+        }
+        if (this.currentIndex < 0) {
+          this.transitioning = false
+          this.currentIndex = this.items.length - 1
+        }
+      }
+    },
+
+    // ======================= Lifecycle Hooks =======================
+    beforeDestroy() {
+      this.stopAutoSlide() // Clean up the interval before the component is destroyed
     }
-  },
-  mounted() {
-    this.startAutoSlide()
-  },
-  methods: {
-    startAutoSlide() {
-      this.slideInterval = setInterval(this.nextSlide, 5000) // Change slide every 5 seconds
-    },
-    stopAutoSlide() {
-      clearInterval(this.slideInterval)
-    },
-    prevSlide() {
-      this.stopAutoSlide()
-      this.transitioning = true
-      this.currentIndex = this.currentIndex === 0 ? this.items.length - 1 : this.currentIndex - 1
-      this.startAutoSlide()
-    },
-    nextSlide() {
-      this.stopAutoSlide()
-      this.transitioning = true
-      this.currentIndex = (this.currentIndex + 1) % this.items.length
-      this.startAutoSlide()
-    },
-    handleTransitionEnd() {
-      if (this.currentIndex >= this.items.length) {
-        this.transitioning = false
-        this.currentIndex = 0
-      }
-      if (this.currentIndex < 0) {
-        this.transitioning = false
-        this.currentIndex = this.items.length - 1
-      }
-    }
-  },
-  beforeDestroy() {
-    this.stopAutoSlide()
   }
-}
+
 </script>
 
 <style scoped>
-/* Additional styling can go here if needed */
-.text-content {
-  font-size: 1.25rem;
-  color: #333;
-  text-align: center;
-}
-
-@keyframes typing {
-  from {
-    width: 0;
+  /* Additional styling can go here if needed */
+  .text-content {
+    font-size: 1.25rem;
+    color: #333;
+    text-align: center;
   }
-  to {
-    width: 100%;
-  }
-}
 
-.animate-typing {
-  display: inline-block;
-  animation: typing 2s steps(20, end) infinite;
-  white-space: nowrap;
-  overflow: hidden;
-  border-right: 4px solid transparent;
-}
+  @keyframes typing {
+    from {
+      width: 0;
+    }
+    to {
+      width: 100%;
+    }
+  }
+
+  .animate-typing {
+    display: inline-block;
+    animation: typing 2s steps(20, end) infinite;
+    white-space: nowrap;
+    overflow: hidden;
+    border-right: 4px solid transparent;
+  }
 </style>

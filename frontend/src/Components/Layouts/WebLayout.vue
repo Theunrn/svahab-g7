@@ -250,186 +250,193 @@
 
 
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue'
-import WebHeaderMenu from '@/Components/WebHeaderMenu.vue'
-import VueFlatpickr from 'vue-flatpickr-component'
-import 'flatpickr/dist/flatpickr.css'
-import axiosInstance from '@/plugins/axios'
+  // ======================= Import Necessary Files and Libraries =======================
+  import { ref, watch, onMounted } from 'vue'
+  import WebHeaderMenu from '@/Components/WebHeaderMenu.vue'
+  import VueFlatpickr from 'vue-flatpickr-component'
+  import 'flatpickr/dist/flatpickr.css'
+  import axiosInstance from '@/plugins/axios'
 
-const showDatePicker = ref(false)
-const selectedProvince = ref('')
-const dateRange = ref(null)
-const flatpickrConfig = {
-  mode: 'range',
-  dateFormat: 'Y-m-d'
-}
+  // ======================= Reactive State =======================
+  const showDatePicker = ref(false)
+  const selectedProvince = ref('')
+  const dateRange = ref(null)
+  const searchQuery = ref('')
+  const fields = ref([])
+  const filteredFields = ref([])
+  const matchFields = ref([])
+  const message = ref('')
+  const provinces = ref([
+    { name: 'Phnom Penh', value: 'phnom penh', icon: '📍' },
+    { name: 'Battambang', value: 'battambang', icon: '📍' },
+    { name: 'Siem Reap', value: 'siem reap', icon: '📍' },
+    { name: 'Sihanoukville', value: 'sihanoukville', icon: '📍' },
+    { name: 'Kampong Cham', value: 'kampong cham', icon: '📍' },
+    { name: 'Kampong Chhnang', value: 'kampong chhnang', icon: '📍' },
+    { name: 'Kampong Speu', value: 'kampong speu', icon: '📍' },
+    { name: 'Kampong Thom', value: 'kampong thom', icon: '📍' },
+    { name: 'Kampot', value: 'kampot', icon: '📍' },
+    { name: 'Kandal', value: 'kandal', icon: '📍' },
+    { name: 'Koh Kong', value: 'koh kong', icon: '📍' },
+    { name: 'Kratié', value: 'kratie', icon: '📍' },
+    { name: 'Mondulkiri', value: 'mondulkiri', icon: '📍' },
+    { name: 'Pailin', value: 'pailin', icon: '📍' },
+    { name: 'Preah Vihear', value: 'preah vihear', icon: '📍' },
+    { name: 'Prey Veng', value: 'prey veng', icon: '📍' },
+    { name: 'Pursat', value: 'pursat', icon: '📍' },
+    { name: 'Ratanakiri', value: 'ratanakiri', icon: '📍' },
+    { name: 'Stung Treng', value: 'stung treng', icon: '📍' },
+    { name: 'Svay Rieng', value: 'svay rieng', icon: '📍' },
+    { name: 'Takéo', value: 'takeo', icon: '📍' },
+    { name: 'Oddar Meanchey', value: 'oddar meanchey', icon: '📍' },
+    { name: 'Tboung Khmum', value: 'tboung khmum', icon: '📍' }
+  ])
 
-const props = defineProps({
-  customer: Object
-})
-
-const searchQuery = ref('')
-const fields = ref([])
-const message = ref('')
-
-const filteredFields = ref([])
-const matchFields = ref([])
-localStorage.setItem('filteredFields', matchFields.value)
-
-const fetchFields = async () => {
-  try {
-    const response = await axiosInstance.get('/fields/list')
-    fields.value = response.data.data
-    filterFields()
-  } catch (error) {
-    console.error('Error fetching fields:', error)
+  // ======================= Flatpickr Configuration =======================
+  const flatpickrConfig = {
+    mode: 'range',
+    dateFormat: 'Y-m-d'
   }
-}
 
-const filterFields = () => {
-  if (selectedProvince.value) {
-    filteredFields.value = fields.value.filter((field) => {
-      return field.province.toLowerCase() === selectedProvince.value.toLowerCase()
-    })
-
-    if (filteredFields.value.length === 0) {
-      message.value = 'Field Not Found'
-    } else {
-      message.value = ''
-    }
-  } else {
-    filteredFields.value = fields.value
-    message.value = ''
-  }
-}
-
-const searchFields = () => {
-  if (searchQuery.value) {
-    const normalizedQuery = searchQuery.value.toLowerCase().trim()
-    filteredFields.value = fields.value.filter((field) => {
-      return (
-        field.name.toLowerCase().includes(normalizedQuery) ||
-        field.location.toLowerCase().includes(normalizedQuery)
-      )
-    })
-
-    if (filteredFields.value.length === 0) {
-      message.value = 'Field Not Found'
-    } else {
-      message.value = ''
-    }
-  } else {
-    filterFields()
-  }
-}
-
-watch(selectedProvince, () => {
-  filterFields()
-})
-
-onMounted(() => {
-  fetchFields().then(() => {
-    filteredFields.value = fields.value
+  // ======================= Props =======================
+  const props = defineProps({
+    customer: Object
   })
-})
 
-const getImageUrl = (imagePath) => {
-  return imagePath ? `http://127.0.0.1:8000/storage/${imagePath}` : '/default-image.jpg'
-}
-
-const provinces = ref([
-  { name: 'Phnom Penh', value: 'phnom penh', icon: '📍' },
-  { name: 'Battambang', value: 'battambang', icon: '📍' },
-  { name: 'Siem Reap', value: 'siem reap', icon: '📍' },
-  { name: 'Sihanoukville', value: 'sihanoukville', icon: '📍' },
-  { name: 'Kampong Cham', value: 'kampong cham', icon: '📍' },
-  { name: 'Kampong Chhnang', value: 'kampong chhnang', icon: '📍' },
-  { name: 'Kampong Speu', value: 'kampong speu', icon: '📍' },
-  { name: 'Kampong Thom', value: 'kampong thom', icon: '📍' },
-  { name: 'Kampot', value: 'kampot', icon: '📍' },
-  { name: 'Kandal', value: 'kandal', icon: '📍' },
-  { name: 'Koh Kong', value: 'koh kong', icon: '📍' },
-  { name: 'Kratié', value: 'kratie', icon: '📍' },
-  { name: 'Mondulkiri', value: 'mondulkiri', icon: '📍' },
-  { name: 'Pailin', value: 'pailin', icon: '📍' },
-  { name: 'Preah Vihear', value: 'preah vihear', icon: '📍' },
-  { name: 'Prey Veng', value: 'prey veng', icon: '📍' },
-  { name: 'Pursat', value: 'pursat', icon: '📍' },
-  { name: 'Ratanakiri', value: 'ratanakiri', icon: '📍' },
-  { name: 'Stung Treng', value: 'stung treng', icon: '📍' },
-  { name: 'Svay Rieng', value: 'svay rieng', icon: '📍' },
-  { name: 'Takéo', value: 'takeo', icon: '📍' },
-  { name: 'Oddar Meanchey', value: 'oddar meanchey', icon: '📍' },
-  { name: 'Tboung Khmum', value: 'tboung khmum', icon: '📍' }
-])
-</script>
-<style scoped>
-/* Additional styling if needed */
-
-.form-select {
-  bottom: -35px;
-}
-/* You can adjust the opacity value to make the overlay lighter or darker */
-.bg-opacity-75 {
-  opacity: 0.8; /* Adjust this value as needed */
-}
-
-.font-bold {
-  font-weight: bold;
-}
-
-.card-me {
-  justify-content: left;
-  align-items: start;
-  text-align: left;
-  flex-wrap: wrap;
-}
-
-.card-wrapper {
-  width: 23%;
-  height: 40%;
-  transition: transform 0.3s ease;
-  position: relative;
-}
-
-.card-wrapper:hover {
-  transform: scale(1.05);
-}
-
-.dollar {
-  border-radius: 5px 5px 5px 0px;
-}
-.container {
-  width: 100%;
-  height: 200px; /* Adjust as needed */
-  position: relative;
-  border-radius: 10px;
-  overflow: hidden;
-}
-.bg-overlay {
-  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)); /* Add a dark overlay */
-}
-
-.btn-group {
-  position: absolute;
-  bottom: 30px;
-  width: 80%;
-  display: flex;
-  justify-content: center;
-  opacity: 0;
-  transition: opacity 0.3s ease, transform 0.3s ease;
-  transform: translateY(20px);
-}
-
-/* Show buttons on hover */
-.card-wrapper:hover .btn-group {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-@media (max-width: 768px) {
-  .card-wrapper {
-    width: 100%;
+  // ======================= Fetch Data =======================
+  const fetchFields = async () => {
+    try {
+      const response = await axiosInstance.get('/fields/list')
+      fields.value = response.data.data
+      filterFields()
+    } catch (error) {
+      console.error('Error fetching fields:', error)
+    }
   }
-}
+
+  // ======================= Filter Fields =======================
+  const filterFields = () => {
+    if (selectedProvince.value) {
+      filteredFields.value = fields.value.filter((field) => {
+        return field.province.toLowerCase() === selectedProvince.value.toLowerCase()
+      })
+
+      if (filteredFields.value.length === 0) {
+        message.value = 'Field Not Found'
+      } else {
+        message.value = ''
+      }
+    } else {
+      filteredFields.value = fields.value
+      message.value = ''
+    }
+  }
+
+  // ======================= Search Fields =======================
+  const searchFields = () => {
+    if (searchQuery.value) {
+      const normalizedQuery = searchQuery.value.toLowerCase().trim()
+      filteredFields.value = fields.value.filter((field) => {
+        return (
+          field.name.toLowerCase().includes(normalizedQuery) ||
+          field.location.toLowerCase().includes(normalizedQuery)
+        )
+      })
+
+      if (filteredFields.value.length === 0) {
+        message.value = 'Field Not Found'
+      } else {
+        message.value = ''
+      }
+    } else {
+      filterFields()
+    }
+  }
+
+  // ======================= Watchers =======================
+  watch(selectedProvince, () => {
+    filterFields() // Watch for changes in selectedProvince and filter fields accordingly
+  })
+
+  // ======================= Lifecycle Hooks =======================
+  onMounted(() => {
+    fetchFields().then(() => {
+      filteredFields.value = fields.value // Initialize filteredFields when component is mounted
+    })
+  })
+
+  // ======================= Utility Functions =======================
+  const getImageUrl = (imagePath) => {
+    return imagePath ? `http://127.0.0.1:8000/storage/${imagePath}` : '/default-image.jpg' // Generate image URL or return default
+  }
+</script>
+
+<style scoped>
+
+  .form-select {
+    bottom: -35px;
+  }
+
+  .bg-opacity-75 {
+    opacity: 0.8; /* Adjust this value as needed */
+  }
+
+  .font-bold {
+    font-weight: bold;
+  }
+
+  .card-me {
+    justify-content: left;
+    align-items: start;
+    text-align: left;
+    flex-wrap: wrap;
+  }
+
+  .card-wrapper {
+    width: 23%;
+    height: 40%;
+    transition: transform 0.3s ease;
+    position: relative;
+  }
+
+  .card-wrapper:hover {
+    transform: scale(1.05);
+  }
+
+  .dollar {
+    border-radius: 5px 5px 5px 0px;
+  }
+  .container {
+    width: 100%;
+    height: 200px; /* Adjust as needed */
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .bg-overlay {
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)); /* Add a dark overlay */
+  }
+
+  .btn-group {
+    position: absolute;
+    bottom: 30px;
+    width: 80%;
+    display: flex;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    transform: translateY(20px);
+  }
+
+  /* Show buttons on hover */
+  .card-wrapper:hover .btn-group {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (max-width: 768px) {
+    .card-wrapper {
+      width: 100%;
+    }
+  }
 </style>

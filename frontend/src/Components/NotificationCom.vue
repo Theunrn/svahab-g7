@@ -166,321 +166,321 @@
   </main>
 </template>
 <script>
-import axiosInstance from '@/plugins/axios'
-import { useRoute, useRouter } from 'vue-router'
-import { computed, ref, onMounted } from 'vue'
-import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
-import { ExclamationTriangleIcon } from '@heroicons/vue/24/outline'
+  // ======================= Import Necessary Files and Libraries =======================
+  import axiosInstance from '@/plugins/axios'
+  import { useRoute, useRouter } from 'vue-router'
+  import { computed, ref, onMounted } from 'vue'
+  import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
+  import { ExclamationTriangleIcon } from '@heroicons/vue/24/outline'
 
-export default {
-  setup() {
-    const route = useRoute()
-    const router = useRouter()
-    const userId = computed(() => route.params.id)
-    const notifications = ref([])
-    const bookingNotifications = ref([])
-    const orderNotifications = ref([])
-    const selectedNotifications = ref([])
-    const showPopup = ref(false)
-    const selectedNotification = ref(null)
-    const activeTab = ref('notification') // Initialize active tab
-    const fieldId = ref('')
-    const orderId = ref('')
+  export default {
+    setup() {
+      // ======================= State and Variables =======================
+      const route = useRoute()
+      const router = useRouter()
+      const userId = computed(() => route.params.id)
+      const notifications = ref([])
+      const bookingNotifications = ref([])
+      const orderNotifications = ref([])
+      const selectedNotifications = ref([])
+      const showPopup = ref(false)
+      const selectedNotification = ref(null)
+      const activeTab = ref('notification') // Initialize active tab
+      const fieldId = ref('')
+      const orderId = ref('')
 
-
-
-
-    const fetchNotifications = async () => {
-      try {
-        const response = await axiosInstance.get(`/notifications/list/${userId.value}`)
-        notifications.value = response.data.data
-        // Filter notifications for bookings and orders
-        bookingNotifications.value = notifications.value.filter((notification) =>
-          notification.notification_type.toLowerCase().includes('booking')
-        )
-        orderNotifications.value = notifications.value.filter((notification) =>
-          notification.notification_type.toLowerCase().includes('order')
-        )
-        // console.log(bookingNotifications.value)
-      } catch (error) {
-        console.error('Error fetching notifications:', error)
+      // ======================= Data Fetching Methods =======================
+      const fetchNotifications = async () => {
+        try {
+          const response = await axiosInstance.get(`/notifications/list/${userId.value}`)
+          notifications.value = response.data.data
+          // Filter notifications for bookings and orders
+          bookingNotifications.value = notifications.value.filter((notification) =>
+            notification.notification_type.toLowerCase().includes('booking')
+          )
+          orderNotifications.value = notifications.value.filter((notification) =>
+            notification.notification_type.toLowerCase().includes('order')
+          )
+        } catch (error) {
+          console.error('Error fetching notifications:', error)
+        }
       }
-    }
 
-    const updateNotification = async (id) => {
-      
-      try {
-        await axiosInstance.put(`/notification/update/${id}`)
-        fetchNotifications() // Re-fetch notifications after updating
-        console.log('Updated notification successfully')
-      } catch (error) {
-        console.error('Error updating notifications:', error)
+      const updateNotification = async (id) => {
+        try {
+          await axiosInstance.put(`/notification/update/${id}`)
+          fetchNotifications() // Re-fetch notifications after updating
+          console.log('Updated notification successfully')
+        } catch (error) {
+          console.error('Error updating notifications:', error)
+        }
       }
-    }
-    const deleteNotification = async (notification) => {
-      try {
-        await axiosInstance.delete(`/notifications/delete/${notification.id}`)
-        fetchNotifications() // Re-fetch notifications after deleting
-        console.log('Deleted notification successfully')
-        showPopup.value = false // Close popup after deleting
-      } catch (error) {
-        console.error('Error deleting notification:', error)
-      }
-    }
 
-    const getNewCount = (notificationList) => {
-      return notificationList.filter((notification) => !notification.read).length
-    }
-
-    const showNotificationDetails = async (notification) => {
-      showNotification(notification.id)
-      
-      try {
-        await axiosInstance.put(`/notification/update/${notification.id}`)
-        fetchNotifications() // Re-fetch notifications after marking as read
-        selectedNotification.value = notification
-        showPopup.value = true
-      } catch (error) {
-        console.error('Error marking notification as read:', error)
+      const deleteNotification = async (notification) => {
+        try {
+          await axiosInstance.delete(`/notifications/delete/${notification.id}`)
+          fetchNotifications() // Re-fetch notifications after deleting
+          console.log('Deleted notification successfully')
+          showPopup.value = false // Close popup after deleting
+        } catch (error) {
+          console.error('Error deleting notification:', error)
+        }
       }
-    }
 
-    const markNotificationAsRead = async (notification) => {
-      notificationId.value = notification.id
-      console.log(notification.id)
-      try {
-        await axiosInstance.put(`/notification/update/${notification.id}`)
-        fetchNotifications() // Re-fetch notifications after marking as read
-        console.log('Marked notification as read successfully')
-        showPopup.value = false // Close popup after marking as read
-      } catch (error) {
-        console.error('Error marking notification as read:', error)
+      const showNotificationDetails = async (notification) => {
+        showNotification(notification.id)
+        try {
+          await axiosInstance.put(`/notification/update/${notification.id}`)
+          fetchNotifications() // Re-fetch notifications after marking as read
+          selectedNotification.value = notification
+          showPopup.value = true
+        } catch (error) {
+          console.error('Error marking notification as read:', error)
+        }
       }
-    }
-    const showNotification = async (id) => {
-      try {
-        const response = await axiosInstance.get(`/notification/show/${id}`)
-  
-          if (response.data.data.notification_type.toLowerCase().includes('booking')){
+
+      const markNotificationAsRead = async (notification) => {
+        try {
+          await axiosInstance.put(`/notification/update/${notification.id}`)
+          fetchNotifications() // Re-fetch notifications after marking as read
+          console.log('Marked notification as read successfully')
+          showPopup.value = false // Close popup after marking as read
+        } catch (error) {
+          console.error('Error marking notification as read:', error)
+        }
+      }
+
+      // ======================= Notification Details =======================
+      const showNotification = async (id) => {
+        try {
+          const response = await axiosInstance.get(`/notification/show/${id}`)
+          if (response.data.data.notification_type.toLowerCase().includes('booking')) {
             showBooking(response.data.data.notification_data)
-          }else if (response.data.data.notification_type.toLowerCase().includes('order')){
+          } else if (response.data.data.notification_type.toLowerCase().includes('order')) {
             showOrder(response.data.data.notification_data)
           }
-        
-      } catch (error) {
-        console.error('Error marking notification as read:', error)
+        } catch (error) {
+          console.error('Error showing notification details:', error)
+        }
       }
-    }
-    const showBooking = async (id) => {
-      try {
-        const response = await axiosInstance.get(`/booking/show/${id}`)
-        fieldId.value = response.data.data.field_id
-        console.log(fieldId.value)
-      } catch (error) {
-        console.error('Error marking notification as read:', error)
+
+      const showBooking = async (id) => {
+        try {
+          const response = await axiosInstance.get(`/booking/show/${id}`)
+          fieldId.value = response.data.data.field_id
+        } catch (error) {
+          console.error('Error showing booking details:', error)
+        }
       }
-    }
-    const showOrder = async (id) => {
-      try {
-        const response = await axiosInstance.get(`/order/show/${id}`)
-        orderId.value = response.data.data.products[0].id;
-      } catch (error) {
-        console.error('Error marking notification as read:', error)
+
+      const showOrder = async (id) => {
+        try {
+          const response = await axiosInstance.get(`/order/show/${id}`)
+          orderId.value = response.data.data.products[0].id
+        } catch (error) {
+          console.error('Error showing order details:', error)
+        }
       }
-    }
 
-    const navigateToDetails = (notification) => {
-      if (notification.notification_type.toLowerCase().includes('booking')) {
-        router.push({
-          path: `/field/detail/${fieldId.value}`,
-          query: { customer: userId.value }
-        })
-      } else if (notification.notification_type.toLowerCase().includes('order')) {
-        router.push({
-          path: `/product/detail/${orderId.value}`,
-          query: { customer: userId.value }
-        })
+      const navigateToDetails = (notification) => {
+        if (notification.notification_type.toLowerCase().includes('booking')) {
+          router.push({
+            path: `/field/detail/${fieldId.value}`,
+            query: { customer: userId.value }
+          })
+        } else if (notification.notification_type.toLowerCase().includes('order')) {
+          router.push({
+            path: `/product/detail/${orderId.value}`,
+            query: { customer: userId.value }
+          })
+        }
+        showPopup.value = false // Close popup after navigating
       }
-      showPopup.value = false // Close popup after navigating
-    }
 
-    // Format date function if needed
-    const formatDate = (dateString) => {
-      const options = {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric',
-        second: 'numeric',
-        timeZone: 'UTC'
+      // ======================= Utility Methods =======================
+      const getNewCount = (notificationList) => {
+        return notificationList.filter((notification) => !notification.read).length
       }
-      return new Date(dateString).toLocaleString('en-US', options)
-    }
 
-    // Fetch notifications and orders notifications on component mount
-    onMounted(() => {
-      fetchNotifications()
-    })
-
-    const isActive = (tabName) => {
-      return activeTab.value === tabName
-    }
-
-    const setActiveTab = (tabName) => {
-      activeTab.value = tabName
-    }
-    const filteredNotifications = computed(() => {
-      if (activeTab.value === 'notification') {
-        return notifications.value
-      } else if (activeTab.value === 'bookings') {
-        return bookingNotifications.value
-      } else if (activeTab.value === 'orders') {
-        return orderNotifications.value
+      const formatDate = (dateString) => {
+        const options = {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: 'numeric',
+          minute: 'numeric',
+          second: 'numeric',
+          timeZone: 'UTC'
+        }
+        return new Date(dateString).toLocaleString('en-US', options)
       }
-      return []
-    })
 
-    return {
-      userId,
-      notifications,
-      bookingNotifications,
-      orderNotifications,
-      selectedNotifications,
-      deleteNotification,
-      isActive,
-      activeTab,
-      setActiveTab,
-      updateNotification,
-      getNewCount,
-      showPopup,
-      selectedNotification,
-      showNotificationDetails,
-      markNotificationAsRead,
-      formatDate,
-      filteredNotifications,
-      navigateToDetails
+      // ======================= UI Interaction Methods =======================
+      const isActive = (tabName) => {
+        return activeTab.value === tabName
+      }
+
+      const setActiveTab = (tabName) => {
+        activeTab.value = tabName
+      }
+
+      const filteredNotifications = computed(() => {
+        if (activeTab.value === 'notification') {
+          return notifications.value
+        } else if (activeTab.value === 'bookings') {
+          return bookingNotifications.value
+        } else if (activeTab.value === 'orders') {
+          return orderNotifications.value
+        }
+        return []
+      })
+
+      // ======================= Lifecycle Hooks =======================
+      onMounted(() => {
+        fetchNotifications()
+      })
+
+      return {
+        userId,
+        notifications,
+        bookingNotifications,
+        orderNotifications,
+        selectedNotifications,
+        deleteNotification,
+        isActive,
+        activeTab,
+        setActiveTab,
+        updateNotification,
+        getNewCount,
+        showPopup,
+        selectedNotification,
+        showNotificationDetails,
+        markNotificationAsRead,
+        formatDate,
+        filteredNotifications,
+        navigateToDetails
+      }
+    },
+    components: {
+      Dialog,
+      DialogPanel,
+      DialogTitle,
+      TransitionChild,
+      TransitionRoot,
+      ExclamationTriangleIcon
     }
-  },
-  components: {
-    Dialog,
-    DialogPanel,
-    DialogTitle,
-    TransitionChild,
-    TransitionRoot,
-    ExclamationTriangleIcon
   }
-}
 </script>
+
 <style scoped>
-.booking-list {
-  width: 100%;
-  border-collapse: collapse;
-}
-.tabs {
-  display: flex;
-  background: #f1f3f4;
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
-}
-.tab {
-  margin-right: 30px;
-  margin-left: 40px;
-  cursor: pointer;
-  text-decoration: none;
-  color: black;
-}
-.tab.active {
-  font-weight: bold;
-  border-bottom: 2px solid #1a73e8;
-}
-.badge {
-  background-color: green;
-  color: white;
-  padding: 2px 6px;
-  border-radius: 12px;
-  font-size: 12px;
-}
-.notification-list {
-  background-color: #f5f5f5;
-  padding: 20px;
-  border-radius: 8px;
-}
-.notification-item {
-  background-color: #fff;
-  padding: 15px;
-  margin-bottom: 15px;
-  border-radius: 8px;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  padding-left: 20px;
-  gap: 10px;
-}
-.notification-item.unread {
-  background-color: white; /* Background color for unread notifications */
-}
-.notification-item.read {
-  background-color: #f0f0f0; /* Background color for read notifications */
-}
-.notification-header {
-  display: flex;
-  align-items: center;
-}
-.notification-type {
-  font-size: 12px;
-  padding: 2px 6px;
-  border-radius: 4px;
-  color: #fff;
-  margin-right: 10px;
-}
-.notification-type.unread {
-  background-color: black; /* Change background color for unread notifications */
-}
-.notification-type.read {
-  background-color: #999; /* Change background color for read notifications */
-}
-.notification-content {
-  flex: 1;
-}
-h3 {
-  font-size: 16px;
-  margin: 0 0 5px;
-}
-h3.bold {
-  font-weight: bold; /* Font weight for unread notifications */
-}
-.notification-sender {
-  color: #f00;
-  font-size: 12px;
-}
-.notification-date {
-  white-space: nowrap;
-  color: #999;
-  font-size: 12px;
-  display: flex;
-  align-items: center;
-}
-.notification-date span {
-  margin-left: 5px;
-}
-.notification-type.booking_confirmed,
-.notification-type.order_confirmed {
-  background-color: green;
-}
-.notification-type.other_type {
-  /* Add other types as necessary */
-  background-color: orange;
-}
-.notification-type.booking_rejected {
-  background-color: red; /* Fallback color */
-}
-.notification-type.booking_cancelled,
-.notification-type.order_cancelled {
-  background-color: red; /* Fallback color */
-}
-.notification-type.booking_rebooked {
-  background-color: orange; /* Fallback color */
-}
+  .booking-list {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .tabs {
+    display: flex;
+    background: #f1f3f4;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+  }
+  .tab {
+    margin-right: 30px;
+    margin-left: 40px;
+    cursor: pointer;
+    text-decoration: none;
+    color: black;
+  }
+  .tab.active {
+    font-weight: bold;
+    border-bottom: 2px solid #1a73e8;
+  }
+  .badge {
+    background-color: green;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 12px;
+    font-size: 12px;
+  }
+  .notification-list {
+    background-color: #f5f5f5;
+    padding: 20px;
+    border-radius: 8px;
+  }
+  .notification-item {
+    background-color: #fff;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding-left: 20px;
+    gap: 10px;
+  }
+  .notification-item.unread {
+    background-color: white; /* Background color for unread notifications */
+  }
+  .notification-item.read {
+    background-color: #f0f0f0; /* Background color for read notifications */
+  }
+  .notification-header {
+    display: flex;
+    align-items: center;
+  }
+  .notification-type {
+    font-size: 12px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: #fff;
+    margin-right: 10px;
+  }
+  .notification-type.unread {
+    background-color: black; /* Change background color for unread notifications */
+  }
+  .notification-type.read {
+    background-color: #999; /* Change background color for read notifications */
+  }
+  .notification-content {
+    flex: 1;
+  }
+  h3 {
+    font-size: 16px;
+    margin: 0 0 5px;
+  }
+  h3.bold {
+    font-weight: bold; /* Font weight for unread notifications */
+  }
+  .notification-sender {
+    color: #f00;
+    font-size: 12px;
+  }
+  .notification-date {
+    white-space: nowrap;
+    color: #999;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+  }
+  .notification-date span {
+    margin-left: 5px;
+  }
+  .notification-type.booking_confirmed,
+  .notification-type.order_confirmed {
+    background-color: green;
+  }
+  .notification-type.other_type {
+    /* Add other types as necessary */
+    background-color: orange;
+  }
+  .notification-type.booking_rejected {
+    background-color: red; /* Fallback color */
+  }
+  .notification-type.booking_cancelled,
+  .notification-type.order_cancelled {
+    background-color: red; /* Fallback color */
+  }
+  .notification-type.booking_rebooked {
+    background-color: orange; /* Fallback color */
+  }
 </style>

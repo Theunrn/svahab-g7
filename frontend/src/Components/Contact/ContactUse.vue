@@ -1,5 +1,5 @@
 <template>
-  <div class="contact-section w-full bg-white shadow-lg">
+  <div class="contact-section w-full bg-white shadow-lg text-black">
     <div class="contact-header relative text-center text-white">
       <img src="../../assets/contact-piture/pixelcut-export.jpeg" alt="Football" class="header-image w-full h-[95vh] md:h-[70vh] lg:h-[95vh] object-cover" />
       <div class="header-text absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center w-[90%] md:w-[80%] lg:w-[60%]">
@@ -92,34 +92,26 @@
 
 
 <style scoped>
-
-
-@media (max-width: 640px) {
-  .header-image {
-    height: 60vh;
+  @media (max-width: 640px) {
+    .header-image {
+      height: 60vh;
+    }
+    .contact-body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .details {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+    .ight-side img {
+      width: 30px;
+      height: 30px;
+    }
   }
-
-  .contact-body {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .details {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-  }
-
-  .ight-side img {
-    width: 30px;
-    height: 30px;
-  }
-
-
-}
-
 </style>

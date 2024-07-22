@@ -229,61 +229,61 @@
 </template>
 
 <script>
-export default {
-  data() {
-    return {
-      activeTab: 'about', // Default active tab
-      showFieldDetails: false, // Boolean to toggle field details visibility
-      field: {
-        name: 'Football Stadium',
-        distance: 3.5,
-        imageUrl: '../../assets/image/field.png', // Example image URL
-        mapUrl: 'https://example.com/map', // Example map URL
-        about:
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed lobortis varius justo, sed finibus arcu suscipit sed.',
-        openingHours: {
-          Monday: '9:00 AM - 5:00 PM',
-          Tuesday: '9:00 AM - 5:00 PM',
-          Wednesday: '9:00 AM - 5:00 PM',
-          Thursday: '9:00 AM - 5:00 PM',
-          Friday: '9:00 AM - 5:00 PM',
-          Saturday: 'Closed',
-          Sunday: 'Closed'
+  export default {
+    data() {
+      return {
+        activeTab: 'about', // Default active tab
+        showFieldDetails: false, // Boolean to toggle field details visibility
+        field: {
+          name: 'Football Stadium',
+          distance: 3.5,
+          imageUrl: '../../assets/image/field.png', // Example image URL
+          mapUrl: 'https://example.com/map', // Example map URL
+          about:
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed lobortis varius justo, sed finibus arcu suscipit sed.',
+          openingHours: {
+            Monday: '9:00 AM - 5:00 PM',
+            Tuesday: '9:00 AM - 5:00 PM',
+            Wednesday: '9:00 AM - 5:00 PM',
+            Thursday: '9:00 AM - 5:00 PM',
+            Friday: '9:00 AM - 5:00 PM',
+            Saturday: 'Closed',
+            Sunday: 'Closed'
+          }
+          // Add more field details as needed
         }
-        // Add more field details as needed
+      }
+    },
+    methods: {
+      toggleDetails(index) {
+        this.showFieldDetails = !this.showFieldDetails
       }
     }
-  },
-  methods: {
-    toggleDetails(index) {
-      this.showFieldDetails = !this.showFieldDetails
-    }
   }
-}
 </script>
 
 <style scoped>
-/* Add scoped styles here if needed */
-.card-me {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-}
-
-.card-wrapper {
-  width: 100%;
-  max-width: calc(25% - 2rem); /* Adjust based on your spacing requirements */
-}
-
-@media (max-width: 768px) {
+  /* Add scoped styles here if needed */
   .card-me {
-    flex-direction: column;
-    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
   }
 
   .card-wrapper {
-    max-width: 100%;
-    margin: 0 auto 2rem;
+    width: 100%;
+    max-width: calc(25% - 2rem); /* Adjust based on your spacing requirements */
   }
-}
+
+  @media (max-width: 768px) {
+    .card-me {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .card-wrapper {
+      max-width: 100%;
+      margin: 0 auto 2rem;
+    }
+  }
 </style>

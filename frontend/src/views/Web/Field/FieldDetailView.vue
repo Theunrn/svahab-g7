@@ -1,21 +1,16 @@
 <template>
-    <DetailCom/>
-    <!-- <LayoutsView/> -->
-
+    <DatailCom></DatailCom>
 </template>
 
-<script>
-import DetailCom from '../../../Components/FieldDetails/DetailCom.vue'
-// import LayoutsView from '../../../Components/Layouts/WebLayout.vue'
-export default {
-    name: 'field_detail',
-    components: {
-        // LayoutsView
-        DetailCom
+<script>    
+    // ======================= Import Necessary Files =======================
+    import DetailCom from '../../../Components/FieldDetails/DetailCom.vue'
+    export default {
+        name: 'field_detail',
+        components: {
+            DetailCom
+        }
     }
-}
 </script>
 
-<style>
-</style>
 

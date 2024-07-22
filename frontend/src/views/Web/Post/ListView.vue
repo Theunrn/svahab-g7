@@ -25,31 +25,31 @@
       </div>
     </div>
   </WebLayout>
-  <!-- {{ store.posts }} -->
   {{ posts }}
 </template>
 
 <script>
-import WebLayout from '@/Components/Layouts/WebLayout.vue'
-import { usePostStore } from '@/stores/post-list'
+  // ======================= Import the required components =======================
+  import WebLayout from '@/Components/Layouts/WebLayout.vue'
+  import { usePostStore } from '@/stores/post-list'
 
-export default {
-  name: 'PostList',
-  components: {
-    WebLayout
-  },
-  data() {
-    return {
-      store: usePostStore(),
-    }
-  },
-  mounted() {
-    this.fetchPosts()
-  },
-  methods: {
-    fetchPosts() {
-      this.store.fetchPosts()
+  export default {
+    name: 'PostList',
+    components: {
+      WebLayout
+    },
+    data() {
+      return {
+        store: usePostStore(),
+      }
+    },
+    mounted() {
+      this.fetchPosts()
+    },
+    methods: {
+      fetchPosts() {
+        this.store.fetchPosts()
+      }
     }
   }
-}
 </script>

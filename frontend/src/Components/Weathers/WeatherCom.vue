@@ -64,168 +64,191 @@
 </template>
 
 <script>
-import axios from 'axios';
+  // ======================= Import Necessary Files and Libraries =======================
+  import axios from 'axios';
 
-export default {
-  data() {
-    return {
-      weather: null,
-      forecast: [], // To store the 7-day forecast
-      apiKey: '1d5b1ee8b600b4a9e279d0d3cdd57a23', // Your OpenWeatherMap API key
-      city: 'Phnom Penh', // Default city
-      searchCity: '', // Bind this to the input field
-      currentTime: '', // Add currentTime to data
-    };
-  },
-  computed: {
-    iconUrl() {
-      if (this.weather && this.weather.weather[0].icon) {
-        return `http://openweathermap.org/img/wn/${this.weather.weather[0].icon}@2x.png`;
+  export default {
+    // ======================= Component Data =======================
+    data() {
+      return {
+        weather: null,
+        forecast: [], // To store the 7-day forecast
+        apiKey: '1d5b1ee8b600b4a9e279d0d3cdd57a23', // Your OpenWeatherMap API key
+        city: 'Phnom Penh', // Default city
+        searchCity: '', // Bind this to the input field
+        currentTime: '', // Add currentTime to data
+      };
+    },
+
+    // ======================= Computed Properties =======================
+    computed: {
+      iconUrl() {
+        if (this.weather && this.weather.weather[0].icon) {
+          return `http://openweathermap.org/img/wn/${this.weather.weather[0].icon}@2x.png`;
+        }
+        return '';
+      },
+      currentDateTime() {
+        const options = { month: 'long', day: 'numeric', year: 'numeric' };
+        return `Today, ${new Date().toLocaleDateString('en-US', options)}`;
+      },
+      filteredForecast() {
+        // Find today's date
+        const today = new Date().setHours(0, 0, 0, 0);
+        // Filter out today's data and return the next 6 days
+        return this.forecast.filter(day => new Date(day.date).setHours(0, 0, 0, 0) !== today).slice(0, 6);
       }
-      return '';
     },
-    currentDateTime() {
-      const options = { month: 'long', day: 'numeric', year: 'numeric' };
-      return `Today, ${new Date().toLocaleDateString('en-US', options)}`;
+
+    // ======================= Lifecycle Hooks =======================
+    created() {
+      this.fetchWeather();
+      this.startTimeAnimation(); // Start updating the time
     },
-    filteredForecast() {
-      // Find today's date
-      const today = new Date().setHours(0, 0, 0, 0);
-      // Filter out today's data and return the next 6 days
-      return this.forecast.filter(day => new Date(day.date).setHours(0, 0, 0, 0) !== today).slice(0, 6);
+    beforeUnmount() {
+      this.stopTimeAnimation(); // Stop updating the time when component is unmounted
+    },
+
+    // ======================= Component Methods =======================
+    methods: {
+      // ======================= Fetch Weather Data =======================
+      async fetchWeather(city = this.city) {
+        try {
+          const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${this.apiKey}`);
+          this.weather = response.data;
+          this.city = city;
+          this.fetchForecast(response.data.coord.lat, response.data.coord.lon);
+        } catch (error) {
+          console.error('Error fetching weather data:', error);
+          this.weather = null;
+          this.city = 'Phnom Penh'; // Revert to default city if error occurs
+          this.fetchWeather('Phnom Penh'); // Fetch weather for default city
+        }
+      },
+
+      // ======================= Fetch Forecast Data =======================
+      async fetchForecast(lat, lon) {
+        try {
+          // Replace with random data generation for testing
+          this.forecast = this.generateRandomForecast();
+        } catch (error) {
+          console.error('Error fetching forecast data:', error);
+          this.forecast = [];
+        }
+      },
+
+      // ======================= Generate Random Forecast =======================
+      generateRandomForecast() {
+        const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        return days.map((day, index) => ({
+          dt: Date.now() + index * 24 * 60 * 60 * 1000, // Mock date
+          temp: {
+            max: Math.floor(Math.random() * 35) + 15, // Random max temp between 15 and 50
+            min: Math.floor(Math.random() * 15) + 5  // Random min temp between 5 and 20
+          },
+          icon: this.getRandomIcon(),
+          date: new Date(Date.now() + index * 24 * 60 * 60 * 1000) // Date object for filtering
+        }));
+      },
+
+      // ======================= Get Random Icon =======================
+      getRandomIcon() {
+        const icons = ['01d', '02d', '03d', '04d', '09d', '10d', '11d', '13d', '50d'];
+        return icons[Math.floor(Math.random() * icons.length)];
+      },
+
+      // ======================= Get Icon URL =======================
+      getIconUrl(icon) {
+        return `http://openweathermap.org/img/wn/${icon}.png`;
+      },
+
+      // ======================= Get Day Name =======================
+      getDayName(date) {
+        const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        return days[new Date(date).getDay()];
+      },
+
+      // ======================= Handle City Search =======================
+      handleSearch() {
+        if (this.searchCity) {
+          this.fetchWeather(this.searchCity);
+          this.searchCity = ''; // Clear the input field
+        }
+      },
+
+      // ======================= Get Current Time =======================
+      getCurrentTime() {
+        const currentDate = new Date();
+        const cambodiaTime = new Date(currentDate.toLocaleString('en-US', { timeZone: 'Asia/Phnom_Penh' }));
+        const formattedTime = date => String(date.getHours()).padStart(2, '0') + ':' + String(date.getMinutes()).padStart(2, '0') + ':' + String(date.getSeconds()).padStart(2, '0');
+        return formattedTime(cambodiaTime);
+      },
+
+      // ======================= Start Time Animation =======================
+      startTimeAnimation() {
+        this.currentTime = this.getCurrentTime(); // Initialize with the current time
+        this.intervalId = setInterval(() => {
+          this.currentTime = this.getCurrentTime();
+        }, 1000); // Update every second
+      },
+
+      // ======================= Stop Time Animation =======================
+      stopTimeAnimation() {
+        if (this.intervalId) {
+          clearInterval(this.intervalId);
+        }
+      }
     }
-  },
-  created() {
-    this.fetchWeather();
-    this.startTimeAnimation(); // Start updating the time
-  },
-  beforeUnmount() {
-    this.stopTimeAnimation(); // Stop updating the time when component is unmounted
-  },
-  methods: {
-    async fetchWeather(city = this.city) {
-      try {
-        const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${this.apiKey}`);
-        this.weather = response.data;
-        this.city = city;
-        this.fetchForecast(response.data.coord.lat, response.data.coord.lon);
-      } catch (error) {
-        console.error('Error fetching weather data:', error);
-        this.weather = null;
-        this.city = 'Phnom Penh'; // Revert to default city if error occurs
-        this.fetchWeather('Phnom Penh'); // Fetch weather for default city
-      }
-    },
-    async fetchForecast(lat, lon) {
-      try {
-        // Replace with random data generation for testing
-        this.forecast = this.generateRandomForecast();
-      } catch (error) {
-        console.error('Error fetching forecast data:', error);
-        this.forecast = [];
-      }
-    },
-    generateRandomForecast() {
-      const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-      return days.map((day, index) => ({
-        dt: Date.now() + index * 24 * 60 * 60 * 1000, // Mock date
-        temp: {
-          max: Math.floor(Math.random() * 35) + 15, // Random max temp between 15 and 50
-          min: Math.floor(Math.random() * 15) + 5  // Random min temp between 5 and 20
-        },
-        icon: this.getRandomIcon(),
-        date: new Date(Date.now() + index * 24 * 60 * 60 * 1000) // Date object for filtering
-      }));
-    },
-    getRandomIcon() {
-      const icons = ['01d', '02d', '03d', '04d', '09d', '10d', '11d', '13d', '50d'];
-      return icons[Math.floor(Math.random() * icons.length)];
-    },
-    getIconUrl(icon) {
-      return `http://openweathermap.org/img/wn/${icon}.png`;
-    },
-    getDayName(date) {
-      const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-      return days[new Date(date).getDay()];
-    },
-    handleSearch() {
-      if (this.searchCity) {
-        this.fetchWeather(this.searchCity);
-        this.searchCity = ''; // Clear the input field
-      }
-    },
-    getCurrentTime() {
-      const currentDate = new Date();
-      const cambodiaTime = new Date(currentDate.toLocaleString('en-US', { timeZone: 'Asia/Phnom_Penh' }));
-      const formattedTime = date => String(date.getHours()).padStart(2, '0') + ':' + String(date.getMinutes()).padStart(2, '0') + ':' + String(date.getSeconds()).padStart(2, '0');
-      return formattedTime(cambodiaTime);
-    },
-    startTimeAnimation() {
-      this.currentTime = this.getCurrentTime(); // Initialize with the current time
-      this.intervalId = setInterval(() => {
-        this.currentTime = this.getCurrentTime();
-      }, 1000); // Update every second
-    },
-    stopTimeAnimation() {
-      if (this.intervalId) {
-        clearInterval(this.intervalId);
-      }
-    }
-  }
-};
+  };
 </script>
 
+
 <style scoped>
-.weather-widget {
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-@media (max-width: 768px) {
-  .left-content {
-    width: 100%;
-    order: 2;
-  }
-
-  /* .weather-center {
-    text-align: center;
-    margin-left: 600px;
-  } */
-  .weather-display {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-  }
   .weather-widget {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  @media (max-width: 768px) {
+    .left-content {
+      width: 100%;
+      order: 2;
+    }
+    .weather-display {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+    }
+    .weather-widget {
+      width: 100%;
+      order: 1;
+    }
+  }
+
+  @keyframes rain {
+    to {
+      transform: translateY(100vh);
+    }
+  }
+
+  .rain {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .rain::before {
+    content: '';
+    position: absolute;
+    top: -100%;
+    left: 0;
     width: 100%;
-    order: 1;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+    animation: rain 1s linear infinite;
+    opacity: 0.5;
+    pointer-events: none;
   }
-}
-
-@keyframes rain {
-  to {
-    transform: translateY(100vh);
-  }
-}
-
-.rain {
-  position: relative;
-  overflow: hidden;
-}
-
-.rain::before {
-  content: '';
-  position: absolute;
-  top: -100%;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.8);
-  box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
-  animation: rain 1s linear infinite;
-  opacity: 0.5;
-  pointer-events: none;
-}
 
 </style>

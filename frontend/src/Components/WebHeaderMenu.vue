@@ -166,8 +166,7 @@
     id="exampleModal"
     tabindex="-1"
     aria-labelledby="exampleModalLabel"
-    aria-hidden="true"
-  >
+    aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
@@ -232,9 +231,11 @@
       </div>
     </div>
   </div>
+  <b></b>
 </template>
 
 <script setup lang="ts">
+// ======================= Import Necessary Files and Libraries =======================
 import { ref, computed, onMounted, reactive } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth-store'
@@ -308,23 +309,23 @@ const getImageUrl = (imagePath) => {
 </script>
 
 <style scoped>
-.custom-hover {
-  padding-bottom: 2px;
-  line-height: 0.5;
-}
+  .custom-hover {
+    padding-bottom: 2px;
+    line-height: 0.5;
+  }
 
-.custom-hover:hover {
-  border-bottom: 2px solid white;
-  border-radius: 5px;
-}
+  .custom-hover:hover {
+    border-bottom: 2px solid white;
+    border-radius: 5px;
+  }
 
-.active {
-  border-bottom: 2px solid white;
-  border-radius: 5px;
-  font-weight: bold;
-}
+  .active {
+    border-bottom: 2px solid white;
+    border-radius: 5px;
+    font-weight: bold;
+  }
 
-body {
-  padding-top: 60px;
-}
+  body {
+    padding-top: 60px;
+  }
 </style>

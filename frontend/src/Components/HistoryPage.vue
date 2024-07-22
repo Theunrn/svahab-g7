@@ -172,70 +172,76 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import axiosInstance from '@/plugins/axios'
-import { useRoute } from 'vue-router'
-import router from '@/router'
+  // ======================= Import Necessary Files and Libraries =======================
+  import { ref, computed, onMounted } from 'vue'
+  import axiosInstance from '@/plugins/axios'
+  import { useRoute } from 'vue-router'
+  import router from '@/router'
 
-const route = useRoute()
-const bookings = ref([])
-const orders = ref([])
-const userId = computed(() => route.params.id)
-const filter = ref('booking') // Initialize filter to 'booking'
-const dropdownIndex = ref(null)
+  // ======================= State and Variables =======================
+  const route = useRoute()
+  const bookings = ref([])
+  const orders = ref([])
+  const userId = computed(() => route.params.id)
+  const filter = ref('booking') // Initialize filter to 'booking'
+  const dropdownIndex = ref(null)
 
-onMounted(() => {
-  fetchBookingByUserId()
-  fetchOrdersByUserId()
-})
+  // ======================= Lifecycle Hooks =======================
+  onMounted(() => {
+    fetchBookingByUserId()
+    fetchOrdersByUserId()
+  })
 
-const fetchBookingByUserId = async () => {
-  try {
-    const response = await axiosInstance.get(`/customer/bookings/${userId.value}`)
-    bookings.value = response.data
-  } catch (error) {
-    console.error('Error fetching bookings:', error)
+  // ======================= Fetch Data Methods =======================
+  const fetchBookingByUserId = async () => {
+    try {
+      const response = await axiosInstance.get(`/customer/bookings/${userId.value}`)
+      bookings.value = response.data
+    } catch (error) {
+      console.error('Error fetching bookings:', error)
+    }
   }
-}
 
-const deleteHistoryBooking = async (id) => {
-  try {
-    const response = await axiosInstance.delete(`/customer/bookings/delete/${id}`)
-    console.log('Deleted successfully')
-    bookings.value = bookings.value.filter((booking) => booking.id !== id)
-    dropdownIndex.value = null
-  } catch (error) {
-    console.error('Error deleting booking:', error)
+  const fetchOrdersByUserId = async () => {
+    try {
+      const response = await axiosInstance.get(`/customer/orders/${userId.value}`)
+      orders.value = response.data
+      console.log(orders.value)
+    } catch (error) {
+      console.error('Error fetching orders:', error)
+    }
   }
-}
 
-const fetchOrdersByUserId = async () => {
-  try {
-    const response = await axiosInstance.get(`/customer/orders/${userId.value}`)
-    orders.value = response.data
-    console.log(orders.value)
-  } catch (error) {
-    console.error('Error fetching orders:', error)
+  // ======================= Action Methods =======================
+  const deleteHistoryBooking = async (id) => {
+    try {
+      const response = await axiosInstance.delete(`/customer/bookings/delete/${id}`)
+      console.log('Deleted successfully')
+      bookings.value = bookings.value.filter((booking) => booking.id !== id)
+      dropdownIndex.value = null
+    } catch (error) {
+      console.error('Error deleting booking:', error)
+    }
   }
-}
 
-const deleteOrder = async (orderId) => {
-  try {
-    const response = await axiosInstance.delete(`/customer/orders/delete/${orderId}`)
-    console.log('Delete response:', response.data)
-    orders.value = orders.value.filter((order) => order.id !== orderId)
-  } catch (error) {
-    console.error('Error deleting order:', error)
+  const deleteOrder = async (orderId) => {
+    try {
+      const response = await axiosInstance.delete(`/customer/orders/delete/${orderId}`)
+      console.log('Delete response:', response.data)
+      orders.value = orders.value.filter((order) => order.id !== orderId)
+    } catch (error) {
+      console.error('Error deleting order:', error)
+    }
   }
-}
 
-const toggleDropdown = (index) => {
-  dropdownIndex.value = dropdownIndex.value === index ? null : index
-}
+  // ======================= UI Interaction Methods =======================
+  const toggleDropdown = (index) => {
+    dropdownIndex.value = dropdownIndex.value === index ? null : index
+  }
 
-const setFilter = (type) => {
-  filter.value = type
-}
+  const setFilter = (type) => {
+    filter.value = type
+  }
 </script>
 
 
@@ -243,75 +249,76 @@ const setFilter = (type) => {
 
 
 
+
 <style scoped>
-.container {
-  display: flex;
-  min-height: 100vh;
-  flex-direction: column;
-}
-.main-content {
-  background-color: #f9f9f9;
-  padding: 1rem;
-  border-radius: 0.5rem;
-}
-ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-li {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.5rem;
-  border-bottom: 1px solid #eaeaea;
-}
-li:last-child {
-  border-bottom: none;
-}
-button {
-  border: none;
-  background: none;
-  cursor: pointer;
-}
-button:hover {
-  color: #007bff;
-}
-.group-container {
-  background-color: #ffffff;
-  padding: 1rem;
-  border-radius: 0.5rem;
-  margin-bottom: 1rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-.group-container h4 {
-  margin-bottom: 0.5rem;
-}
-.order {
-  width: 66%;
-  text-align: center;
-}
-.custom-date-input {
-  display: flex;
-  align-items: center;
-  background-color: #f2f2f2;
-  border-radius: 20px;
-  padding: 5px;
-}
+  .container {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+  }
+  .main-content {
+    background-color: #f9f9f9;
+    padding: 1rem;
+    border-radius: 0.5rem;
+  }
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem;
+    border-bottom: 1px solid #eaeaea;
+  }
+  li:last-child {
+    border-bottom: none;
+  }
+  button {
+    border: none;
+    background: none;
+    cursor: pointer;
+  }
+  button:hover {
+    color: #007bff;
+  }
+  .group-container {
+    background-color: #ffffff;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  .group-container h4 {
+    margin-bottom: 0.5rem;
+  }
+  .order {
+    width: 66%;
+    text-align: center;
+  }
+  .custom-date-input {
+    display: flex;
+    align-items: center;
+    background-color: #f2f2f2;
+    border-radius: 20px;
+    padding: 5px;
+  }
 
-.custom-input {
-  font-family: Arial, sans-serif;
-  font-size: 14px;
-  color: #333;
-  outline: none;
-  border: none;
-  background-color: transparent;
-  width: 150px;
-}
+  .custom-input {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    color: #333;
+    outline: none;
+    border: none;
+    background-color: transparent;
+    width: 150px;
+  }
 
-.custom-icon {
-  font-size: 20px;
-  margin-left: 10px;
-  color: #555;
-}
+  .custom-icon {
+    font-size: 20px;
+    margin-left: 10px;
+    color: #555;
+  }
 </style>

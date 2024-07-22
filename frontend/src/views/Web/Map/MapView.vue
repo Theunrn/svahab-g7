@@ -1,13 +1,13 @@
-<!-- frontend/src/views/Web/Map/MapView.vue -->
 <template>
     <div>
       <h2>Map View</h2>
       <MapCom :address="receivedAddress"></MapCom> <!-- Pass receivedAddress as prop to MapCom -->
       <CurrentMap @address-updated="handleAddressUpdate"></CurrentMap> <!-- Listen for address-updated event -->
     </div>
-  </template>
+</template>
   
-  <script setup lang="ts">
+<script setup lang="ts">
+  // Import required components and modules
   import MapCom from '../../../Components/Maps/MapCom.vue';
   import CurrentMap from '../../../Components/Maps/CurrentUser.vue';
   
@@ -19,8 +19,6 @@
   const handleAddressUpdate = (address: string) => {
     receivedAddress.value = address;
   };
-  </script>
+</script>
   
-  <style scoped>
-  </style>
   

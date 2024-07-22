@@ -38,45 +38,42 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+  import { ref } from 'vue'
 
-// Example user data (replace with your actual user data)
-const user = ref({
-  username: 'JohnDoe',
-  email: 'johndoe@example.com',
-  profilePicture: '../assets/default-profile.jpg' // Placeholder for default profile picture
-})
-
-// Function to handle profile picture upload
-const uploadProfilePicture = () => {
-  // Simulate file selection and upload process
-  const fileInput = document.createElement('input')
-  fileInput.type = 'file'
-  fileInput.accept = 'image/*'
-  fileInput.style.display = 'none'
-  fileInput.addEventListener('change', (event) => {
-    const file = (event.target as HTMLInputElement).files?.[0]
-    if (file) {
-      const reader = new FileReader()
-      reader.onload = () => {
-        user.value.profilePicture = reader.result as string
-      }
-      reader.readAsDataURL(file)
-    }
+  // Example user data (replace with your actual user data)
+  const user = ref({
+    username: 'JohnDoe',
+    email: 'johndoe@example.com',
+    profilePicture: '../assets/default-profile.jpg' // Placeholder for default profile picture
   })
-  document.body.appendChild(fileInput)
-  fileInput.click()
-  document.body.removeChild(fileInput)
-}
 
-// Function to save profile information (example)
-const saveProfile = () => {
-  // Example: Simulate saving to backend
-  console.log('Saving profile...', user.value)
-  // In a real app, this would make an API call to update the user's profile
-}
+  // Function to handle profile picture upload
+  const uploadProfilePicture = () => {
+    // Simulate file selection and upload process
+    const fileInput = document.createElement('input')
+    fileInput.type = 'file'
+    fileInput.accept = 'image/*'
+    fileInput.style.display = 'none'
+    fileInput.addEventListener('change', (event) => {
+      const file = (event.target as HTMLInputElement).files?.[0]
+      if (file) {
+        const reader = new FileReader()
+        reader.onload = () => {
+          user.value.profilePicture = reader.result as string
+        }
+        reader.readAsDataURL(file)
+      }
+    })
+    document.body.appendChild(fileInput)
+    fileInput.click()
+    document.body.removeChild(fileInput)
+  }
+
+  // Function to save profile information (example)
+  const saveProfile = () => {
+    // Example: Simulate saving to backend
+    console.log('Saving profile...', user.value)
+    // In a real app, this would make an API call to update the user's profile
+  }
 </script>
 
-<style scoped>
-/* Add custom styles as needed */
-</style>

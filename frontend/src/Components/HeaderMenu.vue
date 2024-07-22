@@ -23,35 +23,37 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { Icon } from '@iconify/vue'
-
-const isMenuOpen = ref(false)
-const menu = [
-  {
-    title: 'User',
-    meta: {
-      permission: 'view_users'
+  // ======================= Import Necessary Files and Libraries =======================
+  import { ref } from 'vue'
+  import { Icon } from '@iconify/vue'
+  // ======================= State and Menu Data =======================
+  const isMenuOpen = ref(false)
+  const menu = [
+    {
+      title: 'User',
+      meta: {
+        permission: 'view_users'
+      },
+      link: '/users'
     },
-    link: '/users'
-  },
-  {
-    title: 'Role',
-    meta: {
-      permission: 'view_roles'
+    {
+      title: 'Role',
+      meta: {
+        permission: 'view_roles'
+      },
+      link: '/roles'
     },
-    link: '/roles'
-  },
-  {
-    title: 'Permission',
-    meta: {
-      permission: 'view_permissions'
-    },
-    link: '/permissions'
+    {
+      title: 'Permission',
+      meta: {
+        permission: 'view_permissions'
+      },
+      link: '/permissions'
+    }
+  ]
+  // ======================= Methods =======================
+  const toggleMenu = () => {
+    isMenuOpen.value = !isMenuOpen.value
   }
-]
-
-const toggleMenu = () => {
-  isMenuOpen.value = !isMenuOpen.value
-}
+  export { isMenuOpen, menu, toggleMenu }
 </script>
