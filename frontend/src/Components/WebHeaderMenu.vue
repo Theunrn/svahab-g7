@@ -119,6 +119,7 @@
               aria-expanded="false"
             >
               <img class="w-10 h-10 rounded-full ring-2 ring-gray-300 dark:ring-gray-400" src="../assets/image/liep.jpg" alt="avatar">
+              <!-- <i class="bx bxs-user-circle text-4xl text-white  "></i> -->
             </a>
             <ul
               class="px-3 dropdown-menu dropdown-animation dropdown-menu-end shadow pt-3"
@@ -129,6 +130,7 @@
                 <div class="d-flex align-items-center">
                   <!-- Avatar -->
                   <div class="me-3">
+                    <!-- <img class="avatar-img w-10 h-10 rounded-circle shadow" src="../assets/image/liep.jpg" alt="profiles"> -->
                     <i class="bx bxs-user-circle text-4xl mt-2"></i>
                   </div>
                   <div>
@@ -160,44 +162,14 @@
       </div>
     </div>
   </header>
-  <!-- Sidebar Menu for Mobile -->
-  <div v-if="isSidebarOpen" class="fixed inset-0 bg-black bg-opacity-10 z-40 md:hidden mt-3">
-    <div class="bg-white w-64 h-1/2 p-4 flex flex-col">
-      <button @click="toggleSidebar" class="text-black text-3xl mb-4 mr-50">
-        <i class="bx bx-x"></i>
-      </button>
-      <nav class="flex flex-col">
-        <a :href="'/'" :class="{ 'text-yellow-300': route.path === '/' }" @click="toggleSidebar"
-          >HOME</a
-        >
-        <a
-          :href="'/about'"
-          :class="{ 'text-yellow-300': route.path === '/about' }"
-          @click="toggleSidebar"
-          >ABOUT</a
-        >
-        <a
-          :href="'/shop'"
-          :class="{ 'text-yellow-300': route.path === '/shop' }"
-          @click="toggleSidebar"
-          >SHOP</a
-        >
-        <a
-          :href="'/contact'"
-          :class="{ 'text-yellow-300': route.path === '/contact' }"
-          @click="toggleSidebar"
-          >CONTACT</a
-        >
-      </nav>
-    </div>
-  </div>
   <!-- Modal -->
   <div
     class="modal fade"
     id="exampleModal"
     tabindex="-1"
     aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
+    aria-hidden="true"
+  >
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
@@ -262,11 +234,9 @@
       </div>
     </div>
   </div>
-  <b></b>
 </template>
 
 <script setup lang="ts">
-// ======================= Import Necessary Files and Libraries =======================
 import { ref, computed, onMounted, reactive } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth-store'
@@ -281,11 +251,6 @@ const showText = ref(false)
 const name = ref('')
 const email = ref('')
 const profile = ref('')
-const isSidebarOpen = ref(false)
-
-const toggleSidebar = () => {
-  isSidebarOpen.value = !isSidebarOpen.value
-}
 
 const fetchNotifications = async () => {
   try {
@@ -345,148 +310,23 @@ const getImageUrl = (imagePath) => {
 </script>
 
 <style scoped>
-  .custom-hover {
-    padding-bottom: 2px;
-    line-height: 0.5;
-  }
+.custom-hover {
+  padding-bottom: 2px;
+  line-height: 0.5;
+}
 
-  .custom-hover:hover {
-    border-bottom: 2px solid white;
-    border-radius: 5px;
-  }
+.custom-hover:hover {
+  border-bottom: 2px solid white;
+  border-radius: 5px;
+}
 
-  .active {
-    border-bottom: 2px solid white;
-    border-radius: 5px;
-    font-weight: bold;
-  }
+.active {
+  border-bottom: 2px solid white;
+  border-radius: 5px;
+  font-weight: bold;
+}
 
 body {
   padding-top: 60px;
-}
-
-/* @media (min-width: 768px) {
-  .sidebar {
-    display: none;
-  }
-} */
-
-/* Style for the sidebar */
-.sidebar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 16rem; /* Adjust width as needed */
-  height: 50vh; /* Shorter height */
-  background-color: #2d3748; /* Dark background */
-  color: #ffffff;
-  transform: translateX(-100%);
-  transition: transform 0.3s ease-in-out;
-}
-
-.sidebar.open {
-  transform: translateX(0);
-}
-
-.sidebar a {
-  display: block;
-  padding: 1rem;
-  color: #ffffff;
-  text-decoration: none;
-}
-
-.sidebar a:hover {
-  background-color: #4a5568; /* Darker background on hover */
-}
-
-.sidebar button {
-  display: block;
-  width: 100%;
-  text-align: left;
-  background: none;
-  border: none;
-  color: #ffffff;
-  font-size: 2rem;
-}
-.div a img {
-  width: 50%;
-  height: auto;
-}
-.logo {
-  width: 200px; /* Default width for logo */
-  height: auto;
-}
-
-/* Add media queries for responsive design */
-@media (max-width: 768px) {
-  .sidebar {
-    display: none;
-  }
-  .logo {
-    width: 100px; /* Smaller width for mobile */
-  }
-  .cart-btn {
-    transform: scale(0.75);
-  }
-
-  .cart-icon {
-    font-size: 2rem;
-  }
-
-  .notification-btn {
-    transform: scale(0.75);
-  }
-
-  .notification-icon {
-    font-size: 2rem;
-  }
-  .history-btn {
-    transform: scale(0.75);
-  }
-
-  .history-icon {
-    font-size: 2rem;
-  }
-
-  .history-text {
-    font-size: 0.75rem;
-  }
-  .profile-img {
-    width: 2rem; /* 8 * 0.25 */
-    height: 2rem; /* 8 * 0.25 */
-  }
-}
-
-@media (max-width: 480px) {
-  .cart-btn {
-    transform: scale(0.6);
-  }
-
-  .cart-icon {
-    font-size: 1.5rem;
-  }
-
-  .notification-btn {
-    transform: scale(0.6);
-  }
-
-  .notification-icon {
-    font-size: 1.5rem;
-  }
-  .history-btn {
-    transform: scale(0.6);
-  }
-
-  .history-icon {
-    font-size: 1.5rem;
-  }
-
-  .history-text {
-    font-size: 0.6rem;
-  }
-  .profile-img {
-    width: 1.5rem; /* 6 * 0.25 */
-    height: 1.5rem; /* 6 * 0.25 */
-  }
 }
 </style>

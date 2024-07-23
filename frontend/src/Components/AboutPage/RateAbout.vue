@@ -30,7 +30,7 @@
               >
                 <img
                   class="h-full w-full rounded-full object-cover object-center"
-                  src="https://randomuser.me/api/portraits/thumb/men/75.jpg"
+                  src="../../assets/contact-piture/me.jpg"
                 />
               </div>
               <div
@@ -46,12 +46,12 @@
               >
                 <img
                   class="h-full w-full rounded-full object-cover object-center"
-                  src="https://randomuser.me/api/portraits/thumb/men/75.jpg"
+                  src="../../assets/contact-piture/thurn.jpg"
                 />
               </div>
             </div>
             <p class="text-lg text-gray-600 dark:text-gray-400 mt-3">
-              <span class="font-bold">Srey Liep</span>
+              <span class="font-bold">Customers</span>
             </p>
             <div class="flex justify-center mt-2">
               <svg
