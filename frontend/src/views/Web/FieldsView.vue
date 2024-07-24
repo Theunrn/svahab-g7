@@ -22,7 +22,7 @@
   
 <script setup lang="ts">
   // import necessary components here
-  import WebHeaderMenu from '@/Components/WebHeaderMenu (3).vue'
+  import WebHeaderMenu from '@/Components/WebHeaderMenu.vue'
   import WebFooter from '../../Components/WebFooter.vue'
   import CardCom from '../../Components/Cards/CardField.vue'
 </script>

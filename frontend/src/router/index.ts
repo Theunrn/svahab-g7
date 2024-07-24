@@ -127,7 +127,10 @@ const router = createRouter({
       component: () => import('../views/Web/Field/LineUpView.vue')
     }
 
-  ]
+  ],
+  scrollBehavior(to, from, savedPosition) {
+    return { top: 0 }
+  }
 })
 
 router.beforeEach(async (to, from, next) => {
@@ -164,3 +167,4 @@ router.beforeEach(async (to, from, next) => {
 })
 
 export default { router, simpleAcl }
+

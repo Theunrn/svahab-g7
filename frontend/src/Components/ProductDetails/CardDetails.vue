@@ -1,85 +1,86 @@
 <template>
   <div class="product-detail my-5">
-    <div class="button-row row mb-3">
-      <div class="col-12">
-        <router-link to="/product" class="btn btn-outline-primary"> Back </router-link>
-      </div>
-    </div>
-    <div class="product-row row " style="margin-left: -50px">
-      <!-- Image Section -->
-      <div class="img-section col-md-6">
-        <!-- <div class="product-images mt-5">
-          <img :src="getImageUrl(product.image)" class="img-fluid" :alt="product.name" />
-        </div> -->
-        <div class="product-images mt-4" ref="imageContainer">
-          <img :src="getImageUrl(product.image)" class="img-fluid" :alt="product.name" @mousemove="zoomImage" @mouseleave="resetZoom" />
-          <div class="zoomed-image" v-show="zoomedIn" :style="{ backgroundImage: 'url(' + getImageUrl(product.image) + ')', backgroundSize: zoomScale }"></div>
+    <!-- Loading Indicator -->
+    <div v-if="loading" class="loading-spinner">Loading...</div>
+    
+    <div v-else>
+      <div class="button-row row mb-3">
+        <div class="col-12">
+          <router-link to="/product" class="btn btn-outline-primary"> Back </router-link>
         </div>
       </div>
-      <!-- Product Details Section -->
-      <div class="product-section-detail col-md-6">
-        <div class="section-information">
-          <h2 class="mb-2 mt-4 fs-3 font-bold">{{ product.name }}</h2>
-          <h3 class="mb-2">{{ product.description }}</h3>
-          <p class="mb-1"><strong>Call: </strong> 098753527</p>
-          <div class="flex gap-3">
-            <p class="price text-danger font-weight-bold mb-2" :class="{ 'text-decoration-line-through': product.discounts && product.discounts.length > 0 }" >
-              <strong>Price: </strong> ${{ product.price }}
-            </p>
-            <p class="price text-success font-weight-bold mb-2" v-if="product.discounts && product.discounts.length > 0" > ${{ calculateDiscountedPrice(product.price, product.discounts[0].discount) }}
-            </p>
-          </div>
-          <p class="bg-white text-gray-700 border-2 border-green-300 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-40" >
-            <span>Total: </span> ${{ total }}
-          </p>
-          <div class="rating mb-2">
-            <span class="star text-warning">&#9733;</span>
-            <span class="star text-warning">&#9733;</span>
-            <span class="star text-warning">&#9733;</span>
-            <span class="star text-warning">&#9733;</span>
-            <span class="star text-warning">&#9733;</span>
-            <span>(1053 reviews)</span>
+      <div class="product-row row " style="margin-left: -50px">
+        <!-- Image Section -->
+        <div class="img-section col-md-6">
+          <div class="product-images mt-4" ref="imageContainer">
+            <img :src="getImageUrl(product.image)" class="img-fluid" :alt="product.name" @mousemove="zoomImage" @mouseleave="resetZoom" />
+            <div class="zoomed-image" v-show="zoomedIn" :style="{ backgroundImage: 'url(' + getImageUrl(product.image) + ')', backgroundSize: zoomScale }"></div>
           </div>
         </div>
-        <div class="section-detail">
-          <div class="color-options mb-3">
-            <h5 class="mb-2">Color:</h5>
-            <div class="d-flex flex-wrap">
-              <div v-for="color in product.colors" :key="color.id" :style="{ backgroundColor: color.hex_code }" :class="[  'color-circle', 'mr-2', 'cursor-pointer', `bg-${color.name.toLowerCase()}`, { selected: selectedColor === color.id }  ]"  @click="toggleColorSelection(color.id)" ></div>
+        <!-- Product Details Section -->
+        <div class="product-section-detail col-md-6">
+          <div class="section-information">
+            <h2 class="mb-2 mt-4 fs-3 font-bold">{{ product.name }}</h2>
+            <h3 class="mb-2">{{ product.description }}</h3>
+            <p class="mb-1"><strong>Call: </strong> 098753527</p>
+            <div class="flex gap-3">
+              <p class="price text-danger font-weight-bold mb-2" :class="{ 'text-decoration-line-through': product.discounts && product.discounts.length > 0 }" >
+                <strong>Price: </strong> ${{ product.price }}
+              </p>
+              <p class="price text-success font-weight-bold mb-2" v-if="product.discounts && product.discounts.length > 0" > ${{ calculateDiscountedPrice(product.price, product.discounts[0].discount) }}
+              </p>
+            </div>
+            <p class="bg-white text-gray-700 border-2 border-green-300 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-40" >
+              <span>Total: </span> ${{ total }}
+            </p>
+            <div class="rating mb-2">
+              <span class="star text-warning">&#9733;</span>
+              <span class="star text-warning">&#9733;</span>
+              <span class="star text-warning">&#9733;</span>
+              <span class="star text-warning">&#9733;</span>
+              <span class="star text-warning">&#9733;</span>
+              <span>(1053 reviews)</span>
             </div>
           </div>
-          <div class="size-options mb-3 flex gap-3">
-            <div class="size">
-              <h5 class="mb-2">Size:</h5>
-              <select class="form-select w-auto pe-5" v-model="selectedSize">
-                <option class="text-start" v-for="size in product.sizes" :key="size.id"  :value="size.id" >
-                  {{ size.name }}
-                </option>
-              </select>
-            </div>
-            <div class="way">
-              <h5 class="mb-2">The way:</h5>
-              <select class="form-select w-auto">
-                <option value="pickup">Pickup</option>
-                <option value="delivery">Delivery (+2$)</option>
-              </select>
-            </div>
-          </div>
-          <div class="quantity mb-4">
-            <h5 class="mb-2">Quantity:</h5>
-            <div class="input-group w-auto">
-              <div class="quantity-input">
-               <button @click="decrementQuantity" class="decrement btn btn-outline-secondary">  -  </button>
-                <input class="input-group min-max" type="text" v-model="quantity" />
-                <button @click="incrementQuantity" class="increment btn btn-outline-secondary">  +  </button>
+          <div class="section-detail">
+            <div class="color-options mb-3">
+              <h5 class="mb-2">Color:</h5>
+              <div class="d-flex flex-wrap">
+                <div v-for="color in product.colors" :key="color.id" :style="{ backgroundColor: color.hex_code }" :class="[  'color-circle', 'mr-2', 'cursor-pointer', `bg-${color.name.toLowerCase()}`, { selected: selectedColor === color.id }  ]"  @click="toggleColorSelection(color.id)" ></div>
               </div>
             </div>
-          </div>
-          <!-- <a @click="createOrder" class="btn btn-warning btn-block mb-4"> Order Now</a> -->
-          <router-link  @click="submitOrder"  :to="{ path: '/payment/' + userId, query: { order: order.id } }"  class="btn btn-yellow-500 btn-block ml-4 mb-4 text-white"  style="background-color: orange"  >  Pay Now</router-link >
-          <div class="delivery-info mb-4">
-            <p class="mb-1"><strong>Home Delivery:</strong> Available within 48 hours</p>
-            <p class="mb-0"><strong>Click & Collect:</strong> Pickup in store within 4 hours</p>
+            <div class="size-options mb-3 flex gap-3">
+              <div class="size">
+                <h5 class="mb-2">Size:</h5>
+                <select class="form-select w-auto pe-5" v-model="selectedSize">
+                  <option class="text-start" v-for="size in product.sizes" :key="size.id"  :value="size.id" >
+                    {{ size.name }}
+                  </option>
+                </select>
+              </div>
+              <div class="way">
+                <h5 class="mb-2">The way:</h5>
+                <select class="form-select w-auto">
+                  <option value="pickup">Pickup</option>
+                  <option value="delivery">Delivery (+2$)</option>
+                </select>
+              </div>
+            </div>
+            <div class="quantity mb-4">
+              <h5 class="mb-2">Quantity:</h5>
+              <div class="input-group w-auto">
+                <div class="quantity-input">
+                 <button @click="decrementQuantity" class="decrement btn btn-outline-secondary">  -  </button>
+                  <input class="input-group min-max" type="text" v-model="quantity" />
+                  <button @click="incrementQuantity" class="increment btn btn-outline-secondary">  +  </button>
+                </div>
+              </div>
+            </div>
+            <router-link  @click="submitOrder"  :to="{ path: '/payment/' + userId, query: { order: order.id } }"  class="btn btn-yellow-500 btn-block ml-4 mb-4 text-white"  style="background-color: orange"  >  Pay Now</router-link >
+            <div class="delivery-info mb-4">
+              <p class="mb-1"><strong>Home Delivery:</strong> Available within 48 hours</p>
+              <p class="mb-0"><strong>Click & Collect:</strong> Pickup in store within 4 hours</p>
+            </div>
           </div>
         </div>
       </div>
@@ -88,7 +89,6 @@
 </template>
 
 <script setup lang="ts">
-  // ======================= import nuccesary files and libraries =======================
   import { ref, computed, onMounted } from 'vue'
   import axiosInstance from '@/plugins/axios'
   import { useRoute, useRouter } from 'vue-router'
@@ -109,6 +109,7 @@
   const discountPrice = ref(0) // Reactive reference for discounted price
   const zoomedIn = ref(false) // Reactive reference for zoom state
   const zoomScale = ref('100%') // Reactive reference for zoom scale
+  const loading = ref(true) // Reactive reference for loading state
 
   // ======================= Fetch Product Details =======================
   const fetchProductDetails = async () => {
@@ -118,6 +119,8 @@
       product.value.discounts = product.value.discounts || [] // Initialize discounts if not present
     } catch (error) {
       console.error('Error fetching product details:', error)
+    } finally {
+      loading.value = false; // Set loading to false after data is fetched
     }
   }
 
@@ -222,7 +225,6 @@
   }
 </script>
 
-
 <style scoped>
   .product-detail {
     color: #000;
@@ -235,18 +237,12 @@
     overflow: hidden;
   }
 
-  .zoomed-image {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-color: rgba(255, 255, 255, 0.9);
-    z-index: 10;
-    display: none;
-  }
+  .loading-spinner {
+  text-align: center;
+  font-size: 20px;
+  color: #007bff;
+  margin-top: 20px;
+}
 
   .price {
     font-size: 1.5em;

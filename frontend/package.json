@@ -49,6 +49,7 @@
     "notifyjs": "^3.0.0",
     "notifyjs-browser": "^0.4.2",
     "pinia": "^2.1.7",
+    "socket.io-client": "^4.7.5",
     "sweetalert2": "^11.12.2",
     "swiper": "^11.1.4",
     "vee-validate": "^4.12.8",
@@ -62,7 +63,7 @@
     "vue-slick-carousel": "^1.0.6",
     "vue-zoom-on-hover": "^1.0.6",
     "vue3-datepicker": "^0.4.0",
-    "vuex": "^4.0.2",
+    "vuex": "^4.1.0",
     "yup": "^1.4.0"
   },
   "devDependencies": {

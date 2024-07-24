@@ -26,6 +26,7 @@ class CreateUsersTable extends Migration
     //         $table->timestamps();
     //     });
     // }
+    
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();

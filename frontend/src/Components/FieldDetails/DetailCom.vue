@@ -19,7 +19,7 @@
     </div>
 
     <div class="mt-5 flex gap-5 ml-13 mr-13 container">
-      <div class="map-left w-90">
+      <div class="map-left w-120">
         <!-- w-96 sets a fixed width for the left div -->
         <div class="card-me">
           <div class="card-wrapper relative w-full mx-2 my-2 border-1 border-gray-400 rounded-md">
@@ -111,9 +111,10 @@
         </div>
       </div>
 
-      <div class="map-right w-244" style="margin-right: 70px; margin-top: 10px;">
+      <div v-if="loading" class="loading-spinner text-center">Loading...</div>
+      <div  v-else class="map-right w-244" style="margin-right: 10px; margin-top: 10px;">
         <!-- w-96 sets a fixed width for the right div -->
-        <div class="img-original w-full w-214">
+        <div class="img-original">
           <!-- <h2 class="text-2xl font-bold">7Seasons Apartments offers</h2> -->
           <img :src="getImageUrl(field.image)" alt="" class="w-full h-74 object-cover" />
         </div>
@@ -345,6 +346,7 @@
   let feedbackToEdit = ref(null)
   const minDate = ref(new Date().toISOString().split('T')[0])
   const currentTime = ref(new Date().toTimeString().split(' ')[0].substring(0, 5))
+  const loading = ref(true) // Reactive reference for loading state
 
   // =========== Function to check if the end time is before 10:00 PM ============
   const isValidEndTime = (endTime: string): boolean => {
@@ -480,6 +482,8 @@
       location.value = field.value.location
     } catch (error) {
       console.error('Error fetching fields:', error)
+    }finally {
+      loading.value = false; // Set loading to false after data is fetched
     }
   }
 

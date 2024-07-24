@@ -499,8 +499,14 @@
   const setPostId = (postId) => {
     post_id.value = postId
   }
+
+  const startPolling = () => {
+    setInterval(fetchAllTeams, 10000) // Poll every 10 seconds
+  }
+
   onMounted(() => {
     fetchAllTeams()
+    startPolling() // Start polling to keep data updated
   })
 
   // ================= Assuming time is in 24-hour format 'HH:mm' =================

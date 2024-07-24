@@ -20,7 +20,9 @@
             <div class="flex justify-between absolute w-full mt-1">
               <div class="discount-banner mt-1">
                 <span  v-if="product.discount!== null" class="discount-text bg-orange-500 px-4 py-2 rounded-md text-white text-2xl">
-                  {{ product.discount }}% OFF
+                  <!-- {{ product.discount }}% OFF -->
+                  {{ roundedDiscount(product.discount) }}% OFF
+
                 </span>
               </div>
               <div class="cart-icon">
@@ -40,7 +42,7 @@
           </div>
           <div class="text-start p-4">
             <h5 class="card-title">{{ product.name }}</h5>
-            <p class="card-text text-danger fw-bold" v-if="product.discounted_price !== null">
+            <p class="card-text text-danger fw-bold" v-if="product.discount !== null">
               <span class="text-danger fw-bold" style="text-decoration: line-through;">${{ product.price }}</span>
               <span class="text-success ms-2">${{ product.discounted_price }}</span>
             </p>
@@ -118,9 +120,14 @@
     if (product.discounts && product.discounts.length > 0) {
       const discount = product.discounts[0]
       const discountedPrice = product.price - (product.price * (discount.discount / 100))
-      return parseFloat(discountedPrice.toFixed(2)).toString()
+      // return parseFloat(discountedPrice.toFixed(2)).toString()
+      return Math.round(discountedPrice).toString();
     }
     return product.price.toString() // Return original price if no discount
+  }
+  
+  const roundedDiscount = (discount) => {
+      return Math.round(discount);
   }
 
   // ======================= Add to Cart =======================
