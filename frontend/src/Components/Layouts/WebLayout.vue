@@ -59,8 +59,7 @@
     <img width="18%" height="18%" src="../../assets/image/logo1.png" alt="" />
   </div>
   <GoogleMap />
-  <div v-if="loading" class="loading-spinner text-center">Loading...</div>
-  <div v-else>
+  <div>
     <div v-if="filteredFields.length > 0" class="card-me flex flex-wrap justify-start items-start ml-10" >
       <!-- Loop to generate cards based on filtered fields -->
       <div  class="card-wrapper rounded-md shadow-lg relative w-1/3 sm:w-full mx-2 my-2" v-for="field in filteredFields" :key="field.id" >
@@ -113,7 +112,6 @@
   </div>
 </template>
 
-
 <script setup lang="ts">
 import { ref, watch, onMounted } from 'vue'
 import WebHeaderMenu from '@/Components/WebHeaderMenu.vue'
@@ -136,7 +134,6 @@ const props = defineProps({
 const searchQuery = ref('')
 const fields = ref([])
 const message = ref('')
-const loading = ref(true) // Reactive reference for loading state
 const filteredFields = ref([])
 const matchFields = ref([])
 localStorage.setItem('filteredFields', matchFields.value)
@@ -148,8 +145,6 @@ const fetchFields = async () => {
     filterFields()
   } catch (error) {
     console.error('Error fetching fields:', error)
-  }finally {
-    loading.value = false; // Set loading to false after data is fetched
   }
 }
 

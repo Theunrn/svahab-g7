@@ -5,7 +5,7 @@
                 <div class="flex items-center justify-between m-3">
                     <div class="ml-5">
                         <h2 class="text-2xl font-semibold text-gray-800 mb-2 border-b-2 border-gray-500 inline-block">
-                            Discounts
+                            Discounts 
                         </h2>
                     </div>
                     <div class="mr-5 mt-2">

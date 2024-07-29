@@ -110,9 +110,7 @@
           </form>
         </div>
       </div>
-
-      <div v-if="loading" class="loading-spinner text-center">Loading...</div>
-      <div  v-else class="map-right w-244" style="margin-right: 10px; margin-top: 10px;">
+      <div class="map-right w-244" style="margin-right: 10px; margin-top: 10px;">
         <!-- w-96 sets a fixed width for the right div -->
         <div class="img-original">
           <!-- <h2 class="text-2xl font-bold">7Seasons Apartments offers</h2> -->
@@ -346,7 +344,6 @@
   let feedbackToEdit = ref(null)
   const minDate = ref(new Date().toISOString().split('T')[0])
   const currentTime = ref(new Date().toTimeString().split(' ')[0].substring(0, 5))
-  const loading = ref(true) // Reactive reference for loading state
 
   // =========== Function to check if the end time is before 10:00 PM ============
   const isValidEndTime = (endTime: string): boolean => {
@@ -482,8 +479,6 @@
       location.value = field.value.location
     } catch (error) {
       console.error('Error fetching fields:', error)
-    }finally {
-      loading.value = false; // Set loading to false after data is fetched
     }
   }
 

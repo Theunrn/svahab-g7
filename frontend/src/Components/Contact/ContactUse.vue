@@ -5,9 +5,7 @@
       <div class="header-text absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center w-[90%] md:w-[80%] lg:w-[60%]">
         <h1 class="text-4xl font-bold">Contact Information</h1>
         <p class="text-lg mt-5">
-          Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a
-          document or a typeface without relying on meaningful content. Lorem ipsum may be used as a
-          placeholder before the final copy is available.
+          We would love to hear from you! Whether you have questions, or feedback, or need assistance, our team is here to help. You can reach us via phone, or email Connect with us on social media for the latest updates and news. We strive to respond to all inquiries promptly and look forward to assisting you.
         </p>
         <button class="bg-gradient-to-r from-[#AA9A97] to-[#8F504B] hover:bg-gradient-to-r text-white font-bold py-2 px-4 mt-4 rounded-md w-40 border border-white">Contact us</button>
       </div>
@@ -40,9 +38,7 @@
         <div class="details text-start">
           <h2 class="text-center text-3xl font-bold mb-2">Get in touch</h2>
           <p class="mt-1 text-base">
-            Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a
-            document or a typeface without relying on meaningful content. Lorem ipsum may.
-          </p>
+            We'd love to hear from you! If you have any questions, feedback, or need support, please don't hesitate to reach out. Follow us on social media to stay updated with the latest news and updates. Your satisfaction is our priority, and we are committed to providing you with the best service possible.          </p>
           <div class="contact-type flex flex-col md:flex-row justify-between mt-5">
             <div class="left-side w-full md:w-1/2">
               <div class="flex items-center mb-2">
